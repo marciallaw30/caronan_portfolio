@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Official Industry-Ready BSIT Professional Portfolio of Marcial Lawrence Jr V. Caronan. Full-Stack Web Development, Database Administration, and Data Analytics.">
+  <meta name="author" content="Marcial Lawrence Jr V. Caronan">
+  <title>Marcial Lawrence Jr V. Caronan | BSIT Professional Portfolio</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Custom Modern CSS (Violet & Black Palette) -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- ================= GLOWING IT CYBER BACKGROUND ================= -->
+  <div class="it-cyber-bg" aria-hidden="true">
+    <!-- Ambient Glowing Nebulas -->
+    <div class="cyber-orb orb-1"></div>
+    <div class="cyber-orb orb-2"></div>
+    <div class="cyber-orb orb-3"></div>
+
+    <!-- IT Matrix Grid & Circuit Lines -->
+    <div class="cyber-grid"></div>
+    <div class="cyber-circuit-svg"></div>
+
+    <!-- Interactive Glowing Node Mesh Canvas -->
+    <canvas id="cyberNetworkCanvas"></canvas>
+
+    <!-- Floating Glowing IT Elements -->
+    <div class="cyber-floating-icons">
+      <div class="it-floating-chip chip-1">
+        <i class="bi bi-cpu"></i>
+        <span>CPU::8-CORE</span>
+      </div>
+      <div class="it-floating-chip chip-2">
+        <i class="bi bi-terminal"></i>
+        <span>caronan@sys:~$</span>
+      </div>
+      <div class="it-floating-chip chip-3">
+        <i class="bi bi-database-check"></i>
+        <span>SQL::3NF_ACID</span>
+      </div>
+      <div class="it-floating-chip chip-4">
+        <i class="bi bi-code-slash"></i>
+        <span>&lt;FULL-STACK&gt;</span>
+      </div>
+      <div class="it-floating-chip chip-5">
+        <i class="bi bi-shield-lock"></i>
+        <span>AUTH::SHA256</span>
+      </div>
+      <div class="it-floating-chip chip-6">
+        <i class="bi bi-diagram-3"></i>
+        <span>NET::192.168.1.1</span>
+      </div>
+      <div class="it-floating-chip chip-7">
+        <i class="bi bi-motherboard"></i>
+        <span>IoT::ARDUINO_UART</span>
+      </div>
+      <div class="it-floating-chip chip-8">
+        <i class="bi bi-braces"></i>
+        <span>JSON::REST_API</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-xxl navbar-dark fixed-top custom-navbar">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center fw-bold" href="#home">
+        <img src="assets/img/profile.jpg" alt="M. Caronan" class="rounded-circle border border-info me-2 shadow-sm"
+          style="width: 32px; height: 32px; object-fit: cover; object-position: top center;">
+        <span>M. CARONAN</span>
+        <span class="navbar-brand-badge">BSIT GRADUATE</span>
+      </a>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-xl-0 align-items-xl-center">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+          <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+          <li class="nav-item"><a class="nav-link fw-bold" style="color: #c084fc !important;" href="oracle-ai/index.html"><i class="bi bi-stars"></i> Oracle AI</a></li>
+          <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+          <li class="nav-item"><a class="nav-link" href="#certificates">Certificates</a></li>
+          <li class="nav-item"><a class="nav-link" href="#troubleshooting">Troubleshoot</a></li>
+          <li class="nav-item"><a class="nav-link" href="#career-plan">Career</a></li>
+          <li class="nav-item"><a class="nav-link" href="#resume">Resume</a></li>
+          <li class="nav-item"><a class="nav-link" href="#reflection">Reflection</a></li>
+          <li class="nav-item ms-xl-2"><a class="btn-codespot-primary btn-pill py-2 px-3 text-nowrap" href="#contact"><i
+                class="bi bi-send-fill me-1"></i> Get In Touch</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= HERO SECTION (Codespot UI Layout) ================= -->
+  <section id="home" class="hero-section">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <!-- Hero Left Column -->
+        <div class="col-lg-7">
+          <div class="section-tag mb-3">
+            <i class="bi bi-patch-check-fill text-info"></i> Industry-Ready BSIT Portfolio
+          </div>
+          <h1 class="display-3 fw-extrabold mb-3">
+            Transforming Real-World Operations Into <span class="text-gradient-blue">High-Impact Software</span>
+          </h1>
+          <p class="lead text-light opacity-90 mb-4" style="max-width: 620px;">
+            I am <strong>Marcial Lawrence Jr V. Caronan</strong>, a graduating Bachelor of Science in Information
+            Technology student. I bridge practical operational discipline in inventory, warehousing, and retail data
+            systems with modern <strong>Full-Stack Web Development, Relational Databases, and Data Analytics</strong>.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3 mb-4">
+            <a href="#projects" class="btn-codespot-primary btn-pill">
+              VIEW MY PROJECTS <i class="bi bi-arrow-right"></i>
+            </a>
+            <a href="assets/docs/Marcial_Lawrence_Jr_V_Resume.docx" class="btn-codespot-outline btn-pill" download>
+              DOWNLOAD RESUME <i class="bi bi-download"></i>
+            </a>
+          </div>
+
+          <div class="hero-rating-badge mb-4">
+            <div class="d-flex text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <span><strong>Dean's Lister (3 Consecutive Years)</strong> • NSTP Overall Cluster Leader</span>
+          </div>
+        </div>
+
+        <!-- Hero Right Column (Floating Cards Grid matching Codespot Reference) -->
+        <div class="col-lg-5">
+          <div class="hero-grid-showcase">
+            <!-- Card 1: Academic Achievement -->
+            <div class="stat-card-blue">
+              <div class="stat-number-giant text-gradient-blue">3 Yrs</div>
+              <div class="fw-bold text-white mb-1">Dean's Lister Honoree</div>
+              <div class="stat-label-subtle">Consistent academic excellence across 1st, 2nd, and 3rd Year (Sem 1 & 2).
+              </div>
+            </div>
+
+            <!-- Card 2: Developer Portrait & Badge -->
+            <div class="stat-card-blue d-flex flex-column justify-content-between">
+              <div class="d-flex align-items-center mb-2">
+                <img src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
+                  class="rounded-circle border border-2 border-info me-3 shadow"
+                  style="width: 52px; height: 52px; object-fit: cover; object-position: top center;">
+                <div>
+                  <h6 class="text-white fw-bold mb-0">M. Caronan</h6>
+                  <span class="badge bg-success-subtle text-success small" style="font-size: 0.72rem;">● Ready for
+                    Hire</span>
+                </div>
+              </div>
+              <p class="small text-muted mb-0">Junior Web Developer • Data Analyst • Database Administrator</p>
+            </div>
+
+            <!-- Card 3: 3D Geo Shape & Operational Rigor -->
+            <div class="stat-card-blue">
+              <div class="geo-shape-cube">
+                <i class="bi bi-boxes text-info"
+                  style="font-size: 4rem; filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.8));"></i>
+              </div>
+              <div class="fw-bold text-white mb-1">100% Data Rigor</div>
+              <div class="stat-label-subtle">Barcode & inventory systems experience across SM & McDonald's.</div>
+            </div>
+
+            <!-- Card 4: Production Projects -->
+            <div class="stat-card-blue">
+              <div class="stat-number-giant text-gradient-blue">5+</div>
+              <div class="fw-bold text-white mb-1">Flagship Projects</div>
+              <div class="stat-label-subtle">From Full-Stack E-Commerce & Kiosk HR to IoT Arduino systems.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STAT BANNER SECTION ================= -->
+  <section class="stat-banner">
+    <div class="container">
+      <div class="row g-4 text-center">
+        <div class="col-6 col-md-3">
+          <div class="big-stat-number">5+</div>
+          <div class="big-stat-label">Production-Ready IT Systems</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="big-stat-number">100K+</div>
+          <div class="big-stat-label">Warehouse Data Rows Handled</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="big-stat-number">3 Yrs</div>
+          <div class="big-stat-label">Consecutive Dean's List Honors</div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="big-stat-number">0</div>
+          <div class="big-stat-label">Unpatched Security Flaws (IDOR/SQLi)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ME SECTION ================= -->
+  <section id="about" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-person-bounding-box"></i> Candidate Overview</div>
+        <h2 class="section-title">About <span class="text-gradient-blue">Marcial Lawrence</span></h2>
+        <p class="section-subtitle">Bridging front-line operations, inventory systems, and modern software engineering.
+        </p>
+      </div>
+
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+          <div class="codespot-card">
+            <h4 class="h5 text-info fw-bold mb-3"><i class="bi bi-compass-fill me-2"></i> Professional Narrative &
+              Philosophy</h4>
+            <p class="text-light opacity-90 mb-3" style="line-height: 1.8;">
+              My trajectory into Information Technology is anchored in hands-on industrial and retail operations. Having
+              worked as an <strong>Inventory Assistant at McDonald's BF Homes</strong>, a <strong>Stock Clerk at SM
+                Appliances</strong>, and a <strong>Warehouse Clerk & Data Encoder at SM Supermarket Warehouse</strong>,
+              I developed an acute understanding of how digital systems directly govern logistics, inventory accuracy,
+              and business cash flow.
+            </p>
+            <p class="text-light opacity-90 mb-3" style="line-height: 1.8;">
+              Operating barcode scanners, resolving monitor lag in order-taking systems, and building high-volume stock
+              reconciliations in <strong>MS Excel</strong> revealed the vital importance of data integrity. This
+              practical grounding ignited my transition into technical engineering. During my BSIT degree, I channeled
+              this operational discipline into mastering <strong>Python, PHP, JavaScript, and MySQL</strong>, designing
+              normalized relational databases (3NF), and building scalable e-commerce and kiosk management applications.
+            </p>
+            <p class="text-light opacity-90 mb-0" style="line-height: 1.8;">
+              Recognized as a consistent <strong>Dean's Lister across all 3 years</strong> and an <strong>NSTP Overall
+                Cluster Leader</strong>, I am poised to step into the IT industry as a <strong>Junior Web Developer,
+                Data Analyst, or Database Administrator</strong>. I bring to engineering teams not just technical
+              proficiency, but an unyielding commitment to data precision, reliability, and proactive problem
+              resolution.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <!-- Official Student Portrait Card -->
+          <div class="codespot-card text-center mb-4 p-3 border border-info border-opacity-25">
+            <div class="position-relative d-inline-block w-100 mb-3" style="max-width: 340px;">
+              <img src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
+                class="img-fluid rounded-4 shadow-lg border border-2 border-info"
+                style="max-height: 350px; width: 100%; object-fit: cover; object-position: top center;">
+              <span
+                class="position-absolute bottom-0 end-0 mb-3 me-3 badge bg-dark bg-opacity-75 border border-info text-info py-2 px-3 shadow-sm">
+                <i class="bi bi-patch-check-fill text-info me-1"></i> Verified BSIT Candidate
+              </span>
+            </div>
+            <h5 class="fw-bold text-white mb-1">Marcial Lawrence Jr V. Caronan</h5>
+            <p class="text-info small mb-0"><i class="bi bi-mortarboard-fill me-1"></i> Datamex College of Saint Adeline
+              • BSIT 2026</p>
+          </div>
+
+          <div class="codespot-card">
+            <h4 class="h5 text-white fw-bold mb-4 pb-2 border-bottom border-secondary"><i
+                class="bi bi-file-earmark-person-fill text-info me-2"></i> Quick Profile Details</h4>
+            <ul class="list-unstyled mb-0">
+              <li class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">
+                <span class="text-muted"><i class="bi bi-person me-2 text-info"></i> Full Name:</span>
+                <span class="fw-semibold text-white">Marcial Lawrence Jr V. Caronan</span>
+              </li>
+              <li class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">
+                <span class="text-muted"><i class="bi bi-telephone me-2 text-info"></i> Contact No:</span>
+                <span class="fw-semibold text-info">09202720151</span>
+              </li>
+              <li class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">
+                <span class="text-muted"><i class="bi bi-envelope-at me-2 text-info"></i> Email:</span>
+                <span class="fw-semibold text-info">marcialcaronan@gmail.com</span>
+              </li>
+              <li class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-25">
+                <span class="text-muted"><i class="bi bi-geo-alt me-2 text-info"></i> Location:</span>
+                <span class="fw-semibold text-white">Brgy. Moonwalk, Parañaque City</span>
+              </li>
+              <li class="d-flex justify-content-between py-2">
+                <span class="text-muted"><i class="bi bi-bullseye me-2 text-info"></i> Target Roles:</span>
+                <span class="fw-semibold text-info">Web Developer | Data Analyst | DBA</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TECHNICAL SKILLS SECTION ================= -->
+  <section id="skills" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-cpu-fill"></i> Technical Inventory</div>
+        <h2 class="section-title">Skills & <span class="text-gradient-blue">Tech Stack</span></h2>
+        <p class="section-subtitle">Categorized competencies validated through academic systems, enterprise projects,
+          and workplace tools.</p>
+
+        <!-- Filter Pills -->
+        <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+          <button class="skill-category-pill active" data-category="all">All Skills</button>
+          <button class="skill-category-pill" data-category="prog">Programming Languages</button>
+          <button class="skill-category-pill" data-category="db">Database & Analytics</button>
+          <button class="skill-category-pill" data-category="office">Office & Productivity</button>
+          <button class="skill-category-pill" data-category="tools">Tools & Hardware</button>
+          <button class="skill-category-pill" data-category="design">Design Tools</button>
+        </div>
+      </div>
+
+      <div class="row g-4" id="skillsContainer">
+        <!-- Skill 1: Python -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="prog">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-filetype-py text-info fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">Python</h5>
+                <span class="text-muted small">Automation, Scripting & Data Handling</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">85%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="85%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Used for data wrangling, algorithmic automation, and backend API logic in
+              student management systems.</p>
+            <span class="skill-badge">Evidence: Data Scripts & Employee System</span>
+          </div>
+        </div>
+
+        <!-- Skill 2: PHP -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="prog">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-filetype-php text-primary fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">PHP (Backend & OOP)</h5>
+                <span class="text-muted small">Server-Side Web & REST APIs</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">88%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="88%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Engineered backend transaction pipelines, session management, and PDO
+              prepared statements.</p>
+            <span class="skill-badge">Evidence: E-Commerce & Loan App Backend</span>
+          </div>
+        </div>
+
+        <!-- Skill 3: JavaScript -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="prog">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-filetype-js text-warning fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">JavaScript (ES6+)</h5>
+                <span class="text-muted small">Interactive UI & Asynchronous Fetch</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">84%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="84%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Asynchronous client-side state handling, dynamic DOM rendering, AJAX
+              polling, and event listeners.</p>
+            <span class="skill-badge">Evidence: Music Video App & E-Commerce Cart</span>
+          </div>
+        </div>
+
+        <!-- Skill 4: MySQL & ERD -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="db">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-database-fill-check text-info fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">MySQL & ERD Modeling</h5>
+                <span class="text-muted small">3NF Normalization & Complex Joins</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">90%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="90%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Schema design, foreign key constraints, indexing for performance,
+              transactions (`ACID`), and backup routines.</p>
+            <span class="skill-badge">Evidence: E-Commerce & Payroll Schemas</span>
+          </div>
+        </div>
+
+        <!-- Skill 5: Advanced MS Excel -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="db">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-file-earmark-spreadsheet-fill text-success fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">Advanced MS Excel</h5>
+                <span class="text-muted small">Data Analytics, Formulas & Reporting</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">94%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="94%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">VLOOKUP/XLOOKUP, Pivot Tables, Conditional Formatting, Data Validation, and
+              stock reconciliation models.</p>
+            <span class="skill-badge">Evidence: SM Supermarket & McDonald's Inventory</span>
+          </div>
+        </div>
+
+        <!-- Skill 6: Office Productivity Tools -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="office">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-microsoft text-primary fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">MS Word & MS PowerPoint</h5>
+                <span class="text-muted small">Technical Writing & Project Presentations</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">92%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="92%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Comprehensive system documentation, incident report formatting, and
+              technical defense slide decks.</p>
+            <span class="skill-badge">Evidence: Incident Logs & Project Documentation</span>
+          </div>
+        </div>
+
+        <!-- Skill 7: Git & Version Control -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="tools">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-git text-danger fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">Git & GitHub</h5>
+                <span class="text-muted small">Version Control & Collaborative Dev</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">82%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="82%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Branching strategies, commit conventions, merge conflict management, and
+              repository documentation.</p>
+            <span class="skill-badge">Evidence: Project Repositories</span>
+          </div>
+        </div>
+
+        <!-- Skill 8: Hardware & Barcode Scanners -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="tools">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-upc-scan text-info fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">Barcode Scanners & Hardware</h5>
+                <span class="text-muted small">Peripheral Integration & POS Scanners</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">95%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="95%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Hands-on configuration, barcode calibration, serial baud rate
+              troubleshooting, and scanner-to-inventory link.</p>
+            <span class="skill-badge">Evidence: SM Supermarket & SM Appliances</span>
+          </div>
+        </div>
+
+        <!-- Skill 9: Arduino & IoT -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="tools">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-motherboard text-info fs-2 me-3"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">IoT Sensors & Arduino</h5>
+                <span class="text-muted small">C/C++ Embedded Microcontrollers</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">80%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="80%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Circuit assembly, analog sensor calibration, threshold logic programming,
+              and hardware alarms.</p>
+            <span class="skill-badge">Evidence: Project 3 (IoT Soil Monitoring)</span>
+          </div>
+        </div>
+
+        <!-- Skill: Adobe Photoshop -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="design">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-brush-fill text-info fs-2 me-3" style="color: #31a8ff !important;"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">Adobe Photoshop</h5>
+                <span class="text-muted small">Graphic Design & Visual Editing</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">80%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="80%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Used for designing professional certificates, tarpaulins, event posters, trophy designs, and promotional materials for school programs and institutional events.</p>
+            <span class="skill-badge">Evidence: Student Assistant Role</span>
+          </div>
+        </div>
+
+        <!-- Skill: Canva -->
+        <div class="col-md-6 col-lg-4 skill-card-item" data-category="design">
+          <div class="codespot-card h-100">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-palette-fill fs-2 me-3" style="color: #00c4cc;"></i>
+              <div>
+                <h5 class="fw-bold mb-0 text-white">Canva</h5>
+                <span class="text-muted small">Digital Design & Layout</span>
+              </div>
+            </div>
+            <div class="skill-bar-container">
+              <div class="skill-bar-header">
+                <span class="skill-bar-title text-muted">Proficiency</span>
+                <span class="skill-bar-pct">90%</span>
+              </div>
+              <div class="skill-progress-track">
+                <div class="skill-progress-fill" data-width="90%"></div>
+              </div>
+            </div>
+            <p class="small text-muted mb-2">Created professional presentations, event materials, social media graphics, and institutional collaterals. Proficient in layouts, typography, and visual branding.</p>
+            <span class="skill-badge">Evidence: Student Assistant & Events</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS SHOWCASE SECTION ================= -->
+  <section id="projects" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-kanban"></i> Engineering Portfolio</div>
+        <h2 class="section-title">Featured <span class="text-gradient-blue">IT Projects</span></h2>
+        <p class="section-subtitle">From AI-powered metaphysical systems to hardware telemetry — a showcase of diverse technical capabilities.</p>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- Project 1: Oracle AI — FULL FLAGSHIP -->
+        <div class="col-lg-12">
+          <div class="codespot-card d-flex flex-column flex-lg-row gap-4 align-items-start"
+            style="border: 1px solid rgba(192, 132, 252, 0.45); background: linear-gradient(135deg, rgba(88,28,135,0.25) 0%, rgba(15,5,29,0.9) 100%); position:relative; overflow:hidden;">
+            <!-- Glowing accent orb -->
+            <div style="position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:radial-gradient(circle,rgba(192,132,252,0.25) 0%,transparent 70%);pointer-events:none;"></div>
+
+            <!-- Left: Info -->
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center gap-3 mb-3 flex-wrap">
+                <span class="badge px-3 py-2 fw-bold text-uppercase" style="background:linear-gradient(90deg,#7c3aed,#c084fc);font-size:0.78rem;letter-spacing:0.07em;">
+                  <i class="bi bi-stars me-1"></i> PRIMARY FLAGSHIP — AI PROJECT
+                </span>
+                <span class="badge bg-success px-3 py-2 fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Live & Functional</span>
+                <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i> 2026</span>
+              </div>
+
+              <h3 class="h3 fw-bold mb-1" style="background:linear-gradient(90deg,#e879f9,#c084fc,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">
+                🔮 Oracle AI
+              </h3>
+              <p class="text-info fw-semibold small mb-3">Spiritual Intelligence • Astrology • Numerology • Palm Reading • Tarot • Crystals • Metaphysics</p>
+              <p class="text-muted mb-3" style="line-height:1.75;">
+                <strong class="text-white">Oracle AI</strong> is a mystical AI companion powered by <strong class="text-info">Google Gemini</strong> that answers any question about the spiritual and metaphysical world. Users can consult the Oracle on:
+              </p>
+              <div class="row g-2 mb-3">
+                <div class="col-6 col-md-4"><div class="d-flex align-items-center gap-2 small text-light"><i class="bi bi-moon-stars-fill text-warning"></i> Astrology & Zodiac Signs</div></div>
+                <div class="col-6 col-md-4"><div class="d-flex align-items-center gap-2 small text-light"><i class="bi bi-hash text-info"></i> Numerology & Life Paths</div></div>
+                <div class="col-6 col-md-4"><div class="d-flex align-items-center gap-2 small text-light"><i class="bi bi-hand-index-thumb-fill text-success"></i> Palm Reading</div></div>
+                <div class="col-6 col-md-4"><div class="d-flex align-items-center gap-2 small text-light"><i class="bi bi-suit-spade-fill text-danger"></i> Tarot Card Reading</div></div>
+                <div class="col-6 col-md-4"><div class="d-flex align-items-center gap-2 small text-light"><i class="bi bi-gem text-info"></i> Crystal Knowledge</div></div>
+                <div class="col-6 col-md-4"><div class="d-flex align-items-center gap-2 small text-light"><i class="bi bi-stars text-warning"></i> Metaphysical Guidance</div></div>
+              </div>
+
+              <div class="mb-3">
+                <span class="skill-badge">Google Gemini API</span>
+                <span class="skill-badge">JavaScript</span>
+                <span class="skill-badge">HTML5 / CSS3</span>
+                <span class="skill-badge">Prompt Engineering</span>
+                <span class="skill-badge">AI Integration</span>
+              </div>
+
+              <div class="d-flex gap-3 flex-wrap mt-auto">
+                <a href="oracle-ai/index.html" class="btn-codespot-primary btn-pill px-4 py-2" target="_blank">
+                  <i class="bi bi-stars me-2"></i> Launch Oracle AI
+                </a>
+                <button class="btn-codespot-outline btn-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="oracle-ai">
+                  View Technical Specs <i class="bi bi-info-circle"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Chat Preview Mock -->
+            <div class="flex-shrink-0" style="width:100%;max-width:320px;">
+              <div class="codespot-card p-3" style="background:rgba(10,4,20,0.85);border:1px solid rgba(192,132,252,0.3);">
+                <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+                  <i class="bi bi-stars text-warning fs-5"></i>
+                  <span class="fw-bold text-white small">Oracle AI</span>
+                  <span class="ms-auto badge bg-success" style="font-size:0.65rem;">ONLINE</span>
+                </div>
+                <div class="mb-2">
+                  <div class="text-muted" style="font-size:0.72rem;margin-bottom:4px;">You</div>
+                  <div class="p-2 rounded small text-light" style="background:rgba(168,85,247,0.15);font-size:0.8rem;">What does my Life Path Number 7 mean?</div>
+                </div>
+                <div class="mb-2">
+                  <div class="text-info" style="font-size:0.72rem;margin-bottom:4px;"><i class="bi bi-stars me-1"></i>Oracle</div>
+                  <div class="p-2 rounded small text-muted" style="background:rgba(255,255,255,0.04);font-size:0.78rem;line-height:1.55;">Life Path 7 souls are the <span class="text-violet-neon" style="color:#c084fc;">Seekers of Truth</span>. Deeply intuitive, analytical, and spiritually inclined — you are drawn to the mysteries of existence...</div>
+                </div>
+                <div class="text-center mt-3">
+                  <span class="text-muted" style="font-size:0.7rem;font-style:italic;">Powered by Google Gemini ✨</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2: Data Analysis — COMING SOON -->
+        <div class="col-lg-6 col-md-6">
+          <div class="codespot-card h-100 d-flex flex-column" style="border:1px solid rgba(16,185,129,0.25);opacity:0.88;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-success text-uppercase px-3 py-2"><i class="bi bi-bar-chart-line-fill me-1"></i> Data Analytics</span>
+              <span class="badge bg-dark border border-warning text-warning px-2 py-1" style="font-size:0.7rem;"><i class="bi bi-clock-history me-1"></i> Uploading Soon</span>
+            </div>
+            <h4 class="h5 fw-bold text-white mb-2">📊 Data Analysis Project</h4>
+            <p class="text-success fw-semibold small mb-3">Statistical Analysis • Data Visualization • Insight Reports</p>
+            <p class="text-muted small flex-grow-1">
+              A comprehensive data analysis project covering real-world datasets with statistical processing, trend identification, and visual reporting. Full documentation, datasets, and dashboards will be integrated soon.
+            </p>
+            <div class="mb-3">
+              <span class="skill-badge">Python / Pandas</span>
+              <span class="skill-badge">Data Visualization</span>
+              <span class="skill-badge">Excel Analytics</span>
+            </div>
+            <div class="codespot-card p-3 text-center mt-auto" style="background:rgba(16,185,129,0.07);border:1px dashed rgba(16,185,129,0.3);">
+              <i class="bi bi-upload fs-4 text-success mb-2 d-block"></i>
+              <span class="small text-muted">Full project overview & datasets — uploading soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Arduino Project — COMING SOON -->
+        <div class="col-lg-6 col-md-6">
+          <div class="codespot-card h-100 d-flex flex-column" style="border:1px solid rgba(245,158,11,0.25);opacity:0.88;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-warning text-dark text-uppercase px-3 py-2"><i class="bi bi-motherboard-fill me-1"></i> IoT & Hardware</span>
+              <span class="badge bg-dark border border-warning text-warning px-2 py-1" style="font-size:0.7rem;"><i class="bi bi-clock-history me-1"></i> Uploading Soon</span>
+            </div>
+            <h4 class="h5 fw-bold text-white mb-2">⚡ Arduino Hardware Project</h4>
+            <p class="text-warning fw-semibold small mb-3">Microcontroller Programming • Sensor Integration • Hardware Automation</p>
+            <p class="text-muted small flex-grow-1">
+              An Arduino-based hardware project featuring microcontroller programming, sensor interfacing, and physical automation. Full technical overview, circuit diagrams, and code documentation will be integrated soon.
+            </p>
+            <div class="mb-3">
+              <span class="skill-badge">Arduino C++</span>
+              <span class="skill-badge">IoT Sensors</span>
+              <span class="skill-badge">Hardware Logic</span>
+            </div>
+            <div class="codespot-card p-3 text-center mt-auto" style="background:rgba(245,158,11,0.07);border:1px dashed rgba(245,158,11,0.3);">
+              <i class="bi bi-cpu-fill fs-4 text-warning mb-2 d-block"></i>
+              <span class="small text-muted">Project overview, schematics & demo — uploading soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4: Web Development — COMING SOON -->
+        <div class="col-lg-6 col-md-6">
+          <div class="codespot-card h-100 d-flex flex-column" style="border:1px solid rgba(129,140,248,0.25);opacity:0.88;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge text-uppercase px-3 py-2 fw-bold" style="background:linear-gradient(90deg,#4f46e5,#818cf8);"><i class="bi bi-code-slash me-1"></i> Web Development</span>
+              <span class="badge bg-dark border border-info text-info px-2 py-1" style="font-size:0.7rem;"><i class="bi bi-link-45deg me-1"></i> Link Coming Soon</span>
+            </div>
+            <h4 class="h5 fw-bold text-white mb-2">🌐 Web Development Project</h4>
+            <p class="text-info fw-semibold small mb-3">Full-Stack • Responsive Design • Database-Driven</p>
+            <p class="text-muted small flex-grow-1">
+              A full-stack web development project demonstrating front-end craftsmanship and back-end engineering. Live deployment link, detailed technical specifications, and source documentation will be integrated soon.
+            </p>
+            <div class="mb-3">
+              <span class="skill-badge">PHP / JavaScript</span>
+              <span class="skill-badge">MySQL</span>
+              <span class="skill-badge">Bootstrap 5</span>
+            </div>
+            <div class="codespot-card p-3 text-center mt-auto" style="background:rgba(129,140,248,0.07);border:1px dashed rgba(129,140,248,0.3);">
+              <i class="bi bi-globe fs-4 text-info mb-2 d-block"></i>
+              <span class="small text-muted">Live link & full documentation — integrating soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5: Capstone Project — IN THE MAKING -->
+        <div class="col-lg-6 col-md-6">
+          <div class="codespot-card h-100 d-flex flex-column" style="border:1px solid rgba(244,63,94,0.25);opacity:0.88;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-danger text-uppercase px-3 py-2"><i class="bi bi-mortarboard-fill me-1"></i> Capstone Research</span>
+              <span class="badge bg-dark border border-danger text-danger px-2 py-1" style="font-size:0.7rem;"><i class="bi bi-hammer me-1"></i> In the Making</span>
+            </div>
+            <h4 class="h5 fw-bold text-white mb-2">📝 Capstone Project</h4>
+            <p class="text-danger fw-semibold small mb-3">Chapter 1 Completed • Research in Progress</p>
+            <p class="text-muted small flex-grow-1">
+              My BSIT Capstone research project is currently in active development. Chapter 1 (Introduction, Background of the Study, Statement of the Problem, Objectives & Scope) has been completed. Further chapters, prototypes, and full system documentation will be integrated upon completion.
+            </p>
+            <div class="mb-3">
+              <span class="skill-badge">Research</span>
+              <span class="skill-badge">Chapter 1 Done</span>
+              <span class="skill-badge">System Design</span>
+            </div>
+            <div class="codespot-card p-3 text-center mt-auto" style="background:rgba(244,63,94,0.07);border:1px dashed rgba(244,63,94,0.3);">
+              <i class="bi bi-file-earmark-text-fill fs-4 text-danger mb-2 d-block"></i>
+              <span class="small text-muted">Chapter 1 paper & full system details — coming soon</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ================= WORK EXPERIENCE SECTION ================= -->
+  <section id="experience" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-briefcase-fill"></i> Real-World Evidence</div>
+        <h2 class="section-title">Professional <span class="text-gradient-blue">Work Experience</span></h2>
+        <p class="section-subtitle">How practical warehouse, inventory data handling, and retail operations translate
+          directly into IT problem-solving.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Experience 1 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-cup-hot-fill"></i></div>
+            <h5 class="fw-bold text-white mb-1">Service Crew & Inventory Assistant</h5>
+            <div class="text-info small fw-semibold mb-2">McDonald's BF Homes Parañaque</div>
+            <p class="small text-muted mb-3">
+              Handled order-taking monitor duties related to IT systems; managed physical stock and raw material
+              inventory, tracked daily usage data using MS Excel & Word, and encoded records into the restaurant
+              database system.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">POS IT Monitors</span>
+              <span class="skill-badge">Stock Control</span>
+              <span class="skill-badge">MS Excel</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 2 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-tv-fill"></i></div>
+            <h5 class="fw-bold text-white mb-1">Stock Clerk</h5>
+            <div class="text-info small fw-semibold mb-2">SM Appliances</div>
+            <p class="small text-muted mb-3">
+              Operated barcode scanners to capture appliance serials and SKU data directly integrated into inventory,
+              ordering, and dispatching systems. Generated periodic stock discrepancy and replenishment reports via MS
+              Excel.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">Barcode Scanners</span>
+              <span class="skill-badge">Dispatch Systems</span>
+              <span class="skill-badge">Excel Auditing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 3 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-box-seam-fill"></i></div>
+            <h5 class="fw-bold text-white mb-1">Warehouse Clerk & Data Encoder</h5>
+            <div class="text-info small fw-semibold mb-2">SM Supermarket Warehouse</div>
+            <p class="small text-muted mb-3">
+              Utilized industrial barcode scanners for receiving, picking, sorting, and dispatching bulk merchandise.
+              Served as primary data encoder in dispatching, managing electronic waybills, documentation (MS
+              Word/Excel), and inventory tracking.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">High-Volume Data</span>
+              <span class="skill-badge">Sorting & Picking</span>
+              <span class="skill-badge">Warehouse Logistics</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 4 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-shield-check"></i></div>
+            <h5 class="fw-bold text-white mb-1">Security Agent</h5>
+            <div class="text-info small fw-semibold mb-2">National Book Store</div>
+            <p class="small text-muted mb-3">
+              Maintained loss prevention protocols, audited physical merchandise safety, and processed comprehensive
+              incident report documentation using administrative productivity software and office suites.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">Incident Documentation</span>
+              <span class="skill-badge">Administrative Software</span>
+              <span class="skill-badge">Auditing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 5 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-building-check"></i></div>
+            <h5 class="fw-bold text-white mb-1">Security Agent</h5>
+            <div class="text-info small fw-semibold mb-2">Holiday Inn Express (Resorts World Manila)</div>
+            <p class="small text-muted mb-3">
+              Managed hotel incident report documentation, automated parking entrance surveillance monitoring, and
+              systematic operational shift logging in compliance with strict corporate security regulations.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">Operational Logging</span>
+              <span class="skill-badge">Surveillance Monitors</span>
+              <span class="skill-badge">Risk Protocols</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 6: Student Assistant -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-mortarboard-fill"></i></div>
+            <h5 class="fw-bold text-white mb-1">Student Assistant</h5>
+            <div class="text-info small fw-semibold mb-2">Datamex College of Saint Adeline — School / University Role
+            </div>
+            <p class="small text-muted mb-3">
+              Handled sensitive academic documents — student information records, certificates of enrollment &
+              registration, good moral certificates, and grade slips — with strict data confidentiality. Utilized MS
+              Office (Word, PowerPoint, Excel) for documentation, reporting, and presentations.
+            </p>
+            <p class="small text-muted mb-3">
+              Served as <strong class="text-white">Graphic Designer</strong> using Adobe Photoshop and Canva to produce
+              professional certificates, trophy designs, tarpaulins, event posters, and promotional materials.
+              Functioned as <strong class="text-white">Event Host / Floor Manager</strong> ensuring smooth execution of
+              school programs.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">MS Office Suite</span>
+              <span class="skill-badge">Adobe Photoshop</span>
+              <span class="skill-badge">Canva</span>
+              <span class="skill-badge">Event Coordination</span>
+              <span class="skill-badge">Records Management</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 7: Production Team Head -->
+        <div class="col-lg-6 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-stars"></i></div>
+            <h5 class="fw-bold text-white mb-1">Production Team Head</h5>
+            <div class="text-info small fw-semibold mb-2">Datamex College of Saint Adeline — Institutional Projects &
+              Programs</div>
+            <p class="small text-muted mb-3">
+              Spearheaded event design, planning, and creative direction for institutional projects and programs. Led a
+              multidisciplinary production team, coordinating all logistical, visual, and programmatic elements to
+              deliver high-quality academic and organizational events.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">Event Design</span>
+              <span class="skill-badge">Creative Direction</span>
+              <span class="skill-badge">Team Leadership</span>
+              <span class="skill-badge">Project Planning</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 8: NSTP Assistant Facilitator -->
+        <div class="col-lg-6 col-md-6">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-people-fill"></i></div>
+            <h5 class="fw-bold text-white mb-1">NSTP Assistant Facilitator</h5>
+            <div class="text-info small fw-semibold mb-2">Datamex College of Saint Adeline — NSTP 1 & 2 (Overall Cluster
+              Leader)</div>
+            <p class="small text-muted mb-3">
+              Assisted in facilitating NSTP classes for underclassmen, leading student groups through community service
+              orientation, civic welfare training, and literacy programs. Created official NSTP documents, attendance
+              sheets, and evaluation forms using MS Word.
+            </p>
+            <p class="small text-muted mb-3">
+              Performed <strong class="text-white">Excel-based grade encoding and computation</strong> using formulas
+              (VLOOKUP, IF, AVERAGE, SUMPRODUCT) for automated student grade calculation and ranking. Served as a
+              <strong class="text-white">lead instructor and mentor</strong>, teaching students fundamental IT literacy,
+              document formatting, and basic data organization skills.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">Document Creation</span>
+              <span class="skill-badge">Excel Formulas</span>
+              <span class="skill-badge">Grade Computation</span>
+              <span class="skill-badge">Leadership & Teaching</span>
+              <span class="skill-badge">NSTP Facilitation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Experience 9: Professional Development & Certifications -->
+        <div class="col-lg-12">
+          <div class="codespot-card h-100">
+            <div class="experience-icon-box"><i class="bi bi-award-fill"></i></div>
+            <h5 class="fw-bold text-white mb-1">Certified IT Seminars & Workshops</h5>
+            <div class="text-info small fw-semibold mb-2">Continuous Professional Education & Development</div>
+            <p class="small text-muted mb-3">
+              Actively participated in rigorous technical training and IT seminars. Acquired specific certifications including: IT Seminars & Workshops, Professional Development, Technical Training, Industry Readiness, and Advanced IT Skills. This demonstrates a strong commitment to continuous learning and keeping abreast of industry standards in IT operations and software engineering.
+            </p>
+            <div class="border-top border-secondary border-opacity-25 pt-2">
+              <span class="skill-badge">IT Certifications</span>
+              <span class="skill-badge">Continuous Learning</span>
+              <span class="skill-badge">Professional Seminars</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CERTIFICATES SECTION ================= -->
+  <section id="certificates" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-award-fill"></i> Professional Development</div>
+        <h2 class="section-title">Certifications & <span class="text-gradient-blue">Achievements</span></h2>
+        <p class="section-subtitle">Verified credentials demonstrating continuous learning in Web Development, QA Testing, IoT, and Cybersecurity.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Certificate 1 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100 p-3">
+            <img src="assets/img/certificates/MARCIAL 1.png" alt="Certificate 1" class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
+            <h5 class="fw-bold text-white mb-1">IT Seminar & Workshop Certificate</h5>
+            <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
+          </div>
+        </div>
+
+        <!-- Certificate 2 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100 p-3">
+            <img src="assets/img/certificates/MARCIAL 2.png" alt="Certificate 2" class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
+            <h5 class="fw-bold text-white mb-1">Professional Development Certificate</h5>
+            <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
+          </div>
+        </div>
+
+        <!-- Certificate 3 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100 p-3">
+            <img src="assets/img/certificates/MARCIAL 3.png" alt="Certificate 3" class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
+            <h5 class="fw-bold text-white mb-1">Technical Training Certificate</h5>
+            <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
+          </div>
+        </div>
+
+        <!-- Certificate 4 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100 p-3">
+            <img src="assets/img/certificates/MARCIAL 4.png" alt="Certificate 4" class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
+            <h5 class="fw-bold text-white mb-1">Industry Readiness Certificate</h5>
+            <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
+          </div>
+        </div>
+
+        <!-- Certificate 5 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="codespot-card h-100 p-3">
+            <img src="assets/img/certificates/MARCIAL 5.png" alt="Certificate 5" class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
+            <h5 class="fw-bold text-white mb-1">Advanced Skills Certificate</h5>
+            <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TROUBLESHOOTING SECTION (5 IT Cases) ================= -->
+  <section id="troubleshooting" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-tools"></i> Diagnostic Methodology</div>
+        <h2 class="section-title">IT Troubleshooting <span class="text-gradient-blue">Portfolio</span></h2>
+        <p class="section-subtitle">5 detailed troubleshooting logs grounded in real-world operational and web
+          application incidents.</p>
+      </div>
+
+      <div class="accordion" id="troubleshootAccordion">
+        <!-- Case 1: Barcode Scanner -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="hCase1">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cCase1"
+              aria-expanded="true" aria-controls="cCase1">
+              <span class="badge bg-primary me-3">CASE 01</span>
+              <span>Barcode Scanner Hardware Handshake & Buffer Overflow in Warehouse Dispatch</span>
+            </button>
+          </h2>
+          <div id="cCase1" class="accordion-collapse collapse show" aria-labelledby="hCase1"
+            data-bs-parent="#troubleshootAccordion">
+            <div class="accordion-body">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h6 class="text-danger fw-bold"><i class="bi bi-exclamation-triangle-fill me-1"></i> Problem:</h6>
+                  <p class="small">USB barcode scanners in the warehouse terminal truncated 14-digit GTIN barcodes or
+                    inserted garbage ASCII characters during rapid scanning.</p>
+                  <h6 class="text-warning fw-bold mt-3"><i class="bi bi-search me-1"></i> Possible Causes:</h6>
+                  <ul class="small mb-0">
+                    <li>Serial USB baud rate mismatch or incorrect keyboard emulation delay (inter-character delay).
+                    </li>
+                    <li>Missing carriage-return suffix (`CR/LF`) causing input concatenation in dispatch software.</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-info fw-bold"><i class="bi bi-activity me-1"></i> Diagnostic Procedure:</h6>
+                  <p class="small mb-2">Tested input raw stream in a plain text editor to isolate software vs. hardware
+                    buffer. Confirmed transmission delay was set too low (0ms).</p>
+                  <h6 class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Solution:</h6>
+                  <p class="small mb-2">Scanned manufacturer configuration barcode to set a 20ms inter-character delay
+                    and appended automatic `Enter` (Suffix CR) terminator.</p>
+                  <h6 class="text-primary fw-bold"><i class="bi bi-lightbulb-fill me-1"></i> Lesson Learned:</h6>
+                  <p class="small mb-0">Hardware peripherals require strict physical calibration and transmission
+                    throttling before integration into database ingestion interfaces.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 2: POS Order Monitor Lag -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="hCase2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cCase2"
+              aria-expanded="false" aria-controls="cCase2">
+              <span class="badge bg-primary me-3">CASE 02</span>
+              <span>Kitchen / POS Order Display Monitor Freeze During Peak Volume Hours</span>
+            </button>
+          </h2>
+          <div id="cCase2" class="accordion-collapse collapse" aria-labelledby="hCase2"
+            data-bs-parent="#troubleshootAccordion">
+            <div class="accordion-body">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h6 class="text-danger fw-bold">Problem:</h6>
+                  <p class="small">The order-taking display monitor froze during lunch rush, failing to render completed
+                    tickets and delaying drive-thru order assembly.</p>
+                  <h6 class="text-warning fw-bold mt-3">Possible Causes:</h6>
+                  <ul class="small mb-0">
+                    <li>Memory leak in client-side web socket polling script accumulating uncleared DOM elements.</li>
+                    <li>Network broadcast storm across POS Ethernet switch.</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-info fw-bold">Diagnostic Procedure:</h6>
+                  <p class="small mb-2">Examined task manager on the thin-client POS unit; discovered browser process
+                    consuming 98% RAM with 4,000+ detached DOM nodes.</p>
+                  <h6 class="text-success fw-bold">Solution:</h6>
+                  <p class="small mb-2">Refactored client script to destroy detached DOM elements and capped the local
+                    ticket buffer to the 50 most recent transactions.</p>
+                  <h6 class="text-primary fw-bold">Lesson Learned:</h6>
+                  <p class="small mb-0">Always implement strict garbage collection and view caching on continuous-duty
+                    display terminals.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 3: MySQL Connection Pool -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="hCase3">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cCase3"
+              aria-expanded="false" aria-controls="cCase3">
+              <span class="badge bg-primary me-3">CASE 03</span>
+              <span>MySQL Relational Database Connection Starvation & Timeouts</span>
+            </button>
+          </h2>
+          <div id="cCase3" class="accordion-collapse collapse" aria-labelledby="hCase3"
+            data-bs-parent="#troubleshootAccordion">
+            <div class="accordion-body">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h6 class="text-danger fw-bold">Problem:</h6>
+                  <p class="small">Web application threw HTTP 500 error: <em>"SQLSTATE[HY000] [1040] Too many
+                      connections"</em> during simulated concurrent checkout testing.</p>
+                  <h6 class="text-warning fw-bold mt-3">Possible Causes:</h6>
+                  <ul class="small mb-0">
+                    <li>Unclosed PDO database handles remaining open inside loops.</li>
+                    <li>Default MySQL `max_connections` set too low (151) for burst traffic.</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-info fw-bold">Diagnostic Procedure:</h6>
+                  <p class="small mb-2">Executed <code>SHOW PROCESSLIST;</code> in MySQL CLI, revealing 150 persistent
+                    sleeping threads (`Command: Sleep`) with idle time > 300s.</p>
+                  <h6 class="text-success fw-bold">Solution:</h6>
+                  <p class="small mb-2">Implemented explicit database singleton pattern with persistent pooling, closed
+                    idle statements, and reduced `wait_timeout` to 30 seconds.</p>
+                  <h6 class="text-primary fw-bold">Lesson Learned:</h6>
+                  <p class="small mb-0">Database connections are finite system resources; connection lifecycles must be
+                    closed immediately post-execution.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 4: Excel Formula Corruption -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="hCase4">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cCase4"
+              aria-expanded="false" aria-controls="cCase4">
+              <span class="badge bg-primary me-3">CASE 04</span>
+              <span>High-Volume Inventory Spreadsheet Formula Corruption & Circular References</span>
+            </button>
+          </h2>
+          <div id="cCase4" class="accordion-collapse collapse" aria-labelledby="hCase4"
+            data-bs-parent="#troubleshootAccordion">
+            <div class="accordion-body">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h6 class="text-danger fw-bold">Problem:</h6>
+                  <p class="small">Weekly stock reconciliation sheet containing 15,000 inventory rows showed
+                    <code>#REF!</code> and circular reference warnings, halting report delivery.
+                  </p>
+                  <h6 class="text-warning fw-bold mt-3">Possible Causes:</h6>
+                  <ul class="small mb-0">
+                    <li>Accidental deletion of a referenced lookup column during manual sorting.</li>
+                    <li>Dynamic relative cell referencing drifting during automated row insertions.</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-info fw-bold">Diagnostic Procedure:</h6>
+                  <p class="small mb-2">Used Excel's Formula Auditing toolbar (<em>Trace Precedents</em> and <em>Error
+                      Checking</em>) to pinpoint broken cell pointers.</p>
+                  <h6 class="text-success fw-bold">Solution:</h6>
+                  <p class="small mb-2">Converted static range formulas to Excel Structured Tables (`ListObject`) using
+                    explicit column headers: <code>[@UnitPrice] * [@Qty]</code> and protected formula cells.</p>
+                  <h6 class="text-primary fw-bold">Lesson Learned:</h6>
+                  <p class="small mb-0">Enterprise spreadsheet models must utilize structured table references and
+                    worksheet protection to prevent catastrophic operator formula breaks.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 5: Payment Gateway API -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="hCase5">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cCase5"
+              aria-expanded="false" aria-controls="cCase5">
+              <span class="badge bg-primary me-3">CASE 05</span>
+              <span>E-Commerce Payment Gateway Webhook HMAC-SHA256 Signature Mismatch</span>
+            </button>
+          </h2>
+          <div id="cCase5" class="accordion-collapse collapse" aria-labelledby="hCase5"
+            data-bs-parent="#troubleshootAccordion">
+            <div class="accordion-body">
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <h6 class="text-danger fw-bold">Problem:</h6>
+                  <p class="small">Customer payments were processed by the online payment provider, but the store order
+                    status remained stuck on "Pending Payment".</p>
+                  <h6 class="text-warning fw-bold mt-3">Possible Causes:</h6>
+                  <ul class="small mb-0">
+                    <li>Webhook payload signature failing HMAC comparison due to trailing whitespace or character
+                      encoding differences.</li>
+                    <li>HTTP 301 redirect stripping headers during server routing.</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-info fw-bold">Diagnostic Procedure:</h6>
+                  <p class="small mb-2">Logged incoming raw HTTP body using
+                    <code>file_get_contents('php://input')</code> and compared calculated hash against
+                    <code>X-Signature</code> header.
+                  </p>
+                  <h6 class="text-success fw-bold">Solution:</h6>
+                  <p class="small mb-2">Used exact raw binary string input for
+                    <code>hash_hmac('sha256', $rawBody, $secret)</code> rather than re-encoded JSON arrays, guaranteeing
+                    100% hash parity.
+                  </p>
+                  <h6 class="text-primary fw-bold">Lesson Learned:</h6>
+                  <p class="small mb-0">Cryptographic webhook verification must strictly operate on raw unparsed byte
+                    streams prior to any JSON decoding.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CYBERSECURITY & AI USAGE SECTION ================= -->
+  <section id="security" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-shield-lock-fill"></i> Defensive Engineering</div>
+        <h2 class="section-title">Cybersecurity & <span class="text-gradient-blue">AI Literacy</span></h2>
+        <p class="section-subtitle">Real-world mitigation of E-Commerce vulnerabilities and empirical AI audit
+          verification.</p>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+          <div class="codespot-card h-100">
+            <h5 class="fw-bold text-danger mb-3"><i class="bi bi-bug-fill me-2"></i> Critical Flaw: Insecure Direct
+              Object References (IDOR)</h5>
+            <p class="small text-muted mb-3">
+              In e-commerce order lookups, failing to verify the authenticated user against the requested order ID
+              enables malicious customers to inspect competitors' or other buyers' invoices by simply tampering with the
+              URL parameter (e.g., <code>/order_details.php?id=1052</code>).
+            </p>
+
+            <div class="code-box mb-3">
+              <div class="code-header">
+                <span class="text-danger fw-bold">VULNERABLE BACKEND (No Ownership Validation)</span>
+                <span>PHP</span>
+              </div>
+              <pre class="mb-0 text-danger-subtle"><code>// VULNERABLE: Direct access to order record without user check
+$order_id = $_GET['order_id'];
+$query = "SELECT * FROM orders WHERE id = $order_id"; // Also vulnerable to SQLi!
+$result = $conn->query($query);
+$order = $result->fetch_assoc();
+// Returns ANY customer's private invoice and address!</code></pre>
+            </div>
+            <div class="alert alert-danger bg-danger bg-opacity-10 border-danger text-danger-subtle small mb-0">
+              <strong>Impact:</strong> Massive data exfiltration, privacy regulatory breach (DPA 2012), and customer
+              address leakage.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="codespot-card h-100">
+            <h5 class="fw-bold text-success mb-3"><i class="bi bi-shield-check me-2"></i> Defensive Fix: Bound Parameter
+              & Session Ownership</h5>
+            <p class="small text-muted mb-3">
+              Enforce session-bound ownership validation where queries strictly mandate that the <code>order_id</code>
+              must match the authenticated <code>$_SESSION['user_id']</code> or require Administrator role clearance.
+            </p>
+
+            <div class="code-box mb-3">
+              <div class="code-header">
+                <span class="text-success fw-bold">SECURE DEFENSE (PDO Parameterized Query + Ownership)</span>
+                <span>PHP / PDO</span>
+              </div>
+              <pre class="mb-0 text-success-subtle"><code>// SECURE: Enforces authentication + strict ownership check
+$stmt = $pdo->prepare("SELECT * FROM orders 
+                       WHERE id = :order_id 
+                       AND (customer_id = :user_id OR :is_admin = 1) 
+                       LIMIT 1");
+$stmt->execute([
+    'order_id' => $_GET['order_id'],
+    'user_id'  => $_SESSION['user_id'],
+    'is_admin' => ($_SESSION['role'] === 'admin' ? 1 : 0)
+]);
+$order = $stmt->fetch();
+if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
+            </div>
+            <div class="alert alert-success bg-success bg-opacity-10 border-success text-success-subtle small mb-0">
+              <strong>Defense:</strong> Eliminates IDOR and SQL Injection simultaneously through strict session binding
+              and PDO parameterization.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Usage Log Table -->
+      <div class="codespot-card">
+        <h5 class="fw-bold text-info mb-3"><i class="bi bi-robot me-2"></i> Responsible AI Usage & Verification Log</h5>
+        <div class="table-responsive">
+          <table class="table table-dark table-hover mb-0 align-middle small">
+            <thead class="text-info border-bottom border-secondary">
+              <tr>
+                <th scope="col" style="width: 15%;">Date & Task</th>
+                <th scope="col" style="width: 25%;">Task & Prompt Purpose</th>
+                <th scope="col" style="width: 30%;">AI Assistance Provided</th>
+                <th scope="col" style="width: 30%;">Human Verification & Refinement</th>
+              </tr>
+            </thead>
+            <tbody class="text-muted">
+              <tr>
+                <td class="text-white fw-semibold">Oct 2026<br><span class="badge bg-secondary">E-Commerce</span></td>
+                <td>Generate PayPal / Webhook signature verification boilerplate.</td>
+                <td>Provided initial PHP skeleton using <code>hash_hmac('sha256', ...)</code>.</td>
+                <td>Discovered AI used parsed JSON instead of raw input stream; refactored to read
+                  <code>php://input</code> to prevent hash failure.
+                </td>
+              </tr>
+              <tr>
+                <td class="text-white fw-semibold">Sep 2026<br><span class="badge bg-secondary">Employee HR</span></td>
+                <td>Draft SQL query for computing employee monthly tardiness penalties.</td>
+                <td>Generated SQL query with nested aggregations and conditional sums.</td>
+                <td>Tested in phpMyAdmin with edge cases (grace periods, split shifts); adjusted grace period logic to
+                  adhere to Philippine labor rules.</td>
+              </tr>
+              <tr>
+                <td class="text-white fw-semibold">Aug 2026<br><span class="badge bg-secondary">IoT Arduino</span></td>
+                <td>Arduino C++ capacitive sensor voltage smoothing algorithm.</td>
+                <td>Suggested rolling average filter formula for sensor noise reduction.</td>
+                <td>Breadboarded on physical Arduino hardware; calibrated ADC integer limits to prevent memory overflow
+                  on the ATmega328P.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EMPLOYABILITY & CAREER PLAN SECTION ================= -->
+  <section id="career-plan" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-graph-up"></i> Strategic Roadmap</div>
+        <h2 class="section-title">Career <span class="text-gradient-blue">Development Plan</span></h2>
+        <p class="section-subtitle">A practical 6-Month, 1-Year, and 3-Year blueprint targeting high-growth software and
+          database engineering positions.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- 6-Month Goal -->
+        <div class="col-lg-4">
+          <div class="codespot-card h-100 border-info border-opacity-25">
+            <span class="badge bg-info text-dark mb-3 px-3 py-2 fw-bold">6-MONTH ROADMAP</span>
+            <h4 class="h5 fw-bold text-white mb-2">Entry-Level Onboarding & Certification</h4>
+            <p class="small text-info fw-semibold mb-3">Target: Junior Web Developer / Junior Data Analyst</p>
+            <ul class="small text-muted ps-3 mb-0">
+              <li class="mb-2">Secure an entry-level software or data analyst position in an enterprise setting.</li>
+              <li class="mb-2">Earn industry credentials in Database Administration (Oracle / MySQL Certified Associate)
+                and Python for Data Analysis.</li>
+              <li class="mb-2">Integrate operational warehouse knowledge into corporate ERP/CRM software
+                implementations.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 1-Year Goal -->
+        <div class="col-lg-4">
+          <div class="codespot-card h-100 border-primary border-opacity-25">
+            <span class="badge bg-primary mb-3 px-3 py-2 fw-bold">1-YEAR ROADMAP</span>
+            <h4 class="h5 fw-bold text-white mb-2">Full-Stack Autonomy & System Optimization</h4>
+            <p class="small text-info fw-semibold mb-3">Target: Mid-Level Full-Stack Developer</p>
+            <ul class="small text-muted ps-3 mb-0">
+              <li class="mb-2">Lead backend architecture for multi-tenant web modules, microservices, and database
+                tuning.</li>
+              <li class="mb-2">Optimize SQL query execution plans, index hierarchies, and table partitioning for
+                high-throughput clients.</li>
+              <li class="mb-2">Champion automated unit testing (PHPUnit/PyTest) and CI/CD pipeline automation via GitHub
+                Actions.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 3-Year Goal -->
+        <div class="col-lg-4">
+          <div class="codespot-card h-100 border-success border-opacity-25">
+            <span class="badge bg-success mb-3 px-3 py-2 fw-bold">3-YEAR ROADMAP</span>
+            <h4 class="h5 fw-bold text-white mb-2">Senior Database Engineer & Tech Lead</h4>
+            <p class="small text-info fw-semibold mb-3">Target: Database Architect / Systems Lead</p>
+            <ul class="small text-muted ps-3 mb-0">
+              <li class="mb-2">Architect disaster-resilient cloud database clusters (AWS RDS / Multi-AZ replication).
+              </li>
+              <li class="mb-2">Direct cross-functional teams in building scalable enterprise supply chain and e-commerce
+                platforms.</li>
+              <li class="mb-2">Mentor junior engineers, upholding clean code, rigorous empirical verification, and
+                zero-trust security.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESUME SECTION ================= -->
+  <section id="resume" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-file-earmark-person-fill"></i> Official Document</div>
+        <h2 class="section-title">Professional <span class="text-gradient-blue">IT Resume</span></h2>
+        <p class="section-subtitle">Single-page industry-ready resume incorporating academic awards, technical capabilities, and operational experience.</p>
+        
+        <div class="d-flex justify-content-center gap-3 mt-3">
+          <button class="btn-codespot-primary btn-pill" onclick="printResumeDocument()">
+            <i class="bi bi-printer-fill me-2"></i> Print / Save as PDF
+          </button>
+          <a href="assets/docs/Marcial_Lawrence_Jr_V_Resume.docx" class="btn-codespot-outline btn-pill" download>
+            <i class="bi bi-download me-2"></i> Download DOCX
+          </a>
+        </div>
+      </div>
+
+      <!-- Printable Resume Canvas -->
+      <div class="codespot-card resume-paper p-4 p-md-5 mx-auto"
+        style="max-width: 850px; background: #080d1a; border: 1px solid rgba(0, 210, 255, 0.25);">
+        <!-- Header -->
+        <div
+          class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-4 pb-3 border-bottom border-secondary border-opacity-50 mb-4">
+          <img src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
+            class="rounded-3 border border-2 border-info shadow-sm"
+            style="width: 105px; height: 125px; object-fit: cover; object-position: top center;">
+          <div class="text-center text-sm-start flex-grow-1">
+            <h2 class="h3 fw-bold text-white mb-1">MARCIAL LAWRENCE JR V. CARONAN</h2>
+            <p class="text-info fw-semibold mb-2">Junior Web Developer | Data Analyst | Database Administrator</p>
+            <div class="small text-light d-flex flex-wrap justify-content-center justify-content-sm-start gap-3">
+              <span><i class="bi bi-telephone-fill text-info me-1"></i> 09202720151</span>
+              <span><i class="bi bi-envelope-fill text-info me-1"></i> marcialcaronan@gmail.com</span>
+              <span><i class="bi bi-geo-alt-fill text-info me-1"></i> Brgy. Moonwalk, Parañaque City</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professional Summary -->
+        <div class="mb-3">
+          <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">PROFESSIONAL SUMMARY
+          </h5>
+          <p class="small text-light opacity-90 mb-0">
+            Disciplined and detail-driven Information Technology graduate specializing in Full-Stack Web Development,
+            Relational Database Engineering (MySQL 3NF), and Data Analytics. Bridges technical proficiency with rich
+            front-line operational experience in inventory management, retail data encoding, and warehouse dispatching.
+            Recognized as a Dean's Lister across all 3 academic years and an NSTP Overall Cluster Leader.
+          </p>
+        </div>
+
+        <!-- Academic Honors & Education -->
+        <div class="mb-3">
+          <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">EDUCATION & HONORS
+          </h5>
+          <div class="d-flex justify-content-between">
+            <div>
+              <strong class="text-white">Bachelor of Science in Information Technology (BSIT)</strong>
+              <div class="small text-light opacity-75">Datamex College of Saint Adeline</div>
+            </div>
+            <span class="badge bg-dark border border-secondary text-info">Graduating Candidate</span>
+          </div>
+          <div class="small text-warning mt-1">
+            <i class="bi bi-award-fill me-1"></i> <strong>Dean's Lister / Academic Achiever:</strong> 1st Year (Sem 1 &
+            2), 2nd Year (Sem 1 & 2), 3rd Year (Sem 1 & 2)<br>
+            <i class="bi bi-trophy-fill me-1 text-info"></i> <strong>Leadership Award:</strong> NSTP 1 and 2 (Overall
+            Cluster Leader)
+          </div>
+        </div>
+
+        <!-- Technical Skills -->
+        <div class="mb-3">
+          <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">TECHNICAL SKILLS &
+            TOOLS</h5>
+          <ul class="list-unstyled small text-light opacity-90 mb-0">
+            <li class="mb-1"><strong>Programming Languages:</strong> Python, PHP, JavaScript (ES6+), HTML5, CSS3,
+              Bootstrap 5.</li>
+            <li class="mb-1"><strong>Databases & Analytics:</strong> MySQL, Relational Schema Normalization (3NF), ERD
+              Design, Advanced MS Excel (Pivot Tables, VLOOKUP/XLOOKUP, Data Validation).</li>
+            <li class="mb-1"><strong>Productivity & Documentation:</strong> MS Word (Technical Systems Writing), MS
+              PowerPoint (Presentations), MS Excel.</li>
+            <li class="mb-1"><strong>Tools & Hardware:</strong> Git, GitHub, Barcode Scanners, Hardware Integration,
+              Arduino Microcontrollers.</li>
+          </ul>
+        </div>
+
+        <!-- Work Experience & Certifications -->
+        <div class="mb-3">
+          <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">WORK EXPERIENCE & CERTIFICATIONS</h5>
+
+          <div class="mb-2">
+            <div class="d-flex justify-content-between">
+              <strong class="text-white">Certified IT Seminars & Workshops</strong>
+              <span class="small text-info fw-semibold">Continuous Development</span>
+            </div>
+            <p class="small text-light mb-0">Acquired certifications in: IT Seminars & Workshops, Professional Development, Technical Training, Industry Readiness, and Advanced IT Skills.</p>
+          </div>
+
+          <div class="mb-2">
+            <div class="d-flex justify-content-between">
+              <strong class="text-white">Warehouse Clerk & Data Encoder</strong>
+              <span class="small text-info fw-semibold">SM Supermarket Warehouse</span>
+            </div>
+            <p class="small text-light mb-0">Used industrial barcode scanners for receiving, picking, sorting, and
+              dispatching. Encoded dispatch data, generated documentation via MS Word/Excel, and tracked inventory
+              accuracy.</p>
+          </div>
+
+          <div class="mb-2">
+            <div class="d-flex justify-content-between">
+              <strong class="text-white">Stock Clerk</strong>
+              <span class="small text-info fw-semibold">SM Appliances</span>
+            </div>
+            <p class="small text-light mb-0">Scanned barcode appliance serials into inventory, ordering, and dispatching
+              systems; produced stock reconciliation reports using MS Excel.</p>
+          </div>
+
+          <div class="mb-2">
+            <div class="d-flex justify-content-between">
+              <strong class="text-white">Service Crew & Inventory Assistant</strong>
+              <span class="small text-muted">McDonald's BF Homes Parañaque</span>
+            </div>
+            <p class="small text-muted mb-0">Handled POS order-taking monitor duties, managed physical stock counts, and
+              encoded inventory data using MS Excel & Word.</p>
+          </div>
+
+          <div>
+            <div class="d-flex justify-content-between">
+              <strong class="text-white">Security Agent</strong>
+              <span class="small text-muted">National Book Store & Holiday Inn Express</span>
+            </div>
+            <p class="small text-light mb-0">Processed formal incident documentation using administrative software,
+              monitored security surveillance feeds, and logged operational data.</p>
+          </div>
+        </div>
+
+        <!-- Featured Projects -->
+        <div>
+          <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">KEY IT PROJECTS</h5>
+          <div class="mb-2">
+            <strong class="text-white">E-Commerce Web Application (Flagship):</strong>
+            <span class="small text-light opacity-85"> PHP, MySQL, JavaScript, Bootstrap 5. Secure payment integration,
+              order tracking, dynamic inventory decrementing, and admin dashboard.</span>
+          </div>
+          <div>
+            <strong class="text-white">Employee Management System:</strong>
+            <span class="small text-light opacity-85"> Python/Flask, PHP, MySQL. Touchscreen kiosk attendance, automated
+              SSS/PhilHealth payroll calculator, and digital payslips.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FINAL REFLECTION SECTION ================= -->
+  <section id="reflection" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-journal-check"></i> Academic Synthesis</div>
+        <h2 class="section-title">Final <span class="text-gradient-blue">Reflection Essay</span></h2>
+        <p class="section-subtitle">How operational experience, academic rigor, and software engineering converge into
+          professional readiness.</p>
+      </div>
+
+      <div class="codespot-card mx-auto" style="max-width: 900px; line-height: 1.85;">
+        <h4 class="h5 text-info fw-bold mb-3"><i class="bi bi-quote me-2"></i> From Warehouse Operations to Clean Code
+          Architecture</h4>
+
+        <p class="text-light opacity-90 mb-3">
+          As I approach the culmination of my Bachelor of Science in Information Technology (BSIT) degree at Datamex
+          College of Saint Adeline, looking back reveals a transformation defined by grit, empirical learning, and
+          discipline. Unlike traditional paths where computing is studied solely in classrooms, my technical development
+          has been continuously shaped by real-world operational environments.
+        </p>
+
+        <p class="text-light opacity-90 mb-3">
+          Working across fast-paced environments—as a Service Crew and Inventory Assistant at McDonald's BF Homes, a
+          Stock Clerk at SM Appliances, a Warehouse Clerk and Data Encoder at SM Supermarket Warehouse, and as a
+          Security Agent at National Book Store and Holiday Inn Express—taught me lessons that no textbook alone could
+          impart. In the warehouse and on the retail floor, data is not an abstract theory. If a barcode scan fails to
+          link to the central inventory, an order is delayed, money is lost, and trust is broken. If an Excel
+          spreadsheet contains a broken formula reference during stock reconciliation, entire dispatch schedules stall.
+          These experiences forged an unyielding respect for data precision and system reliability.
+        </p>
+
+        <p class="text-light opacity-90 mb-3">
+          When I applied this mindset to software development in my BSIT coursework, everything clicked into place.
+          While many students approach coding as simply getting a program to output a result, my workplace background
+          compelled me to ask: <em>"What happens when 500 users scan items simultaneously? How do we prevent race
+            conditions in inventory decrementing? How do we protect client invoices against Insecure Direct Object
+            References (IDOR) and SQL Injection?"</em> This drive pushed me to excel academically, earning a position on
+          the <strong>Dean's List consistently for 3 consecutive years (1st, 2nd, and 3rd Year)</strong> and serving as
+          the <strong>Overall Cluster Leader for NSTP 1 and 2</strong>.
+        </p>
+
+        <p class="text-light opacity-90 mb-3">
+          My flagship systems directly mirror this journey. In my <strong>E-Commerce Web Application</strong>, I
+          engineered payment gateway verification, dynamic stock allocation, and real-time dispatch tracking. In the
+          <strong>Employee Management System</strong>, I tackled touchscreen kiosk attendance and automated statutory
+          payroll deductions (SSS, PhilHealth, Pag-IBIG). In our <strong>IoT Soil Monitoring System</strong>, I
+          integrated sensor hardware to automate physical environmental responses.
+        </p>
+
+        <p class="text-light opacity-90 mb-0">
+          Stepping into the technology industry as a Junior Web Developer, Data Analyst, or Database Administrator, I do
+          not just bring code syntax—I bring verified resilience, an understanding of ground-level business logistics,
+          and the leadership capacity to deliver software that endures. I am ready to build solutions that matter.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT SECTION ================= -->
+  <section id="contact" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-send-fill"></i> Reach Out</div>
+        <h2 class="section-title">Get In <span class="text-gradient-blue">Touch</span></h2>
+        <p class="section-subtitle">Let's discuss career opportunities, technical collaborations, and software projects.
+        </p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <!-- Contact Information -->
+        <div class="col-lg-5">
+          <div class="codespot-card h-100">
+            <h4 class="h5 fw-bold text-white mb-4"><i class="bi bi-chat-quote-fill text-info me-2"></i> Contact Details
+            </h4>
+
+            <div class="d-flex align-items-center mb-4">
+              <div class="experience-icon-box mb-0 me-3"><i class="bi bi-telephone-fill"></i></div>
+              <div>
+                <span class="text-muted small">Direct Phone:</span>
+                <h6 class="text-white mb-0">09202720151</h6>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center mb-4">
+              <div class="experience-icon-box mb-0 me-3"><i class="bi bi-envelope-at-fill"></i></div>
+              <div>
+                <span class="text-muted small">Official Email:</span>
+                <h6 class="text-white mb-0">marcialcaronan@gmail.com</h6>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center mb-4">
+              <div class="experience-icon-box mb-0 me-3"><i class="bi bi-geo-alt-fill"></i></div>
+              <div>
+                <span class="text-muted small">Current Residence:</span>
+                <h6 class="text-white mb-0">Brgy. Moonwalk, Parañaque City</h6>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center">
+              <div class="experience-icon-box mb-0 me-3"><i class="bi bi-briefcase-fill"></i></div>
+              <div>
+                <span class="text-muted small">Target IT Career Roles:</span>
+                <h6 class="text-info mb-0">Junior Web Dev | Data Analyst | DBA</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-lg-7">
+          <div class="codespot-card">
+            <h4 class="h5 fw-bold text-white mb-3">Send a Direct Inquiry</h4>
+            <form id="contactForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">Your Name</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-white"
+                    placeholder="e.g. Jane Smith" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">Your Email</label>
+                  <input type="email" class="form-control bg-dark border-secondary text-white"
+                    placeholder="e.g. jane@company.com" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label small text-muted">Subject</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-white"
+                    placeholder="Job Opportunity / Interview Invitation" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label small text-muted">Message</label>
+                  <textarea class="form-control bg-dark border-secondary text-white" rows="4"
+                    placeholder="Detail your project or employment opportunity..." required></textarea>
+                </div>
+                <div class="col-12 mt-3">
+                  <button type="submit" class="btn-codespot-primary btn-pill w-100 justify-content-center py-3">
+                    Transmit Message <i class="bi bi-send-fill ms-2"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MODAL FOR PROJECT DEEP DIVES ================= -->
+  <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-dark border border-secondary text-white shadow-lg">
+        <div class="modal-header border-secondary">
+          <div>
+            <h5 class="modal-title fw-bold text-gradient-blue" id="modalTitle">Project Title</h5>
+            <span class="small text-muted" id="modalCategory">Category</span>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6 class="text-info fw-bold mb-2">Overview</h6>
+          <p class="small text-light opacity-90" id="modalOverview"></p>
+
+          <h6 class="text-info fw-bold mb-2">Key Engineering Features</h6>
+          <ul class="small text-light opacity-90 list-unstyled" id="modalFeatures"></ul>
+
+          <h6 class="text-info fw-bold mb-2">Relational Database & Data Flow</h6>
+          <p class="small text-light opacity-90" id="modalErd"></p>
+
+          <h6 class="text-info fw-bold mb-2">Tech Stack</h6>
+          <div id="modalTech"></div>
+        </div>
+        <div class="modal-footer border-secondary">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container">
+    <div id="contactToast" class="toast custom-toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header bg-dark text-white border-bottom border-secondary">
+        <i class="bi bi-check-circle-fill text-info me-2"></i>
+        <strong class="me-auto">Transmission Successful</strong>
+        <small class="text-muted">Just now</small>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body small">
+        Thank you! Your message has been logged. Marcial Lawrence Jr V. Caronan will get back to you shortly.
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container text-center">
+      <h5 class="fw-bold text-white mb-1">MARCIAL LAWRENCE JR V. CARONAN</h5>
+      <p class="small text-muted mb-2">Bachelor of Science in Information Technology (BSIT) • Datamex College of Saint
+        Adeline</p>
+      <p class="small text-secondary mb-0">
+        &copy; 2026 Marcial Lawrence Jr V. Caronan. Designed with modern Bootstrap 5 & Vanilla CSS (Violet & Black
+        Palette).
+      </p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5.3 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Main Application Script -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

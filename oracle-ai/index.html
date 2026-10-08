@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle AI - Your Spiritual & Metaphysical Guide</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="oracle-body">
+
+  <!-- Minimal Navbar for Oracle AI -->
+  <nav class="navbar navbar-expand-lg navbar-dark oracle-navbar fixed-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center fw-bold" href="../index.html">
+        <i class="bi bi-arrow-left me-2 text-info"></i>
+        <span>Back to Portfolio</span>
+      </a>
+      <div class="ms-auto d-flex align-items-center">
+        <i class="bi bi-stars text-warning fs-4 me-2"></i>
+        <span class="fw-bold text-white letter-spacing-1">ORACLE AI</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="oracle-hero py-5 mt-5">
+    <div class="container text-center position-relative">
+      <!-- Decorative Nebula -->
+      <div class="nebula-effect"></div>
+      
+      <div class="section-tag mb-3 mx-auto"><i class="bi bi-stars"></i> Powered by Google Gemini</div>
+      <h1 class="oracle-title mb-3">Your Metaphysical & <span class="text-gradient-mystic">Spiritual Guide</span></h1>
+      <p class="oracle-subtitle mx-auto">Consult the Oracle on Astrology, Numerology, Tarot, Palm Reading, Crystal Knowledge, and deeper spiritual wisdom.</p>
+    </div>
+  </header>
+
+  <!-- Chatbot Interface Section -->
+  <section class="container mb-5 pb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        
+        <div class="chat-container">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="d-flex align-items-center gap-3">
+              <div class="oracle-avatar">
+                <i class="bi bi-moon-stars-fill"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 text-white fw-bold">The Oracle</h5>
+                <small class="text-success"><i class="bi bi-circle-fill small-icon me-1"></i> Online & Listening</small>
+              </div>
+            </div>
+            <div>
+               <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="clearChat()">
+                 <i class="bi bi-arrow-clockwise me-1"></i> Reset
+               </button>
+            </div>
+          </div>
+
+          <!-- Chat History -->
+          <div class="chat-history" id="chatHistory">
+            <!-- Initial Greeting -->
+            <div class="chat-message oracle-message">
+              <div class="message-content">
+                Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. What mysteries of the universe, astrology, tarot, or your life path seek illumination?
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Indicator -->
+          <div class="chat-loading" id="chatLoading">
+            <div class="d-flex align-items-center gap-2">
+              <div class="spinner-grow spinner-grow-sm text-info" role="status"></div>
+              <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
+              <div class="spinner-grow spinner-grow-sm text-violet" role="status"></div>
+              <span class="ms-2 text-muted small font-italic">Oracle is consulting the stars...</span>
+            </div>
+          </div>
+
+          <!-- Suggestion Chips -->
+          <div class="suggestion-chips px-3 pt-3 pb-2" id="suggestionChips">
+            <button class="chip" onclick="sendSuggestion('What is my life path number?')">What is my life path number?</button>
+            <button class="chip" onclick="sendSuggestion('Tell me about Amethyst crystal properties')">Amethyst crystal properties</button>
+            <button class="chip" onclick="sendSuggestion('Draw a Tarot card for today')">Draw a Tarot card for today</button>
+            <button class="chip" onclick="sendSuggestion('What does Mercury retrograde mean?')">Mercury retrograde meaning?</button>
+          </div>
+
+          <!-- Input Area -->
+          <div class="chat-input-area">
+            <form id="chatForm" class="w-100 position-relative">
+              <input type="text" id="userInput" class="chat-input" placeholder="Ask the Oracle a question..." autocomplete="off">
+              <button type="submit" class="btn-send" id="sendBtn">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </form>
+          </div>
+          
+        </div>
+        
+        
+        <!-- API Key Configuration Notice -->
+        <div class="alert alert-dark border-info mt-4 small text-muted text-center rounded-4">
+          <i class="bi bi-info-circle me-1 text-info"></i>
+          <strong>Developer Note:</strong> To make this live, insert your Gemini API Key in <code class="text-warning">script.js</code>.
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Marked.js for parsing markdown in AI responses -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Custom Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
