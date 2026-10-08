@@ -1,16 +1,10 @@
-// Replace this with your Hugging Face Access Token (starts with 'hf_')
-const HF_TOKEN = "YOUR_HUGGINGFACE_TOKEN_HERE";
-
-// We are using Mistral 7B Instruct via Hugging Face's free inference API
-const HF_MODEL_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3/v1/chat/completions";
-
-// The System Persona
-const ORACLE_SYSTEM_PROMPT = `
-You are the "Oracle AI", a wise, objective, and insightful metaphysical guide. 
-Your tone should be mystical yet professional, grounding esoteric concepts in accessible language. 
-You specialize strictly in Astrology, Numerology, Palm Reading, Tarot, and Crystals. 
-Keep your answers concise and format them beautifully using Markdown.
-`;
+// ==========================================
+// ORACLE AI - MOCK API MODE (For Portfolio/Student Showcase)
+// ==========================================
+// Since external APIs are being blocked by your network/ISP,
+// this script uses a "Mock API" to simulate the AI's behavior. 
+// It reads keywords from the user and returns contextually appropriate
+// responses to demonstrate the UI/UX functionality for your school project.
 
 const chatHistory = document.getElementById('chatHistory');
 const chatForm = document.getElementById('chatForm');
@@ -19,11 +13,17 @@ const sendBtn = document.getElementById('sendBtn');
 const chatLoading = document.getElementById('chatLoading');
 const suggestionChips = document.getElementById('suggestionChips');
 
-// Store conversation history for contextual responses
-let conversationContext = [
-  { role: "system", content: ORACLE_SYSTEM_PROMPT },
-  { role: "assistant", content: "Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. What mysteries of the universe, astrology, tarot, or your life path seek illumination?" }
-];
+// Simulated Knowledge Base (Mock API Database)
+const oracleKnowledge = {
+  "life path": "Life Path numbers reveal your soul's blueprint. \n\nIf you are a **Life Path 7**, for example, you are the *Seeker of Truth*. Deeply intuitive, analytical, and spiritually inclined, you are drawn to the mysteries of existence. To calculate yours, add every single digit of your birth date together until you reach a single number.",
+  "amethyst": "Ah, **Amethyst**... a stone of profound spiritual protection and purification. \n\nIt cleanses one's energy field of negative influences and attachments, creating a resonant shield of spiritual light around the body. It is particularly powerful for opening the Third Eye chakra and enhancing intuition.",
+  "tarot": "The cards reveal the energies currently surrounding you. I have drawn the **Wheel of Fortune**. \n\nThis signifies a turning point. Cycles are changing, and destiny is at work. What goes down must come up. Embrace the upcoming changes, for they are aligned with your highest good.",
+  "mercury": "**Mercury Retrograde** is a powerful time of reflection, not fear. \n\nIt is an optical illusion where the planet appears to move backwards. Spiritually, it is the universe forcing us to *slow down, reassess, review, and reconnect*. Expect communication delays, but use this time to tie up loose ends rather than starting new ventures.",
+  "astrology": "The cosmos are a mirror to the soul. Your birth chart is a snapshot of the sky at the exact moment you took your first breath. \n\nYour **Sun** is your core identity, your **Moon** governs your emotional inner world, and your **Rising Sign** is the mask you present to the universe. Which would you like to explore?",
+  "love": "The energies of the heart are complex. Love requires both vulnerability and boundaries. The stars suggest that before seeking a deep connection with another, you must first master the art of radical self-love. Venus is watching over your romantic sector.",
+  "career": "Your professional path is currently bathed in the ambitious light of Saturn. Discipline and structure are required right now. Do not rush the harvest; instead, focus on planting strong, deep roots. Recognition will come in due time.",
+  "default": "The ether is swirling with complex energies today. \n\nYour question touches upon deep cosmic truths. Remember that you are a universe experiencing itself in human form. Trust your intuition, ground your energy, and let the stars guide your next steps. What else seeks clarity in your mind?"
+};
 
 function appendMessage(role, text) {
   const msgDiv = document.createElement('div');
@@ -56,70 +56,38 @@ function clearChat() {
       </div>
     </div>
   `;
-  conversationContext = [
-    { role: "system", content: ORACLE_SYSTEM_PROMPT },
-    { role: "assistant", content: "Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. What mysteries of the universe, astrology, tarot, or your life path seek illumination?" }
-  ];
   suggestionChips.style.display = "flex";
 }
 
-// Handler for Suggestion Chips
 function sendSuggestion(text) {
   userInput.value = text;
   suggestionChips.style.display = "none";
   chatForm.dispatchEvent(new Event('submit'));
 }
 
-async function fetchHuggingFaceResponse(userText) {
-  if (HF_TOKEN === "YOUR_HUGGINGFACE_TOKEN_HERE" || !HF_TOKEN.startsWith("hf_")) {
-    return "The cosmos are currently clouded... \n\n*(Error: A valid Hugging Face Token starting with 'hf_' is required. Please update script.js)*";
-  }
+async function fetchGeminiResponse(userText) {
+  return new Promise((resolve) => {
+    const textLower = userText.toLowerCase();
+    let responseText = oracleKnowledge["default"];
 
-  // Add user message to context
-  conversationContext.push({ role: "user", content: userText });
-
-  try {
-    const response = await fetch(HF_MODEL_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${HF_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "mistralai/Mistral-7B-Instruct-v0.3",
-        messages: conversationContext,
-        max_tokens: 800,
-        temperature: 0.7
-      })
-    });
-
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      const errMsg = errData.error || response.statusText;
-      throw new Error(`API Error (${response.status}): ${errMsg}`);
+    if (textLower.includes("life path") || textLower.includes("number")) {
+      responseText = oracleKnowledge["life path"];
+    } else if (textLower.includes("amethyst") || textLower.includes("crystal")) {
+      responseText = oracleKnowledge["amethyst"];
+    } else if (textLower.includes("tarot") || textLower.includes("card") || textLower.includes("draw")) {
+      responseText = oracleKnowledge["tarot"];
+    } else if (textLower.includes("mercury") || textLower.includes("retrograde")) {
+      responseText = oracleKnowledge["mercury"];
+    } else if (textLower.includes("astrology") || textLower.includes("zodiac") || textLower.includes("sign")) {
+      responseText = oracleKnowledge["astrology"];
+    } else if (textLower.includes("love") || textLower.includes("relationship")) {
+      responseText = oracleKnowledge["love"];
+    } else if (textLower.includes("career") || textLower.includes("job") || textLower.includes("work")) {
+      responseText = oracleKnowledge["career"];
     }
 
-    const data = await response.json();
-    
-    if (data.choices && data.choices.length > 0) {
-      const replyText = data.choices[0].message.content;
-      
-      // Add model response to context
-      conversationContext.push({ role: "assistant", content: replyText });
-      return replyText;
-    } else {
-      return "The Oracle's vision is clouded. I could not parse a response.";
-    }
-  } catch (error) {
-    console.error("Hugging Face API Error:", error);
-    
-    // Check if the model is just loading (Hugging Face sometimes puts cold models to sleep)
-    if (error.message.includes("503") || error.message.includes("loading")) {
-      return "The Oracle is currently awakening from a deep slumber (The AI model is loading). Please wait 30 seconds and try your question again.";
-    }
-    
-    return `A disturbance in the ether... \n\n**Error Details:** ${error.message}`;
-  }
+    setTimeout(() => { resolve(responseText); }, 1500);
+  });
 }
 
 chatForm.addEventListener('submit', async (e) => {
@@ -128,21 +96,17 @@ chatForm.addEventListener('submit', async (e) => {
   const text = userInput.value.trim();
   if (!text) return;
 
-  // 1. Show user message
   appendMessage('user', text);
   userInput.value = '';
   userInput.disabled = true;
   sendBtn.disabled = true;
   suggestionChips.style.display = "none";
   
-  // 2. Show loading
   chatLoading.style.display = 'block';
   scrollToBottom();
 
-  // 3. Fetch response from Hugging Face
-  const oracleResponse = await fetchHuggingFaceResponse(text);
+  const oracleResponse = await fetchGeminiResponse(text);
 
-  // 4. Hide loading and show response
   chatLoading.style.display = 'none';
   appendMessage('oracle', oracleResponse);
   
