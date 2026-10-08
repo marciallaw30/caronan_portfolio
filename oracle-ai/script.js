@@ -61,7 +61,13 @@ const spiritualDatabase = {
   "amethyst": "Ah, **Amethyst**... a stone of profound spiritual protection. It cleanses one's energy field of negative influences and is particularly powerful for opening the Third Eye chakra and enhancing intuition.",
   "tarot": "Tarot is a mirror of the soul. The cards do not dictate the future, but rather reveal the energies currently surrounding you, allowing you to make empowered choices.",
   "mercury": "**Mercury Retrograde** is a powerful time of reflection. It is the universe forcing us to *slow down, reassess, review, and reconnect*. Expect communication delays, but use this time to tie up loose ends.",
-  "love": "The energies of the heart are complex. The stars suggest that before seeking a deep connection with another, you must first master the art of radical self-love."
+  "love": "The energies of the heart are complex. The stars suggest that before seeking a deep connection with another, you must first master the art of radical self-love.",
+  "dream": "Dreams are the language of the subconscious and the astral realm. When we sleep, the veil is thin. To understand a dream's meaning, look not at the literal events, but at the *emotions* you felt. Water represents emotions, flying represents freedom, and falling represents a loss of control.",
+  "chakra": "There are seven main **Chakras**, or energy centers, in the human body. They run from the base of your spine (Root Chakra - grounding) to the top of your head (Crown Chakra - divine connection). When blocked, we experience physical or emotional distress. Meditation and crystals can help align them.",
+  "aura": "Your **Aura** is the electromagnetic energy field that surrounds your physical body. Its colors shift based on your mood, health, and spiritual state. A blue aura signifies calmness and communication, while a green aura signifies healing and growth.",
+  "manifest": "The art of **Manifestation** relies on the Law of Attraction. To manifest your desires, you must align your thoughts, emotions, and actions with the vibration of what you seek. Act as if it is already yours, and release the desperation of wanting.",
+  "spirit guide": "Your **Spirit Guides** are divine beings, ancestors, or ascended masters assigned to help you navigate your earthly journey. They communicate through intuition, synchronicities, and dreams. You need only ask for their guidance to receive it.",
+  "twin flame": "A **Twin Flame** is an intense soul connection, often described as one soul split into two bodies. Unlike soulmates (who bring peace), twin flames trigger deep spiritual growth, healing, and often, turbulent awakenings."
 };
 
 async function fetchKnowledgeResponse(userText) {
@@ -110,12 +116,12 @@ async function fetchKnowledgeResponse(userText) {
       const link = links[0];
       
       if (!summary || summary.trim() === "") {
-        summary = `The ethereal archives contain records regarding **${title}**, but the knowledge is too dense to summarize briefly.`;
+        summary = `The ethereal archives contain records regarding **${title}**, but the esoteric knowledge is too dense to summarize briefly.`;
       }
 
       return `### 🔮 The Oracle has consulted the Archives:\n\n**${title}**\n\n${summary}\n\n📖 **Evidence / Read More:** [View Source](${link})`;
     } else {
-      return `The cosmic archives are silent on the matter of "${searchQuery}". Try asking about a more specific spiritual topic, crystal, or concept.`;
+      return `The cosmic energies surrounding "${searchQuery}" are currently clouded. The universe works in mysterious ways, and some answers are meant to be discovered through your own intuition rather than external archives. What else does your spirit seek?`;
     }
   } catch (error) {
     console.error("Knowledge API Error:", error);
