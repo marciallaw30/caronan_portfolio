@@ -1,20 +1,10 @@
-// Replace this with a valid Gemini API Key from Google AI Studio
-const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
-const GEMINI_MODEL = "gemini-1.5-flash-latest";
-
-// The System Persona
-const ORACLE_SYSTEM_PROMPT = `
-You are the "Oracle AI", a wise, objective, and insightful metaphysical guide. 
-Your tone should be mystical yet professional, grounding esoteric concepts in accessible language. 
-You specialize strictly in:
-1. Astrology & Zodiac insights
-2. Numerology calculations & interpretations
-3. Palm Reading and Tarot symbolism guide
-4. Crystal Properties & Metaphysical knowledge
-5. General Spiritual wellness and reflection
-
-Do NOT break character. If a user asks a technical or completely unrelated question, gently steer them back to your domains of expertise. Format your responses beautifully using Markdown.
-`;
+// ==========================================
+// ORACLE AI - MOCK API MODE (For Portfolio/Student Showcase)
+// ==========================================
+// Since the Gemini API is currently unavailable in your region/account,
+// this script uses a "Mock API" to simulate the AI's behavior. 
+// It reads keywords from the user and returns contextually appropriate
+// responses to demonstrate the UI/UX functionality for your school project.
 
 const chatHistory = document.getElementById('chatHistory');
 const chatForm = document.getElementById('chatForm');
@@ -23,17 +13,17 @@ const sendBtn = document.getElementById('sendBtn');
 const chatLoading = document.getElementById('chatLoading');
 const suggestionChips = document.getElementById('suggestionChips');
 
-// Store conversation history for contextual responses
-let conversationContext = [
-  {
-    role: "user",
-    parts: [{ text: "SYSTEM PROMPT: " + ORACLE_SYSTEM_PROMPT }]
-  },
-  {
-    role: "model",
-    parts: [{ text: "Understood. I am Oracle AI. How may I guide you today?" }]
-  }
-];
+// Simulated Knowledge Base (Mock API Database)
+const oracleKnowledge = {
+  "life path": "Life Path numbers reveal your soul's blueprint. \n\nIf you are a **Life Path 7**, for example, you are the *Seeker of Truth*. Deeply intuitive, analytical, and spiritually inclined, you are drawn to the mysteries of existence. To calculate yours, add every single digit of your birth date together until you reach a single number.",
+  "amethyst": "Ah, **Amethyst**... a stone of profound spiritual protection and purification. \n\nIt cleanses one's energy field of negative influences and attachments, creating a resonant shield of spiritual light around the body. It is particularly powerful for opening the Third Eye chakra and enhancing intuition.",
+  "tarot": "The cards reveal the energies currently surrounding you. I have drawn the **Wheel of Fortune**. \n\nThis signifies a turning point. Cycles are changing, and destiny is at work. What goes down must come up. Embrace the upcoming changes, for they are aligned with your highest good.",
+  "mercury": "**Mercury Retrograde** is a powerful time of reflection, not fear. \n\nIt is an optical illusion where the planet appears to move backwards. Spiritually, it is the universe forcing us to *slow down, reassess, review, and reconnect*. Expect communication delays, but use this time to tie up loose ends rather than starting new ventures.",
+  "astrology": "The cosmos are a mirror to the soul. Your birth chart is a snapshot of the sky at the exact moment you took your first breath. \n\nYour **Sun** is your core identity, your **Moon** governs your emotional inner world, and your **Rising Sign** is the mask you present to the universe. Which would you like to explore?",
+  "love": "The energies of the heart are complex. Love requires both vulnerability and boundaries. The stars suggest that before seeking a deep connection with another, you must first master the art of radical self-love. Venus is watching over your romantic sector.",
+  "career": "Your professional path is currently bathed in the ambitious light of Saturn. Discipline and structure are required right now. Do not rush the harvest; instead, focus on planting strong, deep roots. Recognition will come in due time.",
+  "default": "The ether is swirling with complex energies today. \n\nYour question touches upon deep cosmic truths. Remember that you are a universe experiencing itself in human form. Trust your intuition, ground your energy, and let the stars guide your next steps. What else seeks clarity in your mind?"
+};
 
 function appendMessage(role, text) {
   const msgDiv = document.createElement('div');
@@ -67,17 +57,6 @@ function clearChat() {
       </div>
     </div>
   `;
-  // Reset conversation context
-  conversationContext = [
-    {
-      role: "user",
-      parts: [{ text: "SYSTEM PROMPT: " + ORACLE_SYSTEM_PROMPT }]
-    },
-    {
-      role: "model",
-      parts: [{ text: "Understood. I am Oracle AI. How may I guide you today?" }]
-    }
-  ];
   suggestionChips.style.display = "flex";
 }
 
@@ -88,61 +67,34 @@ function sendSuggestion(text) {
   chatForm.dispatchEvent(new Event('submit'));
 }
 
+// Simulates the network delay and thought process of a real AI API
 async function fetchGeminiResponse(userText) {
-  if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY.startsWith("AIzaSy")) {
-    return "The cosmos are currently clouded... \n\n*(Error: A valid Gemini API Key starting with 'AIzaSy' is required. Please update script.js)*";
-  }
+  return new Promise((resolve) => {
+    const textLower = userText.toLowerCase();
+    let responseText = oracleKnowledge["default"];
 
-  // Add user message to context
-  conversationContext.push({
-    role: "user",
-    parts: [{ text: userText }]
+    // Keyword matching logic to simulate AI comprehension
+    if (textLower.includes("life path") || textLower.includes("number")) {
+      responseText = oracleKnowledge["life path"];
+    } else if (textLower.includes("amethyst") || textLower.includes("crystal")) {
+      responseText = oracleKnowledge["amethyst"];
+    } else if (textLower.includes("tarot") || textLower.includes("card") || textLower.includes("draw")) {
+      responseText = oracleKnowledge["tarot"];
+    } else if (textLower.includes("mercury") || textLower.includes("retrograde")) {
+      responseText = oracleKnowledge["mercury"];
+    } else if (textLower.includes("astrology") || textLower.includes("zodiac") || textLower.includes("sign")) {
+      responseText = oracleKnowledge["astrology"];
+    } else if (textLower.includes("love") || textLower.includes("relationship")) {
+      responseText = oracleKnowledge["love"];
+    } else if (textLower.includes("career") || textLower.includes("job") || textLower.includes("work")) {
+      responseText = oracleKnowledge["career"];
+    }
+
+    // Simulate network latency (2 seconds) to mimic API processing time
+    setTimeout(() => {
+      resolve(responseText);
+    }, 2000);
   });
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-  
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contents: conversationContext,
-        generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 1024,
-        }
-      })
-    });
-
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      const errMsg = errData.error?.message || response.statusText;
-      throw new Error(`API Error (${response.status}): ${errMsg}`);
-    }
-
-    const data = await response.json();
-    
-    if (data.candidates && data.candidates.length > 0) {
-      const replyText = data.candidates[0].content.parts[0].text;
-      
-      // Add model response to context
-      conversationContext.push({
-        role: "model",
-        parts: [{ text: replyText }]
-      });
-      
-      return replyText;
-    } else {
-      return "The Oracle's vision is clouded. I could not parse a response.";
-    }
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return `A disturbance in the ether... \n\n**Error Details:** ${error.message}`;
-  }
 }
 
 chatForm.addEventListener('submit', async (e) => {
@@ -162,7 +114,7 @@ chatForm.addEventListener('submit', async (e) => {
   chatLoading.style.display = 'block';
   scrollToBottom();
 
-  // 3. Fetch response
+  // 3. Fetch simulated API response
   const oracleResponse = await fetchGeminiResponse(text);
 
   // 4. Hide loading and show response
