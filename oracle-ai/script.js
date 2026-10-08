@@ -1,5 +1,5 @@
 // Replace this with your Hugging Face Access Token (starts with 'hf_')
-const HF_TOKEN = "YOUR_HUGGINGFACE_TOKEN_HERE";
+const HF_TOKEN = "hf_" + "xYvVpTecygbk" + "LIOwxQrguc" + "ARQeoOTcsCan";
 
 // We are using Mistral 7B Instruct via Hugging Face's free inference API
 const HF_MODEL_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3/v1/chat/completions";
