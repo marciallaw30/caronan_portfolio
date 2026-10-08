@@ -1,16 +1,9 @@
-// Split token to bypass GitHub's automated secret scanner for this static portfolio
-const HF_TOKEN = "hf_" + "xYvVpTecygbk" + "LIOwxQrguc" + "ARQeoOTcsCan";
-
-// We are using Mistral 7B Instruct via Hugging Face's free inference API
-const HF_MODEL_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3/v1/chat/completions";
-
-// The System Persona
-const ORACLE_SYSTEM_PROMPT = `
-You are the "Oracle AI", a wise, objective, and insightful metaphysical guide. 
-Your tone should be mystical yet professional, grounding esoteric concepts in accessible language. 
-You specialize strictly in Astrology, Numerology, Palm Reading, Tarot, and Crystals. 
-Keep your answers concise and format them beautifully using Markdown.
-`;
+// ==========================================
+// ORACLE AI - WIKIPEDIA KNOWLEDGE ENGINE
+// ==========================================
+// This script uses the free, open Wikipedia API to act as an oracle.
+// It searches for the user's query and returns factual summaries
+// with direct evidence links, bypassing any need for API keys!
 
 const chatHistory = document.getElementById('chatHistory');
 const chatForm = document.getElementById('chatForm');
@@ -18,12 +11,6 @@ const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 const chatLoading = document.getElementById('chatLoading');
 const suggestionChips = document.getElementById('suggestionChips');
-
-// Store conversation history for contextual responses
-let conversationContext = [
-  { role: "system", content: ORACLE_SYSTEM_PROMPT },
-  { role: "assistant", content: "Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. What mysteries of the universe, astrology, tarot, or your life path seek illumination?" }
-];
 
 function appendMessage(role, text) {
   const msgDiv = document.createElement('div');
@@ -52,14 +39,10 @@ function clearChat() {
   chatHistory.innerHTML = `
     <div class="chat-message oracle-message">
       <div class="message-content">
-        Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. What mysteries of the universe, astrology, tarot, or your life path seek illumination?
+        Greetings, seeker of truth. I am Oracle AI, powered by the collective knowledge of humanity. What subject do you wish to explore today?
       </div>
     </div>
   `;
-  conversationContext = [
-    { role: "system", content: ORACLE_SYSTEM_PROMPT },
-    { role: "assistant", content: "Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. What mysteries of the universe, astrology, tarot, or your life path seek illumination?" }
-  ];
   suggestionChips.style.display = "flex";
 }
 
@@ -70,54 +53,41 @@ function sendSuggestion(text) {
   chatForm.dispatchEvent(new Event('submit'));
 }
 
-async function fetchHuggingFaceResponse(userText) {
-  if (!HF_TOKEN || HF_TOKEN.includes("YOUR_")) {
-    return "The cosmos are currently clouded... \n\n*(Error: A valid Hugging Face Token is required)*";
-  }
-
-  // Add user message to context
-  conversationContext.push({ role: "user", content: userText });
-
+async function fetchKnowledgeResponse(query) {
+  // Using the Wikipedia OpenSearch API (100% free, no API key needed, returns summaries + links)
+  const url = `https://en.wikipedia.org/w/api.php?action=opensearch&search=${encodeURIComponent(query)}&limit=1&namespace=0&format=json&origin=*`;
+  
   try {
-    const response = await fetch(HF_MODEL_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${HF_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "mistralai/Mistral-7B-Instruct-v0.3",
-        messages: conversationContext,
-        max_tokens: 800,
-        temperature: 0.7
-      })
-    });
-
+    const response = await fetch(url);
+    
     if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      const errMsg = errData.error || response.statusText;
-      throw new Error(`API Error (${response.status}): ${errMsg}`);
+      throw new Error("Failed to consult the knowledge archives.");
     }
 
     const data = await response.json();
     
-    if (data.choices && data.choices.length > 0) {
-      const replyText = data.choices[0].message.content;
+    // data format: [ "query", ["Title"], ["Summary"], ["Link"] ]
+    const titles = data[1];
+    const summaries = data[2];
+    const links = data[3];
+
+    if (titles.length > 0 && summaries.length > 0) {
+      const title = titles[0];
+      let summary = summaries[0];
+      const link = links[0];
       
-      // Add model response to context
-      conversationContext.push({ role: "assistant", content: replyText });
-      return replyText;
+      // Sometimes the summary is empty, so we provide a fallback
+      if (!summary || summary.trim() === "") {
+        summary = `I found records regarding **${title}**, but the summary is too complex to summarize briefly.`;
+      }
+
+      // Format beautifully in Markdown
+      return `### 🔮 The Oracle has found the answers:\n\n**${title}**\n\n${summary}\n\n📖 **Evidence / Read More:** [Click here to view the source](${link})`;
     } else {
-      return "The Oracle's vision is clouded. I could not parse a response.";
+      return `The archives are silent on the matter of "${query}". Try asking about a more specific topic, concept, or historical event.`;
     }
   } catch (error) {
-    console.error("Hugging Face API Error:", error);
-    
-    // Check if the model is just loading (Hugging Face sometimes puts cold models to sleep)
-    if (error.message.includes("503") || error.message.includes("loading")) {
-      return "The Oracle is currently awakening from a deep slumber (The AI model is loading). Please wait 30 seconds and try your question again.";
-    }
-    
+    console.error("Knowledge API Error:", error);
     return `A disturbance in the ether... \n\n**Error Details:** ${error.message}`;
   }
 }
@@ -139,8 +109,8 @@ chatForm.addEventListener('submit', async (e) => {
   chatLoading.style.display = 'block';
   scrollToBottom();
 
-  // 3. Fetch response from Hugging Face
-  const oracleResponse = await fetchHuggingFaceResponse(text);
+  // 3. Fetch response from Knowledge API
+  const oracleResponse = await fetchKnowledgeResponse(text);
 
   // 4. Hide loading and show response
   chatLoading.style.display = 'none';
