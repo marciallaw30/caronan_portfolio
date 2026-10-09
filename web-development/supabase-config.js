@@ -15,13 +15,20 @@ window.DCSA_SUPABASE = {
   isConnected: false
 };
 
+// URL Sanitizer: strips trailing slashes and /rest/v1 if copied from Data API
+function sanitizeSupabaseUrl(rawUrl) {
+  if (!rawUrl) return '';
+  return rawUrl.trim().replace(/\/rest\/v1\/?$/i, '').replace(/\/+$/, '');
+}
+
 // Initialize Supabase Client
 function initSupabaseClient() {
-  const url = (window.DCSA_SUPABASE.url || '').trim();
+  const url = sanitizeSupabaseUrl(window.DCSA_SUPABASE.url);
   const key = (window.DCSA_SUPABASE.anonKey || '').trim();
 
   if (url && key && typeof supabase !== 'undefined' && supabase.createClient) {
     try {
+      window.DCSA_SUPABASE.url = url;
       window.DCSA_SUPABASE.client = supabase.createClient(url, key);
       window.DCSA_SUPABASE.isConnected = true;
       console.log('✅ Supabase client initialized:', url);
@@ -42,7 +49,10 @@ async function testSupabaseConnection(testUrl, testKey) {
     throw new Error('Supabase JS library not loaded. Check your internet connection.');
   }
 
-  const client = supabase.createClient(testUrl.trim(), testKey.trim());
+  const cleanUrl = sanitizeSupabaseUrl(testUrl);
+  const cleanKey = testKey.trim();
+
+  const client = supabase.createClient(cleanUrl, cleanKey);
   const { data, error } = await client.from('employees').select('*').limit(1);
 
   if (error) {
@@ -54,15 +64,15 @@ async function testSupabaseConnection(testUrl, testKey) {
 
 // Save credentials from UI modal and sync
 function saveSupabaseCredentials(url, key) {
-  const trimmedUrl = url.trim();
-  const trimmedKey = key.trim();
+  const cleanUrl = sanitizeSupabaseUrl(url);
+  const cleanKey = key.trim();
 
   localStorage.removeItem('DCSA_SUPABASE_DISCONNECTED');
-  localStorage.setItem('DCSA_SUPABASE_URL', trimmedUrl);
-  localStorage.setItem('DCSA_SUPABASE_ANON_KEY', trimmedKey);
+  localStorage.setItem('DCSA_SUPABASE_URL', cleanUrl);
+  localStorage.setItem('DCSA_SUPABASE_ANON_KEY', cleanKey);
 
-  window.DCSA_SUPABASE.url = trimmedUrl;
-  window.DCSA_SUPABASE.anonKey = trimmedKey;
+  window.DCSA_SUPABASE.url = cleanUrl;
+  window.DCSA_SUPABASE.anonKey = cleanKey;
 
   initSupabaseClient();
 }
