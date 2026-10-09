@@ -4,18 +4,21 @@
    =================================================================== */
 
 // Global Supabase Credentials Store
+const isExplicitlyDisconnected = localStorage.getItem('DCSA_SUPABASE_DISCONNECTED') === 'true';
+const defaultUrl = isExplicitlyDisconnected ? '' : 'https://phapzopmnlbidrlacsfc.supabase.co';
+const defaultKey = isExplicitlyDisconnected ? '' : 'sb_publishable_kuQMzUN56wuLH2OsziqaIQ__rl_q4DN';
+
 window.DCSA_SUPABASE = {
-  // You can paste your Supabase URL & Key here, or enter them in the Web App's "Connect Supabase" modal
-  url: localStorage.getItem('DCSA_SUPABASE_URL') || '',
-  anonKey: localStorage.getItem('DCSA_SUPABASE_ANON_KEY') || '',
+  url: localStorage.getItem('DCSA_SUPABASE_URL') || defaultUrl,
+  anonKey: localStorage.getItem('DCSA_SUPABASE_ANON_KEY') || defaultKey,
   client: null,
   isConnected: false
 };
 
 // Initialize Supabase Client
 function initSupabaseClient() {
-  const url = window.DCSA_SUPABASE.url.trim();
-  const key = window.DCSA_SUPABASE.anonKey.trim();
+  const url = (window.DCSA_SUPABASE.url || '').trim();
+  const key = (window.DCSA_SUPABASE.anonKey || '').trim();
 
   if (url && key && typeof supabase !== 'undefined' && supabase.createClient) {
     try {
@@ -54,6 +57,7 @@ function saveSupabaseCredentials(url, key) {
   const trimmedUrl = url.trim();
   const trimmedKey = key.trim();
 
+  localStorage.removeItem('DCSA_SUPABASE_DISCONNECTED');
   localStorage.setItem('DCSA_SUPABASE_URL', trimmedUrl);
   localStorage.setItem('DCSA_SUPABASE_ANON_KEY', trimmedKey);
 
@@ -65,6 +69,7 @@ function saveSupabaseCredentials(url, key) {
 
 // Disconnect / Clear credentials
 function disconnectSupabase() {
+  localStorage.setItem('DCSA_SUPABASE_DISCONNECTED', 'true');
   localStorage.removeItem('DCSA_SUPABASE_URL');
   localStorage.removeItem('DCSA_SUPABASE_ANON_KEY');
   window.DCSA_SUPABASE.url = '';
