@@ -1,0 +1,479 @@
+/* ===================================================================
+   DATAMEX HRIS & PAYROLL PORTFOLIO SHOWCASE
+   Developer: Marcial Lawrence Jr V. Caronan
+   High-End Glassmorphic & Modern Intranet Dashboard Styles
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --bg-deep: #06040d;
+  --bg-surface: #0d0a1a;
+  --card-bg: rgba(18, 13, 33, 0.75);
+  --card-border: rgba(192, 132, 252, 0.15);
+  --card-hover-border: rgba(245, 158, 11, 0.4);
+  
+  /* Datamex College Brand Accents */
+  --dcsa-maroon: #881337;
+  --dcsa-crimson: #be123c;
+  --dcsa-navy: #1e1b4b;
+  --dcsa-gold: #f59e0b;
+  --dcsa-gold-bright: #fbbf24;
+  --dcsa-gold-glow: rgba(245, 158, 11, 0.25);
+  
+  /* Modern UI Accents */
+  --accent-cyan: #06b6d4;
+  --accent-blue: #3b82f6;
+  --accent-emerald: #10b981;
+  --accent-purple: #a855f7;
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  
+  --glass-blur: blur(16px);
+  --transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body.showcase-body {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Background Glowing Mesh Gradients */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(136, 19, 55, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 85% 25%, rgba(30, 27, 75, 0.35) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(245, 158, 11, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.07) 0%, transparent 40%);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #090614;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a1f47;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dcsa-gold);
+}
+
+/* Navbar */
+.showcase-nav {
+  background: rgba(8, 4, 15, 0.85);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+  transition: var(--transition);
+  z-index: 1030;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--dcsa-maroon), #4c0519);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--dcsa-gold-bright);
+  letter-spacing: 0.5px;
+}
+
+.nav-link-custom {
+  color: var(--text-muted) !important;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.nav-link-custom:hover, .nav-link-custom.active {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.nav-pill-gold {
+  background: linear-gradient(90deg, #d97706, #f59e0b);
+  color: #000 !important;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.84rem;
+  border: none;
+  transition: var(--transition);
+}
+
+.nav-pill-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+  color: #000;
+}
+
+/* Glassmorphism Cards */
+.glass-panel {
+  background: var(--card-bg);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-panel:hover {
+  border-color: var(--card-hover-border);
+  box-shadow: 0 12px 40px 0 rgba(245, 158, 11, 0.12);
+}
+
+/* Metric / Stat Boxes */
+.metric-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px 20px;
+  transition: var(--transition);
+}
+
+.metric-box:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(245, 158, 11, 0.3);
+  transform: translateY(-3px);
+}
+
+.metric-num {
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #fff, var(--dcsa-gold-bright));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.metric-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* System Tabs */
+.simulator-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 6px;
+  background: rgba(15, 10, 30, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  backdrop-filter: var(--glass-blur);
+}
+
+.sim-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sim-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sim-tab-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(136, 19, 55, 0.8), rgba(30, 27, 75, 0.8));
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+}
+
+/* Kiosk Terminal Styles */
+.kiosk-screen {
+  background: radial-gradient(circle at top, #150d2e 0%, #080314 100%);
+  border: 2px solid rgba(245, 158, 11, 0.35);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 0 40px rgba(136, 19, 55, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+.kiosk-clock {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--dcsa-gold-bright);
+  text-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+  letter-spacing: 2px;
+}
+
+.kiosk-btn {
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.kiosk-btn-in {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+.kiosk-btn-in:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+  color: #fff;
+}
+
+.kiosk-btn-out {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+}
+
+.kiosk-btn-out:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(239, 68, 68, 0.5);
+  color: #fff;
+}
+
+/* Badges & Pills */
+.badge-role-admin {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--dcsa-gold-bright);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+}
+
+.badge-role-emp {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+}
+
+.badge-tech {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  font-size: 0.76rem;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Tables */
+.table-custom {
+  width: 100%;
+  color: var(--text-main);
+  border-collapse: separate;
+  border-spacing: 0 6px;
+}
+
+.table-custom th {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 16px;
+  font-weight: 600;
+  border: none;
+}
+
+.table-custom td {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 12px 16px;
+  font-size: 0.86rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+}
+
+.table-custom tr td:first-child {
+  border-left: 1px solid rgba(255, 255, 255, 0.04);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.table-custom tr td:last-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.table-custom tr:hover td {
+  background: rgba(245, 158, 11, 0.04);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+/* Code Viewer */
+.code-viewer {
+  background: #090614;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+}
+
+.code-header {
+  background: #120c24;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.code-body {
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 16px;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* Modals */
+.modal-custom .modal-content {
+  background: #0c0817;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  color: var(--text-main);
+}
+
+.modal-custom .modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px 24px;
+}
+
+.modal-custom .modal-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 24px;
+}
+
+/* Printable Official Payslip */
+.payslip-voucher {
+  background: #ffffff;
+  color: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 6px;
+  padding: 30px;
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.payslip-header {
+  border-bottom: 2px solid #881337;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.payslip-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  margin-bottom: 20px;
+}
+
+.payslip-table th {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.payslip-table td {
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  color: #334155;
+}
+
+.net-pay-banner {
+  background: #fef3c7;
+  border: 2px solid #f59e0b;
+  padding: 14px 20px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.net-pay-amount {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #b45309;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #payslipPrintArea, #payslipPrintArea * {
+    visibility: visible;
+  }
+  #payslipPrintArea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

@@ -110,18 +110,19 @@ document.addEventListener('DOMContentLoaded', () => {
       erd: 'Normalized to 3NF: `users`, `products`, `inventory_batches`, `orders`, `order_items`, `payments`, `messages`, and `audit_logs`.'
     },
     'employee-mgmt': {
-      title: 'Enterprise Employee Management & Kiosk Attendance System',
-      category: 'Enterprise Web & Operations Software',
-      overview: 'Comprehensive human resource management system featuring an interactive kiosk attendance portal for barcode/ID check-ins, automated salary and statutory deduction calculation (SSS, PhilHealth, Pag-IBIG), automated digital payslip delivery, employee feedback channels, event scheduling, and company bulletin boards.',
+      title: 'DATAMEX College HRIS & Automated Payroll Portal',
+      category: 'Enterprise Web & Operations Engineering',
+      overview: 'A full-scale human resource information and payroll automation system engineered for Datamex College of Saint Adeline. Features a biometric touchscreen kiosk for barcode/ID check-ins, automated 15-day salary calculation with Philippine statutory deduction compliance (SSS, PhilHealth, Pag-IBIG), automated digital PDF payslips via FPDF, employee feedback channels, and campus bulletin board.',
       features: [
-        'Interactive Kiosk Clock-in/Clock-out portal with timestamp validation',
-        'Automated payroll engine computing gross salary, tardiness penalties, and statutory deductions',
-        'Instant digital payslip PDF generator for employee download',
-        'Internal company announcement board and confidential feedback submission loops',
-        'Corporate calendar module for company-wide event notifications and scheduling'
+        'Biometric Kiosk Time-Clock portal with Asia/Manila PST timestamps & tardy calculation',
+        '15-day payroll computation engine compliant with NCR daily minimum wage rules',
+        'Philippine statutory deduction engine (SSS, PhilHealth, Pag-IBIG, and Tax)',
+        'FPDF integration for automated official digital PDF payslip voucher generation',
+        'Role-Based Access Control (Admin vs Employee) with Bcrypt password encryption',
+        'Campus-wide announcement bulletin board with image upload management'
       ],
-      tech: ['Python / Flask', 'PHP', 'MySQL', 'JavaScript', 'FPDF Library', 'Bootstrap 5'],
-      erd: 'Normalized structure across `employees`, `attendance_logs`, `shifts`, `payroll_records`, `deduction_rates`, `announcements`, and `feedback`.'
+      tech: ['PHP 8.2', 'MySQL / MariaDB (3NF)', 'JavaScript (ES6)', 'FPDF Library', 'Bootstrap 5', 'Bcrypt Security'],
+      erd: 'Normalized 3NF relational database across `employees`, `attendance`, `payroll`, `benefits`, `benefits_deductions`, `announcements`, `events`, and `feedback`.'
     },
     'iot-soil': {
       title: 'IoT Automated Soil Moisture Monitoring System',

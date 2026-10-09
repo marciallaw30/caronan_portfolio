@@ -58,6 +58,10 @@ while ($listener.IsListening) {
                     $localPath = $localPath.TrimStart('/').Replace('/', '\')
                     $filePath = [System.IO.Path]::Combine($root, $localPath)
                     
+                    if ([System.IO.Directory]::Exists($filePath)) {
+                        $filePath = [System.IO.Path]::Combine($filePath, "index.html")
+                    }
+
                     if ([System.IO.File]::Exists($filePath)) {
                         $ext = [System.IO.Path]::GetExtension($filePath).ToLower()
                         
