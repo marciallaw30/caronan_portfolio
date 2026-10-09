@@ -1,9 +1,9 @@
 // ==========================================
-// ORACLE AI - WIKIPEDIA KNOWLEDGE ENGINE
+// ORACLE AI - GOOGLE SEARCH KNOWLEDGE ENGINE (SIMULATED)
 // ==========================================
-// This script uses the free, open Wikipedia API to act as an oracle.
+// This script simulates a Google Search integration to act as an oracle.
 // It searches for the user's query and returns factual summaries
-// with direct evidence links, bypassing any need for API keys!
+// with direct evidence links, acting as if searching Google!
 
 const chatHistory = document.getElementById('chatHistory');
 const chatForm = document.getElementById('chatForm');
@@ -116,16 +116,16 @@ async function fetchKnowledgeResponse(userText) {
       const link = links[0];
       
       if (!summary || summary.trim() === "") {
-        summary = `The ethereal archives contain records regarding **${title}**, but the esoteric knowledge is too dense to summarize briefly.`;
+        summary = `The Google Search index contains records regarding **${title}**, but the esoteric knowledge is too dense for a quick glimpse.`;
       }
 
-      return `### 🔮 The Oracle has consulted the Archives:\n\n**${title}**\n\n${summary}\n\n📖 **Evidence / Read More:** [View Source](${link})`;
+      return `### 🔍 Oracle's Divine Answer (via Google Search)\n\n**Topic:** ${title}\n\n> *"${summary}"*\n\n✨ *The cosmic energies highlight this as the precise truth you seek.*\n\n🌐 **Source:** [View Full Record](${link})`;
     } else {
       return `The cosmic energies surrounding "${searchQuery}" are currently clouded. The universe works in mysterious ways, and some answers are meant to be discovered through your own intuition rather than external archives. What else does your spirit seek?`;
     }
   } catch (error) {
     console.error("Knowledge API Error:", error);
-    return `A disturbance in the ether... the connection to the archives failed.`;
+    return `A disturbance in the ether... the connection to Google Search failed.`;
   }
 }
 
