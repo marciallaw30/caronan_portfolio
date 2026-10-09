@@ -116,16 +116,16 @@ async function fetchKnowledgeResponse(userText) {
       const link = links[0];
       
       if (!summary || summary.trim() === "") {
-        summary = `The Google Search index contains records regarding **${title}**, but the esoteric knowledge is too dense for a quick glimpse.`;
+        summary = `The spiritual realm contains records regarding **${title}**, but the esoteric knowledge is too dense for a quick glimpse.`;
       }
 
-      return `### 🔍 Oracle's Divine Answer (via Google Search)\n\n**Topic:** ${title}\n\n> *"${summary}"*\n\n✨ *The cosmic energies highlight this as the precise truth you seek.*\n\n🌐 **Source:** [View Full Record](${link})`;
+      return `### 👁️ Oracle's Divine Answer\n\n**Topic:** ${title}\n\n> *"${summary}"*\n\n✨ *The cosmic energies highlight this as the precise spiritual truth you seek.*`;
     } else {
       return `The cosmic energies surrounding "${searchQuery}" are currently clouded. The universe works in mysterious ways, and some answers are meant to be discovered through your own intuition rather than external archives. What else does your spirit seek?`;
     }
   } catch (error) {
     console.error("Knowledge API Error:", error);
-    return `A disturbance in the ether... the connection to Google Search failed.`;
+    return `A disturbance in the ether... the spiritual connection failed.`;
   }
 }
 
