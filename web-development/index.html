@@ -43,19 +43,39 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navContent">
-        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
-          <li class="nav-item"><a class="nav-link-custom" href="#overview">Overview</a></li>
-          <li class="nav-item"><a class="nav-link-custom" href="#simulator">Live Simulator</a></li>
-          <li class="nav-item"><a class="nav-link-custom" href="#simulator" onclick="openDatabaseTab()">SQL Database</a></li>
-          <li class="nav-item"><a class="nav-link-custom" href="#architecture">Architecture & ERD</a></li>
-          <li class="nav-item"><a class="nav-link-custom" href="#code-viewer">Source Code</a></li>
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-2">
+          <li class="nav-item">
+            <a class="nav-link-custom" href="#overview">
+              <i class="bi bi-info-circle text-warning"></i> Overview
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link-custom" href="#simulator">
+              <i class="bi bi-cpu text-info"></i> Simulator
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link-custom" href="#simulator" onclick="openDatabaseTab()">
+              <i class="bi bi-database text-success"></i> SQL Database
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link-custom" href="#architecture">
+              <i class="bi bi-diagram-3 text-primary"></i> Architecture
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link-custom" href="#code-viewer">
+              <i class="bi bi-code-square text-purple"></i> Source Code
+            </a>
+          </li>
         </ul>
-        <div class="d-flex align-items-center gap-3">
-          <a href="../index.html#projects" class="btn btn-outline-light btn-sm rounded-pill px-3">
-            <i class="bi bi-arrow-left me-1"></i> Back to Portfolio
+        <div class="d-flex align-items-center gap-2">
+          <a href="../index.html#projects" class="btn-nav-back">
+            <i class="bi bi-arrow-left"></i> Back to Portfolio
           </a>
-          <a href="#simulator" class="nav-pill-gold text-decoration-none d-none d-md-inline-block">
-            <i class="bi bi-play-circle-fill me-1"></i> Test Live Demo
+          <a href="#simulator" class="btn-nav-launch d-none d-md-inline-flex">
+            <i class="bi bi-play-circle-fill"></i> Test Live Demo
           </a>
         </div>
       </div>
