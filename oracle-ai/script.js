@@ -68,7 +68,7 @@ async function fetchKnowledgeResponse(userText) {
     return "The cosmic connection is severed. Please enter your **Gemini API Key** in `script.js` to allow the Oracle to commune with the Universe.";
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/antigravity-preview-latest:generateContent?key=${GEMINI_API_KEY}`;
   
   // Add user message to context
   conversationContext.push({
