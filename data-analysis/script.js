@@ -1,8 +1,8 @@
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     try {
-        // Fetch JSON data
-        const response = await fetch('data.json');
-        const data = await response.json();
+        // Use rawData from data.js to bypass file:// CORS policy
+        const data = typeof rawData !== 'undefined' ? rawData : [];
+        if (data.length === 0) throw new Error("Data not loaded");
         
         // Populate KPIs
         document.getElementById('kpi-total-transactions').innerText = data.length;

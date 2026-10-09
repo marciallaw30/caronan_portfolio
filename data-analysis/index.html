@@ -125,6 +125,11 @@
       color: #34d399;
       border: 1px solid #10b981;
     }
+    
+    /* Override Bootstrap text-muted for dark mode */
+    .text-muted {
+      color: #94a3b8 !important;
+    }
   </style>
 </head>
 
@@ -165,25 +170,25 @@
       <div class="row g-4">
         <div class="col-md-3">
           <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-people-fill me-2"></i>Total Transactions</div>
+            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-people-fill me-2"></i>Total Transactions</div>
             <div class="stat-value" id="kpi-total-transactions">0</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-currency-dollar me-2"></i>Total Revenue</div>
+            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-currency-dollar me-2"></i>Total Revenue</div>
             <div class="stat-value" id="kpi-total-revenue">₱0</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-clock-history me-2"></i>Avg Internet Hours</div>
+            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-clock-history me-2"></i>Avg Internet Hours</div>
             <div class="stat-value" id="kpi-avg-hours">0</div>
           </div>
         </div>
         <div class="col-md-3">
           <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-person-badge-fill me-2"></i>Student Ratio</div>
+            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-person-badge-fill me-2"></i>Student Ratio</div>
             <div class="stat-value" id="kpi-student-ratio">0%</div>
           </div>
         </div>
@@ -197,13 +202,13 @@
       <div class="row g-4">
         <div class="col-lg-8">
           <div class="chart-container">
-            <h5 class="fw-bold mb-4"><i class="bi bi-graph-up text-success me-2"></i>Daily Sales Trend</h5>
+            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-graph-up text-success me-2"></i>Daily Sales Trend</h5>
             <canvas id="salesChart" height="100"></canvas>
           </div>
         </div>
         <div class="col-lg-4">
           <div class="chart-container">
-            <h5 class="fw-bold mb-4"><i class="bi bi-pie-chart-fill text-success me-2"></i>Revenue by Gender</h5>
+            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-pie-chart-fill text-success me-2"></i>Revenue by Gender</h5>
             <canvas id="genderChart" height="200"></canvas>
           </div>
         </div>
@@ -211,13 +216,13 @@
       <div class="row g-4">
         <div class="col-lg-6">
           <div class="chart-container">
-            <h5 class="fw-bold mb-4"><i class="bi bi-controller text-success me-2"></i>Gamers vs Non-Gamers Revenue</h5>
+            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-controller text-success me-2"></i>Gamers vs Non-Gamers Revenue</h5>
             <canvas id="gamingChart"></canvas>
           </div>
         </div>
         <div class="col-lg-6">
           <div class="chart-container">
-            <h5 class="fw-bold mb-4"><i class="bi bi-printer text-success me-2"></i>Services Distribution</h5>
+            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-printer text-success me-2"></i>Services Distribution</h5>
             <canvas id="servicesChart"></canvas>
           </div>
         </div>
@@ -228,7 +233,7 @@
   <!-- Data Table -->
   <section class="py-5 mb-5">
     <div class="container">
-      <h3 class="fw-bold mb-4"><i class="bi bi-table text-success me-2"></i>Raw JSON Data Feed</h3>
+      <h3 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-table text-success me-2"></i>Raw JSON Data Feed</h3>
       <div class="table-container">
         <table class="table table-hover mb-0" id="dataTable">
           <thead>
@@ -253,6 +258,7 @@
     </div>
   </section>
 
+  <script src="data.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
