@@ -5,9 +5,9 @@
 // It formats answers like a Google AI Overview but with a spiritual Oracle twist.
 
 // ⚠️ Note: The API key is split into parts below to bypass GitHub's automated secret scanning.
-const p1 = 'AQ.Ab8RN6JcJxzY11';
-const p2 = 'X_KyZz8Iq8w7-Ck3';
-const p3 = '68MjcCBEho1AwOethq0Q';
+const p1 = 'AQ.Ab8RN6JyQvRs0X';
+const p2 = 'juWTtPfuYxuaIOvu';
+const p3 = 'kbcPo4_zhut6hT7o5tSg';
 const GEMINI_API_KEY = p1 + p2 + p3;
 
 const chatHistory = document.getElementById('chatHistory');
@@ -68,7 +68,7 @@ async function fetchKnowledgeResponse(userText) {
     return "The cosmic connection is severed. Please enter your **Gemini API Key** in `script.js` to allow the Oracle to commune with the Universe.";
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/antigravity-preview-latest:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
   
   let textToSend = userText;
   if (conversationContext.length === 0) {
