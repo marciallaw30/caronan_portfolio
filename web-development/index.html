@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -45,7 +45,8 @@
       <div class="collapse navbar-collapse" id="navContent">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
           <li class="nav-item"><a class="nav-link-custom" href="#overview">Overview</a></li>
-          <li class="nav-item"><a class="nav-link-custom" href="#simulator">Live System Simulator</a></li>
+          <li class="nav-item"><a class="nav-link-custom" href="#simulator">Live Simulator</a></li>
+          <li class="nav-item"><a class="nav-link-custom" href="#simulator" onclick="openDatabaseTab()">SQL Database</a></li>
           <li class="nav-item"><a class="nav-link-custom" href="#architecture">Architecture & ERD</a></li>
           <li class="nav-item"><a class="nav-link-custom" href="#code-viewer">Source Code</a></li>
         </ul>
@@ -188,6 +189,9 @@
           <button class="sim-tab-btn" data-tab="bulletin">
             <i class="bi bi-newspaper text-danger"></i> <span>Campus Bulletin & News</span>
           </button>
+          <button class="sim-tab-btn" data-tab="database" id="simTabDatabaseBtn">
+            <i class="bi bi-database-fill-gear text-info"></i> <span>Live SQL Database & Console</span>
+          </button>
         </div>
       </div>
     </div>
@@ -227,20 +231,20 @@
         <!-- Summary Metric Pills -->
         <div class="row g-3 mb-4">
           <div class="col-4">
-            <div class="p-3 rounded bg-dark border border-secondary text-center">
-              <span class="text-muted small d-block">Total Staff</span>
+            <div class="sim-stat-box">
+              <span class="sim-stat-label">Total Staff</span>
               <span id="countTotalStaff" class="fs-4 fw-bold text-white">5</span>
             </div>
           </div>
           <div class="col-4">
-            <div class="p-3 rounded bg-dark border border-secondary text-center">
-              <span class="text-muted small d-block">Administrators</span>
+            <div class="sim-stat-box">
+              <span class="sim-stat-label text-warning">Administrators</span>
               <span id="countAdmin" class="fs-4 fw-bold text-warning">4</span>
             </div>
           </div>
           <div class="col-4">
-            <div class="p-3 rounded bg-dark border border-secondary text-center">
-              <span class="text-muted small d-block">Regular Staff</span>
+            <div class="sim-stat-box">
+              <span class="sim-stat-label text-info">Regular Staff</span>
               <span id="countRegular" class="fs-4 fw-bold text-info">1</span>
             </div>
           </div>
@@ -598,6 +602,155 @@
                 <div class="text-muted small mt-1 font-monospace" style="font-size:0.75rem;">Sept 24, 2025 • Anonymous</div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PANE 5: LIVE DATABASE & SQL CONSOLE ================= -->
+    <div id="tab-database" class="sim-pane d-none">
+      <div class="glass-panel">
+        <!-- Header with Title and DB Action Buttons -->
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+              <h4 class="fw-bold text-white mb-0"><i class="bi bi-database-fill-gear text-info me-2"></i> In-Browser MySQL Database Manager</h4>
+              <span class="badge bg-success-subtle text-success border border-success font-monospace" style="font-size:0.7rem;">ENGINE: LOCALSTORAGE (PERSISTENT)</span>
+              <span class="badge bg-dark border border-secondary text-warning font-monospace" style="font-size:0.7rem;">SCHEMA: datamex_payroll_db</span>
+            </div>
+            <div class="text-muted small">
+              Real client-side relational SQL execution engine. Every modification (registration, attendance punches, and SQL statements) is saved persistently in your browser.
+            </div>
+          </div>
+          <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-info btn-sm rounded-pill" onclick="exportDatabaseSQL()" title="Export .sql dump matching MySQL format">
+              <i class="bi bi-download me-1"></i> Export .SQL Dump
+            </button>
+            <button class="btn btn-outline-light btn-sm rounded-pill" onclick="exportDatabaseJSON()" title="Export JSON dataset">
+              <i class="bi bi-filetype-json me-1"></i> Export JSON
+            </button>
+            <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="resetDatabaseToDefault()" title="Restore initial records from datamex_payroll_db.sql">
+              <i class="bi bi-arrow-counterclockwise me-1"></i> Reset to Factory DB
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Left Column: Table Navigator -->
+          <div class="col-lg-3">
+            <div class="p-3 rounded bg-dark border border-secondary mb-3">
+              <span class="text-muted small fw-bold text-uppercase d-block mb-2">Relational Tables (9)</span>
+              <div id="dbTableList" class="d-flex flex-column gap-1">
+                <!-- Dynamically populated table list with row badges -->
+              </div>
+            </div>
+
+            <!-- Database Live Statistics -->
+            <div class="p-3 rounded bg-dark border border-secondary">
+              <span class="text-muted small fw-bold text-uppercase d-block mb-2">Database Status</span>
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Total Tables:</span>
+                <span class="text-white fw-bold font-monospace">9 Tables</span>
+              </div>
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Total Records:</span>
+                <span id="dbTotalRecordsCount" class="text-warning fw-bold font-monospace">Loading...</span>
+              </div>
+              <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Storage Key:</span>
+                <span class="text-info font-monospace small">DCSA_DB_V1</span>
+              </div>
+              <div class="d-flex justify-content-between small text-muted">
+                <span>Status:</span>
+                <span class="text-success fw-bold">Active & Synced</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Dual View (SQL Console + Table Data Viewer) -->
+          <div class="col-lg-9">
+            <!-- Mode Toggle Tabs (SQL Console vs Table Grid) -->
+            <ul class="nav nav-pills mb-3 gap-2" id="dbViewTabs">
+              <li class="nav-item">
+                <button class="btn btn-sm btn-outline-warning rounded-pill active" id="btnTabSQLConsole" onclick="switchDbViewMode('console')">
+                  <i class="bi bi-terminal-fill me-1"></i> SQL Query Console
+                </button>
+              </li>
+              <li class="nav-item">
+                <button class="btn btn-sm btn-outline-info rounded-pill" id="btnTabTableGrid" onclick="switchDbViewMode('grid')">
+                  <i class="bi bi-table me-1"></i> Table Data Grid (<span id="activeTableNameDisplay">employees</span>)
+                </button>
+              </li>
+            </ul>
+
+            <!-- VIEW 1: SQL QUERY CONSOLE -->
+            <div id="dbViewConsole">
+              <div class="p-3 rounded bg-dark border border-secondary mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-muted small fw-bold text-uppercase"><i class="bi bi-code-slash text-warning me-1"></i> Interactive SQL Terminal</span>
+                  <span class="text-dim small font-monospace">Ctrl + Enter to Execute</span>
+                </div>
+
+                <!-- Query Pre-set Chips -->
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge bg-secondary-subtle text-light border border-secondary cursor-pointer" onclick="setQueryPreset('SELECT * FROM employees')">SELECT * FROM employees</span>
+                  <span class="badge bg-secondary-subtle text-light border border-secondary cursor-pointer" onclick="setQueryPreset('SELECT employeeNo, date, time_in, time_out, working_hours, late_minutes FROM attendance ORDER BY id DESC')">Today's Attendance</span>
+                  <span class="badge bg-secondary-subtle text-light border border-secondary cursor-pointer" onclick="setQueryPreset('SELECT * FROM employees WHERE accountType = \'admin\'')">Admin Users Only</span>
+                  <span class="badge bg-secondary-subtle text-light border border-secondary cursor-pointer" onclick="setQueryPreset('SELECT employeeNo, grossPay, total_deductions, netPay FROM payroll')">Payroll Records</span>
+                  <span class="badge bg-secondary-subtle text-light border border-secondary cursor-pointer" onclick="setQueryPreset('SELECT * FROM announcements')">Announcements</span>
+                  <span class="badge bg-secondary-subtle text-light border border-secondary cursor-pointer" onclick="setQueryPreset('SHOW TABLES')">SHOW TABLES</span>
+                </div>
+
+                <textarea id="sqlQueryInput" class="form-control font-monospace bg-black border-secondary text-warning py-2 mb-3" rows="3" style="font-size: 0.9rem;" placeholder="Enter SQL query: SELECT * FROM employees WHERE department = 'Information Technology'..."></textarea>
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <button class="btn btn-warning btn-sm fw-bold px-4 rounded-pill" onclick="executeSQLQuery()">
+                    <i class="bi bi-play-fill me-1"></i> Run SQL Query
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="clearSQLQuery()">
+                    <i class="bi bi-eraser-fill me-1"></i> Clear
+                  </button>
+                </div>
+              </div>
+
+              <!-- Query Result Container -->
+              <div id="sqlResultBox" class="p-3 rounded bg-dark border border-secondary">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div id="sqlStatusBadge" class="small fw-bold text-success font-monospace">
+                    <i class="bi bi-check-circle-fill me-1"></i> Ready for execution. Type or choose a preset query above.
+                  </div>
+                  <div id="sqlExecutionTimer" class="small text-muted font-monospace"></div>
+                </div>
+
+                <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
+                  <table class="table-custom" id="sqlResultTable">
+                    <thead id="sqlResultThead"></thead>
+                    <tbody id="sqlResultTbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- VIEW 2: TABLE DATA GRID -->
+            <div id="dbViewGrid" class="d-none">
+              <div class="p-3 rounded bg-dark border border-secondary mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                  <h6 class="fw-bold text-white mb-0" id="gridTableTitle">Table: employees</h6>
+                  <span class="small text-muted" id="gridTableSubtitle">Showing all columns and records</span>
+                </div>
+                <div class="d-flex gap-2">
+                  <input type="text" id="gridTableSearch" class="form-control form-control-sm bg-black border-secondary text-white" placeholder="Filter rows..." oninput="filterActiveTableGrid(this.value)">
+                </div>
+              </div>
+
+              <div class="table-responsive" style="max-height: 480px; overflow-y: auto;">
+                <table class="table-custom" id="activeGridTable">
+                  <thead id="activeGridThead"></thead>
+                  <tbody id="activeGridTbody"></tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

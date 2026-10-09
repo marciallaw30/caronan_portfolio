@@ -44,6 +44,112 @@ body.showcase-body {
   min-height: 100vh;
 }
 
+/* ================= HIGH CONTRAST TEXT OVERRIDES ================= */
+.text-muted, 
+small.text-muted, 
+.small.text-muted, 
+div.text-muted, 
+span.text-muted, 
+p.text-muted {
+  color: #cbd5e1 !important; /* Crisp, easily readable light slate */
+}
+
+.text-dim {
+  color: #94a3b8 !important; /* Soft bright gray */
+}
+
+.text-emerald {
+  color: #34d399 !important;
+}
+
+p.lead, .lead {
+  color: #e2e8f0 !important;
+  opacity: 1 !important;
+}
+
+/* Stat & Metric labels */
+.metric-label, .stat-label-subtle {
+  color: #cbd5e1 !important;
+  font-weight: 600 !important;
+}
+
+.sim-stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.sim-stat-box:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.sim-stat-label {
+  color: #cbd5e1 !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Form Controls & Placeholders */
+.form-control, .form-select {
+  background-color: #120b24 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: #180f30 !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 0.25rem rgba(245, 158, 11, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.form-control::placeholder {
+  color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+.form-select option {
+  background-color: #0d081a !important;
+  color: #ffffff !important;
+}
+
+.input-group-text {
+  background-color: #1a1033 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #fbbf24 !important;
+}
+
+/* Table elements */
+.table-custom th {
+  color: #f1f5f9 !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.06em;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.table-custom td {
+  color: #f8fafc !important;
+}
+
+.table-custom td .small.text-muted,
+.table-custom td .text-muted {
+  color: #cbd5e1 !important;
+}
+
+.table-custom td .small.text-dim,
+.table-custom td .text-dim {
+  color: #cbd5e1 !important;
+}
+
 /* Background Glowing Mesh Gradients */
 .bg-mesh {
   position: fixed;
@@ -476,4 +582,52 @@ body.showcase-body {
   .no-print {
     display: none !important;
   }
+}
+
+/* ================= IN-BROWSER DATABASE MANAGER STYLES ================= */
+.cursor-pointer {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cursor-pointer:hover {
+  background: rgba(245, 158, 11, 0.25) !important;
+  color: #fbbf24 !important;
+  border-color: #f59e0b !important;
+}
+
+.db-table-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.db-table-item:hover, .db-table-item.active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+.db-table-badge {
+  font-size: 0.7rem;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
+.db-table-item.active .db-table-badge {
+  background: #f59e0b;
+  color: #000;
+  font-weight: 700;
 }
