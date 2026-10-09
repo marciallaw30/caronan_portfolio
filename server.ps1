@@ -53,33 +53,35 @@ while ($listener.IsListening) {
                     $localPath = $req.Url.LocalPath
                     if ($localPath -eq "/" -or [string]::IsNullOrWhiteSpace($localPath)) {
                         $localPath = "/index.html"
-                        $res.ContentType = if ($mimeTypes.ContainsKey($ext)) { $mimeTypes[$ext] } else { "application/octet-stream" }
-
-                        $bytes = [System.IO.File]::ReadAllBytes($filePath)
+                    }
+                    
+                    $localPath = $localPath.TrimStart('/').Replace('/', '\')
+                    $filePath = [System.IO.Path]::Combine($root, $localPath)
+                    
+                    if ([System.IO.File]::Exists($filePath)) {
+                        $ext = [System.IO.Path]::GetExtension($filePath).ToLower()
+                        
                         $contentType = "application/octet-stream"
                         if ($types.ContainsKey($ext)) {
                             $contentType = $types[$ext]
                         }
+                        $res.ContentType = $contentType
+                        
+                        $bytes = [System.IO.File]::ReadAllBytes($filePath)
+                        $res.ContentLength64 = $bytes.Length
+                        
                         if ($req.HttpMethod -ne "HEAD") {
                             $res.OutputStream.Write($bytes, 0, $bytes.Length)
                         }
                     }
                     else {
                         $res.StatusCode = 404
-                        $err = [System.Text.Encoding]::UTF8.GetBytes("404 - File Not Found: $rawPath")
-                        $res.ContentType = "text/plain; charset=utf-8"
-                        $res.ContentLength64 = $err.Length
-                        if ($req.HttpMethod -ne "HEAD") {
-                            $res.OutputStream.Write($err, 0, $err.Length)
-                        }
-                        $res.OutputStream.Write($contentBytes, 0, $contentBytes.Length)
-                    }
-                    else {
-                        $res.StatusCode = 404
                         $errorBytes = [System.Text.Encoding]::UTF8.GetBytes("404 - File Not Found")
                         $res.ContentType = "text/plain; charset=utf-8"
                         $res.ContentLength64 = $errorBytes.Length
-                        $res.OutputStream.Write($errorBytes, 0, $errorBytes.Length)
+                        if ($req.HttpMethod -ne "HEAD") {
+                            $res.OutputStream.Write($errorBytes, 0, $errorBytes.Length)
+                        }
                     }
                 }
                 catch {
