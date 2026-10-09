@@ -452,10 +452,13 @@ function renderEmployeeDirectory(filterText = '', filterRole = 'all') {
       <td><span class="badge border border-info border-opacity-50 text-info bg-dark">${emp.department}</span></td>
       <td><span class="font-monospace text-emerald">₱${parseFloat(emp.dailyRate).toFixed(2)} / day</span></td>
       <td class="text-end">
+        <button class="btn btn-sm btn-outline-warning me-1" onclick="openEditEmployeeModal('${emp.employeeNo}')" title="Edit Staff Details (Admin)">
+          <i class="bi bi-pencil-square"></i> Edit
+        </button>
         <button class="btn btn-sm btn-outline-info me-1" onclick="viewEmployeeModal('${emp.employeeNo}')" title="View Full Profile">
           <i class="bi bi-person-lines-fill"></i> Profile
         </button>
-        <button class="btn btn-sm btn-outline-warning" onclick="quickClockIn('${emp.employeeNo}')" title="Quick Punch Kiosk">
+        <button class="btn btn-sm btn-outline-success" onclick="quickClockIn('${emp.employeeNo}')" title="Quick Punch Kiosk">
           <i class="bi bi-fingerprint"></i> Punch
         </button>
       </td>
@@ -476,23 +479,79 @@ window.viewEmployeeModal = function(empNo) {
   const emp = employeesData.find(e => e.employeeNo === empNo);
   if (!emp) return;
 
+  window.lastViewedEmpNo = empNo;
+
   document.getElementById('modalEmpNo').textContent = emp.employeeNo;
   document.getElementById('modalEmpName').textContent = `${emp.firstName} ${emp.middleName || ''} ${emp.lastName}`;
   document.getElementById('modalEmpRole').textContent = `${emp.role} (${emp.accountType.toUpperCase()})`;
   document.getElementById('modalEmpDept').textContent = emp.department;
-  document.getElementById('modalEmpPhone').textContent = emp.phoneNumber;
+  document.getElementById('modalEmpPhone').textContent = emp.phoneNumber || 'N/A';
   document.getElementById('modalEmpEmail').textContent = emp.email;
-  document.getElementById('modalEmpAddress').textContent = emp.address;
+  document.getElementById('modalEmpAddress').textContent = emp.address || 'Metro Manila, Philippines';
   document.getElementById('modalEmpCivil').textContent = `${(emp.civilStatus || 'single').toUpperCase()} • ${emp.nationality || 'Filipino'} • ${emp.religion || 'Roman Catholic'}`;
-  document.getElementById('modalEmpBday').textContent = `${emp.birthDay} (${emp.birthPlace || 'Philippines'})`;
-  document.getElementById('modalEmpSSS').textContent = emp.sssNumber;
-  document.getElementById('modalEmpPhilhealth').textContent = emp.philhealthNumber;
-  document.getElementById('modalEmpPagibig').textContent = emp.pagibigNumber;
-  document.getElementById('modalEmpTIN').textContent = emp.tinNumber;
-  document.getElementById('modalEmpBank').textContent = emp.bankAccount;
-  document.getElementById('modalEmpRate').textContent = `₱${parseFloat(emp.dailyRate).toFixed(2)} (₱${(parseFloat(emp.dailyRate) / 8).toFixed(2)}/hr)`;
+  document.getElementById('modalEmpBday').textContent = `${emp.birthDay || '2000-01-01'} (${emp.birthPlace || 'Philippines'})`;
+  document.getElementById('modalEmpSSS').textContent = emp.sssNumber || 'N/A';
+  document.getElementById('modalEmpPhilhealth').textContent = emp.philhealthNumber || 'N/A';
+  document.getElementById('modalEmpPagibig').textContent = emp.pagibigNumber || 'N/A';
+  document.getElementById('modalEmpTIN').textContent = emp.tinNumber || 'N/A';
+  document.getElementById('modalEmpBank').textContent = emp.bankAccount || 'N/A';
+  document.getElementById('modalEmpRate').textContent = `₱${parseFloat(emp.dailyRate || 695).toFixed(2)} (₱${(parseFloat(emp.dailyRate || 695) / 8).toFixed(2)}/hr)`;
 
-  const modal = new bootstrap.Modal(document.getElementById('employeeDetailsModal'));
+  const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('employeeDetailsModal'));
+  modal.show();
+};
+
+window.openEditEmployeeFromProfile = function() {
+  const profileModalEl = document.getElementById('employeeDetailsModal');
+  const profileModal = bootstrap.Modal.getInstance(profileModalEl);
+  if (profileModal) profileModal.hide();
+
+  if (window.lastViewedEmpNo) {
+    openEditEmployeeModal(window.lastViewedEmpNo);
+  }
+};
+
+window.openEditEmployeeModal = function(empNo) {
+  const emp = employeesData.find(e => e.employeeNo === empNo);
+  if (!emp) {
+    alert(`Employee #${empNo} not found in database.`);
+    return;
+  }
+
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val !== undefined && val !== null ? val : '';
+  };
+
+  setVal('editEmpNo', emp.employeeNo);
+  setVal('editFirstName', emp.firstName);
+  setVal('editLastName', emp.lastName);
+  setVal('editMiddleName', emp.middleName || '');
+  setVal('editDepartment', emp.department || 'Information Technology');
+  setVal('editRole', emp.role || 'Staff Member');
+  setVal('editAccountType', emp.accountType || 'employee');
+  setVal('editGender', emp.gender || 'male');
+  setVal('editRate', parseFloat(emp.dailyRate || 695.00).toFixed(2));
+  setVal('editEmail', emp.email || '');
+  setVal('editPhone', emp.phoneNumber || '');
+  setVal('editAddress', emp.address || '');
+  setVal('editBday', emp.birthDay || '2000-01-01');
+  setVal('editBplace', emp.birthPlace || 'Metro Manila');
+  setVal('editCivilStatus', emp.civilStatus || 'single');
+  setVal('editSSS', emp.sssNumber || '');
+  setVal('editPhilhealth', emp.philhealthNumber || '');
+  setVal('editPagibig', emp.pagibigNumber || '');
+  setVal('editTIN', emp.tinNumber || '');
+  setVal('editBank', emp.bankAccount || '');
+
+  const alertBox = document.getElementById('editEmployeeAlert');
+  if (alertBox) {
+    alertBox.className = 'd-none';
+    alertBox.innerHTML = '';
+  }
+
+  const modalEl = document.getElementById('editEmployeeModal');
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
   modal.show();
 };
 
@@ -1939,6 +1998,135 @@ function setupEventListeners() {
 
       } catch (err) {
         console.error('Save employee error:', err);
+        showAlert(`<strong><i class="bi bi-x-octagon-fill me-1"></i> Error:</strong> ${err.message}`);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+      }
+    });
+  }
+
+  // Edit Employee Form (Admin Master Control - updates DB and Supabase)
+  const editForm = document.getElementById('editEmployeeForm');
+  if (editForm) {
+    editForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const empNo = document.getElementById('editEmpNo')?.value?.trim() || '';
+      const firstName = document.getElementById('editFirstName')?.value?.trim() || '';
+      const lastName = document.getElementById('editLastName')?.value?.trim() || '';
+      const middleName = document.getElementById('editMiddleName')?.value?.trim() || '';
+      const department = document.getElementById('editDepartment')?.value || 'Information Technology';
+      const role = document.getElementById('editRole')?.value?.trim() || 'Staff Member';
+      const accountType = document.getElementById('editAccountType')?.value || 'employee';
+      const gender = document.getElementById('editGender')?.value || 'male';
+      const dailyRate = parseFloat(document.getElementById('editRate')?.value || 695.00);
+      const email = document.getElementById('editEmail')?.value?.trim() || '';
+      const phoneNumber = document.getElementById('editPhone')?.value?.trim() || '';
+      const address = document.getElementById('editAddress')?.value?.trim() || '';
+      const birthDay = document.getElementById('editBday')?.value || '2000-01-01';
+      const birthPlace = document.getElementById('editBplace')?.value?.trim() || 'Metro Manila';
+      const civilStatus = document.getElementById('editCivilStatus')?.value || 'single';
+      const sssNumber = document.getElementById('editSSS')?.value?.trim() || '';
+      const philhealthNumber = document.getElementById('editPhilhealth')?.value?.trim() || '';
+      const pagibigNumber = document.getElementById('editPagibig')?.value?.trim() || '';
+      const tinNumber = document.getElementById('editTIN')?.value?.trim() || '';
+      const bankAccount = document.getElementById('editBank')?.value?.trim() || '';
+
+      const alertBox = document.getElementById('editEmployeeAlert');
+      const showAlert = (msg, type = 'danger') => {
+        if (alertBox) {
+          alertBox.className = `alert alert-${type} py-2 px-3 mb-3 small rounded d-block`;
+          alertBox.innerHTML = msg;
+        }
+      };
+
+      if (alertBox) alertBox.className = 'd-none';
+
+      if (!empNo || !firstName || !lastName || !email) {
+        showAlert('<strong><i class="bi bi-exclamation-circle-fill me-1"></i> Missing Fields:</strong> First Name, Last Name, and Email are required.');
+        return;
+      }
+
+      // Check if email belongs to someone else
+      const duplicateEmailEmp = employeesData.find(emp => emp.employeeNo !== empNo && emp.email?.toLowerCase() === email.toLowerCase());
+      if (duplicateEmailEmp) {
+        showAlert(`<strong><i class="bi bi-envelope-exclamation-fill me-1"></i> Duplicate Email:</strong> Email "${email}" is already used by Employee #${duplicateEmailEmp.employeeNo} (${duplicateEmailEmp.firstName} ${duplicateEmailEmp.lastName}).`);
+        return;
+      }
+
+      const submitBtn = editForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Save Changes & Sync Cloud';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Updating Cloud...';
+      }
+
+      const updatedFields = {
+        firstName,
+        middleName,
+        lastName,
+        department,
+        role,
+        accountType,
+        gender,
+        dailyRate,
+        email,
+        phoneNumber,
+        address,
+        birthDay,
+        birthPlace,
+        civilStatus,
+        sssNumber,
+        philhealthNumber,
+        pagibigNumber,
+        tinNumber,
+        bankAccount
+      };
+
+      try {
+        // Live Update in Supabase
+        if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
+          const { error } = await window.DCSA_SUPABASE.client
+            .from('employees')
+            .update(updatedFields)
+            .eq('employeeNo', empNo);
+
+          if (error) {
+            console.error('Supabase employee update error:', error);
+            showAlert(`<strong><i class="bi bi-cloud-slash-fill me-1"></i> Cloud Update Error:</strong> ${error.message}`);
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnText;
+            }
+            return;
+          }
+          console.log(`✅ Supabase employee #${empNo} updated successfully!`);
+        }
+
+        // Update local database in-memory
+        const empIndex = window.dcsaDB.employees.findIndex(e => e.employeeNo === empNo);
+        if (empIndex !== -1) {
+          Object.assign(window.dcsaDB.employees[empIndex], updatedFields);
+        }
+        saveDCSADatabase();
+        renderEmployeeDirectory();
+        initPayrollCalculator();
+        renderActiveGridTable();
+
+        showAlert(`<strong><i class="bi bi-check-circle-fill me-1"></i> Success!</strong> Employee #${empNo} details updated and synced!`, 'success');
+
+        setTimeout(() => {
+          const modalEl = document.getElementById('editEmployeeModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+          if (alertBox) alertBox.className = 'd-none';
+        }, 1200);
+
+      } catch (err) {
+        console.error('Edit employee error:', err);
         showAlert(`<strong><i class="bi bi-x-octagon-fill me-1"></i> Error:</strong> ${err.message}`);
       } finally {
         if (submitBtn) {

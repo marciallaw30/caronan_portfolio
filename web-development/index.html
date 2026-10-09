@@ -980,9 +980,185 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-warning rounded-pill px-4" onclick="openEditEmployeeFromProfile()">
+            <i class="bi bi-pencil-square me-1"></i> Edit Employee (Admin)
+          </button>
           <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: EDIT EMPLOYEE (ADMIN MASTER CONTROL) ================= -->
+  <div class="modal fade modal-custom" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div class="modal-content border border-warning border-opacity-50">
+        <form id="editEmployeeForm">
+          <div class="modal-header border-secondary border-opacity-25" style="background: rgba(245, 158, 11, 0.08);">
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(245, 158, 11, 0.2); color: #f59e0b;">
+                <i class="bi bi-person-gear fs-5"></i>
+              </div>
+              <div>
+                <h5 class="modal-title fw-bold text-white mb-0" id="editEmployeeModalLabel">Edit Staff Information (Admin Master Control)</h5>
+                <small class="text-muted">Modify employee record &amp; sync to Supabase Cloud</small>
+              </div>
+            </div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div id="editEmployeeAlert" class="d-none alert py-2 px-3 mb-3 small rounded"></div>
+
+            <div class="row g-3">
+              <!-- Employee ID (Locked/Readonly identifier) -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Employee No (Unique ID):</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-dark border-secondary text-warning"><i class="bi bi-lock-fill"></i></span>
+                  <input type="text" id="editEmpNo" class="form-control bg-dark border-secondary text-warning font-monospace fw-bold" readonly>
+                </div>
+                <small class="text-muted" style="font-size:0.75rem;">Primary key cannot be modified</small>
+              </div>
+
+              <!-- First Name -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">First Name:</label>
+                <input type="text" id="editFirstName" class="form-control bg-dark border-secondary text-white" required>
+              </div>
+
+              <!-- Last Name -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Last Name:</label>
+                <input type="text" id="editLastName" class="form-control bg-dark border-secondary text-white" required>
+              </div>
+
+              <!-- Middle Name -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Middle Name:</label>
+                <input type="text" id="editMiddleName" class="form-control bg-dark border-secondary text-white">
+              </div>
+
+              <!-- Department -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Department:</label>
+                <select id="editDepartment" class="form-select bg-dark border-secondary text-white">
+                  <option value="Information Technology">Information Technology</option>
+                  <option value="Academic Affairs">Academic Affairs</option>
+                  <option value="Human Resources">Human Resources</option>
+                  <option value="Finance & Accounting">Finance & Accounting</option>
+                  <option value="Admissions & Records">Admissions & Records</option>
+                  <option value="Operations">Operations</option>
+                </select>
+              </div>
+
+              <!-- Role / Title -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Job Role / Position Title:</label>
+                <input type="text" id="editRole" class="form-control bg-dark border-secondary text-white" placeholder="e.g. Lead Systems Architect" required>
+              </div>
+
+              <!-- Account Role (Admin vs Regular) -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Account Access Type:</label>
+                <select id="editAccountType" class="form-select bg-dark border-secondary text-white">
+                  <option value="employee">Regular Employee</option>
+                  <option value="admin">System Administrator</option>
+                </select>
+              </div>
+
+              <!-- Gender -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Gender:</label>
+                <select id="editGender" class="form-select bg-dark border-secondary text-white">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+
+              <!-- Daily Wage Rate -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Daily Wage (₱):</label>
+                <input type="number" id="editRate" class="form-control bg-dark border-secondary text-white font-monospace" step="0.01" min="1" required>
+              </div>
+
+              <!-- Official Email -->
+              <div class="col-md-6">
+                <label class="form-label text-light small fw-bold">Official Email Address:</label>
+                <input type="email" id="editEmail" class="form-control bg-dark border-secondary text-white" required>
+              </div>
+
+              <!-- Phone Number -->
+              <div class="col-md-6">
+                <label class="form-label text-light small fw-bold">Mobile Phone Number:</label>
+                <input type="text" id="editPhone" class="form-control bg-dark border-secondary text-white font-monospace" placeholder="09xxxxxxxxx">
+              </div>
+
+              <!-- Address -->
+              <div class="col-12">
+                <label class="form-label text-light small fw-bold">Residential Address:</label>
+                <input type="text" id="editAddress" class="form-control bg-dark border-secondary text-white" placeholder="Street, Barangay, City">
+              </div>
+
+              <!-- Birthday & Place -->
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Birth Date:</label>
+                <input type="date" id="editBday" class="form-control bg-dark border-secondary text-white font-monospace">
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Birth Place:</label>
+                <input type="text" id="editBplace" class="form-control bg-dark border-secondary text-white">
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label text-light small fw-bold">Civil Status:</label>
+                <select id="editCivilStatus" class="form-select bg-dark border-secondary text-white">
+                  <option value="single">Single</option>
+                  <option value="married">Married</option>
+                  <option value="widowed">Widowed</option>
+                  <option value="separated">Separated</option>
+                </select>
+              </div>
+
+              <!-- Statutory Government Numbers -->
+              <div class="col-12 mt-3 pt-3 border-top border-secondary border-opacity-25">
+                <h6 class="text-warning small fw-bold text-uppercase mb-2"><i class="bi bi-bank me-1"></i> Government Mandated Numbers &amp; Banking</h6>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label text-light small">SSS Number:</label>
+                <input type="text" id="editSSS" class="form-control bg-dark border-secondary text-white font-monospace small">
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label text-light small">PhilHealth Number:</label>
+                <input type="text" id="editPhilhealth" class="form-control bg-dark border-secondary text-white font-monospace small">
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label text-light small">Pag-IBIG Number:</label>
+                <input type="text" id="editPagibig" class="form-control bg-dark border-secondary text-white font-monospace small">
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label text-light small">BIR TIN:</label>
+                <input type="text" id="editTIN" class="form-control bg-dark border-secondary text-white font-monospace small">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label text-light small">Payroll Bank Account:</label>
+                <input type="text" id="editBank" class="form-control bg-dark border-secondary text-white font-monospace" placeholder="e.g. LandBank #1920-4820-19">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-secondary border-opacity-25">
+            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold" id="btnSaveEditEmployee">
+              <i class="bi bi-check2-circle me-1"></i> Save Changes &amp; Sync Cloud
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
