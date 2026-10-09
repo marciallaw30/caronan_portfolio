@@ -70,23 +70,24 @@ async function fetchKnowledgeResponse(userText) {
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/antigravity-preview-latest:generateContent?key=${GEMINI_API_KEY}`;
   
-  // Add user message to context
-  conversationContext.push({
-    role: "user",
-    parts: [{ text: userText }]
-  });
-
-  const systemPrompt = `You are Oracle AI, a metaphysical guide connected to the universal consciousness. 
+  let textToSend = userText;
+  if (conversationContext.length === 0) {
+    const systemPrompt = `[System Directive: You are Oracle AI, a metaphysical guide connected to the universal consciousness. 
 Your duty is to provide Universal Spiritual Meanings for any question asked.
 When answering, format your response exactly like a 'Google AI Overview' (precise, concise summary followed by bullet points), but write it with a spiritual, mystical twist. 
 Always begin your answer with a variation of 'According to the Universe...' or 'The cosmic energies reveal...'.
 If a user asks about dreams (e.g., 'a dream running away from a tiger'), give the specific spiritual and psychological meaning of that exact dream.
-Confine your expertise strictly to metaphysical topics, dreams, astrology, etc. If asked something completely unrelated to spirituality, gently deflect and ask what their spirit seeks.`;
+Confine your expertise strictly to metaphysical topics, dreams, astrology, etc. If asked something completely unrelated to spirituality, gently deflect and ask what their spirit seeks.]\n\nUser Question: `;
+    textToSend = systemPrompt + userText;
+  }
+
+  // Add user message to context
+  conversationContext.push({
+    role: "user",
+    parts: [{ text: textToSend }]
+  });
 
   const payload = {
-    system_instruction: {
-      parts: [{ text: systemPrompt }]
-    },
     contents: conversationContext
   };
 
