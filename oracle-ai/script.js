@@ -97,7 +97,11 @@ Confine your expertise strictly to metaphysical topics, dreams, astrology, etc. 
       body: JSON.stringify(payload)
     });
 
-    if (!response.ok) throw new Error("API Error");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const googleError = errorData?.error?.message || response.statusText;
+      throw new Error(`Google API says: ${googleError}`);
+    }
 
     const data = await response.json();
     const oracleReply = data.candidates[0].content.parts[0].text;
@@ -114,7 +118,7 @@ Confine your expertise strictly to metaphysical topics, dreams, astrology, etc. 
     console.error("Gemini API Error:", error);
     // Remove the failed user message from context so they can try again
     conversationContext.pop();
-    return `A disturbance in the ether... the spiritual connection to the Universe failed. Please check your API key or internet connection.`;
+    return `A disturbance in the ether... the connection failed.\n\n**Error from Google:** ${error.message}`;
   }
 }
 
