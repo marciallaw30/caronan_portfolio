@@ -1830,22 +1830,32 @@ function setupEventListeners() {
       const gender = document.getElementById('newGender')?.value || 'male';
       const dailyRate = parseFloat(document.getElementById('newRate')?.value || 695.00);
 
+      const alertBox = document.getElementById('addEmployeeAlert');
+      const showAlert = (msg, type = 'danger') => {
+        if (alertBox) {
+          alertBox.className = `alert alert-${type} py-2 px-3 mb-3 small rounded d-block`;
+          alertBox.innerHTML = msg;
+        }
+      };
+
+      if (alertBox) alertBox.className = 'd-none';
+
       if (!empNo || !firstName || !lastName || !email) {
-        alert('⚠️ Please fill in all required fields (Employee No, First Name, Last Name, Email).');
+        showAlert('<strong><i class="bi bi-exclamation-circle-fill me-1"></i> Missing Fields:</strong> Please fill in all required fields (Employee No, First Name, Last Name, Email).');
         return;
       }
 
       // Check for duplicate Employee No in current database
       const existingEmpNo = employeesData.find(emp => emp.employeeNo === empNo);
       if (existingEmpNo) {
-        alert(`⚠️ Employee Number "${empNo}" already exists for ${existingEmpNo.firstName} ${existingEmpNo.lastName}. Please use a different Employee Number.`);
+        showAlert(`<strong><i class="bi bi-person-exclamation me-1"></i> Duplicate Employee No:</strong> Number "${empNo}" is already assigned to ${existingEmpNo.firstName} ${existingEmpNo.lastName}.`);
         return;
       }
 
       // Check for duplicate Email in current database
       const existingEmail = employeesData.find(emp => emp.email?.toLowerCase() === email.toLowerCase());
       if (existingEmail) {
-        alert(`⚠️ Email address "${email}" is already registered to Employee #${existingEmail.employeeNo} (${existingEmail.firstName} ${existingEmail.lastName}).\n\nPlease use a different unique email address.`);
+        showAlert(`<strong><i class="bi bi-envelope-exclamation-fill me-1"></i> Duplicate Email:</strong> Email "${email}" is already registered to Employee #${existingEmail.employeeNo} (${existingEmail.firstName} ${existingEmail.lastName}).<br>Please use a different unique email address.`);
         return;
       }
 
@@ -1894,9 +1904,9 @@ function setupEventListeners() {
           if (error) {
             console.error('Supabase employee insert error:', error);
             if (error.code === '23505' || error.message.includes('unique')) {
-              alert(`⚠️ Cloud Database Error: Employee No or Email already exists in Supabase!\n\nDetails: ${error.message}`);
+              showAlert(`<strong><i class="bi bi-shield-lock-fill me-1"></i> Cloud Database Conflict:</strong> Employee No or Email already exists in Supabase PostgreSQL.<br><small class="text-white-50">${error.message}</small>`);
             } else {
-              alert(`⚠️ Could not save to Supabase Cloud:\n${error.message}`);
+              showAlert(`<strong><i class="bi bi-cloud-slash-fill me-1"></i> Supabase Cloud Error:</strong> ${error.message}`);
             }
             if (submitBtn) {
               submitBtn.disabled = false;
@@ -1917,17 +1927,19 @@ function setupEventListeners() {
         renderEmployeeDirectory();
         initPayrollCalculator();
 
-        // Close modal and reset form
-        const modalEl = document.getElementById('addEmployeeModal');
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        if (modal) modal.hide();
-        addForm.reset();
+        showAlert(`<strong><i class="bi bi-check-circle-fill me-1"></i> Success!</strong> Employee #${newEmp.employeeNo} (${newEmp.firstName} ${newEmp.lastName}) saved and synced to database!`, 'success');
 
-        alert(`✅ Employee #${newEmp.employeeNo} (${newEmp.firstName} ${newEmp.lastName}) successfully saved and synced to database!`);
+        setTimeout(() => {
+          const modalEl = document.getElementById('addEmployeeModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+          addForm.reset();
+          if (alertBox) alertBox.className = 'd-none';
+        }, 1200);
 
       } catch (err) {
         console.error('Save employee error:', err);
-        alert(`⚠️ Unexpected error while saving employee: ${err.message}`);
+        showAlert(`<strong><i class="bi bi-x-octagon-fill me-1"></i> Error:</strong> ${err.message}`);
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
