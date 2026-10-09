@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Analysis Dashboard - Marcial Lawrence</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #05010d;
+      --card-bg: rgba(15, 5, 29, 0.9);
+      --accent-green: #10b981;
+      --accent-green-glow: rgba(16, 185, 129, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: rgba(5, 1, 13, 0.95) !important;
+      border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar-brand {
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-main) !important;
+    }
+
+    .navbar-brand span {
+      color: var(--accent-green);
+    }
+
+    .nav-link {
+      color: var(--text-muted) !important;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--accent-green) !important;
+    }
+
+    .dashboard-header {
+      padding: 100px 0 40px 0;
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(16, 185, 129, 0.15), transparent 60%);
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px var(--accent-green-glow);
+      border-color: rgba(16, 185, 129, 0.5);
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .chart-container {
+      background: var(--card-bg);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      color: var(--text-main) !important;
+    }
+
+    th {
+      background-color: rgba(16, 185, 129, 0.1) !important;
+      color: var(--accent-green) !important;
+      border-bottom: 2px solid rgba(16, 185, 129, 0.3) !important;
+    }
+
+    td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      background-color: transparent !important;
+      color: #e2e8f0 !important;
+    }
+
+    .badge-green {
+      background-color: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid #10b981;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top custom-navbar py-3">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html"><i class="bi bi-bar-chart-fill me-2"></i>Data<span>Analytics</span></a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <i class="bi bi-list text-white fs-2"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto gap-3">
+          <li class="nav-item">
+            <a class="nav-link" href="../index.html"><i class="bi bi-arrow-left me-1"></i> Back to Portfolio</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <section class="dashboard-header">
+    <div class="container">
+      <span class="badge badge-green px-3 py-2 mb-3 text-uppercase fw-bold letter-spacing-1">JSON-Powered Dashboard</span>
+      <h1 class="display-4 fw-bold mb-3">Internet Cafe <span style="color: var(--accent-green);">Data Analysis</span></h1>
+      <p class="lead text-muted mx-auto" style="max-width: 700px;">
+        An interactive dashboard rendering parsed JSON data originally extracted from a raw Excel dataset. 
+        Visualizing internet usage, customer demographics, and total sales metrics.
+      </p>
+    </div>
+  </section>
+
+  <!-- KPI Cards -->
+  <section class="py-4">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-people-fill me-2"></i>Total Transactions</div>
+            <div class="stat-value" id="kpi-total-transactions">0</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-currency-dollar me-2"></i>Total Revenue</div>
+            <div class="stat-value" id="kpi-total-revenue">₱0</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-clock-history me-2"></i>Avg Internet Hours</div>
+            <div class="stat-value" id="kpi-avg-hours">0</div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="text-muted small mb-2 text-uppercase fw-bold"><i class="bi bi-person-badge-fill me-2"></i>Student Ratio</div>
+            <div class="stat-value" id="kpi-student-ratio">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Charts Section -->
+  <section class="py-4">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="chart-container">
+            <h5 class="fw-bold mb-4"><i class="bi bi-graph-up text-success me-2"></i>Daily Sales Trend</h5>
+            <canvas id="salesChart" height="100"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="chart-container">
+            <h5 class="fw-bold mb-4"><i class="bi bi-pie-chart-fill text-success me-2"></i>Revenue by Gender</h5>
+            <canvas id="genderChart" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="chart-container">
+            <h5 class="fw-bold mb-4"><i class="bi bi-controller text-success me-2"></i>Gamers vs Non-Gamers Revenue</h5>
+            <canvas id="gamingChart"></canvas>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="chart-container">
+            <h5 class="fw-bold mb-4"><i class="bi bi-printer text-success me-2"></i>Services Distribution</h5>
+            <canvas id="servicesChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Table -->
+  <section class="py-5 mb-5">
+    <div class="container">
+      <h3 class="fw-bold mb-4"><i class="bi bi-table text-success me-2"></i>Raw JSON Data Feed</h3>
+      <div class="table-container">
+        <table class="table table-hover mb-0" id="dataTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Day</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Student</th>
+              <th>Internet Hrs</th>
+              <th>Printing</th>
+              <th>Scanning</th>
+              <th>Gaming</th>
+              <th>Total Sales (₱)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

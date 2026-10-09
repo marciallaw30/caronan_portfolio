@@ -1,0 +1,12 @@
+Variable / Column Name,Data Type,Description
+Transaction_ID,Text / Alphanumeric,"Unique identification code assigned to each customer transaction (e.g., T1000)."
+Day,Numerical (Integer),"The sequential day number of the operation/recording period (e.g., Day 1 to Day 50)."
+Day_of_Week,Text,"The specific day of the week when the transaction occurred (e.g., Mon, Tue, Wed, etc.)."
+Customer_Age,Numerical (Integer),The age of the customer making the transaction.
+Gender,Text,"The gender of the customer (e.g., Male, Female)."
+Student,Text (Yes / No),Indicates whether the customer is a student (Yes) or a non-student (No).
+Internet_Hours,Numerical (Integer),The total number of hours the customer spent using the internet service.
+Printing_Pages,Numerical (Integer),The number of pages printed by the customer during the transaction.
+Scanning_Pages,Numerical (Integer),The number of pages scanned by the customer during the transaction.
+Gaming,Text (Yes / No),Indicates whether the customer used the gaming service (Yes) or not (No).
+Total_Sales,Numerical (Integer / Currency),The total monetary value or revenue generated from the transaction.
