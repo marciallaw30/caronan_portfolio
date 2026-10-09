@@ -125,17 +125,18 @@ document.addEventListener('DOMContentLoaded', () => {
       erd: 'Normalized 3NF relational database across `employees`, `attendance`, `payroll`, `benefits`, `benefits_deductions`, `announcements`, `events`, and `feedback`.'
     },
     'iot-soil': {
-      title: 'IoT Automated Soil Moisture Monitoring System',
-      category: 'IoT Hardware Engineering & Automation',
-      overview: 'Smart agricultural sensor system utilizing Arduino microcontrollers and capacitive soil moisture probes. Programmed to continuously sample moisture thresholds in cultivating soil, triggering an audible buzzer and visual alarm whenever hydration levels drop below required agricultural setpoints.',
+      title: 'Arduino: Soil Moisture Sensor for Plants Modified w/ Speaker',
+      category: 'Embedded Systems & IoT Hardware Engineering',
+      overview: 'An embedded microcontroller project developed at Datamex College of Saint Adeline (BSIT OOP & Discrete Structures). Employs an Arduino Uno R3, capacitive/resistive soil moisture sensor, and modified PWM speaker to provide real-time audio and visual telemetry for precision plant hydration monitoring.',
       features: [
-        'Continuous analog soil moisture sampling with calibration routines',
-        'Real-time threshold logic triggering piezo buzzer alarm upon critical dryness',
-        'LED status indicator array (Green: Optimal, Yellow: Moderate, Red: Critical Dryness)',
-        'Serial data telemetry logging for soil moisture degradation over time'
+        'Dynamic floating-point ratio math: moistureRatio = currentMoistureLevel / maximumMoistureLevel',
+        'Multi-frequency PWM acoustic synthesizer: 1000Hz alert tone ("I\'m thirsty!"), 1500Hz confirmation chime ("I\'m full!"), and 5-6kHz boot chime',
+        'Diffused LED status array: Green LED (Pin D1, >30% moisture) & Red LED (Pin D3, ≤30% moisture) protected by 10kΩ resistors',
+        'Continuous 10Hz sampling loop with 9600 baud UART Serial Monitor telemetry logging for laboratory debugging',
+        'Empirical test validation across dry, moderate, and saturated soil environments with recorded video demo'
       ],
-      tech: ['Arduino C/C++', 'Microcontroller Hardware', 'Capacitive Moisture Probes', 'Piezo Audio Alarm', 'Circuitry'],
-      erd: 'Telemetry logged into local data array with moisture percentage, timestamp, and alarm actuation status.'
+      tech: ['Arduino Uno R3', 'C++ Embedded Firmware', 'Soil Moisture Sensor (A0)', 'PWM Speaker (D5)', 'Breadboard Prototyping', '10kΩ Resistors'],
+      erd: 'Pinout Map: Analog In A0 (Moisture Probe), Digital Out D1 (Green LED), Digital Out D3 (Red LED), Digital Out D5 PWM (Speaker Audio), 5V & Common GND.'
     },
     'music-video': {
       title: 'Multimedia Music Video Web Application',
