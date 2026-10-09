@@ -1814,58 +1814,126 @@ function setupEventListeners() {
     });
   }
 
-  // Add Employee Form (persists directly to DB)
+  // Add Employee Form (persists directly to DB and Supabase)
   const addForm = document.getElementById('addEmployeeForm');
   if (addForm) {
-    addForm.addEventListener('submit', (e) => {
+    addForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      const empNo = document.getElementById('newEmpNo')?.value?.trim() || '';
+      const firstName = document.getElementById('newFirstName')?.value?.trim() || '';
+      const lastName = document.getElementById('newLastName')?.value?.trim() || '';
+      const middleName = document.getElementById('newMiddleName')?.value?.trim() || '';
+      const email = document.getElementById('newEmail')?.value?.trim() || '';
+      const department = document.getElementById('newDepartment')?.value || 'Information Technology';
+      const accountType = document.getElementById('newAccountType')?.value || 'employee';
+      const gender = document.getElementById('newGender')?.value || 'male';
+      const dailyRate = parseFloat(document.getElementById('newRate')?.value || 695.00);
+
+      if (!empNo || !firstName || !lastName || !email) {
+        alert('⚠️ Please fill in all required fields (Employee No, First Name, Last Name, Email).');
+        return;
+      }
+
+      // Check for duplicate Employee No in current database
+      const existingEmpNo = employeesData.find(emp => emp.employeeNo === empNo);
+      if (existingEmpNo) {
+        alert(`⚠️ Employee Number "${empNo}" already exists for ${existingEmpNo.firstName} ${existingEmpNo.lastName}. Please use a different Employee Number.`);
+        return;
+      }
+
+      // Check for duplicate Email in current database
+      const existingEmail = employeesData.find(emp => emp.email?.toLowerCase() === email.toLowerCase());
+      if (existingEmail) {
+        alert(`⚠️ Email address "${email}" is already registered to Employee #${existingEmail.employeeNo} (${existingEmail.firstName} ${existingEmail.lastName}).\n\nPlease use a different unique email address.`);
+        return;
+      }
+
+      const submitBtn = addForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn ? submitBtn.innerHTML : 'Save Employee';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving to Cloud...';
+      }
+
       const newEmp = {
         id: Date.now(),
-        employeeNo: document.getElementById('newEmpNo').value.trim(),
-        firstName: document.getElementById('newFirstName').value.trim(),
-        middleName: document.getElementById('newMiddleName').value.trim() || '',
-        lastName: document.getElementById('newLastName').value.trim(),
-        birthDay: document.getElementById('newBday').value || '2000-01-01',
-        birthPlace: document.getElementById('newBplace').value || 'Metro Manila',
-        address: document.getElementById('newAddress').value || 'Paranaque City',
-        email: document.getElementById('newEmail').value.trim(),
-        gender: document.getElementById('newGender').value,
+        employeeNo: empNo,
+        password: '$2y$10$XyUFcjrsiQ0ZIPIKSrAb1uGO0/v.zDC524w03sSeB8YxrEsLd.WFK',
+        firstName: firstName,
+        middleName: middleName,
+        lastName: lastName,
+        birthDay: '2000-01-01',
+        birthPlace: 'Metro Manila',
+        address: 'Paranaque City, Metro Manila',
+        email: email,
+        gender: gender,
         civilStatus: 'single',
         nationality: 'Filipino',
         religion: 'Roman Catholic',
-        phoneNumber: document.getElementById('newPhone').value || '09123456789',
+        phoneNumber: '09123456789',
         sssNumber: '34-' + Math.floor(1000000 + Math.random() * 9000000) + '-1',
         pagibigNumber: '1211-' + Math.floor(1000 + Math.random() * 9000) + '-0012',
         tinNumber: '291-' + Math.floor(100 + Math.random() * 900) + '-000',
         philhealthNumber: '19-' + Math.floor(100000000 + Math.random() * 900000000) + '-1',
         bankAccount: 'LandBank #' + Math.floor(1000 + Math.random() * 9000) + '-48',
-        accountType: document.getElementById('newAccountType').value,
-        department: document.getElementById('newDepartment').value,
-        role: document.getElementById('newRole').value || 'Staff Member',
-        dailyRate: parseFloat(document.getElementById('newRate').value || 695.00)
+        accountType: accountType,
+        department: department,
+        role: accountType === 'admin' ? 'System Administrator' : 'Staff Member',
+        dailyRate: dailyRate
       };
 
-      window.dcsaDB.employees.push(newEmp);
-      saveDCSADatabase();
-      renderEmployeeDirectory();
-      initPayrollCalculator();
+      try {
+        // If Supabase is connected, sync to cloud first
+        if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
+          const empToInsert = { ...newEmp };
+          delete empToInsert.id; // Allow DB identity column to generate id
 
-      // Live Sync to Supabase
-      if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
-        const empToInsert = { ...newEmp };
-        delete empToInsert.id;
-        window.DCSA_SUPABASE.client.from('employees').insert([empToInsert]).then(({ error }) => {
-          if (error) console.warn('Supabase employee insert error:', error);
-          else console.log('✅ Supabase employee synced:', newEmp.employeeNo);
-        });
+          const { data, error } = await window.DCSA_SUPABASE.client.from('employees').insert([empToInsert]).select();
+
+          if (error) {
+            console.error('Supabase employee insert error:', error);
+            if (error.code === '23505' || error.message.includes('unique')) {
+              alert(`⚠️ Cloud Database Error: Employee No or Email already exists in Supabase!\n\nDetails: ${error.message}`);
+            } else {
+              alert(`⚠️ Could not save to Supabase Cloud:\n${error.message}`);
+            }
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnText;
+            }
+            return;
+          }
+
+          if (data && data[0] && data[0].id) {
+            newEmp.id = data[0].id;
+          }
+          console.log('✅ Supabase employee synced successfully:', newEmp.employeeNo);
+        }
+
+        // Add to local database
+        window.dcsaDB.employees.push(newEmp);
+        saveDCSADatabase();
+        renderEmployeeDirectory();
+        initPayrollCalculator();
+
+        // Close modal and reset form
+        const modalEl = document.getElementById('addEmployeeModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+        addForm.reset();
+
+        alert(`✅ Employee #${newEmp.employeeNo} (${newEmp.firstName} ${newEmp.lastName}) successfully saved and synced to database!`);
+
+      } catch (err) {
+        console.error('Save employee error:', err);
+        alert(`⚠️ Unexpected error while saving employee: ${err.message}`);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
       }
-
-      const modalEl = document.getElementById('addEmployeeModal');
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      if (modal) modal.hide();
-      addForm.reset();
-
-      alert(`✅ Employee #${newEmp.employeeNo} (${newEmp.firstName} ${newEmp.lastName}) saved to datamex_payroll_db!`);
     });
   }
 
