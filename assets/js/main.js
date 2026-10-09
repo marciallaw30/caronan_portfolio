@@ -81,6 +81,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5. Complete 5-Projects Data Store for Modals
   const projectDatabase = {
+    'oracle-ai': {
+      title: 'Oracle AI (Spiritual AI Chatbot)',
+      category: 'AI Integration & Web Development',
+      overview: 'A specialized, front-end artificial intelligence chatbot designed to act as a mystical "Oracle". It uses prompt engineering and the Google Gemini API to provide spiritual interpretations for dreams, astrology, tarot, and numerology, formatting responses dynamically with a "cosmic" persona.',
+      features: [
+        'Real-time integration with Google Gemini 3.6 Flash Large Language Model',
+        'Advanced system prompting and context window management for multi-turn conversations',
+        'Custom markdown parsing for rendering "Google AI Overview" style featured snippets',
+        'Stateful UI with typing indicators, interactive suggestion chips, and responsive design'
+      ],
+      tech: ['Google Gemini API', 'JavaScript (ES6+)', 'HTML5 / CSS3', 'RESTful Fetch', 'JSON'],
+      erd: 'Serverless architecture. Data flows directly from the client browser to Google Generative Language API via HTTPS POST requests, retaining conversation context in local memory.'
+    },
     'ecommerce': {
       title: 'E-Commerce Web Application (Flagship Enterprise)',
       category: 'Full-Stack Web & E-Commerce Engineering',
