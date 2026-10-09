@@ -634,15 +634,18 @@
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-25">
           <div>
             <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-              <h4 class="fw-bold text-white mb-0"><i class="bi bi-database-fill-gear text-info me-2"></i> In-Browser MySQL Database Manager</h4>
-              <span class="badge bg-success-subtle text-success border border-success font-monospace" style="font-size:0.7rem;">ENGINE: LOCALSTORAGE (PERSISTENT)</span>
+              <h4 class="fw-bold text-white mb-0"><i class="bi bi-database-fill-gear text-info me-2"></i> In-Browser & Cloud MySQL Database Manager</h4>
+              <span id="supabaseStatusBadge" class="badge bg-secondary-subtle text-light border border-secondary font-monospace" style="font-size:0.7rem;"><i class="bi bi-cloud-slash me-1"></i> CLOUD: LOCAL MODE</span>
               <span class="badge bg-dark border border-secondary text-warning font-monospace" style="font-size:0.7rem;">SCHEMA: datamex_payroll_db</span>
             </div>
             <div class="text-muted small">
-              Real client-side relational SQL execution engine. Every modification (registration, attendance punches, and SQL statements) is saved persistently in your browser.
+              Real relational SQL engine supporting both client-side persistence and live <strong>Supabase PostgreSQL Cloud Sync</strong> for seamless deployment on Vercel & GitHub.
             </div>
           </div>
           <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-outline-success btn-sm rounded-pill fw-bold" onclick="openSupabaseModal()" id="btnSupabaseConnect">
+              <i class="bi bi-cloud-arrow-up-fill me-1"></i> <span id="supabaseBtnLabel">Connect Supabase Cloud</span>
+            </button>
             <button class="btn btn-outline-info btn-sm rounded-pill" onclick="exportDatabaseSQL()" title="Export .sql dump matching MySQL format">
               <i class="bi bi-download me-1"></i> Export .SQL Dump
             </button>
@@ -1185,8 +1188,95 @@
     </div>
   </div>
 
+  <!-- ================= MODAL: SUPABASE CLOUD DATABASE CONFIG ================= -->
+  <div class="modal fade modal-custom" id="supabaseModal" tabindex="-1" aria-labelledby="supabaseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border border-success border-opacity-50">
+        <div class="modal-header border-secondary border-opacity-25" style="background: rgba(16, 185, 129, 0.08);">
+          <div class="d-flex align-items-center gap-2">
+            <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: rgba(62, 207, 142, 0.2); color: #3ecf8e;">
+              <i class="bi bi-cloud-check-fill fs-5"></i>
+            </div>
+            <div>
+              <h5 class="modal-title fw-bold text-white mb-0" id="supabaseModalLabel">Supabase Cloud Database Settings</h5>
+              <small class="text-muted">Live PostgreSQL connection for Vercel &amp; GitHub deployment</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Step-by-Step Human Action Instructions -->
+          <div class="p-3 mb-4 rounded bg-dark border border-secondary border-opacity-50">
+            <h6 class="fw-bold text-warning mb-2"><i class="bi bi-lightning-charge-fill me-1"></i> Quick 3-Step Supabase Setup</h6>
+            <ol class="small text-light mb-2 ps-3" style="line-height: 1.7;">
+              <li>Log in to <a href="https://supabase.com/dashboard" target="_blank" class="text-info text-decoration-underline fw-bold">Supabase Dashboard</a> and create a free project.</li>
+              <li>Go to <strong>SQL Editor</strong>, click <strong>New Query</strong>, paste our schema SQL, and click <strong>Run</strong>.
+                <button type="button" class="btn btn-outline-info btn-sm py-0 px-2 ms-2 rounded-pill fw-bold" onclick="copySupabaseSQLScript()" id="btnCopySqlModal">
+                  <i class="bi bi-clipboard-check me-1"></i> Copy SQL Schema
+                </button>
+              </li>
+              <li>Go to <strong>Project Settings &gt; API</strong>, copy your <strong>Project URL</strong> and <strong>anon public key</strong>, and paste them below:</li>
+            </ol>
+          </div>
+
+          <!-- Alert / Status Banner -->
+          <div id="supabaseModalMsg" class="d-none alert py-2 px-3 mb-3 small rounded"></div>
+
+          <!-- Supabase Form -->
+          <form id="supabaseConfigForm" onsubmit="event.preventDefault(); handleSaveSupabaseConfig();">
+            <div class="mb-3">
+              <label for="inputSupabaseUrl" class="form-label text-light small fw-bold">
+                <i class="bi bi-link-45deg text-success me-1"></i> Supabase Project URL:
+              </label>
+              <input type="url" class="form-control bg-dark border-secondary text-white font-monospace" id="inputSupabaseUrl" placeholder="https://xxxxxxxxxxxxxxxx.supabase.co" required>
+              <small class="text-muted">Found in Supabase: Project Settings &rarr; API &rarr; Project URL</small>
+            </div>
+
+            <div class="mb-3">
+              <label for="inputSupabaseKey" class="form-label text-light small fw-bold">
+                <i class="bi bi-key-fill text-warning me-1"></i> Supabase Anon Public Key:
+              </label>
+              <div class="input-group">
+                <input type="password" class="form-control bg-dark border-secondary text-white font-monospace" id="inputSupabaseKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." required>
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('inputSupabaseKey')">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+              <small class="text-muted">Found in Supabase: Project Settings &rarr; API &rarr; Project API keys &rarr; <code>anon</code> <code>public</code></small>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25">
+              <div class="d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-outline-warning btn-sm rounded-pill fw-bold" onclick="testSupabaseConfigFromModal()" id="btnTestSupabaseModal">
+                  <i class="bi bi-broadcast me-1"></i> Test Connection
+                </button>
+                <button type="button" class="btn btn-outline-info btn-sm rounded-pill fw-bold" onclick="syncAllLocalToSupabase()" id="btnPushLocalSupabase" title="Upload local employees, attendance, and feedback into Supabase tables">
+                  <i class="bi bi-cloud-arrow-up-fill me-1"></i> Sync Local to Cloud
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm rounded-pill" onclick="handleDisconnectSupabase()" id="btnDisconnectSupabase">
+                  <i class="bi bi-cloud-slash me-1"></i> Disconnect (Use Local)
+                </button>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success btn-sm rounded-pill px-4 fw-bold" id="btnSaveSupabaseModal" style="background-color: #3ecf8e; border-color: #3ecf8e; color: #121212;">
+                  <i class="bi bi-check-circle-fill me-1"></i> Save &amp; Connect
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Bootstrap 5 JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Supabase JS Client v2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase Configuration & Client Manager -->
+  <script src="supabase-config.js"></script>
   <!-- Showcase Logic -->
   <script src="showcase.js"></script>
 </body>

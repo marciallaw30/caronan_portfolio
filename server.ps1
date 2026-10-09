@@ -33,6 +33,7 @@ $mimeTypes = @{
     ".svg"  = "image/svg+xml"
     ".ico"  = "image/x-icon"
     ".md"   = "text/plain; charset=utf-8"
+    ".sql"  = "text/plain; charset=utf-8"
 }
 
 while ($listener.IsListening) {

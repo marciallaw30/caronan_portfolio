@@ -344,6 +344,42 @@ function initDatabase() {
   employeesData = window.dcsaDB.employees;
   attendanceRecords = window.dcsaDB.attendance;
   feedbackRecords = window.dcsaDB.feedback;
+
+  // Supabase Status check & live sync
+  updateSupabaseUIBadge();
+  if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.isConnected) {
+    fetchFromSupabaseToLocal(true);
+  }
+}
+
+function updateSupabaseUIBadge() {
+  const badge = document.getElementById('supabaseStatusBadge');
+  const btnLabel = document.getElementById('supabaseBtnLabel');
+  const btn = document.getElementById('btnSupabaseConnect');
+
+  const isConnected = !!(window.DCSA_SUPABASE && window.DCSA_SUPABASE.isConnected && window.DCSA_SUPABASE.client);
+
+  if (badge) {
+    if (isConnected) {
+      badge.className = 'badge bg-success-subtle text-success border border-success font-monospace';
+      badge.innerHTML = '<i class="bi bi-cloud-check-fill me-1"></i> CLOUD: SUPABASE CONNECTED';
+    } else {
+      badge.className = 'badge bg-secondary-subtle text-light border border-secondary font-monospace';
+      badge.innerHTML = '<i class="bi bi-cloud-slash me-1"></i> CLOUD: LOCAL MODE';
+    }
+  }
+
+  if (btnLabel) {
+    btnLabel.textContent = isConnected ? 'Supabase Settings' : 'Connect Supabase Cloud';
+  }
+
+  if (btn) {
+    if (isConnected) {
+      btn.className = 'btn btn-outline-success btn-sm rounded-pill fw-bold active';
+    } else {
+      btn.className = 'btn btn-outline-success btn-sm rounded-pill fw-bold';
+    }
+  }
 }
 
 function saveDCSADatabase(notify = true) {
@@ -543,6 +579,23 @@ window.handleKioskAction = function(actionType) {
     window.dcsaDB.attendance.push(newRec);
     saveDCSADatabase();
     renderAttendanceTable();
+
+    // Live Sync to Supabase
+    if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
+      window.DCSA_SUPABASE.client.from('attendance').insert([{
+        employeeNo: emp.employeeNo,
+        date: dateStr,
+        time_in: timeStr,
+        working_hours: 0,
+        late_minutes: lateMins,
+        overtime_hours: 0,
+        status: 'Clocked In'
+      }]).then(({ error }) => {
+        if (error) console.warn('Supabase attendance time-in error:', error);
+        else console.log('✅ Supabase attendance time-in synced');
+      });
+    }
+
     showKioskToast(`✅ TIME IN Recorded for ${emp.firstName} ${emp.lastName} at ${timeStr}. ${lateMins > 0 ? `(Late: ${lateMins} mins)` : '(On Time)'}`, 'success');
   } else if (actionType === 'out') {
     if (!record) {
@@ -572,6 +625,23 @@ window.handleKioskAction = function(actionType) {
 
     saveDCSADatabase();
     renderAttendanceTable();
+
+    // Live Sync to Supabase
+    if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
+      window.DCSA_SUPABASE.client.from('attendance')
+        .update({
+          time_out: timeStr,
+          working_hours: record.working_hours,
+          overtime_hours: record.overtime_hours,
+          status: 'Completed'
+        })
+        .match({ employeeNo: empNo, date: dateStr })
+        .then(({ error }) => {
+          if (error) console.warn('Supabase attendance time-out error:', error);
+          else console.log('✅ Supabase attendance time-out synced');
+        });
+    }
+
     showKioskToast(`✅ TIME OUT Recorded for ${emp.firstName} ${emp.lastName} at ${timeStr}! Hours: ${record.working_hours}h, OT: ${record.overtime_hours}h.`, 'success');
   }
 };
@@ -883,6 +953,16 @@ window.deleteDbRow = function(tableName, identifier) {
     renderEmployeeDirectory();
     renderAttendanceTable();
     initPayrollCalculator();
+
+    // Live Sync deletion to Supabase
+    if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
+      const colName = (tableName === 'employees' && typeof identifier === 'string') ? 'employeeNo' : 'id';
+      window.DCSA_SUPABASE.client.from(tableName).delete().eq(colName, identifier).then(({ error }) => {
+        if (error) console.warn(`Supabase delete from ${tableName}:`, error);
+        else console.log(`✅ Synced delete from ${tableName} in Supabase`);
+      });
+    }
+
     alert(`Row deleted from ${tableName}.`);
   }
 };
@@ -1221,6 +1301,244 @@ function downloadFile(filename, text, mime) {
   document.body.removeChild(element);
 }
 
+/* ================= 6B. SUPABASE CLOUD DATABASE SYNC & CONTROLS ================= */
+window.openSupabaseModal = function() {
+  const urlInput = document.getElementById('inputSupabaseUrl');
+  const keyInput = document.getElementById('inputSupabaseKey');
+  const msgBox = document.getElementById('supabaseModalMsg');
+
+  if (urlInput) urlInput.value = window.DCSA_SUPABASE?.url || '';
+  if (keyInput) keyInput.value = window.DCSA_SUPABASE?.anonKey || '';
+
+  if (msgBox) {
+    if (window.DCSA_SUPABASE?.isConnected) {
+      msgBox.className = 'alert alert-success py-2 px-3 mb-3 small rounded d-block';
+      msgBox.innerHTML = '<strong><i class="bi bi-check-circle-fill me-1"></i> Supabase Connected:</strong> Live queries and insertions are syncing directly with your cloud PostgreSQL database.';
+    } else {
+      msgBox.className = 'd-none';
+      msgBox.innerHTML = '';
+    }
+  }
+
+  const modalEl = document.getElementById('supabaseModal');
+  if (modalEl) {
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    modal.show();
+  }
+};
+
+window.togglePasswordVisibility = function(inputId) {
+  const input = document.getElementById(inputId);
+  if (input) {
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+};
+
+window.testSupabaseConfigFromModal = async function() {
+  const url = document.getElementById('inputSupabaseUrl')?.value.trim();
+  const key = document.getElementById('inputSupabaseKey')?.value.trim();
+  const msgBox = document.getElementById('supabaseModalMsg');
+  const btn = document.getElementById('btnTestSupabaseModal');
+
+  if (!url || !key) {
+    if (msgBox) {
+      msgBox.className = 'alert alert-warning py-2 px-3 mb-3 small rounded d-block';
+      msgBox.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Please enter both Supabase Project URL and Anon Public Key.';
+    }
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Testing...';
+  }
+
+  try {
+    await testSupabaseConnection(url, key);
+    if (msgBox) {
+      msgBox.className = 'alert alert-success py-2 px-3 mb-3 small rounded d-block';
+      msgBox.innerHTML = '<strong><i class="bi bi-check-circle-fill me-1"></i> Connection Successful!</strong> Successfully connected and queried table <code>employees</code> in Supabase.';
+    }
+  } catch (err) {
+    if (msgBox) {
+      msgBox.className = 'alert alert-danger py-2 px-3 mb-3 small rounded d-block';
+      msgBox.innerHTML = `<strong><i class="bi bi-x-circle-fill me-1"></i> Connection Failed:</strong> ${err.message}<br><small class="text-white-50">Did you execute <code>supabase_schema.sql</code> in the Supabase SQL Editor?</small>`;
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-broadcast me-1"></i> Test Connection';
+    }
+  }
+};
+
+window.handleSaveSupabaseConfig = async function() {
+  const url = document.getElementById('inputSupabaseUrl')?.value.trim();
+  const key = document.getElementById('inputSupabaseKey')?.value.trim();
+  const msgBox = document.getElementById('supabaseModalMsg');
+  const saveBtn = document.getElementById('btnSaveSupabaseModal');
+
+  if (!url || !key) return;
+
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Connecting...';
+  }
+
+  try {
+    await testSupabaseConnection(url, key);
+    saveSupabaseCredentials(url, key);
+    updateSupabaseUIBadge();
+
+    // Pull cloud data into local
+    await fetchFromSupabaseToLocal();
+
+    if (msgBox) {
+      msgBox.className = 'alert alert-success py-2 px-3 mb-3 small rounded d-block';
+      msgBox.innerHTML = '<strong><i class="bi bi-check-circle-fill me-1"></i> Connected & Synced!</strong> Cloud data loaded. Closing in 2 seconds...';
+    }
+
+    setTimeout(() => {
+      const modalEl = document.getElementById('supabaseModal');
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+    }, 1500);
+
+  } catch (err) {
+    if (msgBox) {
+      msgBox.className = 'alert alert-danger py-2 px-3 mb-3 small rounded d-block';
+      msgBox.innerHTML = `<strong><i class="bi bi-x-circle-fill me-1"></i> Error:</strong> ${err.message}. Please verify SQL schema was executed in Supabase.`;
+    }
+  } finally {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Save & Connect';
+    }
+  }
+};
+
+window.handleDisconnectSupabase = function() {
+  if (!confirm('Disconnect Supabase? The application will revert to in-browser local storage mode.')) return;
+  disconnectSupabase();
+  updateSupabaseUIBadge();
+  const msgBox = document.getElementById('supabaseModalMsg');
+  if (msgBox) {
+    msgBox.className = 'alert alert-secondary py-2 px-3 mb-3 small rounded d-block';
+    msgBox.innerHTML = '<i class="bi bi-info-circle-fill me-1"></i> Disconnected from Supabase cloud. Now running in Local Storage mode.';
+  }
+  const urlInput = document.getElementById('inputSupabaseUrl');
+  const keyInput = document.getElementById('inputSupabaseKey');
+  if (urlInput) urlInput.value = '';
+  if (keyInput) keyInput.value = '';
+};
+
+window.copySupabaseSQLScript = async function() {
+  const btn = document.getElementById('btnCopySqlModal');
+  try {
+    const res = await fetch('supabase_schema.sql');
+    if (!res.ok) throw new Error('Fetch failed');
+    const sqlText = await res.text();
+    await navigator.clipboard.writeText(sqlText);
+    if (btn) {
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="bi bi-check-lg text-success"></i> Copied SQL!';
+      setTimeout(() => { btn.innerHTML = orig; }, 2500);
+    }
+  } catch (err) {
+    window.open('supabase_schema.sql', '_blank');
+    if (btn) {
+      btn.innerHTML = '<i class="bi bi-box-arrow-up-right"></i> Opened SQL File';
+      setTimeout(() => { btn.innerHTML = '<i class="bi bi-clipboard-check me-1"></i> Copy SQL Schema'; }, 2500);
+    }
+  }
+};
+
+window.fetchFromSupabaseToLocal = async function(silent = false) {
+  if (!window.DCSA_SUPABASE?.client) return;
+
+  try {
+    const tables = ['employees', 'attendance', 'payroll', 'announcements', 'events', 'feedback', 'benefits', 'benefits_deductions', 'training'];
+    let fetchedAny = false;
+
+    for (const t of tables) {
+      const { data, error } = await window.DCSA_SUPABASE.client.from(t).select('*');
+      if (!error && data && data.length > 0) {
+        window.dcsaDB[t] = data;
+        fetchedAny = true;
+      }
+    }
+
+    if (fetchedAny) {
+      saveDCSADatabase(false);
+      renderEmployeeDirectory();
+      renderAttendanceTable();
+      initPayrollCalculator();
+      updateDbStats();
+      renderActiveGridTable();
+      if (!silent) {
+        console.log('✅ Supabase cloud tables synchronized locally.');
+      }
+    }
+  } catch (err) {
+    console.warn('Error fetching from Supabase:', err);
+  }
+};
+
+window.syncAllLocalToSupabase = async function() {
+  if (!window.DCSA_SUPABASE?.client) {
+    alert('Please connect to Supabase first before syncing.');
+    return;
+  }
+
+  const btn = document.getElementById('btnPushLocalSupabase');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Syncing...';
+  }
+
+  try {
+    const client = window.DCSA_SUPABASE.client;
+    // Sync employees
+    if (window.dcsaDB.employees?.length) {
+      const empsToUpsert = window.dcsaDB.employees.map(e => {
+        const copy = { ...e };
+        delete copy.id;
+        return copy;
+      });
+      await client.from('employees').upsert(empsToUpsert, { onConflict: 'employeeNo' });
+    }
+
+    // Sync attendance
+    if (window.dcsaDB.attendance?.length) {
+      const attToUpsert = window.dcsaDB.attendance.map(a => {
+        const copy = { ...a };
+        delete copy.id;
+        return copy;
+      });
+      await client.from('attendance').insert(attToUpsert);
+    }
+
+    // Sync feedback
+    if (window.dcsaDB.feedback?.length) {
+      const fbToUpsert = window.dcsaDB.feedback.map(f => {
+        const copy = { ...f };
+        delete copy.id;
+        return copy;
+      });
+      await client.from('feedback').insert(fbToUpsert);
+    }
+
+    alert('✅ Local database records successfully pushed to Supabase Cloud!');
+  } catch (err) {
+    alert('⚠️ Sync error: ' + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-cloud-arrow-up-fill me-1"></i> Sync Local to Cloud';
+    }
+  }
+};
+
 /* 7. Source Code Explorer */
 const sourceSnippets = {
   'manage_payroll': {
@@ -1532,6 +1850,16 @@ function setupEventListeners() {
       renderEmployeeDirectory();
       initPayrollCalculator();
 
+      // Live Sync to Supabase
+      if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
+        const empToInsert = { ...newEmp };
+        delete empToInsert.id;
+        window.DCSA_SUPABASE.client.from('employees').insert([empToInsert]).then(({ error }) => {
+          if (error) console.warn('Supabase employee insert error:', error);
+          else console.log('✅ Supabase employee synced:', newEmp.employeeNo);
+        });
+      }
+
       const modalEl = document.getElementById('addEmployeeModal');
       const modal = bootstrap.Modal.getInstance(modalEl);
       if (modal) modal.hide();
@@ -1554,6 +1882,14 @@ function setupEventListeners() {
       const newFb = { id: Date.now(), feedback_text: txt, created_at: dateStr };
       window.dcsaDB.feedback.unshift(newFb);
       saveDCSADatabase();
+
+      // Live Sync to Supabase
+      if (window.DCSA_SUPABASE && window.DCSA_SUPABASE.client) {
+        window.DCSA_SUPABASE.client.from('feedback').insert([{ feedback_text: txt }]).then(({ error }) => {
+          if (error) console.warn('Supabase feedback insert error:', error);
+          else console.log('✅ Supabase feedback synced');
+        });
+      }
       
       const list = document.getElementById('feedbackList');
       if (list) {
