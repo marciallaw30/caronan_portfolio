@@ -12,7 +12,7 @@ The project demonstrates advanced capabilities in API consumption, prompt engine
    - **Custom CSS (`style.css`):** Implements glassmorphism effects, floating animations, and gradient typography to evoke a mystical atmosphere.
 
 2. **Backend / API Integration:**
-   - **Google Gemini API (`gemini-1.5-flash` / `pro`):** Serves as the core NLP (Natural Language Processing) engine.
+   - **Google Gemini API (`gemini-3.8-flash` / `gemini-3.5-flash-lite`):** Serves as the core NLP (Natural Language Processing) engine.
    - **JavaScript Fetch API:** Handles asynchronous HTTP requests to the Gemini REST endpoint.
    - **Marked.js:** A markdown parser used on the client-side to render Gemini's structured responses (bolding, lists, etc.) into clean HTML.
 

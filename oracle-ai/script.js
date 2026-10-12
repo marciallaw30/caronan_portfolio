@@ -563,8 +563,8 @@ async function fetchKnowledgeResponse(userText) {
     return "The cosmic connection is severed. Please enter your **Gemini API Key** in `script.js` to allow the Oracle to commune with the Universe.";
   }
 
-  // Model endpoint
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  // Primary Model endpoint (Google Gemini 3.8 Flash)
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
   
   let textToSend = userText;
   if (conversationContext.length === 0) {
@@ -599,8 +599,8 @@ Confine your expertise strictly to metaphysical topics, dreams, astrology, cryst
       const googleError = errorData?.error?.message || response.statusText;
       console.warn("Primary model error:", googleError);
       
-      // Fallback: try alternative endpoint gemini-2.0-flash or gemini-1.5-pro
-      const fallbackUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+      // Fallback: try alternative high-throughput endpoint gemini-3.5-flash-lite
+      const fallbackUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
       const fbResponse = await fetch(fallbackUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
