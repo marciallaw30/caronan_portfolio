@@ -1640,13 +1640,16 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
         <p class="section-subtitle">Single-page industry-ready resume incorporating academic awards, technical
           capabilities, and operational experience.</p>
 
-        <div class="d-flex justify-content-center gap-3 mt-3">
-          <button class="btn-codespot-primary btn-pill" onclick="printResumeDocument()">
-            <i class="bi bi-printer-fill me-2"></i> Print / Save as PDF
-          </button>
-          <a href="assets/docs/Marcial_Lawrence_Jr_V_Resume.docx" class="btn-codespot-outline btn-pill" download>
+        <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+          <a href="resume.html" class="btn-codespot-primary btn-pill" target="_blank">
+            <i class="bi bi-file-earmark-person-fill me-2"></i> View &amp; Print Full Resume Page
+          </a>
+          <a href="assets/docs/Marcial_Lawrence_Jr_V_Resume.docx" class="btn-codespot-outline btn-pill" download="Marcial_Lawrence_Jr_V_Resume.docx">
             <i class="bi bi-download me-2"></i> Download DOCX
           </a>
+          <button class="btn-codespot-outline btn-pill" onclick="printResumeDocument()">
+            <i class="bi bi-printer-fill me-2"></i> Print / Save as PDF
+          </button>
         </div>
       </div>
 
@@ -1771,16 +1774,22 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
 
         <!-- Featured Projects -->
         <div>
-          <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">KEY IT PROJECTS</h5>
+          <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">KEY IT PROJECTS &amp; CAPSTONES</h5>
           <div class="mb-2">
-            <strong class="text-white">E-Commerce Web Application (Flagship):</strong>
-            <span class="small text-light opacity-85"> PHP, MySQL, JavaScript, Bootstrap 5. Secure payment integration,
-              order tracking, dynamic inventory decrementing, and admin dashboard.</span>
+            <strong class="text-white">1. TarotKnight Crystal Art E-Commerce:</strong>
+            <span class="small text-light opacity-85"> JavaScript ES6+, Bootstrap 5, PayMongo API, J&amp;T Express Logistics, MySQL 3NF. 44-item catalog, real-time inventory decrementing, and admin control center.</span>
+          </div>
+          <div class="mb-2">
+            <strong class="text-white">2. Oracle AI Spiritual Guide:</strong>
+            <span class="small text-light opacity-85"> Google Gemini API (gemini-3.8-flash), PayMongo API, Gmail Auth. 5 free daily insights and Cosmic Token Store.</span>
+          </div>
+          <div class="mb-2">
+            <strong class="text-white">3. DATAMEX College HRIS &amp; Payroll Portal:</strong>
+            <span class="small text-light opacity-85"> PHP 8.2, MySQL 3NF, FPDF. Touchscreen kiosk attendance, Philippine statutory deductions (SSS/PhilHealth/Pag-IBIG), and digital payslips.</span>
           </div>
           <div>
-            <strong class="text-white">Employee Management System:</strong>
-            <span class="small text-light opacity-85"> Python/Flask, PHP, MySQL. Touchscreen kiosk attendance, automated
-              SSS/PhilHealth payroll calculator, and digital payslips.</span>
+            <strong class="text-white">4. Arduino IoT Soil Moisture Telemetry:</strong>
+            <span class="small text-light opacity-85"> C++, Arduino Uno R3, PWM Speaker, Capacitive Sensor. 1000Hz audio alerts and 9600 baud serial monitoring.</span>
           </div>
         </div>
       </div>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Official Professional IT Resume of Marcial Lawrence Jr V. Caronan. Junior Web Developer, Data Analyst, and Database Administrator.">
+  <meta name="author" content="Marcial Lawrence Jr V. Caronan">
+  <title>Marcial Lawrence Jr V. Caronan | Professional IT Resume</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #070913;
+      --bg-card: #0d1224;
+      --primary-blue: #00d2ff;
+      --primary-violet: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-subtle: rgba(139, 92, 246, 0.25);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      padding-top: 80px;
+      padding-bottom: 60px;
+    }
+
+    /* Fixed Action Header */
+    .resume-action-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1050;
+      background: rgba(13, 18, 36, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(0, 210, 255, 0.25);
+      padding: 12px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-action-primary {
+      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+      color: #030712 !important;
+      font-weight: 700;
+      font-size: 0.88rem;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-action-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 210, 255, 0.45);
+      color: #000 !important;
+    }
+
+    .btn-action-outline {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff !important;
+      font-weight: 600;
+      font-size: 0.88rem;
+      padding: 7px 16px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn-action-outline:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #00d2ff;
+      color: #00d2ff !important;
+      transform: translateY(-2px);
+    }
+
+    /* Resume Document Paper */
+    .resume-sheet {
+      max-width: 900px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(139, 92, 246, 0.15);
+      padding: 45px 50px;
+      margin: 0 auto;
+    }
+
+    .resume-header-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    .resume-role-tag {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary-blue);
+      letter-spacing: 0.02em;
+    }
+
+    .resume-contact-item {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .resume-contact-item i {
+      color: var(--primary-blue);
+    }
+
+    .resume-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--primary-blue);
+      border-bottom: 2px solid rgba(0, 210, 255, 0.3);
+      padding-bottom: 5px;
+      margin-top: 24px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .resume-skill-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      color: #e2e8f0;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      margin-right: 5px;
+      margin-bottom: 6px;
+    }
+
+    .project-card-mini {
+      background: rgba(255, 255, 255, 0.025);
+      border-left: 3px solid var(--primary-violet);
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* Print Specific Styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #111827 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 10.5pt;
+        line-height: 1.45;
+      }
+
+      .resume-action-bar,
+      .no-print {
+        display: none !important;
+      }
+
+      .resume-sheet {
+        max-width: 100% !important;
+        width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #ffffff !important;
+        color: #111827 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+      }
+
+      .resume-header-title {
+        color: #0f172a !important;
+        font-size: 20pt !important;
+      }
+
+      .resume-role-tag {
+        color: #1d4ed8 !important;
+        font-size: 11pt !important;
+      }
+
+      .resume-contact-item,
+      .text-light,
+      .text-muted,
+      p, li, span, small {
+        color: #1f2937 !important;
+      }
+
+      .resume-section-title {
+        color: #0f172a !important;
+        border-bottom: 1.5pt solid #1d4ed8 !important;
+        font-size: 11pt !important;
+        margin-top: 14pt !important;
+        margin-bottom: 8pt !important;
+      }
+
+      .resume-skill-badge {
+        background: #f1f5f9 !important;
+        border: 1pt solid #cbd5e1 !important;
+        color: #0f172a !important;
+      }
+
+      .project-card-mini {
+        background: #f8fafc !important;
+        border-left: 3pt solid #1d4ed8 !important;
+        padding: 6pt 10pt !important;
+        margin-bottom: 8pt !important;
+        page-break-inside: avoid;
+      }
+
+      .badge {
+        border: 1pt solid #64748b !important;
+        color: #0f172a !important;
+        background: transparent !important;
+      }
+
+      a {
+        text-decoration: none !important;
+        color: #0f172a !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================= TOP FLOATING ACTION BAR ================= -->
+  <header class="resume-action-bar no-print">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <a href="index.html" class="btn-action-outline">
+          <i class="bi bi-arrow-left"></i> Portfolio
+        </a>
+        <span class="text-white fw-bold small d-none d-md-inline">
+          Marcial Lawrence Jr V. Caronan • Official IT Resume
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn-action-primary" onclick="window.print()">
+          <i class="bi bi-printer-fill"></i> Print / Save as PDF
+        </button>
+        <a href="assets/docs/Marcial_Lawrence_Jr_V_Resume.docx" class="btn-action-outline" download="Marcial_Lawrence_Jr_V_Resume.docx">
+          <i class="bi bi-file-earmark-word-fill text-primary"></i> Download DOCX
+        </a>
+        <a href="docs/PROFESSIONAL_RESUME_AND_REFLECTION.md" class="btn-action-outline d-none d-sm-inline-flex" download target="_blank">
+          <i class="bi bi-markdown-fill text-info"></i> Markdown
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= RESUME DOCUMENT CANVAS ================= -->
+  <main class="container">
+    <article class="resume-sheet">
+
+      <!-- HEADER & CONTACT -->
+      <div class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-4 pb-4 border-bottom border-secondary border-opacity-30">
+        <img src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
+          class="rounded-3 border border-2 border-info shadow-sm"
+          style="width: 110px; height: 130px; object-fit: cover; object-position: top center;"
+          onerror="this.style.display='none'">
+
+        <div class="text-center text-sm-start flex-grow-1">
+          <h1 class="resume-header-title mb-1">MARCIAL LAWRENCE JR V. CARONAN</h1>
+          <div class="resume-role-tag mb-2">
+            Junior Web Developer | Data Analyst | Database Administrator
+          </div>
+          <div class="d-flex flex-wrap justify-content-center justify-content-sm-start gap-3 small mb-2">
+            <span class="resume-contact-item"><i class="bi bi-telephone-fill"></i> 09202720151</span>
+            <span class="resume-contact-item"><i class="bi bi-envelope-fill"></i> marcialcaronan@gmail.com</span>
+            <span class="resume-contact-item"><i class="bi bi-geo-alt-fill"></i> Brgy. Moonwalk, Parañaque City, PH</span>
+          </div>
+          <div class="d-flex flex-wrap justify-content-center justify-content-sm-start gap-3 small text-muted">
+            <span><i class="bi bi-mortarboard-fill text-info me-1"></i> Datamex College of Saint Adeline</span>
+            <span><i class="bi bi-award-fill text-warning me-1"></i> Dean's Lister across all 3 Consecutive Years</span>
+            <span><i class="bi bi-patch-check-fill text-success me-1"></i> Graduating Candidate (2026)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. PROFESSIONAL SUMMARY -->
+      <section>
+        <h2 class="resume-section-title"><i class="bi bi-person-lines-fill"></i> Professional Summary</h2>
+        <p class="small text-light mb-0" style="text-align: justify; line-height: 1.65;">
+          Disciplined, results-driven Information Technology graduate from Datamex College of Saint Adeline specializing in <strong>Full-Stack Web Development</strong>, <strong>Relational Database Architecture (MySQL 3NF)</strong>, and <strong>Data Analytics</strong>. Uniquely bridges rigorous software engineering principles (Python, PHP 8, JavaScript ES6+, RESTful APIs) with rich, hands-on operational experience in high-volume warehouse dispatching, retail inventory tracking, and spreadsheet modeling. Proven academic excellence awarded <strong>Dean's Lister honors across all three consecutive years</strong> (1st, 2nd, and 3rd Year) and recognized with the <strong>Leadership Award as Overall Cluster Leader for NSTP 1 and 2</strong>. Adept at building secure, data-driven systems that eliminate operational bottlenecks, prevent inventory race conditions, and optimize business workflows.
+        </p>
+      </section>
+
+      <!-- 2. EDUCATION & ACADEMIC HONORS -->
+      <section>
+        <h2 class="resume-section-title"><i class="bi bi-mortarboard-fill"></i> Education &amp; Academic Honors</h2>
+        <div class="d-flex justify-content-between align-items-start mb-1">
+          <div>
+            <strong class="text-white fs-6">Bachelor of Science in Information Technology (BSIT)</strong>
+            <div class="small text-light opacity-85">Datamex College of Saint Adeline (DCSA) — Parañaque City</div>
+          </div>
+          <span class="badge bg-dark border border-info text-info px-2 py-1 small">Graduating Candidate (2026)</span>
+        </div>
+        <div class="p-2 rounded-2 my-2" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+          <div class="small text-warning fw-semibold mb-1">
+            <i class="bi bi-award-fill me-1"></i> Dean's Lister / Academic Achiever:
+            <span class="text-light fw-normal">Awarded across all 3 Consecutive Academic Years (1st Year Sem 1 &amp; 2, 2nd Year Sem 1 &amp; 2, 3rd Year Sem 1 &amp; 2).</span>
+          </div>
+          <div class="small text-info fw-semibold">
+            <i class="bi bi-trophy-fill me-1"></i> Leadership Award (NSTP 1 &amp; NSTP 2):
+            <span class="text-light fw-normal">Recognized as Overall Cluster Leader for community coordination, civic deployment, and team leadership.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. TECHNICAL SKILLS & PROFICIENCIES -->
+      <section>
+        <h2 class="resume-section-title"><i class="bi bi-cpu-fill"></i> Technical Skills &amp; Proficiencies</h2>
+        <div class="row g-2 small">
+          <div class="col-md-6">
+            <strong class="text-info d-block mb-1">Programming &amp; Web Technologies:</strong>
+            <div>
+              <span class="resume-skill-badge">Python</span>
+              <span class="resume-skill-badge">PHP 8 (OOP)</span>
+              <span class="resume-skill-badge">JavaScript (ES6+)</span>
+              <span class="resume-skill-badge">HTML5</span>
+              <span class="resume-skill-badge">CSS3</span>
+              <span class="resume-skill-badge">Bootstrap 5.3</span>
+              <span class="resume-skill-badge">RESTful APIs</span>
+              <span class="resume-skill-badge">JSON / AJAX</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <strong class="text-info d-block mb-1">Databases &amp; Data Analytics:</strong>
+            <div>
+              <span class="resume-skill-badge">MySQL / MariaDB</span>
+              <span class="resume-skill-badge">3NF Normalization</span>
+              <span class="resume-skill-badge">ERD Modeling</span>
+              <span class="resume-skill-badge">Query Optimization</span>
+              <span class="resume-skill-badge">MS Excel (Pivot Tables)</span>
+              <span class="resume-skill-badge">VLOOKUP / XLOOKUP</span>
+              <span class="resume-skill-badge">Stock Reconciliation</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <strong class="text-info d-block mb-1">DevOps, Hardware &amp; Tooling:</strong>
+            <div>
+              <span class="resume-skill-badge">Git &amp; GitHub</span>
+              <span class="resume-skill-badge">VS Code</span>
+              <span class="resume-skill-badge">XAMPP / Apache</span>
+              <span class="resume-skill-badge">Postman</span>
+              <span class="resume-skill-badge">Barcode Scanners (USB/Serial)</span>
+              <span class="resume-skill-badge">Arduino Uno R3</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <strong class="text-info d-block mb-1">Cybersecurity &amp; Defensive Logic:</strong>
+            <div>
+              <span class="resume-skill-badge">PDO Prepared Statements (SQLi Immunity)</span>
+              <span class="resume-skill-badge">Role-Based Access Control (RBAC)</span>
+              <span class="resume-skill-badge">Session Fixation Defense</span>
+              <span class="resume-skill-badge">HMAC-SHA256 Webhooks</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. FEATURED IT PROJECTS & CAPSTONES -->
+      <section>
+        <h2 class="resume-section-title"><i class="bi bi-folder-check"></i> Featured IT Projects &amp; Capstones</h2>
+
+        <!-- Project 1: TarotKnight -->
+        <div class="project-card-mini">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong class="text-white">1. TarotKnight Crystal Art: E-Commerce &amp; Appointment Web Platform</strong>
+            <span class="badge bg-dark border border-warning text-warning small">E-Business Capstone</span>
+          </div>
+          <div class="small text-info mb-1" style="font-size: 0.78rem;">
+            Stack: JavaScript (ES6+), Bootstrap 5.3, PayMongo API, J&amp;T Express Logistics, MySQL 3NF, LocalDB Persistence
+          </div>
+          <p class="small text-light mb-0" style="line-height: 1.5;">
+            Engineered an authentic 44-item handcrafted crystal jewelry catalog with dynamic category filtering (Pendants, Bracelets, Rings, Earrings). Integrated PayMongo test payment gateway (GCash, Maya, Cards), simulated J&amp;T Express waybill tracking logistics, real-time inventory decrementing to eliminate overselling race conditions, spiritual appointment booking calendar, and an Administrative Control Center monitoring gross settled revenue.
+          </p>
+        </div>
+
+        <!-- Project 2: Oracle AI -->
+        <div class="project-card-mini">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong class="text-white">2. Oracle AI: Metaphysical Guide &amp; Token Recharge Portal</strong>
+            <span class="badge bg-dark border border-primary text-primary small">AI &amp; Fintech Flagship</span>
+          </div>
+          <div class="small text-info mb-1" style="font-size: 0.78rem;">
+            Stack: Google Gemini API (gemini-3.8-flash), PayMongo API, Gmail Session Auth, LocalStorage
+          </div>
+          <p class="small text-light mb-0" style="line-height: 1.5;">
+            Developed an intelligent spiritual conversational companion querying Google Generative Language endpoints. Enforces Gmail authentication, manages 5 free daily insights with 24-hour reset countdown timers, custom markdown snippet parsing, and a tiered PayMongo Cosmic Token Store for instant digital wallet recharge.
+          </p>
+        </div>
+
+        <!-- Project 3: HRIS -->
+        <div class="project-card-mini">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong class="text-white">3. DATAMEX College HRIS &amp; Payroll Automation Portal</strong>
+            <span class="badge bg-dark border border-secondary text-info small">Enterprise Web System</span>
+          </div>
+          <div class="small text-info mb-1" style="font-size: 0.78rem;">
+            Stack: PHP 8.2, MySQL (3NF), FPDF Library, JavaScript, Bootstrap 5
+          </div>
+          <p class="small text-light mb-0" style="line-height: 1.5;">
+            Engineered an operations portal featuring a biometric touchscreen kiosk for barcode check-ins, automated 15-day payroll calculations complying with Philippine statutory contributions (SSS, PhilHealth, Pag-IBIG), automated digital PDF payslips via FPDF, and campus announcement boards.
+          </p>
+        </div>
+
+        <!-- Project 4: Arduino IoT -->
+        <div class="project-card-mini">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <strong class="text-white">4. Arduino IoT Soil Moisture Telemetry System w/ Audio Buzzer</strong>
+            <span class="badge bg-dark border border-danger text-danger small">Embedded IoT System</span>
+          </div>
+          <div class="small text-info mb-1" style="font-size: 0.78rem;">
+            Stack: Arduino Uno R3, C++ Embedded Firmware, Capacitive Probe, PWM Speaker, Breadboard
+          </div>
+          <p class="small text-light mb-0" style="line-height: 1.5;">
+            Constructed an embedded agricultural telemetry device utilizing floating-point ratio math, 1000Hz PWM audio alert triggers on critically dry soil (dry threshold &le; 10%), dual status LEDs, and 9600 baud UART serial logging for plant precision agriculture.
+          </p>
+        </div>
+      </section>
+
+      <!-- 5. PROFESSIONAL WORK EXPERIENCE -->
+      <section>
+        <h2 class="resume-section-title"><i class="bi bi-briefcase-fill"></i> Professional Work Experience (Operations &amp; IT Evidence)</h2>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong class="text-white">Warehouse Clerk &amp; Data Encoder</strong>
+              <div class="small text-info">SM Supermarket Warehouse</div>
+            </div>
+            <span class="small text-muted">Operational Division</span>
+          </div>
+          <ul class="small text-light mb-1 ps-3" style="line-height: 1.55;">
+            <li>Operated industrial barcode scanners for merchandise receiving, picking, sorting, and dispatching in high-velocity warehouse lanes.</li>
+            <li>Served as primary data encoder in the dispatch division, logging waybills, generating electronic inventory reports in MS Excel, and auditing stock reconciliations with zero discrepancy.</li>
+          </ul>
+        </div>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong class="text-white">Stock Clerk</strong>
+              <div class="small text-info">SM Appliances</div>
+            </div>
+            <span class="small text-muted">Retail Logistics</span>
+          </div>
+          <ul class="small text-light mb-1 ps-3" style="line-height: 1.55;">
+            <li>Scanned high-value appliance serial numbers into central warehouse inventory systems to maintain traceability.</li>
+            <li>Produced weekly stock balance reconciliation sheets using advanced MS Excel formulas for replenishment optimization.</li>
+          </ul>
+        </div>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong class="text-white">Service Crew &amp; Inventory Assistant</strong>
+              <div class="small text-info">McDonald's BF Homes Parañaque</div>
+            </div>
+            <span class="small text-muted">Food &amp; Beverage Operations</span>
+          </div>
+          <ul class="small text-light mb-1 ps-3" style="line-height: 1.55;">
+            <li>Managed POS monitor workflows, reported hardware telemetry alerts, audited daily raw material levels via MS Excel, and encoded shift logs into the branch store management database.</li>
+          </ul>
+        </div>
+
+        <div class="mb-2">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <strong class="text-white">Security Agent</strong>
+              <div class="small text-info">National Book Store &amp; Holiday Inn Express (Resorts World Manila)</div>
+            </div>
+            <span class="small text-muted">Security &amp; Surveillance</span>
+          </div>
+          <ul class="small text-light mb-1 ps-3" style="line-height: 1.55;">
+            <li>Authored official incident reports using corporate administrative software; monitored automated CCTV surveillance and security operations centers.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6. CERTIFICATIONS & WORKSHOPS -->
+      <section>
+        <h2 class="resume-section-title"><i class="bi bi-patch-check-fill"></i> Certified IT Seminars &amp; Workshops</h2>
+        <p class="small text-light mb-2">
+          Concurrently completed official institutional certifications at Datamex College of Saint Adeline:
+        </p>
+        <div class="d-flex flex-wrap gap-1">
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>IT Seminars &amp; Workshops</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Professional Development</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Technical Skills Training</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Industry Readiness Seminar</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Advanced IT Skills Workshop</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Object-Oriented Programming (OOP)</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Database Administration (MySQL 3NF)</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Discrete Structures</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Modern Web Development</span>
+          <span class="resume-skill-badge"><i class="bi bi-check-circle-fill text-info me-1"></i>Cybersecurity Defense Fundamentals</span>
+        </div>
+      </section>
+
+      <!-- 7. REFERENCES -->
+      <section>
+        <h2 class="resume-section-title"><i class="bi bi-people-fill"></i> Character References</h2>
+        <div class="row g-3 small">
+          <div class="col-md-6">
+            <strong class="text-white d-block">Mr. Randy Villanueva</strong>
+            <span class="text-info d-block">Faculty Adviser &amp; Senior IT Instructor</span>
+            <span class="text-muted">Datamex College of Saint Adeline - Parañaque City</span>
+          </div>
+          <div class="col-md-6">
+            <strong class="text-white d-block">Academic &amp; Professional References</strong>
+            <span class="text-light d-block">Full contact credentials and letters of endorsement available immediately upon request.</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER NOTE -->
+      <footer class="mt-4 pt-3 border-top border-secondary border-opacity-25 text-center text-muted small">
+        Official BSIT Professional Resume &bull; Marcial Lawrence Jr V. Caronan &bull; Verified Portfolio Evidence &bull; &copy; 2024-2026
+      </footer>
+
+    </article>
+  </main>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
