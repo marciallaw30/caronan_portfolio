@@ -231,8 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. Glowing IT Cybernetic Network Node Animation
-  function initCyberNetwork() {
+  // ===================================================================
+  // 7. Glow-In-The-Dark World Map & Global Country Interconnectivity
+  // ===================================================================
+  function initWorldMapNetwork() {
     const canvas = document.getElementById('cyberNetworkCanvas');
     if (!canvas) return;
 
@@ -240,165 +242,644 @@ document.addEventListener('DOMContentLoaded', () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    // Responsive node count based on screen size
-    const nodeCount = Math.min(Math.floor((width * height) / 28000), 50);
-    const nodes = [];
-    const maxDistance = 150;
-
-    // Mouse tracking for subtle glow interaction
-    const mouse = { x: null, y: null, radius: 180 };
+    // Mouse tracking for tactical crosshair & interactive node inspection
+    const mouse = { x: null, y: null, targetX: null, targetY: null };
     window.addEventListener('mousemove', (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+      mouse.targetX = e.clientX;
+      mouse.targetY = e.clientY;
     });
     window.addEventListener('mouseleave', () => {
-      mouse.x = null;
-      mouse.y = null;
+      mouse.targetX = null;
+      mouse.targetY = null;
     });
 
     window.addEventListener('resize', () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      calculateNodePositions();
     });
 
-    class NetworkNode {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-        this.radius = Math.random() * 2 + 1.5;
-        this.pulse = Math.random() * Math.PI * 2;
-        this.pulseSpeed = 0.02 + Math.random() * 0.03;
-      }
+    // Equirectangular projection mapping geographic coords to canvas screen
+    function project(lon, lat) {
+      const mapWidth = width * 0.94;
+      const mapHeight = height * 0.86;
+      const offsetX = (width - mapWidth) / 2;
+      const offsetY = (height - mapHeight) / 2 + 15;
 
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
-
-        this.pulse += this.pulseSpeed;
-      }
-
-      draw() {
-        const glowRadius = this.radius + Math.sin(this.pulse) * 1;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, glowRadius, 0, Math.PI * 2);
-        ctx.fillStyle = '#c084fc';
-        ctx.shadowColor = '#a855f7';
-        ctx.shadowBlur = 10;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
+      const x = offsetX + ((lon + 180) / 360) * mapWidth;
+      const y = offsetY + ((85 - lat) / 170) * mapHeight;
+      return { x, y };
     }
 
-    for (let i = 0; i < nodeCount; i++) {
-      nodes.push(new NetworkNode());
-    }
+    // Authentic High-Tech Continent Outlines (Polygons in [lon, lat])
+    const continents = [
+      // North America
+      [
+        [-168, 65], [-162, 70], [-140, 70], [-125, 70], [-100, 70], [-80, 68], [-65, 60],
+        [-60, 50], [-64, 45], [-70, 42], [-76, 35], [-80, 26], [-82, 23], [-88, 30],
+        [-97, 26], [-97, 20], [-90, 20], [-87, 16], [-83, 9], [-77, 8], [-80, 8],
+        [-85, 12], [-92, 15], [-105, 20], [-110, 24], [-115, 30], [-122, 37], [-124, 48],
+        [-130, 54], [-140, 60], [-150, 60], [-160, 58], [-168, 65]
+      ],
+      // Greenland
+      [
+        [-45, 60], [-35, 65], [-20, 70], [-18, 77], [-25, 82], [-40, 83], [-55, 82],
+        [-60, 77], [-50, 70], [-45, 60]
+      ],
+      // South America
+      [
+        [-77, 8], [-72, 11], [-60, 10], [-50, 0], [-35, -5], [-35, -9], [-39, -15],
+        [-42, -22], [-48, -28], [-53, -33], [-65, -42], [-66, -55], [-74, -53], [-75, -45],
+        [-72, -37], [-71, -30], [-76, -15], [-81, -5], [-80, 1], [-77, 8]
+      ],
+      // Europe
+      [
+        [-9, 36], [-9, 43], [-1, 46], [-5, 48], [2, 51], [8, 54], [9, 57], [13, 55],
+        [10, 60], [14, 65], [19, 70], [28, 71], [32, 69], [40, 65], [45, 60], [40, 55],
+        [30, 50], [30, 45], [26, 40], [23, 38], [15, 40], [12, 44], [4, 43], [3, 42],
+        [-3, 36], [-9, 36]
+      ],
+      // UK & Ireland
+      [
+        [-5, 50], [-1, 51], [1, 52], [0, 54], [-2, 58], [-5, 58], [-5, 54], [-5, 50]
+      ],
+      // Africa
+      [
+        [-6, 36], [10, 37], [25, 32], [32, 31], [34, 27], [43, 13], [51, 12], [45, 5],
+        [40, -4], [39, -11], [35, -20], [32, -28], [28, -32], [20, -35], [18, -34],
+        [15, -28], [12, -17], [10, -5], [9, 4], [2, 6], [-8, 4], [-15, 11], [-17, 15],
+        [-17, 21], [-13, 28], [-6, 36]
+      ],
+      // Madagascar
+      [
+        [44, -13], [50, -15], [49, -20], [47, -25], [44, -25], [44, -13]
+      ],
+      // Asia
+      [
+        [26, 40], [35, 37], [40, 31], [50, 30], [55, 25], [60, 25], [68, 24], [72, 19],
+        [80, 13], [80, 8], [85, 17], [90, 22], [98, 16], [103, 10], [104, 1], [108, 15],
+        [118, 24], [122, 30], [122, 37], [129, 42], [132, 43], [140, 48], [143, 53],
+        [156, 51], [162, 56], [170, 60], [180, 65], [170, 68], [140, 73], [110, 77],
+        [80, 73], [60, 70], [50, 65], [45, 60]
+      ],
+      // Japan
+      [
+        [130, 31], [132, 33], [136, 35], [140, 36], [141, 41], [142, 45], [145, 44],
+        [141, 39], [136, 34], [130, 31]
+      ],
+      // Philippines (High-Fidelity Island Groups)
+      [
+        [120, 18.5], [122, 18.2], [122.5, 16.5], [124, 14], [122, 13.5], [120.5, 14.5],
+        [119.8, 16], [120, 18.5]
+      ],
+      [
+        [122, 11.5], [124.5, 12], [125, 10.5], [122.5, 10], [122, 11.5]
+      ],
+      [
+        [122, 8], [124, 8.5], [126, 9], [126.5, 6.5], [125, 5.5], [122, 6.5], [122, 8]
+      ],
+      // Indonesia & Malaysia
+      [
+        [95, 5], [98, 3], [103, -1], [106, -5], [103, -3], [98, 1], [95, 5]
+      ],
+      [
+        [109, 1], [112, 4], [117, 4], [119, 2], [117, -2], [113, -3], [110, -2], [109, 1]
+      ],
+      [
+        [105, -6], [110, -7], [114, -8], [114, -8.5], [108, -7.5], [105, -6]
+      ],
+      // Australia
+      [
+        [114, -22], [118, -35], [135, -35], [138, -38], [147, -38], [153, -28], [150, -22],
+        [142, -11], [136, -12], [130, -13], [124, -16], [114, -22]
+      ],
+      // New Zealand
+      [
+        [173, -35], [177, -37], [178, -39], [175, -41], [173, -40], [173, -35]
+      ],
+      [
+        [174, -41], [170, -43], [167, -46], [170, -46], [174, -41]
+      ]
+    ];
 
-    // Packet data transmission simulation
+    // Global Country Nodes (Tech Hubs & Data Gateways)
+    const countries = [
+      { id: 'PH', code: 'PH-MNL', name: 'Philippines (Manila HQ)', lon: 120.98, lat: 14.60, isHQ: true },
+      { id: 'JP', code: 'JP-TYO', name: 'Japan (Tokyo)', lon: 139.77, lat: 35.68 },
+      { id: 'SG', code: 'SG-SIN', name: 'Singapore', lon: 103.82, lat: 1.35 },
+      { id: 'KR', code: 'KR-SEL', name: 'South Korea (Seoul)', lon: 126.98, lat: 37.57 },
+      { id: 'AU', code: 'AU-SYD', name: 'Australia (Sydney)', lon: 151.21, lat: -33.87 },
+      { id: 'IN', code: 'IN-BOM', name: 'India (Mumbai)', lon: 72.88, lat: 19.08 },
+      { id: 'AE', code: 'AE-DXB', name: 'UAE (Dubai)', lon: 55.27, lat: 25.20 },
+      { id: 'DE', code: 'DE-FRA', name: 'Germany (Frankfurt)', lon: 8.68, lat: 50.11 },
+      { id: 'UK', code: 'UK-LON', name: 'United Kingdom (London)', lon: -0.13, lat: 51.51 },
+      { id: 'FR', code: 'FR-PAR', name: 'France (Paris)', lon: 2.35, lat: 48.86 },
+      { id: 'US-NY', code: 'US-NYC', name: 'USA (New York)', lon: -74.01, lat: 40.71 },
+      { id: 'US-SF', code: 'US-SFO', name: 'USA (Silicon Valley)', lon: -122.42, lat: 37.77 },
+      { id: 'CA', code: 'CA-TOR', name: 'Canada (Toronto)', lon: -79.38, lat: 43.65 },
+      { id: 'BR', code: 'BR-SAO', name: 'Brazil (São Paulo)', lon: -46.63, lat: -23.55 },
+      { id: 'ZA', code: 'ZA-CPT', name: 'South Africa (Cape Town)', lon: 18.42, lat: -33.92 },
+      { id: 'ID', code: 'ID-JKT', name: 'Indonesia (Jakarta)', lon: 106.85, lat: -6.21 }
+    ];
+
+    // Transcontinental Interconnectivity Optic Routes
+    const routePairs = [
+      ['PH', 'JP'],
+      ['PH', 'SG'],
+      ['PH', 'AU'],
+      ['PH', 'US-SF'], // Trans-Pacific Primary Trunk
+      ['JP', 'KR'],
+      ['JP', 'US-SF'],
+      ['SG', 'ID'],
+      ['SG', 'IN'],
+      ['SG', 'AU'],
+      ['IN', 'AE'],
+      ['AE', 'DE'],
+      ['DE', 'UK'],
+      ['FR', 'UK'],
+      ['UK', 'US-NY'], // Trans-Atlantic Primary Trunk
+      ['US-NY', 'US-SF'],
+      ['US-NY', 'CA'],
+      ['US-NY', 'BR'],
+      ['UK', 'ZA']
+    ];
+
+    const nodeMap = {};
+    countries.forEach(c => {
+      c.ripples = [];
+      c.pulse = Math.random() * Math.PI * 2;
+      nodeMap[c.id] = c;
+    });
+
+    let activeRoutes = [];
+    function calculateNodePositions() {
+      countries.forEach(c => {
+        const pt = project(c.lon, c.lat);
+        c.x = pt.x;
+        c.y = pt.y;
+      });
+
+      activeRoutes = routePairs.map(([aId, bId]) => {
+        const a = nodeMap[aId];
+        const b = nodeMap[bId];
+        return { a, b };
+      });
+    }
+    calculateNodePositions();
+
+    // Data Photon Packets traveling between countries
     const packets = [];
+    const maxPackets = 16;
     function spawnPacket() {
-      if (nodes.length < 2 || packets.length > 8) return;
-      const startIdx = Math.floor(Math.random() * nodes.length);
-      const start = nodes[startIdx];
-      for (let j = 0; j < nodes.length; j++) {
-        if (startIdx === j) continue;
-        const target = nodes[j];
-        const dist = Math.hypot(start.x - target.x, start.y - target.y);
-        if (dist < maxDistance) {
-          packets.push({
-            x: start.x,
-            y: start.y,
-            targetNode: target,
-            progress: 0,
-            speed: 0.015 + Math.random() * 0.015,
-          });
-          break;
-        }
-      }
-    }
-    setInterval(spawnPacket, 650);
+      if (packets.length >= maxPackets || activeRoutes.length === 0) return;
+      const route = activeRoutes[Math.floor(Math.random() * activeRoutes.length)];
+      // 50% forward, 50% backward transmission
+      const forward = Math.random() > 0.5;
+      const start = forward ? route.a : route.b;
+      const end = forward ? route.b : route.a;
 
+      packets.push({
+        start,
+        end,
+        progress: 0,
+        speed: 0.0035 + Math.random() * 0.0045,
+        color: Math.random() > 0.4 ? '#00f0ff' : '#c084fc',
+        trailLength: 0.06
+      });
+    }
+    setInterval(spawnPacket, 400);
+
+    // Landmass internal phosphor dots (Matrix Grid)
+    const landDots = [];
+    function generateLandDots() {
+      landDots.length = 0;
+      // Sampling coordinates across key landmass boxes
+      const landSamples = [
+        // NA
+        [-120, 45], [-110, 40], [-100, 35], [-90, 38], [-80, 42], [-115, 52], [-100, 55], [-90, 50],
+        // SA
+        [-60, -5], [-50, -10], [-45, -20], [-60, -25], [-65, -35], [-70, -15],
+        // EU
+        [5, 48], [15, 50], [25, 55], [10, 58], [0, 45], [15, 42],
+        // AF
+        [15, 20], [25, 25], [20, 10], [25, 0], [20, -15], [25, -28], [30, -5],
+        // AS
+        [45, 30], [55, 32], [75, 25], [80, 20], [105, 30], [115, 35], [100, 20], [80, 50], [100, 55], [120, 50],
+        // AU
+        [125, -25], [135, -28], [140, -32], [145, -22],
+        // PH & SE Asia
+        [102, 14], [105, 10], [121, 15], [124, 8]
+      ];
+
+      landSamples.forEach(([lon, lat]) => {
+        const pt = project(lon, lat);
+        landDots.push({
+          x: pt.x,
+          y: pt.y,
+          pulse: Math.random() * Math.PI * 2,
+          speed: 0.02 + Math.random() * 0.03
+        });
+      });
+    }
+    generateLandDots();
+
+    // Quadratic Bezier evaluation point
+    function getBezierPoint(p0, p1, p2, t) {
+      const inv = 1 - t;
+      return {
+        x: inv * inv * p0.x + 2 * inv * t * p1.x + t * t * p2.x,
+        y: inv * inv * p0.y + 2 * inv * t * p1.y + t * t * p2.y
+      };
+    }
+
+    // Bezier control point arched toward atmosphere
+    function getControlPoint(p0, p2) {
+      const mx = (p0.x + p2.x) / 2;
+      const my = (p0.y + p2.y) / 2;
+      const dist = Math.hypot(p2.x - p0.x, p2.y - p0.y);
+      const bow = Math.min(100, Math.max(30, dist * 0.22));
+      return { x: mx, y: my - bow };
+    }
+
+    let hoveredNode = null;
     let animationFrameId;
-    function animate() {
+
+    function renderWorldMap() {
       ctx.clearRect(0, 0, width, height);
 
-      // Update & Draw connections
-      for (let i = 0; i < nodes.length; i++) {
-        nodes[i].update();
-        nodes[i].draw();
+      // Smooth mouse interpolation
+      if (mouse.targetX !== null) {
+        mouse.x += (mouse.targetX - mouse.x) * 0.1;
+        mouse.y += (mouse.targetY - mouse.y) * 0.1;
+      } else {
+        mouse.x = null;
+        mouse.y = null;
+      }
 
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+      // 1. Draw Lat/Long Geodetic Telemetry Grid
+      ctx.save();
+      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = 'rgba(0, 210, 255, 0.07)';
+      ctx.setLineDash([4, 6]);
 
-          if (dist < maxDistance) {
-            const alpha = (1 - dist / maxDistance) * 0.28;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.strokeStyle = `rgba(168, 85, 247, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
+      // Parallels (Equator, Tropics, Poles)
+      const lats = [-60, -30, 0, 30, 60];
+      lats.forEach(lat => {
+        const p1 = project(-180, lat);
+        const p2 = project(180, lat);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      });
+
+      // Meridians
+      const lons = [-120, -60, 0, 60, 120];
+      lons.forEach(lon => {
+        const p1 = project(lon, 75);
+        const p2 = project(lon, -65);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      // 2. Draw Glow-in-the-Dark Continent Outlines
+      continents.forEach(poly => {
+        if (!poly.length) return;
+
+        // Path creation
+        ctx.beginPath();
+        const start = project(poly[0][0], poly[0][1]);
+        ctx.moveTo(start.x, start.y);
+        for (let i = 1; i < poly.length; i++) {
+          const pt = project(poly[i][0], poly[i][1]);
+          ctx.lineTo(pt.x, pt.y);
         }
+        ctx.closePath();
 
-        // Mouse interaction link
-        if (mouse.x !== null) {
-          const mDist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
-          if (mDist < mouse.radius) {
-            const mAlpha = (1 - mDist / mouse.radius) * 0.45;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(192, 132, 252, ${mAlpha})`;
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
+        // Dark translucent cyber fill
+        ctx.fillStyle = 'rgba(12, 6, 28, 0.55)';
+        ctx.fill();
+
+        // Outer glow stroke
+        ctx.save();
+        ctx.strokeStyle = 'rgba(0, 210, 255, 0.45)';
+        ctx.lineWidth = 1.4;
+        ctx.shadowColor = '#00d2ff';
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.restore();
+
+        // Inner bright accent stroke
+        ctx.save();
+        ctx.strokeStyle = 'rgba(192, 132, 252, 0.35)';
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // 3. Draw Landmass Phosphor Tech Dots
+      landDots.forEach(dot => {
+        dot.pulse += dot.speed;
+        const alpha = 0.15 + (Math.sin(dot.pulse) + 1) * 0.15;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 210, 255, ${alpha})`;
+        ctx.fill();
+      });
+
+      // Check mouse hovering over country nodes
+      hoveredNode = null;
+      if (mouse.x !== null) {
+        for (let c of countries) {
+          const d = Math.hypot(c.x - mouse.x, c.y - mouse.y);
+          if (d < 38) {
+            hoveredNode = c;
+            break;
           }
         }
       }
 
-      // Draw data packets traveling along lines
-      for (let p = packets.length - 1; p >= 0; p--) {
-        const pkt = packets[p];
+      // 4. Draw Interconnecting Light Arcs (Optic Carrier Cables)
+      activeRoutes.forEach(r => {
+        const p0 = { x: r.a.x, y: r.a.y };
+        const p2 = { x: r.b.x, y: r.b.y };
+        const p1 = getControlPoint(p0, p2);
+
+        const isHovered = hoveredNode && (hoveredNode.id === r.a.id || hoveredNode.id === r.b.id);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.quadraticCurveTo(p1.x, p1.y, p2.x, p2.y);
+
+        if (isHovered) {
+          ctx.strokeStyle = 'rgba(0, 240, 255, 0.85)';
+          ctx.lineWidth = 2.2;
+          ctx.shadowColor = '#00f0ff';
+          ctx.shadowBlur = 16;
+        } else {
+          ctx.strokeStyle = 'rgba(168, 85, 247, 0.22)';
+          ctx.lineWidth = 1.1;
+        }
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // 5. Draw Streaming Data Photon Packets Along Arcs
+      for (let i = packets.length - 1; i >= 0; i--) {
+        const pkt = packets[i];
         pkt.progress += pkt.speed;
 
         if (pkt.progress >= 1) {
-          packets.splice(p, 1);
+          // Trigger sonar ripple at destination
+          pkt.end.ripples.push({ r: 2, maxR: 24, alpha: 0.85 });
+          packets.splice(i, 1);
           continue;
         }
 
-        const curX = pkt.x + (pkt.targetNode.x - pkt.x) * pkt.progress;
-        const curY = pkt.y + (pkt.targetNode.y - pkt.y) * pkt.progress;
+        const p0 = { x: pkt.start.x, y: pkt.start.y };
+        const p2 = { x: pkt.end.x, y: pkt.end.y };
+        const p1 = getControlPoint(p0, p2);
 
+        const cur = getBezierPoint(p0, p1, p2, pkt.progress);
+        const trailT = Math.max(0, pkt.progress - pkt.trailLength);
+        const trail = getBezierPoint(p0, p1, p2, trailT);
+
+        // Packet comet trail
+        ctx.save();
         ctx.beginPath();
-        ctx.arc(curX, curY, 2.5, 0, Math.PI * 2);
+        ctx.moveTo(trail.x, trail.y);
+        ctx.lineTo(cur.x, cur.y);
+        ctx.strokeStyle = pkt.color;
+        ctx.lineWidth = 2;
+        ctx.shadowColor = pkt.color;
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+
+        // Packet glowing head
+        ctx.beginPath();
+        ctx.arc(cur.x, cur.y, 2.2, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = '#e879f9';
-        ctx.shadowBlur = 12;
         ctx.fill();
-        ctx.shadowBlur = 0;
+        ctx.restore();
       }
 
-      animationFrameId = requestAnimationFrame(animate);
+      // 6. Draw Country Nodes & Telemetry Beacons
+      countries.forEach(c => {
+        c.pulse += 0.035;
+
+        // Draw Expanding Sonar Ripples
+        for (let rIdx = c.ripples.length - 1; rIdx >= 0; rIdx--) {
+          const rip = c.ripples[rIdx];
+          rip.r += 0.45;
+          rip.alpha -= 0.02;
+
+          if (rip.alpha <= 0) {
+            c.ripples.splice(rIdx, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, rip.r, 0, Math.PI * 2);
+          ctx.strokeStyle = c.isHQ ? `rgba(245, 158, 11, ${rip.alpha})` : `rgba(0, 210, 255, ${rip.alpha})`;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // HQ Node Ambient Continuous Dual Rings (Manila, Philippines)
+        if (c.isHQ) {
+          const hqPulseR = 6 + (Math.sin(c.pulse) + 1) * 3;
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, hqPulseR, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(245, 158, 11, 0.7)';
+          ctx.lineWidth = 1.5;
+          ctx.shadowColor = '#f59e0b';
+          ctx.shadowBlur = 14;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Standard Node Glowing Halo
+        const haloR = c.isHQ ? 3.5 : 2.5;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, haloR, 0, Math.PI * 2);
+        ctx.fillStyle = c.isHQ ? '#f59e0b' : '#00d2ff';
+        ctx.shadowColor = c.isHQ ? '#f59e0b' : '#c084fc';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.restore();
+
+        // Node Label
+        ctx.save();
+        ctx.font = '9px "Fira Code", monospace';
+        ctx.fillStyle = c.isHQ ? '#f59e0b' : 'rgba(203, 213, 225, 0.65)';
+        ctx.fillText(c.code, c.x + 8, c.y + 3);
+        ctx.restore();
+      });
+
+      // 7. Interactive Tactical HUD on Hovered Node
+      if (hoveredNode) {
+        ctx.save();
+        const hudX = Math.min(width - 230, Math.max(20, hoveredNode.x + 15));
+        const hudY = Math.min(height - 110, Math.max(20, hoveredNode.y - 65));
+
+        // Targeting Crosshairs
+        ctx.strokeStyle = '#00d2ff';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(hoveredNode.x, hoveredNode.y, 14, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(hoveredNode.x - 20, hoveredNode.y);
+        ctx.lineTo(hoveredNode.x + 20, hoveredNode.y);
+        ctx.moveTo(hoveredNode.x, hoveredNode.y - 20);
+        ctx.lineTo(hoveredNode.x, hoveredNode.y + 20);
+        ctx.stroke();
+
+        // Tactical HUD Panel
+        ctx.fillStyle = 'rgba(8, 2, 18, 0.9)';
+        ctx.strokeStyle = 'rgba(0, 210, 255, 0.6)';
+        ctx.lineWidth = 1.2;
+        ctx.shadowColor = '#00d2ff';
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.roundRect(hudX, hudY, 210, 75, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.shadowBlur = 0;
+        ctx.font = 'bold 10px "Fira Code", monospace';
+        ctx.fillStyle = '#00d2ff';
+        ctx.fillText(`NODE::${hoveredNode.code}`, hudX + 12, hudY + 20);
+
+        ctx.font = '9px "Inter", sans-serif';
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillText(hoveredNode.name, hudX + 12, hudY + 36);
+
+        ctx.font = '9px "Fira Code", monospace';
+        ctx.fillStyle = '#94a3b8';
+        ctx.fillText(`GEO: ${hoveredNode.lat.toFixed(2)}°N, ${hoveredNode.lon.toFixed(2)}°E`, hudX + 12, hudY + 50);
+        ctx.fillStyle = '#10b981';
+        ctx.fillText('STATUS: ONLINE // 10 Gbps MESH', hudX + 12, hudY + 64);
+        ctx.restore();
+      }
+
+      animationFrameId = requestAnimationFrame(renderWorldMap);
     }
 
-    animate();
+    renderWorldMap();
 
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         cancelAnimationFrame(animationFrameId);
       } else {
-        animate();
+        renderWorldMap();
       }
     });
   }
 
-  initCyberNetwork();
+  // ===================================================================
+  // 8. 3D Cylindrical Perspective Scroll Engine
+  // ===================================================================
+  function initCylinderScroll() {
+    const sections = document.querySelectorAll('.cylinder-section');
+    const toggleBtn = document.getElementById('cylinderToggleBtn');
+    const statusDot = document.getElementById('cylinderStatusDot');
+    const statusLabel = document.getElementById('cylinderStatusLabel');
+
+    if (!sections.length) return;
+
+    let isEnabled = localStorage.getItem('cylinder_scroll_enabled') !== 'false';
+
+    function setCylinderState(active) {
+      isEnabled = active;
+      localStorage.setItem('cylinder_scroll_enabled', active ? 'true' : 'false');
+      if (statusDot && statusLabel) {
+        if (active) {
+          statusDot.classList.remove('inactive');
+          statusLabel.textContent = '3D CYLINDER :: ACTIVE';
+        } else {
+          statusDot.classList.add('inactive');
+          statusLabel.textContent = '3D CYLINDER :: OFF';
+        }
+      }
+      if (!active) {
+        sections.forEach(sec => {
+          sec.style.transform = '';
+          sec.style.opacity = '1';
+        });
+      } else {
+        updateCylinder();
+      }
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        setCylinderState(!isEnabled);
+      });
+    }
+
+    let ticking = false;
+    function onScroll() {
+      if (!isEnabled) return;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateCylinder();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    function updateCylinder() {
+      if (!isEnabled) return;
+      const vh = window.innerHeight;
+      const vCenter = vh / 2;
+
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        // If far out of view, skip heavy calculation
+        if (rect.bottom < -250 || rect.top > vh + 250) {
+          return;
+        }
+
+        const secCenter = rect.top + rect.height / 2;
+        const dist = secCenter - vCenter;
+        const normDist = dist / (vh * 0.72);
+        const clamped = Math.max(-1.3, Math.min(1.3, normDist));
+
+        // When scrolling down, sections above center tilt backward (rotateX > 0)
+        // When scrolling down, sections below center tilt forward (rotateX < 0)
+        const angleX = -clamped * 20;
+        const zDist = -Math.pow(Math.abs(clamped), 1.55) * 85;
+        const scale = 1 - Math.min(0.06, Math.abs(clamped) * 0.04);
+        const opacity = 1 - Math.min(0.38, Math.abs(clamped) * 0.3);
+
+        sec.style.transform = `perspective(1300px) rotateX(${angleX.toFixed(2)}deg) translateZ(${zDist.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+        sec.style.opacity = opacity.toFixed(2);
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      if (isEnabled) updateCylinder();
+    }, { passive: true });
+
+    setCylinderState(isEnabled);
+  }
+
+  // Initialize Core Visual Engines
+  initWorldMapNetwork();
+  initCylinderScroll();
 });
 
 // Helper: Resume Print Trigger
