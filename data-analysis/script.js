@@ -69,14 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <td class="fw-bold ${isStudent ? 'text-success' : 'text-light'}">
             <i class="bi ${isStudent ? 'bi-mortarboard-fill text-success' : 'bi-person-fill text-muted'} me-2"></i>${seg.category}
           </td>
-          <td><span class="badge ${isStudent ? 'bg-success' : 'bg-secondary'}">${seg.customers} (${seg.pctCustomers})</span></td>
-          <td class="fw-bold text-success">₱${seg.totalSales.toLocaleString()} <small class="text-muted">(${seg.pctSales})</small></td>
-          <td class="fw-semibold">₱${seg.avgSale.toFixed(2)}</td>
-          <td>${seg.internetHours} hrs</td>
-          <td>${seg.printingPages} pgs</td>
-          <td>${seg.scanningPages} pgs</td>
-          <td><span class="text-warning fw-semibold">${seg.gaming}</span> / ${seg.nonGaming}</td>
-          <td>${seg.avgAge.toFixed(1)} yrs</td>
+          <td class="fw-bold text-center fs-6">${seg.customers}</td>
+          <td class="fw-bold text-success text-center fs-6">₱${seg.totalSales.toLocaleString()}</td>
+          <td class="fw-semibold text-center">₱${seg.avgSale.toFixed(2)}</td>
+          <td class="text-center">${seg.internetHours}</td>
+          <td class="text-center">${seg.printingPages}</td>
+          <td class="text-center">${seg.scanningPages}</td>
+          <td class="text-center"><span class="text-warning fw-bold">${seg.gaming}</span> (Gaming) / <span class="text-muted">${seg.nonGaming}</span></td>
+          <td class="text-center">${seg.avgAge.toFixed(2)}</td>
         `;
         segTbody.appendChild(tr);
       });
@@ -102,24 +102,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 6. Populate Top 5 Transactions Table (Task 11)
+    // 6. Populate Top 5 Transactions Table (Task 11 matching Excel Screenshot)
     const topTbody = document.querySelector('#topTxTable tbody');
     if (topTbody && typeof topTransactions !== 'undefined') {
       topTbody.innerHTML = '';
       topTransactions.forEach(t => {
         const tr = document.createElement('tr');
-        const medal = t.rank === 1 ? '🥇' : (t.rank === 2 ? '🥈' : (t.rank === 3 ? '🥉' : `#${t.rank}`));
+        const medal = t.rank === 1 ? '🥇' : (t.rank === 2 ? '🥈' : (t.rank === 3 ? '🥉' : ''));
         tr.innerHTML = `
-          <td class="fw-bold">${medal}</td>
-          <td><span class="badge bg-dark border border-success text-success">${t.id}</span></td>
-          <td class="fw-bold text-success fs-6">₱${t.revenue}</td>
-          <td class="text-light small">${t.day}</td>
-          <td>${t.age} yrs (${t.gender})</td>
-          <td>${t.student === 'Yes' ? '<span class="badge bg-success-subtle text-success">Student</span>' : '<span class="badge bg-secondary">Non-Student</span>'}</td>
-          <td>${t.internet} hrs</td>
-          <td>${t.printing} pgs</td>
-          <td>${t.scanning} pgs</td>
-          <td>${t.gaming === 'Yes' ? '<i class="bi bi-controller text-warning"></i>' : '-'}</td>
+          <td class="fw-bold">${medal} ${t.rank}</td>
+          <td><span class="badge bg-dark border border-success text-success font-monospace fs-6 px-3 py-1">${t.id}</span></td>
+          <td class="fw-bold text-success fs-5">₱${t.revenue}</td>
         `;
         topTbody.appendChild(tr);
       });

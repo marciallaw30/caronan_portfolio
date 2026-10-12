@@ -53,7 +53,7 @@
 
     /* Custom Navbar */
     .custom-navbar {
-      background: rgba(8, 2, 17, 0.92) !important;
+      background: rgba(8, 2, 17, 0.94) !important;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-emerald);
@@ -95,9 +95,9 @@
       transform: translateY(-2px);
     }
 
-    /* Academic Banner Card */
+    /* Academic Hero */
     .academic-hero {
-      padding: 110px 0 35px 0;
+      padding: 105px 0 25px 0;
       text-align: center;
     }
 
@@ -107,7 +107,7 @@
       border-radius: 20px;
       padding: 2rem;
       box-shadow: 0 10px 35px -5px rgba(0, 0, 0, 0.7), 0 0 25px rgba(16, 185, 129, 0.2);
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       position: relative;
       overflow: hidden;
     }
@@ -150,7 +150,7 @@
     }
 
     .stat-label {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: #94a3b8;
@@ -160,7 +160,7 @@
     /* Nav Tabs */
     .nav-tabs-custom {
       border-bottom: 1px solid rgba(168, 85, 247, 0.25);
-      gap: 8px;
+      gap: 6px;
     }
 
     .nav-tabs-custom .nav-link {
@@ -170,7 +170,8 @@
       color: #94a3b8;
       border-radius: 12px 12px 0 0;
       font-weight: 600;
-      padding: 0.75rem 1.4rem;
+      padding: 0.7rem 1.25rem;
+      font-size: 0.92rem;
       transition: all 0.25s ease;
     }
 
@@ -196,6 +197,7 @@
       padding: 1.5rem;
       overflow-x: auto;
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+      margin-bottom: 1.8rem;
     }
 
     .custom-table {
@@ -234,8 +236,8 @@
       border: 1px solid var(--accent-emerald);
       color: var(--accent-emerald-neon);
       border-radius: 9999px;
-      padding: 5px 12px;
-      font-size: 0.78rem;
+      padding: 5px 14px;
+      font-size: 0.8rem;
       font-weight: 600;
     }
 
@@ -244,8 +246,8 @@
       border: 1px solid var(--accent-violet);
       color: #c084fc;
       border-radius: 9999px;
-      padding: 5px 12px;
-      font-size: 0.78rem;
+      padding: 5px 14px;
+      font-size: 0.8rem;
       font-weight: 600;
     }
 
@@ -263,7 +265,19 @@
       height: 420px;
     }
 
-    /* Search & Filter Inputs */
+    /* Excel Screenshot Style Quote Callout */
+    .excel-callout-quote {
+      background: rgba(16, 185, 129, 0.08);
+      border-left: 4px solid var(--accent-emerald);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 18px;
+      font-style: italic;
+      color: #cbd5e1;
+      margin-top: 10px;
+      font-size: 0.92rem;
+    }
+
+    /* Filter Inputs */
     .filter-input {
       background: rgba(10, 4, 20, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -279,6 +293,15 @@
       box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
       outline: none;
     }
+
+    /* Document Download Modal */
+    .modal-content-dark {
+      background: #090314;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(16, 185, 129, 0.25);
+      color: #fff;
+    }
   </style>
 </head>
 
@@ -292,9 +315,10 @@
         <span class="brand-title fw-bold text-white fs-5">M. Caronan <span class="text-success fs-6">• Data Analytics</span></span>
       </a>
       <div class="d-flex align-items-center gap-2 ms-auto">
-        <a href="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-emerald btn-pill btn-sm px-3 py-2" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx">
-          <i class="bi bi-download me-1"></i> Download Original Excel (.xlsx)
-        </a>
+        <!-- Download Documents Button (triggers modal) -->
+        <button class="btn btn-emerald btn-pill btn-sm px-3 py-2" data-bs-toggle="modal" data-bs-target="#downloadDocumentsModal">
+          <i class="bi bi-folder-symlink-fill me-1"></i> Download Documents
+        </button>
         <a href="../index.html#projects" class="btn btn-outline-emerald btn-pill btn-sm px-3 py-2">
           <i class="bi bi-arrow-left me-1"></i> Back to Portfolio
         </a>
@@ -336,14 +360,14 @@
         </div>
       </div>
 
-      <!-- Prominent Original Excel Download Card -->
+      <!-- Prominent Original Excel & Documents Download Card -->
       <div class="download-excel-banner text-start">
         <div class="row align-items-center g-4">
-          <div class="col-lg-8">
+          <div class="col-lg-7">
             <div class="d-flex align-items-center gap-3 mb-2">
               <i class="bi bi-file-earmark-excel-fill text-success fs-1"></i>
               <div>
-                <h3 class="h4 fw-bold text-white mb-0">Original Excel Workbook Available for Download</h3>
+                <h3 class="h4 fw-bold text-white mb-0">Original Graded Excel Workbook Available</h3>
                 <span class="badge bg-success-subtle text-success">Verified Submission Artifact • 54.7 KB • .xlsx</span>
               </div>
             </div>
@@ -356,18 +380,21 @@
               <strong class="text-info">Recommendations</strong> (Task 12).
             </p>
             <div class="d-flex flex-wrap gap-2 pt-1">
-              <span class="badge bg-dark border border-secondary text-muted">xl/workbook.xml</span>
-              <span class="badge bg-dark border border-secondary text-muted">SUM & AVERAGE Formulas</span>
-              <span class="badge bg-dark border border-secondary text-muted">CORREL Function (r = 0.7556)</span>
-              <span class="badge bg-dark border border-secondary text-muted">Cross-Tabulations</span>
+              <span class="badge bg-dark border border-secondary text-muted">Path: C:\Users\DCSA-PC 07\Documents\cert\data analysis</span>
+              <span class="badge bg-dark border border-secondary text-muted">SUM / AVERAGE / MEDIAN / CORREL</span>
             </div>
           </div>
-          <div class="col-lg-4 text-lg-end">
-            <a href="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-emerald btn-pill px-4 py-3 w-100 mb-2" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx">
-              <i class="bi bi-cloud-arrow-down-fill me-2 fs-5"></i> Download Original Excel (.xlsx)
-            </a>
+          <div class="col-lg-5 text-lg-end">
+            <div class="d-flex flex-column flex-sm-row gap-2 justify-content-lg-end mb-2">
+              <a href="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-emerald btn-pill px-4 py-3 text-nowrap" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx">
+                <i class="bi bi-file-earmark-excel-fill me-2 fs-5"></i> Download Excel (.xlsx)
+              </a>
+              <button class="btn btn-outline-emerald btn-pill px-4 py-3 text-nowrap" data-bs-toggle="modal" data-bs-target="#downloadDocumentsModal">
+                <i class="bi bi-folder2-open me-2 fs-5"></i> Download Documents...
+              </button>
+            </div>
             <div class="text-muted small text-center text-lg-end">
-              <i class="bi bi-shield-check text-success me-1"></i> Exact file submitted for grading
+              <i class="bi bi-shield-check text-success me-1"></i> 100% authentic file submitted for grading
             </div>
           </div>
         </div>
@@ -445,18 +472,13 @@
     <div class="container">
       <ul class="nav nav-tabs nav-tabs-custom mb-4" id="analysisTabs" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
-            <i class="bi bi-bar-chart-line-fill me-1"></i> Overview & Visual Charts
+          <button class="nav-link active" id="excel-tasks-tab" data-bs-toggle="tab" data-bs-target="#excel-tasks" type="button" role="tab">
+            <i class="bi bi-file-earmark-spreadsheet-fill me-1"></i> Excel Exam Tasks (All 12 Tables)
           </button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button" role="tab">
-            <i class="bi bi-calculator-fill me-1"></i> Descriptive Stats & Correlation
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="segment-tab" data-bs-toggle="tab" data-bs-target="#segment" type="button" role="tab">
-            <i class="bi bi-people-fill me-1"></i> Customer Segmentation (Students)
+          <button class="nav-link" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
+            <i class="bi bi-bar-chart-line-fill me-1"></i> Visual Charts & Graphs (Task 9)
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -466,7 +488,7 @@
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="dict-tab" data-bs-toggle="tab" data-bs-target="#dict" type="button" role="tab">
-            <i class="bi bi-book-fill me-1"></i> Data Dictionary & Methodology
+            <i class="bi bi-book-fill me-1"></i> Data Dictionary & Cleaning (Tasks 1, 2)
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -479,15 +501,300 @@
       <!-- Tab Content Panes -->
       <div class="tab-content" id="analysisTabsContent">
 
-        <!-- TAB 1: OVERVIEW & CHARTS -->
-        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+        <!-- TAB 1: ALL 12 EXCEL EXAM TASKS & TABLES (MATCHING SCREENSHOTS) -->
+        <div class="tab-pane fade show active" id="excel-tasks" role="tabpanel">
+
+          <!-- Task 1 & 2: Inspection & Cleaning Methodology (From Screenshot 2) -->
+          <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <h5 class="fw-bold text-white mb-2"><i class="bi bi-search text-success me-2"></i>1. Inspect and clean the raw data</h5>
+                <p class="text-light opacity-90 small mb-0" style="line-height: 1.7;">
+                  "I checked all columns in the Raw_Data sheet row by row to look for typing errors, incorrect formatting, or strange characters. I used Excel's Filter tool on the header row to review the values in each column and make sure everything looked correct and clean."
+                </p>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <h5 class="fw-bold text-white mb-2"><i class="bi bi-funnel-fill text-success me-2"></i>2. Identify and handle missing values</h5>
+                <p class="text-light opacity-90 small mb-0" style="line-height: 1.7;">
+                  "I used Excel's Go To Special then Blanks feature to instantly find any missing or empty cells in the spreadsheet. Once located, I filled in the missing values properly (such as entering zeroes or placeholder text) so they wouldn't mess up my calculations."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task 3: Descriptive Statistics Matrix (From Screenshot 2) -->
+          <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="fw-bold text-white mb-1"><i class="bi bi-calculator text-success me-2"></i>3. Calculate descriptive statistics</h4>
+                <p class="text-muted small mb-0">Original table from Exam_Tasks sheet: Descriptive Statistic parameters computed across 50 records.</p>
+              </div>
+              <span class="badge badge-pill-emerald">Values • Total • Average • Median • Min • Max</span>
+            </div>
+            <table class="custom-table" id="descStatsTable">
+              <thead>
+                <tr>
+                  <th>Values</th>
+                  <th>Total</th>
+                  <th>Average</th>
+                  <th>Median</th>
+                  <th>Minimum</th>
+                  <th>Maximum</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated dynamically via script.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Task 4: Sales Statistics Breakdown (From Screenshot 2) -->
+          <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-cash-stack text-success me-2"></i>4. Calculate total, mean, median, minimum, and maximum sales.</h5>
+                  <span class="badge bg-success">Sale Statistic</span>
+                </div>
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Sale Statistic</th>
+                      <th>Value (₱)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="fw-bold">Total</td><td class="fw-bold text-success">₱9,690</td></tr>
+                    <tr><td class="fw-bold">Mean</td><td class="text-info fw-semibold">₱193.80</td></tr>
+                    <tr><td class="fw-bold">Median</td><td class="text-light">₱202.50</td></tr>
+                    <tr><td class="fw-bold">Minimum</td><td class="text-muted">₱65</td></tr>
+                    <tr><td class="fw-bold">Maximum</td><td class="text-warning fw-bold">₱365</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Task 7: Determine the Highest-Revenue Service (From Screenshot 1) -->
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-trophy-fill text-warning me-2"></i>7. Determine the highest-revenue service</h5>
+                  <span class="badge bg-warning text-dark fw-bold">Rank #1 Driver</span>
+                </div>
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Highest Service Revenue</th>
+                      <th>Volume Output</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td class="fw-bold text-success"><i class="bi bi-printer-fill me-2"></i>Printing Pages:</td><td class="fw-bold text-success fs-5">415</td></tr>
+                    <tr><td class="fw-bold text-info"><i class="bi bi-scanner me-2"></i>Scanning Pages:</td><td class="text-info">180</td></tr>
+                    <tr><td class="fw-bold text-warning"><i class="bi bi-controller me-2"></i>Gaming</td><td class="text-warning">14</td></tr>
+                  </tbody>
+                </table>
+                <div class="excel-callout-quote mt-3">
+                  <i class="bi bi-quote me-1"></i> "The Highest Service revenue was Printing Pages"
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task 5: Compare Student vs Non-Student Customers (From Screenshot 1) -->
+          <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="fw-bold text-white mb-1"><i class="bi bi-people-fill text-success me-2"></i>5. Compare student vs. non-student customers</h4>
+                <p class="text-muted small mb-0">Original table comparing volume, total sales, average spend, and service hours between cohorts.</p>
+              </div>
+              <span class="badge badge-pill-emerald">76% of Net Customers</span>
+            </div>
+            <table class="custom-table" id="segmentationTable">
+              <thead>
+                <tr>
+                  <th>Costumers</th>
+                  <th>Total Costumers</th>
+                  <th>Total Sales</th>
+                  <th>Average Sale</th>
+                  <th>Internet H</th>
+                  <th>Printing Page</th>
+                  <th>Scanning Page</th>
+                  <th>Gaming / Non-Gaming</th>
+                  <th>Average Costumer Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated dynamically via script.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Task 6 & Task 8: Day of Week & Frequency Tables (From Screenshot 1) -->
+          <div class="row g-4 mb-4">
+            <!-- Task 6: Analyze Sales by Day of the Week (From Screenshot 1) -->
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-calendar-week text-success me-2"></i>6. Analyze sales by day of the week</h5>
+                  <span class="badge bg-success">Pivot Analysis</span>
+                </div>
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Days of Week</th>
+                      <th>Sum of Total_Sales</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Sun</td><td class="fw-bold text-success">₱1,500 <span class="badge bg-success-subtle text-success ms-2">Peak #1</span></td></tr>
+                    <tr><td>Mon</td><td class="fw-bold text-success">₱1,500 <span class="badge bg-success-subtle text-success ms-2">Peak #1</span></td></tr>
+                    <tr><td>Tue</td><td class="text-light">₱1,410</td></tr>
+                    <tr><td>Wed</td><td class="text-danger fw-semibold">₱1,215 <span class="badge bg-danger-subtle text-danger ms-2">Lowest</span></td></tr>
+                    <tr><td>Thu</td><td class="text-light">₱1,305</td></tr>
+                    <tr><td>Fri</td><td class="text-light">₱1,450</td></tr>
+                    <tr><td>Sat</td><td class="text-light">₱1,310</td></tr>
+                    <tr class="table-active border-top border-success">
+                      <td class="fw-bold text-white fs-6">Grand Total</td>
+                      <td class="fw-bold text-success fs-6">₱9,690</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="excel-callout-quote">
+                  <i class="bi bi-quote me-1"></i> "Monday and Sunday has the Highest Sales of the week, while Wednesday has the lowest Sales"
+                </div>
+              </div>
+            </div>
+
+            <!-- Task 8: Create Frequency Tables (From Screenshot 1) -->
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-table text-info me-2"></i>8. Create frequency tables</h5>
+                  <span class="badge bg-info text-dark fw-bold">Cross-Tabulation</span>
+                </div>
+                <table class="custom-table text-center">
+                  <thead>
+                    <tr>
+                      <th colspan="2" class="border-end border-secondary">Costumer</th>
+                      <th colspan="2" class="border-end border-secondary">Gender</th>
+                      <th colspan="2">Gaming</th>
+                    </tr>
+                    <tr>
+                      <th>Students</th>
+                      <th class="border-end border-secondary">Total</th>
+                      <th>Male</th>
+                      <th class="border-end border-secondary">Female</th>
+                      <th>Yes</th>
+                      <th>No</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold text-success">Yes</td>
+                      <td class="fw-bold text-white border-end border-secondary">38</td>
+                      <td>23</td>
+                      <td class="border-end border-secondary">15</td>
+                      <td>10</td>
+                      <td>28</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold text-muted">No</td>
+                      <td class="fw-bold text-white border-end border-secondary">12</td>
+                      <td>5</td>
+                      <td class="border-end border-secondary">7</td>
+                      <td>4</td>
+                      <td>8</td>
+                    </tr>
+                    <tr class="border-top border-secondary fw-bold">
+                      <td class="text-info">Total</td>
+                      <td class="text-info border-end border-secondary">50</td>
+                      <td class="text-info">28</td>
+                      <td class="text-info border-end border-secondary">22</td>
+                      <td class="text-info">14</td>
+                      <td class="text-info">36</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="text-muted small mt-2">
+                  <i class="bi bi-info-circle me-1"></i> Frequency distribution across gender, academic status, and gaming usage.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task 10 & 11: Correlation and Top 5 Transactions -->
+          <div class="row g-4">
+            <!-- Task 10: Correlation -->
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-graph-up-arrow text-success me-2"></i>10. Calculate correlation between Internet Hours and Total Sales</h5>
+                  <span class="badge bg-success">r = 0.7556</span>
+                </div>
+                <table class="custom-table mb-3">
+                  <thead>
+                    <tr>
+                      <th>Correlation Parameter</th>
+                      <th>Computed Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="fw-bold">Pearson Correlation (r)</td>
+                      <td class="fw-bold text-success fs-5">0.75563076563881271</td>
+                    </tr>
+                    <tr>
+                      <td class="fw-bold">Coefficient of Determination (R²)</td>
+                      <td class="text-info">0.5709778536838392 (57.1% Variance Explained)</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="excel-callout-quote">
+                  <i class="bi bi-quote me-1"></i> "There is a strong positive correlation (r = 0.7556) between Internet Hours and Total Sales. This means that an increase in the number of internet hours used by customers strongly corresponds to higher overall sales for the computer shop."
+                </div>
+              </div>
+            </div>
+
+            <!-- Task 11: Top 5 Transactions -->
+            <div class="col-lg-6">
+              <div class="table-container h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-trophy-fill text-warning me-2"></i>11. Identify the top 5 transactions</h5>
+                  <span class="badge bg-warning text-dark fw-bold">Leaderboard</span>
+                </div>
+                <table class="custom-table" id="topTxTable">
+                  <thead>
+                    <tr>
+                      <th>Top 5</th>
+                      <th>Transaction_ID</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Populated dynamically via script.js -->
+                  </tbody>
+                </table>
+                <div class="text-muted small mt-2">
+                  <i class="bi bi-info-circle me-1"></i> Top transactions are heavily driven by extended internet sessions combined with high print volume.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TAB 2: VISUAL CHARTS & GRAPHS (TASK 9) -->
+        <div class="tab-pane fade" id="overview" role="tabpanel">
           <div class="row g-4 mb-4">
             <!-- Daily Sales Trend Chart -->
             <div class="col-lg-8">
               <div class="chart-box chart-box-tall">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-graph-up text-success me-2"></i>Daily Sales Trend (50 Days Sequence)</h5>
-                  <span class="badge bg-success-subtle text-success">Task 9</span>
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-graph-up text-success me-2"></i>9. Sales Trend Chart (50 Sequential Operations Days)</h5>
+                  <span class="badge bg-success-subtle text-success">Task 9 Line Chart</span>
                 </div>
                 <div style="height: 330px;">
                   <canvas id="salesChart"></canvas>
@@ -500,7 +807,7 @@
               <div class="chart-box chart-box-tall">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                   <h5 class="fw-bold text-white mb-0"><i class="bi bi-calendar-week text-success me-2"></i>Weekly Revenue Breakdown</h5>
-                  <span class="badge bg-success-subtle text-success">Task 6</span>
+                  <span class="badge bg-success-subtle text-success">Task 6 / 9 Bar Chart</span>
                 </div>
                 <div style="height: 330px;">
                   <canvas id="dowChart"></canvas>
@@ -509,13 +816,13 @@
             </div>
           </div>
 
-          <div class="row g-4">
+          <div class="row g-4 mb-4">
             <!-- Multi-Service Volume Doughnut -->
             <div class="col-lg-6">
               <div class="chart-box">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h5 class="fw-bold text-white mb-0"><i class="bi bi-pie-chart-fill text-info me-2"></i>Service Output Utilization Volume</h5>
-                  <span class="badge bg-info-subtle text-info">Task 7</span>
+                  <span class="badge bg-info-subtle text-info">Task 7 / 9</span>
                 </div>
                 <p class="text-muted small mb-2">Printing Pages (415) represent the single highest volume service output.</p>
                 <div style="height: 280px;">
@@ -529,7 +836,7 @@
               <div class="chart-box">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <h5 class="fw-bold text-white mb-0"><i class="bi bi-gender-ambiguous text-warning me-2"></i>Demographics (Gender × Student Status)</h5>
-                  <span class="badge bg-warning-subtle text-warning">Task 8</span>
+                  <span class="badge bg-warning-subtle text-warning">Task 8 / 9</span>
                 </div>
                 <p class="text-muted small mb-2">Cross-tabulation reveals male students as the primary computer shop demographic.</p>
                 <div style="height: 280px;">
@@ -538,168 +845,28 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- TAB 2: DESCRIPTIVE STATS & CORRELATION -->
-        <div class="tab-pane fade" id="stats" role="tabpanel">
-          <div class="table-container mb-4">
+          <!-- Scatter Plot for Correlation (Task 10) -->
+          <div class="chart-box chart-box-tall">
             <div class="d-flex justify-content-between align-items-center mb-3">
-              <div>
-                <h4 class="fw-bold text-white mb-1"><i class="bi bi-calculator text-success me-2"></i>Task 3: Descriptive Statistics Matrix</h4>
-                <p class="text-muted small mb-0">Summary parameters computed directly across all 50 recorded transactions in Excel.</p>
-              </div>
-              <span class="badge badge-pill-emerald">SUM • AVERAGE • MEDIAN • MIN • MAX</span>
+              <h5 class="fw-bold text-white mb-0"><i class="bi bi-diagram-3-fill text-success me-2"></i>Task 10: Pearson Correlation Scatter Plot (Internet Hours vs Total Sales)</h5>
+              <span class="badge bg-success">r = 0.7556</span>
             </div>
-            <table class="custom-table" id="descStatsTable">
-              <thead>
-                <tr>
-                  <th>Variable Metric</th>
-                  <th>Sum Total</th>
-                  <th>Mean (Average)</th>
-                  <th>Median</th>
-                  <th>Minimum</th>
-                  <th>Maximum</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Populated dynamically via script.js -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Task 10: Correlation Deep-Dive -->
-          <div class="row g-4 align-items-stretch">
-            <div class="col-lg-7">
-              <div class="chart-box chart-box-tall">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-diagram-3-fill text-success me-2"></i>Task 10: Pearson Correlation Scatter Plot</h5>
-                  <span class="badge bg-success">r = 0.7556</span>
-                </div>
-                <p class="text-muted small mb-2">Customer Internet Hours (X-Axis) plotted against Total Sales (Y-Axis).</p>
-                <div style="height: 330px;">
-                  <canvas id="correlationChart"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-5">
-              <div class="stat-card h-100 p-4 d-flex flex-column justify-content-between">
-                <div>
-                  <div class="badge-pill-emerald d-inline-block mb-3">Statistical Proof</div>
-                  <h4 class="fw-bold text-white mb-3">Strong Positive Correlation: r = 0.7556</h4>
-                  <div class="p-3 rounded mb-3" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25);">
-                    <div class="fw-bold text-success mb-1"><i class="bi bi-check2-circle me-1"></i> Coefficient Interpretation:</div>
-                    <p class="small text-light mb-0" style="line-height: 1.65;">
-                      The computed Pearson Correlation Coefficient between <strong>Internet Hours</strong> and <strong>Total Sales</strong> is <strong>0.7556</strong> ($R^2 \approx 0.571$).
-                    </p>
-                  </div>
-                  <p class="text-muted small mb-3" style="line-height: 1.7;">
-                    This indicates a robust, statistically significant positive relationship: as customers stay longer at internet stations, their likelihood of purchasing supplementary high-margin services (such as document printing, thesis scanning, and gaming) multiplies exponentially.
-                  </p>
-                </div>
-                <div class="p-3 rounded" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
-                  <div class="small fw-bold text-warning mb-1"><i class="bi bi-lightning-charge-fill me-1"></i> Business Takeaway:</div>
-                  <div class="small text-light">Extending customer session duration is the primary commercial engine of the computer shop.</div>
-                </div>
-              </div>
+            <div style="height: 330px;">
+              <canvas id="correlationChart"></canvas>
             </div>
           </div>
         </div>
 
-        <!-- TAB 3: CUSTOMER SEGMENTATION (STUDENTS VS NON-STUDENTS) -->
-        <div class="tab-pane fade" id="segment" role="tabpanel">
-          <div class="table-container mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div>
-                <h4 class="fw-bold text-white mb-1"><i class="bi bi-pie-chart text-success me-2"></i>Task 5: Student vs. Non-Student Customer Comparison</h4>
-                <p class="text-muted small mb-0">Demographic cross-segmentation demonstrating student dominance across revenue and service usage.</p>
-              </div>
-              <span class="badge badge-pill-emerald">76% of Net Volume</span>
-            </div>
-            <table class="custom-table" id="segmentationTable">
-              <thead>
-                <tr>
-                  <th>Customer Segment</th>
-                  <th>Client Volume</th>
-                  <th>Total Sales</th>
-                  <th>Avg Spend</th>
-                  <th>Internet Hrs</th>
-                  <th>Printing</th>
-                  <th>Scanning</th>
-                  <th>Gaming (Yes/No)</th>
-                  <th>Avg Age</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Populated dynamically via script.js -->
-              </tbody>
-            </table>
-          </div>
-
-          <div class="row g-4">
-            <!-- Day of Week Table -->
-            <div class="col-lg-6">
-              <div class="table-container">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-calendar3 text-success me-2"></i>Task 6: Weekly Sales Performance</h5>
-                  <span class="badge bg-success">Sunday & Monday Peak</span>
-                </div>
-                <table class="custom-table" id="dayOfWeekTable">
-                  <thead>
-                    <tr>
-                      <th>Day</th>
-                      <th>Total Sales</th>
-                      <th>Tx Count</th>
-                      <th>Classification</th>
-                      <th>Operational Observation</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Populated dynamically -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Top 5 High-Value Transactions -->
-            <div class="col-lg-6">
-              <div class="table-container">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-trophy-fill text-warning me-2"></i>Task 11: Top 5 Highest-Value Transactions</h5>
-                  <span class="badge bg-warning text-dark fw-bold">Leaderboard</span>
-                </div>
-                <table class="custom-table" id="topTxTable">
-                  <thead>
-                    <tr>
-                      <th>Rank</th>
-                      <th>Tx ID</th>
-                      <th>Sales</th>
-                      <th>Day</th>
-                      <th>Customer</th>
-                      <th>Student</th>
-                      <th>Internet</th>
-                      <th>Print</th>
-                      <th>Scan</th>
-                      <th>Game</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Populated dynamically -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 4: EVIDENCE-BASED RECOMMENDATIONS -->
+        <!-- TAB 3: EVIDENCE-BASED RECOMMENDATIONS (TASK 12) -->
         <div class="tab-pane fade" id="recommendations" role="tabpanel">
           <div class="p-4 rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 5, 29, 0.9) 100%); border: 1px solid rgba(16, 185, 129, 0.3);">
             <div class="d-flex align-items-center gap-3">
               <div class="badge bg-success p-3 rounded-circle"><i class="bi bi-award-fill fs-3 text-white"></i></div>
               <div>
-                <h4 class="fw-bold text-white mb-1">Task 12: Evidence-Based Business Recommendations</h4>
+                <h4 class="fw-bold text-white mb-1">12. Provide evidence-based business recommendations</h4>
                 <p class="text-light opacity-90 small mb-0">
-                  Synthesized from statistical evidence across correlation coefficients, demographic matrices, and service volume distributions.
+                  "Based on the comprehensive analysis of the computer shop's operations, customer demographics, and service performance, the following evidence-based business recommendations are proposed to optimize revenue and improve operational efficiency:"
                 </p>
               </div>
             </div>
@@ -709,7 +876,7 @@
           </div>
         </div>
 
-        <!-- TAB 5: DATA DICTIONARY & METHODOLOGY -->
+        <!-- TAB 4: DATA DICTIONARY & CLEANING (TASKS 1, 2) -->
         <div class="tab-pane fade" id="dict" role="tabpanel">
           <div class="row g-4 mb-4" id="cleaningStepsContainer">
             <!-- Populated dynamically via script.js -->
@@ -719,7 +886,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <h4 class="fw-bold text-white mb-1"><i class="bi bi-card-checklist text-info me-2"></i>Complete Variable Data Dictionary</h4>
-                <p class="text-muted small mb-0">Definitions, column formats, and constraints defined in the original Data_Dictionary sheet.</p>
+                <p class="text-muted small mb-0">Original definitions, formats, and constraints defined in the Data_Dictionary sheet.</p>
               </div>
               <span class="badge badge-pill-violet">11 Attributes Documented</span>
             </div>
@@ -738,7 +905,7 @@
           </div>
         </div>
 
-        <!-- TAB 6: RAW DATA EXPLORER -->
+        <!-- TAB 5: RAW DATA EXPLORER -->
         <div class="tab-pane fade" id="raw" role="tabpanel">
           <div class="table-container">
             <div class="row g-3 align-items-center mb-4">
@@ -789,6 +956,116 @@
       </div>
     </div>
   </section>
+
+  <!-- Download Documents Modal -->
+  <div class="modal fade" id="downloadDocumentsModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content modal-content-dark">
+        <div class="modal-header border-bottom border-secondary border-opacity-50">
+          <h5 class="modal-title fw-bold text-white d-flex align-items-center gap-2" id="downloadModalLabel">
+            <i class="bi bi-folder-fill text-success"></i> Download Project Documents & Datasets
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="text-muted small mb-4">
+            All files are extracted directly from the verified academic examination folder (<code class="text-info">C:\Users\DCSA-PC 07\Documents\cert\data analysis</code>). You can download the complete original Excel workbook, individual CSV data sheets, or the bundled ZIP package.
+          </p>
+
+          <div class="list-group gap-3">
+            <!-- Document 1: Original Excel (.xlsx) -->
+            <div class="list-group-item bg-dark border border-success border-opacity-50 rounded-3 p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-file-earmark-excel-fill text-success fs-2"></i>
+                <div>
+                  <h6 class="text-white fw-bold mb-1">4A_Marcial Lawrence Jr V. Caronan.xlsx</h6>
+                  <span class="badge bg-success-subtle text-success me-2">Primary Workbook</span>
+                  <small class="text-muted">Original Graded Excel Workbook with all 5 sheets, formulas, and PivotTables • 54.7 KB</small>
+                </div>
+              </div>
+              <a href="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-emerald btn-pill btn-sm px-3 py-2 text-nowrap" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx">
+                <i class="bi bi-download me-1"></i> Download .XLSX
+              </a>
+            </div>
+
+            <!-- Document 2: Full Package ZIP -->
+            <div class="list-group-item bg-dark border border-secondary rounded-3 p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-file-earmark-zip-fill text-warning fs-2"></i>
+                <div>
+                  <h6 class="text-white fw-bold mb-1">Data_Analysis_Marcial_Caronan_Full_Package.zip</h6>
+                  <span class="badge bg-warning text-dark me-2">All-in-One Bundle</span>
+                  <small class="text-muted">Includes original Excel, all 4 CSV exports, and verification documentation • 48.6 KB</small>
+                </div>
+              </div>
+              <a href="Data_Analysis_Marcial_Caronan_Full_Package.zip" class="btn btn-outline-emerald btn-pill btn-sm px-3 py-2 text-nowrap" download="Data_Analysis_Marcial_Caronan_Full_Package.zip">
+                <i class="bi bi-download me-1"></i> Download .ZIP
+              </a>
+            </div>
+
+            <!-- Document 3: Raw Data CSV -->
+            <div class="list-group-item bg-dark border border-secondary rounded-3 p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-filetype-csv text-info fs-2"></i>
+                <div>
+                  <h6 class="text-white fw-bold mb-1">Raw_Data.csv</h6>
+                  <small class="text-muted">50 Customer Transactions raw table with all 11 attributes • 2.1 KB</small>
+                </div>
+              </div>
+              <a href="Raw_Data.csv" class="btn btn-outline-emerald btn-pill btn-sm px-3 py-2 text-nowrap" download="Raw_Data.csv">
+                <i class="bi bi-download me-1"></i> CSV
+              </a>
+            </div>
+
+            <!-- Document 4: Exam Tasks CSV -->
+            <div class="list-group-item bg-dark border border-secondary rounded-3 p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-filetype-csv text-info fs-2"></i>
+                <div>
+                  <h6 class="text-white fw-bold mb-1">Exam_Tasks.csv</h6>
+                  <small class="text-muted">Complete calculations for Tasks 1 to 11 (Descriptive stats, segmentation, day of week, correlation) • 4.2 KB</small>
+                </div>
+              </div>
+              <a href="Exam_Tasks.csv" class="btn btn-outline-emerald btn-pill btn-sm px-3 py-2 text-nowrap" download="Exam_Tasks.csv">
+                <i class="bi bi-download me-1"></i> CSV
+              </a>
+            </div>
+
+            <!-- Document 5: Data Dictionary CSV -->
+            <div class="list-group-item bg-dark border border-secondary rounded-3 p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-filetype-csv text-info fs-2"></i>
+                <div>
+                  <h6 class="text-white fw-bold mb-1">Data_Dictionary.csv</h6>
+                  <small class="text-muted">11 Schema Variable Definitions, formats, and ranges • 1.2 KB</small>
+                </div>
+              </div>
+              <a href="Data_Dictionary.csv" class="btn btn-outline-emerald btn-pill btn-sm px-3 py-2 text-nowrap" download="Data_Dictionary.csv">
+                <i class="bi bi-download me-1"></i> CSV
+              </a>
+            </div>
+
+            <!-- Document 6: Recommendations CSV -->
+            <div class="list-group-item bg-dark border border-secondary rounded-3 p-3 d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-filetype-csv text-info fs-2"></i>
+                <div>
+                  <h6 class="text-white fw-bold mb-1">Recommendations.csv</h6>
+                  <small class="text-muted">Task 12 Evidence-Based Business Recommendations text export • 1.9 KB</small>
+                </div>
+              </div>
+              <a href="Recommendations.csv" class="btn btn-outline-emerald btn-pill btn-sm px-3 py-2 text-nowrap" download="Recommendations.csv">
+                <i class="bi bi-download me-1"></i> CSV
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top border-secondary border-opacity-50">
+          <button type="button" class="btn btn-outline-secondary btn-pill px-4" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="py-4 text-center border-top border-secondary border-opacity-25 mt-5">
