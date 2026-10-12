@@ -82,17 +82,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. Complete 5-Projects Data Store for Modals
   const projectDatabase = {
     'oracle-ai': {
-      title: 'Oracle AI (Spiritual AI Chatbot)',
-      category: 'AI Integration & Web Development',
-      overview: 'A specialized, front-end artificial intelligence chatbot designed to act as a mystical "Oracle". It uses prompt engineering and the Google Gemini API to provide spiritual interpretations for dreams, astrology, tarot, and numerology, formatting responses dynamically with a "cosmic" persona.',
+      title: 'Oracle AI: Spiritual Intelligence & Metaphysical Companion',
+      category: 'AI Integration, Authentication & Fintech Token Economy',
+      overview: 'A front-end artificial intelligence companion powered by Google Gemini and engineered with a dual-tier credit economy. Features mandatory Gmail authentication, 5 free daily insights that automatically regenerate every 24 hours, and an integrated PayMongo Philippines payment gateway (GCash, Maya, Cards) for purchasing extra Cosmic Insight Tokens.',
       features: [
-        'Real-time integration with Google Gemini 3.6 Flash Large Language Model',
-        'Advanced system prompting and context window management for multi-turn conversations',
-        'Custom markdown parsing for rendering "Google AI Overview" style featured snippets',
-        'Stateful UI with typing indicators, interactive suggestion chips, and responsive design'
+        'Real-time integration with Google Gemini Generative AI for spiritual interpretations, tarot, astrology, and numerology',
+        'Mandatory Google Gmail (@gmail.com) authentication and validation system with local session persistence',
+        'Dynamic 24-hour regeneration engine providing 5 free daily insights with live countdown timer display',
+        'Integrated PayMongo Test API (pk_test_wfW6N69auD5WdUXDq7dRQVam) supporting GCash, Maya, and Visa/Mastercard test transactions',
+        'Tiered Cosmic Token Store (₱49 for 10 tokens, ₱99 for 30 tokens, ₱249 for 100 tokens) with instant wallet crediting',
+        'Custom markdown parsing for rendering "Google AI Overview" spiritual featured snippets and suggested chips'
       ],
-      tech: ['Google Gemini API', 'JavaScript (ES6+)', 'HTML5 / CSS3', 'RESTful Fetch', 'JSON'],
-      erd: 'Serverless architecture. Data flows directly from the client browser to Google Generative Language API via HTTPS POST requests, retaining conversation context in local memory.'
+      tech: ['Google Gemini API', 'PayMongo API', 'JavaScript (ES6+)', 'Bootstrap 5', 'HTML5 / CSS3', 'LocalStorage'],
+      erd: 'Serverless client-side architecture integrating Google Generative Language REST API, PayMongo test gateway endpoints, and localized user account/token state schema (`oracle_users_db`).'
     },
     'ecommerce': {
       title: 'TarotKnight Crystal Art: E-Commerce Web Application',

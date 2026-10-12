@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   
   <!-- Custom Styles -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261012-v2">
 </head>
 <body class="oracle-body">
 
@@ -22,9 +22,17 @@
         <i class="bi bi-arrow-left me-2 text-info"></i>
         <span>Back to Portfolio</span>
       </a>
-      <div class="ms-auto d-flex align-items-center">
-        <i class="bi bi-stars text-warning fs-4 me-2"></i>
-        <span class="fw-bold text-white letter-spacing-1">ORACLE AI</span>
+      
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <!-- Auth & Balance Dynamic State -->
+        <div id="navAuthContainer" class="d-flex align-items-center gap-2">
+          <!-- Dynamically populated by updateAuthUI() -->
+        </div>
+
+        <div class="d-none d-md-flex align-items-center ms-2 ps-2 border-start border-secondary border-opacity-25">
+          <i class="bi bi-stars text-warning fs-5 me-1"></i>
+          <span class="fw-bold text-white letter-spacing-1 small">ORACLE AI</span>
+        </div>
       </div>
     </div>
   </nav>
@@ -35,7 +43,9 @@
       <!-- Decorative Nebula -->
       <div class="nebula-effect"></div>
       
-      <div class="section-tag mb-3 mx-auto"><i class="bi bi-stars"></i> Powered by Google Gemini</div>
+      <div class="section-tag mb-3 mx-auto">
+        <i class="bi bi-stars"></i> Powered by Google Gemini &bull; PayMongo Gateway Integrated
+      </div>
       <h1 class="oracle-title mb-3">Your Metaphysical & <span class="text-gradient-mystic">Spiritual Guide</span></h1>
       <p class="oracle-subtitle mx-auto">Consult the Oracle on Astrology, Numerology, Tarot, Palm Reading, Crystal Knowledge, and deeper spiritual wisdom.</p>
     </div>
@@ -58,10 +68,29 @@
                 <small class="text-success"><i class="bi bi-circle-fill small-icon me-1"></i> Online & Listening</small>
               </div>
             </div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="openTokenStore()" title="Recharge Cosmic Tokens">
+                <i class="bi bi-gem me-1 text-warning"></i> Buy Tokens
+              </button>
+              <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="clearChat()" title="Reset Conversation">
+                <i class="bi bi-arrow-clockwise me-1"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Quota & Regeneration Bar -->
+          <div class="chat-quota-bar">
             <div>
-               <button class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="clearChat()">
-                 <i class="bi bi-arrow-clockwise me-1"></i> Reset
-               </button>
+              <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
+              <span id="chatQuotaStatusText">Free Daily Insights: <strong class="quota-indicator-active">5 / 5</strong></span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-muted small" id="chatRegenTimer">
+                <i class="bi bi-arrow-repeat me-1"></i>Regenerates every 24h
+              </span>
+              <span class="badge bg-dark border border-warning text-warning" id="chatPaidTokensBadge" style="display:none;">
+                <i class="bi bi-gem me-1"></i><span id="chatPaidTokensCount">0</span> Tokens
+              </span>
             </div>
           </div>
 
@@ -70,7 +99,7 @@
             <!-- Initial Greeting -->
             <div class="chat-message oracle-message">
               <div class="message-content">
-                Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. What mysteries of the universe, astrology, tarot, or your life path seek illumination?
+                Greetings, seeker of truth. I am Oracle AI. The stars and energies align to bring you here today. Sign in with your Gmail to receive <strong>5 free daily insights</strong>, or recharge anytime with Cosmic Tokens. What mysteries of the universe, astrology, tarot, or your life path seek illumination?
               </div>
             </div>
           </div>
@@ -96,31 +125,334 @@
           <!-- Input Area -->
           <div class="chat-input-area">
             <form id="chatForm" class="w-100 position-relative">
-              <input type="text" id="userInput" class="chat-input" placeholder="Ask the Oracle a question..." autocomplete="off">
-              <button type="submit" class="btn-send" id="sendBtn">
+              <input type="text" id="userInput" class="chat-input" placeholder="Ask the Oracle a question (5 Free daily insights)..." autocomplete="off">
+              <button type="submit" class="btn-send" id="sendBtn" title="Send Question">
                 <i class="bi bi-send-fill"></i>
               </button>
             </form>
+            <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+              <small class="text-muted" style="font-size: 0.73rem;">
+                <i class="bi bi-shield-check text-info me-1"></i>5 free chats per 24 hours &bull; Extra chats powered by PayMongo
+              </small>
+              <small class="text-violet" style="font-size: 0.73rem; cursor: pointer;" onclick="openTokenStore()">
+                <i class="bi bi-credit-card-2-front me-1"></i>PayMongo Gateway &bull; ₱49 / 10 tokens
+              </small>
+            </div>
           </div>
           
         </div>
         
-        
         <!-- Knowledge API Notice -->
-        <div class="alert alert-dark border-info mt-4 small text-muted text-center rounded-4">
+        <div class="alert alert-dark border-info mt-4 small text-muted text-center rounded-4 shadow-sm">
           <i class="bi bi-moon-stars-fill me-1 text-info"></i>
-          <strong>Spiritual Network Active:</strong> The Oracle draws huge spiritual knowledge from the universal consciousness.
+          <strong>Universal Spiritual Gateway:</strong> Real Google Gemini generative intelligence with Gmail verification & PayMongo API token economy.
         </div>
 
       </div>
     </div>
   </section>
 
+  <!-- ================= AUTHENTICATION MODAL (GMAIL REQUIRED) ================= -->
+  <div class="modal fade modal-oracle" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-2">
+            <div class="oracle-avatar" style="width:36px;height:36px;font-size:1rem;">
+              <i class="bi bi-stars"></i>
+            </div>
+            <div>
+              <h5 class="modal-title fw-bold text-white mb-0" id="authModalLabel">Oracle Seeker Portal</h5>
+              <small class="text-gold" style="font-size: 0.75rem;">Authentication with Google Gmail</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <!-- Auth Alert Feedback -->
+          <div id="authAlert" class="alert d-none py-2 px-3 small rounded-3 mb-3"></div>
+
+          <!-- Gmail Mandate Notice -->
+          <div class="gmail-badge-notice mb-3">
+            <i class="bi bi-google text-danger fs-6"></i>
+            <span><strong>Gmail Required:</strong> Your email address must end with <strong>@gmail.com</strong> to receive free daily insights.</span>
+          </div>
+
+          <!-- Tab Navigation -->
+          <ul class="nav nav-tabs auth-tabs mb-4 justify-content-center" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="tabSignInBtn" data-bs-toggle="tab" data-bs-target="#tabSignIn" type="button" role="tab">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tabSignUpBtn" data-bs-toggle="tab" data-bs-target="#tabSignUp" type="button" role="tab">
+                <i class="bi bi-person-plus-fill me-1"></i> Create Account
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <!-- TAB 1: SIGN IN -->
+            <div class="tab-pane fade show active" id="tabSignIn" role="tabpanel">
+              <form id="signInForm">
+                <div class="mb-3">
+                  <label class="form-label small text-light fw-semibold">Gmail Address</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-danger"><i class="bi bi-envelope-at-fill"></i></span>
+                    <input type="email" class="form-control oracle-form-control" id="signInEmail" placeholder="yourname@gmail.com" required>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label small text-light fw-semibold">Password</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-info"><i class="bi bi-key-fill"></i></span>
+                    <input type="password" class="form-control oracle-form-control" id="signInPassword" placeholder="Enter your password" required>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-mystic-auth w-100 py-2 fw-bold mt-2">
+                  <i class="bi bi-stars me-1"></i> Sign In to Oracle
+                </button>
+              </form>
+
+              <!-- One-Click Demo Login -->
+              <div class="text-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                <span class="small text-muted d-block mb-2">Want to test right away without typing?</span>
+                <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-3" onclick="fillDemoAccount()">
+                  <i class="bi bi-lightning-fill text-warning me-1"></i> Quick Test: Demo Seeker (@gmail.com)
+                </button>
+              </div>
+            </div>
+
+            <!-- TAB 2: SIGN UP -->
+            <div class="tab-pane fade" id="tabSignUp" role="tabpanel">
+              <form id="signUpForm">
+                <div class="mb-3">
+                  <label class="form-label small text-light fw-semibold">Your Name or Spiritual Alias</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-warning"><i class="bi bi-person-fill"></i></span>
+                    <input type="text" class="form-control oracle-form-control" id="signUpName" placeholder="e.g. Celestial Seeker" required>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label small text-light fw-semibold">Gmail Address (@gmail.com)</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-danger"><i class="bi bi-envelope-at-fill"></i></span>
+                    <input type="email" class="form-control oracle-form-control" id="signUpEmail" placeholder="must end with @gmail.com" required>
+                  </div>
+                  <div id="signUpEmailFeedback" class="small mt-1 text-muted" style="font-size:0.75rem;">
+                    * Must end strictly with <code>@gmail.com</code>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label small text-light fw-semibold">Password</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-dark border-secondary text-info"><i class="bi bi-lock-fill"></i></span>
+                    <input type="password" class="form-control oracle-form-control" id="signUpPassword" placeholder="Minimum 6 characters" minlength="6" required>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-mystic-auth w-100 py-2 fw-bold mt-2">
+                  <i class="bi bi-gift-fill text-warning me-1"></i> Create Account & Claim 5 Free Insights
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAYMONGO TOKEN STORE MODAL ================= -->
+  <div class="modal fade modal-oracle" id="tokenStoreModal" tabindex="-1" aria-labelledby="tokenStoreLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-2">
+            <div class="oracle-avatar" style="width:38px;height:38px;font-size:1.1rem;background:linear-gradient(135deg,#d4af37,#f59e0b);">
+              <i class="bi bi-gem"></i>
+            </div>
+            <div>
+              <h5 class="modal-title fw-bold text-white mb-0" id="tokenStoreLabel">Oracle Cosmic Energy Recharge</h5>
+              <small class="text-gold" style="font-size: 0.75rem;">Integrated PayMongo Philippines Test Gateway</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <!-- Gateway Status Notice -->
+          <div class="paymongo-badge-bar mb-4">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-shield-check text-success fs-5"></i>
+              <div>
+                <strong>PayMongo Sandbox Active</strong> &bull; API Key: <code>pk_test_wfW6N69auD5WdUXDq7dRQVam</code>
+              </div>
+            </div>
+            <span class="badge bg-success bg-opacity-25 text-success border border-success">Verified</span>
+          </div>
+
+          <!-- Token Packages Selection -->
+          <label class="form-label small text-gold fw-bold text-uppercase letter-spacing-1 mb-2">1. Select Cosmic Token Package</label>
+          <div class="row g-3 mb-4">
+            <!-- Pack 1 -->
+            <div class="col-md-4">
+              <div class="token-pack-card" data-tokens="10" data-price="49" onclick="selectTokenPack(this)">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="badge bg-secondary text-light">Starlight</span>
+                  <i class="bi bi-stars text-warning fs-5"></i>
+                </div>
+                <h4 class="fw-bold text-white mb-0">10 Tokens</h4>
+                <div class="text-gold fw-bold fs-5 my-1">₱49</div>
+                <small class="text-muted d-block" style="font-size:0.75rem;">₱4.90 / insight &bull; No expiration</small>
+              </div>
+            </div>
+
+            <!-- Pack 2 (Recommended) -->
+            <div class="col-md-4">
+              <div class="token-pack-card selected" data-tokens="30" data-price="99" onclick="selectTokenPack(this)">
+                <span class="token-badge-popular">BEST VALUE</span>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="badge bg-purple text-white" style="background:#7c3aed;">Mystic</span>
+                  <i class="bi bi-gem text-warning fs-5"></i>
+                </div>
+                <h4 class="fw-bold text-white mb-0">30 Tokens</h4>
+                <div class="text-gold fw-bold fs-5 my-1">₱99</div>
+                <small class="text-muted d-block" style="font-size:0.75rem;">₱3.30 / insight &bull; +200% value</small>
+              </div>
+            </div>
+
+            <!-- Pack 3 -->
+            <div class="col-md-4">
+              <div class="token-pack-card" data-tokens="100" data-price="249" onclick="selectTokenPack(this)">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="badge bg-warning text-dark fw-bold">Celestial</span>
+                  <i class="bi bi-moon-stars-fill text-warning fs-5"></i>
+                </div>
+                <h4 class="fw-bold text-white mb-0">100 Tokens</h4>
+                <div class="text-gold fw-bold fs-5 my-1">₱249</div>
+                <small class="text-muted d-block" style="font-size:0.75rem;">₱2.49 / insight &bull; Master tier</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method Selection -->
+          <label class="form-label small text-gold fw-bold text-uppercase letter-spacing-1 mb-2">2. PayMongo Payment Channel</label>
+          <div class="d-flex gap-2 flex-wrap mb-3">
+            <div class="payment-method-pill active" data-method="gcash" onclick="selectPaymentMethod('gcash', this)">
+              <i class="bi bi-phone-fill text-primary"></i>
+              <span>GCash (e-Wallet)</span>
+            </div>
+            <div class="payment-method-pill" data-method="maya" onclick="selectPaymentMethod('maya', this)">
+              <i class="bi bi-wallet2 text-success"></i>
+              <span>Maya (PayMaya)</span>
+            </div>
+            <div class="payment-method-pill" data-method="card" onclick="selectPaymentMethod('card', this)">
+              <i class="bi bi-credit-card-2-front-fill text-warning"></i>
+              <span>Debit / Credit Card</span>
+            </div>
+          </div>
+
+          <!-- Payment Form -->
+          <form id="paymongoForm">
+            <!-- Card Details (shown if card selected) -->
+            <div id="cardFields" style="display:none;" class="p-3 rounded-3 mb-3 border border-secondary" style="background:rgba(255,255,255,0.03);">
+              <div class="mb-2">
+                <label class="form-label small text-light">Card Number</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-dark border-secondary text-light"><i class="bi bi-credit-card"></i></span>
+                  <input type="text" id="pmCardNumber" class="form-control oracle-form-control" placeholder="4343 4343 4343 4343" value="4343 4343 4343 4343">
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <label class="form-label small text-light">Expiry (MM/YY)</label>
+                  <input type="text" id="pmCardExp" class="form-control oracle-form-control" placeholder="12/28" value="12/28">
+                </div>
+                <div class="col-6">
+                  <label class="form-label small text-light">CVC</label>
+                  <input type="text" id="pmCardCvc" class="form-control oracle-form-control" placeholder="123" value="123">
+                </div>
+              </div>
+            </div>
+
+            <!-- E-Wallet Details (shown if GCash/Maya selected) -->
+            <div id="walletFields" class="p-3 rounded-3 mb-3 border border-secondary" style="background:rgba(255,255,255,0.03);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small text-light" id="walletLabel">Authorized GCash Mobile Number</span>
+                <span class="badge bg-info text-dark" style="font-size:0.7rem;">PayMongo Test Mode</span>
+              </div>
+              <div class="input-group">
+                <span class="input-group-text bg-dark border-secondary text-info">+63</span>
+                <input type="tel" id="pmWalletMobile" class="form-control oracle-form-control" placeholder="917 123 4567" value="917 888 7766">
+              </div>
+              <small class="text-muted d-block mt-1" style="font-size:0.73rem;">Simulates live PayMongo source webhook authorization with instant token credit.</small>
+            </div>
+
+            <!-- Order Summary Banner -->
+            <div class="d-flex justify-content-between align-items-center p-3 rounded-3 mb-3" style="background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(192, 132, 252, 0.3);">
+              <div>
+                <strong class="text-white d-block" id="summaryPackText">Selected: 30 Cosmic Tokens</strong>
+                <small class="text-muted">Recharging account: <span class="text-gold" id="summaryUserEmail">Seeker</span></small>
+              </div>
+              <div class="text-end">
+                <span class="text-muted small d-block">Total Amount</span>
+                <strong class="text-gold fs-4" id="summaryPriceText">₱99.00</strong>
+              </div>
+            </div>
+
+            <button type="submit" id="btnPaymongoSubmit" class="btn btn-mystic-auth w-100 py-3 fw-bold fs-6">
+              <i class="bi bi-lock-fill me-1"></i> Pay ₱99.00 via PayMongo
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ENERGY DEPLETED ALERT MODAL ================= -->
+  <div class="modal fade modal-oracle" id="energyDepletedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-4">
+        <div class="oracle-avatar mx-auto mb-3" style="width:60px;height:60px;font-size:1.8rem;background:linear-gradient(135deg,#ef4444,#dc2626);">
+          <i class="bi bi-hourglass-bottom"></i>
+        </div>
+        <h4 class="fw-bold text-white mb-2">Cosmic Energy Exhausted</h4>
+        <p class="text-light small mb-3">
+          You have utilized all <strong class="text-warning">5 free daily insights</strong>! Free insights automatically regenerate after 24 hours.
+        </p>
+
+        <div class="p-3 rounded-3 mb-4" style="background: rgba(239,68,68,0.1); border: 1px dashed rgba(239,68,68,0.4);">
+          <span class="text-danger small fw-bold d-block text-uppercase mb-1">Automatic Energy Regeneration</span>
+          <h3 class="text-white fw-bold mb-0" id="depletedCountdownTimer">24h 00m 00s</h3>
+          <small class="text-muted">Cycles every 24 hours per Gmail account</small>
+        </div>
+
+        <div class="d-flex flex-column gap-2">
+          <button type="button" class="btn-buy-tokens py-3 justify-content-center fs-6" onclick="closeDepletedAndOpenStore()">
+            <i class="bi bi-gem me-1"></i> Recharge Now via PayMongo (from ₱49)
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill py-2" data-bs-dismiss="modal">
+            Wait for 24h Regeneration
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1090;" id="toastContainer"></div>
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Marked.js for parsing markdown in AI responses -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <!-- Custom Logic -->
-  <script src="script.js"></script>
+  <script src="script.js?v=20261012-v2"></script>
 </body>
 </html>

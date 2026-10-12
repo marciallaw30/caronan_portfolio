@@ -284,3 +284,247 @@ h1, h2, h3, h4, h5, h6 {
 .text-violet {
   color: #a855f7 !important;
 }
+
+/* =======================================================
+   ORACLE AUTHENTICATION, ENERGY & PAYMONGO TOKEN STYLES
+   ======================================================= */
+
+/* Top Navigation Profile & Energy Pills */
+.nav-energy-pill {
+  background: rgba(124, 58, 237, 0.18);
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.nav-energy-pill:hover {
+  background: rgba(124, 58, 237, 0.3);
+  border-color: rgba(192, 132, 252, 0.7);
+}
+
+.nav-token-pill {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  padding: 5px 12px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fde047;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+}
+.nav-token-pill:hover {
+  background: rgba(212, 175, 55, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+}
+
+.btn-buy-tokens {
+  background: linear-gradient(135deg, #d4af37, #f59e0b);
+  border: none;
+  color: #0f051d;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 5px 12px;
+  border-radius: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+}
+.btn-buy-tokens:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+  color: #000;
+}
+
+.btn-mystic-auth {
+  background: linear-gradient(135deg, #7c3aed, #c084fc);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 6px 16px;
+  border-radius: 30px;
+  transition: all 0.25s ease;
+}
+.btn-mystic-auth:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.5);
+  color: #fff;
+}
+
+.user-avatar-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #c084fc);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Chat Quota Status Bar */
+.chat-quota-bar {
+  padding: 6px 16px;
+  background: rgba(14, 8, 25, 0.85);
+  border-bottom: 1px solid rgba(192, 132, 252, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.quota-indicator-active {
+  color: #4ade80;
+  font-weight: 600;
+}
+.quota-indicator-depleted {
+  color: #f87171;
+  font-weight: 600;
+}
+
+/* Modals Styling */
+.modal-oracle .modal-content {
+  background: #0d0619;
+  border: 1px solid rgba(192, 132, 252, 0.35);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(124, 58, 237, 0.25);
+  color: #f8fafc;
+}
+
+.modal-oracle .modal-header {
+  border-bottom: 1px solid rgba(192, 132, 252, 0.2);
+  padding: 1.25rem 1.5rem;
+}
+.modal-oracle .modal-footer {
+  border-top: 1px solid rgba(192, 132, 252, 0.2);
+  padding: 1rem 1.5rem;
+}
+
+.auth-tabs .nav-link {
+  color: #94a3b8;
+  font-weight: 600;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 18px;
+  transition: all 0.2s ease;
+}
+.auth-tabs .nav-link.active {
+  color: #c084fc;
+  background: transparent;
+  border-bottom: 2px solid #c084fc;
+}
+
+.oracle-form-control {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  color: #fff;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+}
+.oracle-form-control:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #c084fc;
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.25);
+}
+.oracle-form-control::placeholder {
+  color: #64748b;
+}
+
+.gmail-badge-notice {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  color: #fca5a5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* PayMongo Token Store Cards */
+.token-pack-card {
+  background: rgba(20, 10, 38, 0.9);
+  border: 2px solid rgba(192, 132, 252, 0.25);
+  border-radius: 16px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.token-pack-card:hover {
+  border-color: rgba(212, 175, 55, 0.8);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.2);
+}
+.token-pack-card.selected {
+  border-color: #d4af37;
+  background: linear-gradient(135deg, rgba(35, 17, 65, 0.95), rgba(45, 20, 85, 0.95));
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.35);
+}
+
+.token-badge-popular {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  transform: rotate(45deg);
+  background: linear-gradient(90deg, #d4af37, #f59e0b);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 32px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.paymongo-badge-bar {
+  background: rgba(3, 105, 161, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  color: #7dd3fc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.payment-method-pill {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.payment-method-pill.active {
+  background: rgba(124, 58, 237, 0.35);
+  border-color: #c084fc;
+  color: #fff;
+  font-weight: 600;
+}
+
