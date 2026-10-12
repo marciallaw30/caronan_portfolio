@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Mythic Gambit — Complete Game Design Document (GDD) & Tactical Chess RPG System engineered by Marcial Lawrence Jr V. Caronan and BSIT cohort at Datamex College of Saint Adeline.">
+  <meta name="author" content="Marcial Lawrence Jr V. Caronan">
+  <title>Mythic Gambit | Tactical Chess RPG — Game Design Document (BSIT)</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #070913;
+      --bg-card: rgba(15, 20, 38, 0.75);
+      --bg-card-hover: rgba(22, 30, 58, 0.9);
+      --border-color: rgba(147, 51, 234, 0.3);
+      --border-glow: rgba(168, 85, 247, 0.6);
+      --accent-violet: #a855f7;
+      --accent-purple: #7c3aed;
+      --accent-crimson: #f43f5e;
+      --accent-amber: #f59e0b;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(124, 58, 237, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(244, 63, 94, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+
+    h1, h2, h3, h4, .font-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .font-fantasy {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+
+    .font-mono {
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* Ambient Game Cyber Background */
+    .game-grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.035;
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, #ffffff 1px, transparent 1px),
+        linear-gradient(to bottom, #ffffff 1px, transparent 1px);
+    }
+
+    /* Glassmorphism Cards */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card:hover {
+      border-color: var(--border-glow);
+      box-shadow: 0 12px 32px rgba(124, 58, 237, 0.2);
+      transform: translateY(-3px);
+    }
+
+    /* Custom Buttons */
+    .btn-mythic-primary {
+      background: linear-gradient(135deg, #7c3aed, #c084fc);
+      color: #ffffff;
+      font-weight: 700;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .btn-mythic-primary:hover {
+      background: linear-gradient(135deg, #6d28d9, #a855f7);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+    }
+
+    .btn-mythic-gold {
+      background: linear-gradient(135deg, #d97706, #fbbf24);
+      color: #000000;
+      font-weight: 800;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35);
+      transition: all 0.25s ease;
+    }
+
+    .btn-mythic-gold:hover {
+      background: linear-gradient(135deg, #b45309, #f59e0b);
+      color: #000000;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+    }
+
+    .btn-mythic-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-mythic-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #ffffff;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* Badge Pills */
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(147, 51, 234, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #d8b4fe;
+    }
+
+    .tag-catalyst {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fda4af;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .tag-passive {
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: #67e8f9;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .tag-ultimate {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fde68a;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Kingdom Filter Navigation */
+    .filter-tab {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-tab:hover, .filter-tab.active {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      border-color: #c084fc;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+    }
+
+    /* Interactive 8x8 Board Simulator */
+    .tactical-board {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 3px;
+      width: 100%;
+      max-width: 500px;
+      aspect-ratio: 1 / 1;
+      background: #0f172a;
+      padding: 10px;
+      border-radius: 12px;
+      border: 2px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      margin: 0 auto;
+    }
+
+    .board-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .cell-dark {
+      background: #1e1b4b;
+    }
+
+    .cell-light {
+      background: #312e81;
+    }
+
+    .cell-volcanic {
+      background: radial-gradient(circle, #b91c1c 0%, #450a0a 100%) !important;
+      border: 1px solid #ef4444 !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+
+    .cell-verdant {
+      background: radial-gradient(circle, #047857 0%, #064e3b 100%) !important;
+      border: 1px solid #10b981 !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .cell-abyssal {
+      background: radial-gradient(circle, #0369a1 0%, #082f49 100%) !important;
+      border: 1px solid #0284c7 !important;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+    }
+
+    .cell-frost {
+      background: radial-gradient(circle, #0284c7 0%, #0e7490 100%) !important;
+      border: 1px solid #38bdf8 !important;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+
+    .cell-void {
+      background: radial-gradient(circle, #581c87 0%, #18052e 100%) !important;
+      border: 1px solid #a855f7 !important;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+
+    .board-cell:hover {
+      transform: scale(1.08);
+      z-index: 5;
+      outline: 2px solid #fbbf24;
+    }
+
+    /* Sticky Navbar */
+    .game-nav {
+      background: rgba(7, 9, 19, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(147, 51, 234, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    /* Modal Styling */
+    .game-modal .modal-content {
+      background: #0d1124;
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+    }
+
+    .kingdom-card-img {
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      transition: transform 0.4s ease;
+    }
+
+    .glass-card:hover .kingdom-card-img {
+      transform: scale(1.04);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="game-grid-overlay"></div>
+
+  <!-- Header / Navigation -->
+  <header class="game-nav py-3">
+    <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <a href="../index.html#projects" class="btn btn-sm btn-outline-secondary rounded-pill px-3 text-light">
+          <i class="bi bi-arrow-left me-1"></i> Return to Portfolio
+        </a>
+        <div class="d-flex align-items-center gap-2">
+          <span class="fs-4">♟️</span>
+          <div>
+            <div class="font-fantasy fw-bold text-white fs-5 lh-1">MYTHIC GAMBIT</div>
+            <div class="small text-muted font-mono" style="font-size: 0.72rem;">TACTICAL CHESS RPG • BSIT GAME DEV</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <a href="#kingdoms" class="btn btn-sm btn-mythic-outline d-none d-md-inline-flex">
+          <i class="bi bi-people-fill me-1"></i> 15 Kingdoms
+        </a>
+        <a href="#board-sim" class="btn btn-sm btn-mythic-outline d-none d-md-inline-flex">
+          <i class="bi bi-grid-3x3 me-1"></i> Board Simulator
+        </a>
+        <a href="../assets/docs/Game_Dev_Paper_Mythic_Gambit.docx" download="Game_Dev_Paper_Mythic_Gambit.docx" class="btn btn-sm btn-mythic-gold">
+          <i class="bi bi-file-earmark-word-fill me-1"></i> Download GDD (.docx • 44.6 MB)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="position-relative" style="z-index: 1;">
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="py-5 text-center position-relative overflow-hidden">
+      <div class="container py-4">
+
+        <!-- Academic Authority Banner -->
+        <div class="d-inline-flex align-items-center gap-2 mb-4 p-2 px-3 rounded-pill glass-card border-info" style="font-size: 0.85rem;">
+          <span class="badge bg-primary px-2 py-1"><i class="bi bi-mortarboard-fill me-1"></i> DATAMEX COLLEGE OF SAINT ADELINE</span>
+          <span class="text-light">BSIT Game Development • Submitted to <strong>Ms. Jeanniel T. Ilago</strong></span>
+        </div>
+
+        <h1 class="display-3 font-fantasy text-white fw-extrabold mb-3" style="text-shadow: 0 0 40px rgba(168, 85, 247, 0.4);">
+          MYTHIC GAMBIT
+        </h1>
+        <p class="lead font-fantasy text-info mb-3" style="letter-spacing: 0.1em;">
+          THE SHATTERING OF THE INFINITE TAPESTRY &amp; THE WAR OF THE ENDLESS SHARDS
+        </p>
+        <p class="text-light opacity-90 mx-auto mb-4" style="max-width: 820px; font-size: 1.1rem; line-height: 1.8;">
+          An original 3D turn-based tactical strategy game blueprint engineered by the BSIT development cohort. 
+          Bridging classical 8x8 chess movement logic with real-time elemental terrain transformations, unit manifestation executions, 15 mythical civilizations, and apocalyptic Queen Ultimates.
+        </p>
+
+        <!-- Project Authors Credit -->
+        <div class="glass-card p-3 mx-auto mb-4 text-start" style="max-width: 820px; border-color: rgba(147, 51, 234, 0.4);">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 border-bottom border-secondary border-opacity-25 pb-2 mb-2">
+            <span class="text-uppercase small font-mono fw-bold text-info"><i class="bi bi-people-fill me-1"></i> Development Cohort Authors:</span>
+            <span class="badge bg-dark border border-secondary text-muted">8167 Dr. A. Santos Ave, San Dionisio, Parañaque City</span>
+          </div>
+          <div class="row g-2 small text-light">
+            <div class="col-sm-6 col-md-4"><strong>• Marcial Lawrence Jr V. Caronan</strong> <span class="badge bg-primary" style="font-size: 0.65rem;">Lead Author</span></div>
+            <div class="col-sm-6 col-md-4">• Jhay L. Castro</div>
+            <div class="col-sm-6 col-md-4">• Tyron John L. Dela Cruz</div>
+            <div class="col-sm-6 col-md-4">• Kerr Cassel Pangan</div>
+            <div class="col-sm-6 col-md-4">• Kaye Emmanuel Nercua</div>
+            <div class="col-sm-6 col-md-4">• Jonvie Cantero</div>
+          </div>
+        </div>
+
+        <!-- Download & CTAs -->
+        <div class="d-flex justify-content-center gap-3 flex-wrap mb-5">
+          <a href="../assets/docs/Game_Dev_Paper_Mythic_Gambit.docx" download="Game_Dev_Paper_Mythic_Gambit.docx" class="btn-mythic-gold">
+            <i class="bi bi-cloud-arrow-down-fill fs-5"></i> Download Full Paper (.docx • 44.6 MB)
+          </a>
+          <a href="#kingdoms" class="btn-mythic-primary">
+            <i class="bi bi-shield-shaded fs-5"></i> Explore 15 Kingdoms Codex
+          </a>
+          <a href="#board-sim" class="btn-mythic-outline">
+            <i class="bi bi-controller fs-5"></i> Launch Board Simulator
+          </a>
+        </div>
+
+        <!-- Metric Stat Cards -->
+        <div class="row g-3 justify-content-center">
+          <div class="col-6 col-md-3 col-lg-2">
+            <div class="glass-card p-3">
+              <div class="font-fantasy fs-2 fw-bold text-warning">15</div>
+              <div class="small text-muted">Unique Kingdoms</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <div class="glass-card p-3">
+              <div class="font-fantasy fs-2 fw-bold text-info">8x8</div>
+              <div class="small text-muted">Planar Grid</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <div class="glass-card p-3">
+              <div class="font-fantasy fs-2 fw-bold text-danger">42</div>
+              <div class="small text-muted">Concept Artworks</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <div class="glass-card p-3">
+              <div class="font-fantasy fs-2 fw-bold text-success">5-Tier</div>
+              <div class="small text-muted">Ranked Ladder</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <div class="glass-card p-3">
+              <div class="font-fantasy fs-2 fw-bold text-purple" style="color: #c084fc;">44.6 MB</div>
+              <div class="small text-muted">Complete GDD</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= GAME DESIGN PILLARS ================= -->
+    <section class="py-5 border-top border-secondary border-opacity-25" id="pillars">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="pill-badge mb-2"><i class="bi bi-compass"></i> FOUNDATIONAL ARCHITECTURE</span>
+          <h2 class="display-5 font-title text-white">Core Game Design Pillars</h2>
+          <p class="text-muted mx-auto" style="max-width: 650px;">
+            Extracting traditional chess into a living, high-fantasy tactical battlefield governed by lore, elemental physics, and competitive balance.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <!-- Pillar 1 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 h-100">
+              <div class="fs-1 text-danger mb-3">⚔️</div>
+              <h4 class="h5 text-white fw-bold mb-2">The "Manifestation" System</h4>
+              <p class="text-muted small mb-3">
+                Standard piece captures transcend sterile grid removals. Executing an enemy piece switches into a cinematic combat sequence where the attacking unit manifests its elemental power to annihilate the opponent.
+              </p>
+              <span class="pill-badge text-danger" style="border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.1);">
+                <i class="bi bi-film"></i> Cinematic Executions
+              </span>
+            </div>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 h-100">
+              <div class="fs-1 text-info mb-3">🌋</div>
+              <h4 class="h5 text-white fw-bold mb-2">Dynamic Planar Board &amp; Terrains</h4>
+              <p class="text-muted small mb-3">
+                Tiles permanently transform as units advance. Volcanic factions scorch the board creating Heat Haze, Verdant units sprout briars with Root-Bound, and Abyssal pieces summon deep waters granting Tidal Flow mobility.
+              </p>
+              <span class="pill-badge text-info" style="border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.1);">
+                <i class="bi bi-grid-3x3"></i> Permanent Tile Mutators
+              </span>
+            </div>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 h-100">
+              <div class="fs-1 text-warning mb-3">👑</div>
+              <h4 class="h5 text-white fw-bold mb-2">Signature Queen Ultimates</h4>
+              <p class="text-muted small mb-3">
+                Upon delivering checkmate, the victorious Queen unleashes an apocalyptic finisher—from Lava Torrents and Thorn Surges to Glacial Stasis and Cosmic Vorticities—clearing the board in cinematic glory.
+              </p>
+              <span class="pill-badge text-warning" style="border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.1);">
+                <i class="bi bi-stars"></i> Post-Checkmate Finisher
+              </span>
+            </div>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 h-100">
+              <div class="fs-1 text-success mb-3">🏆</div>
+              <h4 class="h5 text-white fw-bold mb-2">Quarterly Ranked Ladder</h4>
+              <p class="text-muted small mb-3">
+                Built for competitive esports longevity: 5 ranked tiers (Bronze, Silver, Gold, Platinum, Mythic) governed by Victory Stars, matchmaking MMR, scheduled seasonal resets, and exclusive leaderboard cosmetics.
+              </p>
+              <span class="pill-badge text-success" style="border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.1);">
+                <i class="bi bi-trophy"></i> Esports Ecosystem
+              </span>
+            </div>
+          </div>
+
+          <!-- Pillar 5 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 h-100">
+              <div class="fs-1 text-purple mb-3" style="color: #c084fc;">📜</div>
+              <h4 class="h5 text-white fw-bold mb-2">The Shattered Aether-Weave Lore</h4>
+              <p class="text-muted small mb-3">
+                The cosmic Aether-Weave fractured following the Void Sovereign's betrayal. Across the cosmos, 15 distinct civilizations secured lingering Aether-Shards, each driven by distinct emotional catalysts to rewrite universal order.
+              </p>
+              <span class="pill-badge text-purple" style="border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.1); color: #d8b4fe;">
+                <i class="bi bi-book"></i> Epic High-Fantasy Lore
+              </span>
+            </div>
+          </div>
+
+          <!-- Pillar 6 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card p-4 h-100">
+              <div class="fs-1 text-primary mb-3">🎧</div>
+              <h4 class="h5 text-white fw-bold mb-2">Faction Soundscapes &amp; Audio</h4>
+              <p class="text-muted small mb-3">
+                Exhaustive audio identities for all 15 kingdoms: roaring volcanic drums for Obsidian Roost, Celtic harps for Verdant Court, clanging anvils for Iron-Anvil, and Gregorian death chants for Grave-Bound Dynasty.
+              </p>
+              <span class="pill-badge text-primary" style="border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.1);">
+                <i class="bi bi-soundwave"></i> Dynamic Audio Profiles
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 15 KINGDOMS CODEX ================= -->
+    <section class="py-5" id="kingdoms">
+      <div class="container">
+        <div class="text-center mb-4">
+          <span class="pill-badge mb-2"><i class="bi bi-shield-fill-check"></i> THE ROSTER</span>
+          <h2 class="display-5 font-title text-white">The 15 Mythical Kingdoms</h2>
+          <p class="text-muted mx-auto mb-4" style="max-width: 700px;">
+            Filter and explore all fifteen civilizations featured in the Game Design Document. Each faction maps classical chess pieces into custom thematic unit hierarchies, passive terrain traits, and Queen Ultimates.
+          </p>
+
+          <!-- Category Filter Buttons -->
+          <div class="d-flex justify-content-center gap-2 flex-wrap mb-4" id="kingdomFilters">
+            <button class="filter-tab active" data-filter="all">All (15 Kingdoms)</button>
+            <button class="filter-tab" data-filter="fire-forge">Fire &amp; Forge</button>
+            <button class="filter-tab" data-filter="nature-water">Nature &amp; Water</button>
+            <button class="filter-tab" data-filter="ice-storm">Ice &amp; Lightning</button>
+            <button class="filter-tab" data-filter="shadow-death">Shadow &amp; Death</button>
+            <button class="filter-tab" data-filter="clock-desert">Clockwork &amp; Sand</button>
+            <button class="filter-tab" data-filter="primal-blood">Primal &amp; Horde</button>
+          </div>
+        </div>
+
+        <div class="row g-4" id="kingdomsGrid">
+          <!-- Kingdom Cards will be rendered dynamically by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= INTERACTIVE 8X8 TACTICAL BOARD SIMULATOR ================= -->
+    <section class="py-5 border-top border-secondary border-opacity-25" id="board-sim">
+      <div class="container">
+        <div class="text-center mb-4">
+          <span class="pill-badge mb-2"><i class="bi bi-controller"></i> TACTICAL ENGINE PREVIEW</span>
+          <h2 class="display-5 font-title text-white">Interactive 8x8 Planar Board Simulator</h2>
+          <p class="text-muted mx-auto" style="max-width: 680px;">
+            Select a kingdom, click on tiles to simulate movement and watch dynamic terrain transformations take place in real-time. Test passive elemental abilities and trigger the Queen Ultimate animation.
+          </p>
+        </div>
+
+        <div class="row align-items-center g-4">
+          <!-- Left: Controls & Stats -->
+          <div class="col-lg-5">
+            <div class="glass-card p-4">
+              <h4 class="h5 fw-bold text-white mb-3"><i class="bi bi-sliders me-2 text-info"></i> Simulation Parameters</h4>
+              
+              <div class="mb-3">
+                <label class="form-label small text-muted font-mono">ACTIVE FACTION DOMINION</label>
+                <select id="simKingdomSelect" class="form-select bg-dark text-white border-secondary">
+                  <option value="volcanic">The Obsidian Roost (Fire / Volcanic)</option>
+                  <option value="verdant">The Verdant Court (Nature / Briars)</option>
+                  <option value="abyssal">The Abyssal Tides (Water / Tidal)</option>
+                  <option value="frost">The Frostbound Reach (Ice / Glacial)</option>
+                  <option value="void">The Abyssal Veil (Shadow / Void)</option>
+                </select>
+              </div>
+
+              <div class="p-3 rounded mb-3" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15);">
+                <div class="small fw-bold text-info mb-1" id="simPassiveName">Active Passive: Heat Haze</div>
+                <div class="small text-muted" id="simPassiveDesc">
+                  Enemy units attempting to target pieces on transformed volcanic tiles suffer reduced sightline clarity.
+                </div>
+              </div>
+
+              <div class="d-flex flex-column gap-2 mb-3">
+                <button class="btn btn-sm btn-mythic-primary w-100" id="btnQueenUltimate">
+                  <i class="bi bi-stars me-1"></i> Trigger Queen Signature Ultimate
+                </button>
+                <button class="btn btn-sm btn-outline-secondary rounded-pill w-100 text-light" id="btnResetBoard">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Board to Neutral 8x8
+                </button>
+              </div>
+
+              <div class="small font-mono text-muted text-center" id="simStatusLog">
+                Ready. Click any tile to move piece &amp; claim terrain.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Interactive 8x8 Board -->
+          <div class="col-lg-7 text-center">
+            <div class="tactical-board" id="tacticalBoard">
+              <!-- 64 cells generated via JS -->
+            </div>
+            <div class="small text-muted font-mono mt-3">
+              Standard 8x8 Tactical Grid • Files a-h, Ranks 1-8 • Permanent Terrain Transformation Active
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONCEPT ART & SYSTEM BLUEPRINTS GALLERY ================= -->
+    <section class="py-5 border-top border-secondary border-opacity-25" id="gallery">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="pill-badge mb-2"><i class="bi bi-images"></i> VISUAL ARCHIVES</span>
+          <h2 class="display-5 font-title text-white">Concept Art &amp; System Diagrams</h2>
+          <p class="text-muted mx-auto" style="max-width: 680px;">
+            High-resolution diagrams extracted directly from the original academic Game Design Document, covering piece hierarchies, board layouts, and terrain mutators.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <!-- Diagram 1 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3">
+              <img src="../assets/img/game-dev/image26.png" alt="Figure C.25 - The Planar Board" class="w-100 rounded mb-3" style="height: 200px; object-fit: cover;">
+              <h5 class="h6 fw-bold text-white mb-1">Figure C.25: The Planar Board</h5>
+              <p class="small text-muted mb-0">High-fantasy perspective board showcasing floating celestial planes and magical boundaries.</p>
+            </div>
+          </div>
+
+          <!-- Diagram 2 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3">
+              <img src="../assets/img/game-dev/image27.png" alt="Figure C.26 - Standardized 8x8 Grid" class="w-100 rounded mb-3" style="height: 200px; object-fit: cover;">
+              <h5 class="h6 fw-bold text-white mb-1">Figure C.26: Standardized 8x8 Grid</h5>
+              <p class="small text-muted mb-0">Classical chess movement coordinates aligned with tactical zone divisions.</p>
+            </div>
+          </div>
+
+          <!-- Diagram 3 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3">
+              <img src="../assets/img/game-dev/image28.jpeg" alt="Figure C.27 - Zonal Ownership" class="w-100 rounded mb-3" style="height: 200px; object-fit: cover;">
+              <h5 class="h6 fw-bold text-white mb-1">Figure C.27: Zonal Ownership</h5>
+              <p class="small text-muted mb-0">Tactical territory expansion mechanics as frontline units breach opposing boundaries.</p>
+            </div>
+          </div>
+
+          <!-- Diagram 4 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3">
+              <img src="../assets/img/game-dev/image29.jpeg" alt="Figure C.28 - Terrain Transformation" class="w-100 rounded mb-3" style="height: 200px; object-fit: cover;">
+              <h5 class="h6 fw-bold text-white mb-1">Figure C.28: Terrain Transformation</h5>
+              <p class="small text-muted mb-0">Permanent elemental tile alteration triggered by advancing kingdom pieces.</p>
+            </div>
+          </div>
+
+          <!-- Diagram 5 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3">
+              <img src="../assets/img/game-dev/image37.jpeg" alt="Figure C.37 - Manifestation Execution" class="w-100 rounded mb-3" style="height: 200px; object-fit: cover;">
+              <h5 class="h6 fw-bold text-white mb-1">Figure C.37: Manifestation Combat</h5>
+              <p class="small text-muted mb-0">Dynamic camera transition into full 3D piece-capture cinematic execution.</p>
+            </div>
+          </div>
+
+          <!-- Diagram 6 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3">
+              <img src="../assets/img/game-dev/image2.jpeg" alt="Figure C.1 - Piece Hierarchy" class="w-100 rounded mb-3" style="height: 200px; object-fit: cover;">
+              <h5 class="h6 fw-bold text-white mb-1">Figure C.1: Complete Chess Hierarchy</h5>
+              <p class="small text-muted mb-0">King, Queen, Bishop, Knight, Rook, and Pawn stylized unit manifestations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TECHNICAL ENGINE SPECIFICATIONS ================= -->
+    <section class="py-5 border-top border-secondary border-opacity-25" id="tech-specs">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="pill-badge mb-2"><i class="bi bi-cpu"></i> SYSTEMS ENGINEERING</span>
+          <h2 class="display-5 font-title text-white">Technical Architecture &amp; Engine Specs</h2>
+          <p class="text-muted mx-auto" style="max-width: 680px;">
+            Engineering requirements specified in Section XII of the paper for multiplatform deployment and optimal graphics pipeline execution.
+          </p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="font-mono text-info small mb-2">ENGINE &amp; PIPELINE</div>
+              <h5 class="text-white fw-bold mb-2">Unity / Unreal Engine 5</h5>
+              <p class="small text-muted mb-0">High-performance PBR shader graphs for dynamic elemental terrain transformation and real-time volumetric lighting.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="font-mono text-success small mb-2">TARGET PLATFORMS</div>
+              <h5 class="text-white fw-bold mb-2">PC (Steam) &amp; Mobile</h5>
+              <p class="small text-muted mb-0">Cross-play architecture with touch-optimized tactical gestures and keyboard/mouse precision grid controls.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="font-mono text-warning small mb-2">NETCODE &amp; MATCHMAKING</div>
+              <h5 class="text-white fw-bold mb-2">Deterministic Turn Logic</h5>
+              <p class="small text-muted mb-0">Server-authoritative state synchronization to prevent desynchronization, packet manipulation, or unauthorized move injections.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="glass-card p-4 h-100">
+              <div class="font-mono text-danger small mb-2">AUDIO ENGINE</div>
+              <h5 class="text-white fw-bold mb-2">FMOD / Wwise Middleware</h5>
+              <p class="small text-muted mb-0">Dynamic interactive audio layers shifting orchestral intensity based on board control and Queen Ultimates.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ACADEMIC FOOTER & DOWNLOAD CTA ================= -->
+    <section class="py-5 border-top border-secondary border-opacity-25 bg-black">
+      <div class="container text-center py-4">
+        <h3 class="display-6 font-fantasy text-white fw-bold mb-3">Download the Complete Game Design Document</h3>
+        <p class="text-muted mx-auto mb-4" style="max-width: 650px;">
+          Contains all 15 kingdoms, complete character sheets, storyboards, wireframes, technical timelines, and research citations (44.6 MB Microsoft Word format).
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+          <a href="../assets/docs/Game_Dev_Paper_Mythic_Gambit.docx" download="Game_Dev_Paper_Mythic_Gambit.docx" class="btn-mythic-gold px-5 py-3 fs-6">
+            <i class="bi bi-file-earmark-word-fill me-2 fs-5"></i> Download Original Paper (.docx • 44.6 MB)
+          </a>
+          <a href="../index.html#projects" class="btn-mythic-outline px-4 py-3 fs-6">
+            <i class="bi bi-arrow-left me-2"></i> Back to Main Portfolio
+          </a>
+        </div>
+
+        <div class="text-muted small mt-4 pt-3 border-top border-secondary border-opacity-25">
+          <p class="mb-1"><strong>Datamex College of Saint Adeline</strong> — 8167 Dr. A. Santos Avenue, San Dionisio, Parañaque City</p>
+          <p class="mb-0">Bachelor of Science in Information Technology (BSIT) • Game Development Proposal • Author: <strong>Marcial Lawrence Jr V. Caronan</strong> &amp; Cohort</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= KINGDOM DETAILS MODAL ================= -->
+  <div class="modal fade game-modal" id="kingdomModal" tabindex="-1" aria-labelledby="kingdomModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-secondary border-opacity-25">
+          <h5 class="modal-title font-fantasy fw-bold text-white d-flex align-items-center gap-2" id="kingdomModalTitle">
+            <span id="modalKingdomIcon"></span> <span id="modalKingdomName">Kingdom Name</span>
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="row g-4 align-items-center mb-4">
+            <div class="col-md-5">
+              <img id="modalKingdomImg" src="" alt="" class="w-100 rounded-3 shadow border border-secondary border-opacity-50" style="height: 240px; object-fit: cover;">
+            </div>
+            <div class="col-md-7">
+              <div class="mb-2">
+                <span class="badge bg-secondary me-2 font-mono" id="modalKingdomElement">ELEMENT</span>
+                <span class="tag-catalyst" id="modalKingdomCatalyst">Emotional Catalyst</span>
+              </div>
+              <h6 class="text-info font-mono small fw-bold mb-1">CHESS PIECE HIERARCHY</h6>
+              <p class="small text-light opacity-90 mb-3" id="modalKingdomHierarchy"></p>
+              
+              <h6 class="text-info font-mono small fw-bold mb-1">KINGDOM PASSIVE ABILITY</h6>
+              <p class="small text-light opacity-90 mb-3" id="modalKingdomPassive"></p>
+            </div>
+          </div>
+
+          <div class="p-3 rounded-3" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25);">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="bi bi-stars text-warning fs-5"></i>
+              <strong class="text-warning small text-uppercase font-mono">Queen Signature Ultimate Move</strong>
+            </div>
+            <p class="small text-light mb-0" id="modalKingdomUltimate"></p>
+          </div>
+        </div>
+        <div class="modal-footer border-secondary border-opacity-25">
+          <a href="../assets/docs/Game_Dev_Paper_Mythic_Gambit.docx" download="Game_Dev_Paper_Mythic_Gambit.docx" class="btn btn-sm btn-mythic-gold">
+            <i class="bi bi-download me-1"></i> Download Complete GDD (.docx)
+          </a>
+          <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Game Dev Interactive Logic -->
+  <script>
+    // 15 Complete Kingdoms Database extracted from Game Dev Paper.docx
+    const kingdomsData = [
+      {
+        id: "obsidian",
+        name: "The Obsidian Roost",
+        category: "fire-forge",
+        element: "Fire & Draconic",
+        icon: "🔥",
+        img: "../assets/img/game-dev/image11.jpeg",
+        catalyst: "Wrath & Territorial Ferocity",
+        hierarchy: "King: The Eternal Drake | Queen: The Ash Matriarch | Bishop: Cinder Cleric | Knight: Flame-Winged Vanguard | Rook: Magma Bastion | Pawn: Scaled Hatchling",
+        passive: "Heat Haze: Volcanic terrain emits thermal distortions reducing enemy ranged accuracy by 25% on claimed tiles.",
+        ultimate: "Lava Torrent: The Ash Matriarch ruptures the planar board, showering opposing squares in catastrophic volcanic lava."
+      },
+      {
+        id: "verdant",
+        name: "The Verdant Court",
+        category: "nature-water",
+        element: "Nature & Enchantment",
+        icon: "🌿",
+        img: "../assets/img/game-dev/image12.jpeg",
+        catalyst: "Harmony & Protective Resentment",
+        hierarchy: "King: The Elder Dryad | Queen: The Forest Matriarch | Bishop: Thorn Warden | Knight: Stag-Rider | Rook: Ancient Treant | Pawn: Sproutling",
+        passive: "Root-Bound: Units landing on Verdant tiles sprout thorny briars that restrict enemy piece mobility on subsequent turns.",
+        ultimate: "Thorn Surge: The Forest Matriarch commands primeval roots to erupt across the entire 8x8 grid, entangling all hostile remnants."
+      },
+      {
+        id: "iron-anvil",
+        name: "The Iron-Anvil Forge",
+        category: "fire-forge",
+        element: "Earth & Industrial Metallurgy",
+        icon: "⚒️",
+        img: "../assets/img/game-dev/image13.jpeg",
+        catalyst: "Pride & Unyielding Stubbornness",
+        hierarchy: "King: High Forge-Master | Queen: Mistress of Smelting | Bishop: Runic Smith | Knight: Armored Boar-Rider | Rook: Iron Spire | Pawn: Foundry Apprentice",
+        passive: "Reinforced Plate: Friendly pieces on Forge terrain gain temporary capture immunity on the initial frontline clash.",
+        ultimate: "Geothermal Overload: Unleashes pressurized volcanic geothermal steam across opposing files, melting hostile defenses."
+      },
+      {
+        id: "abyssal-tides",
+        name: "The Abyssal Tides",
+        category: "nature-water",
+        element: "Water & Bioluminescence",
+        icon: "🌊",
+        img: "../assets/img/game-dev/image14.jpeg",
+        catalyst: "Isolation & Mourning",
+        hierarchy: "King: Abyssal Monarch | Queen: Leviathan Matriarch | Bishop: Trench Oracle | Knight: Deep-Sea Manta | Rook: Coral Fortress | Pawn: Nautiloid",
+        passive: "Tidal Flow: Pieces moving across flooded tiles gain +1 diagonal movement extension over watery boundaries.",
+        ultimate: "Crushing Deluge: Summons a towering tidal tsunami that swallows the opposing side of the planar board."
+      },
+      {
+        id: "frostbound",
+        name: "The Frostbound Reach",
+        category: "ice-storm",
+        element: "Ice & Permafrost",
+        icon: "❄️",
+        img: "../assets/img/game-dev/image15.jpeg",
+        catalyst: "Cold Vengeance & Stoicism",
+        hierarchy: "King: Glacial Sovereign | Queen: Frost Matriarch | Bishop: Shard Weaver | Knight: Ice-Fang Wolf | Rook: Spire of Rime | Pawn: Snow Strider",
+        passive: "Permafrost: Enemy pieces stepping onto Glacial terrain lose 1 movement turn due to freezing crystallizations.",
+        ultimate: "Glacial Stasis: Encapsulates the entire battlefield in crystalline permafrost, shattering enemy pieces into ice shards."
+      },
+      {
+        id: "fulminating",
+        name: "The Fulminating Spire",
+        category: "ice-storm",
+        element: "Lightning & Storm Energy",
+        icon: "⚡",
+        img: "../assets/img/game-dev/image16.jpeg",
+        catalyst: "Hyperactive Impatience & Ambition",
+        hierarchy: "King: Thunder Lord | Queen: Storm Matriarch | Bishop: Volt Magus | Knight: Lightning Stallion | Rook: Dynamo Pillar | Pawn: Spark Thrall",
+        passive: "Static Charge: Capturing a unit discharges a chain-lightning arc that debuffs adjacent opposing squares.",
+        ultimate: "Thunderstorm: Calls down cataclysmic atmospheric lightning bolts simultaneously across all 64 planar coordinates."
+      },
+      {
+        id: "gossamer",
+        name: "The Gossamer Glade",
+        category: "nature-water",
+        element: "Fairy & Illusions",
+        icon: "✨",
+        img: "../assets/img/game-dev/image17.png",
+        catalyst: "Mischief & Escapism",
+        hierarchy: "King: Fae Sovereign | Queen: Glimmer Empress | Bishop: Mirage Seer | Knight: Dragonfly Rider | Rook: Will-o'-Wisp | Pawn: Sprite",
+        passive: "Glimmer Decoys: 30% chance for incoming tactical attacks to target a lingering optical fae illusion.",
+        ultimate: "Fae Trap: Distorts planar space-time, scattering enemy pieces into an ethereal labyrinth of illusions."
+      },
+      {
+        id: "titan",
+        name: "The Titan's Foothold",
+        category: "fire-forge",
+        element: "Tectonic & Mountain",
+        icon: "🏔️",
+        img: "../assets/img/game-dev/image18.png",
+        catalyst: "Steadfast Resignation",
+        hierarchy: "King: Granite Monarch | Queen: Tectonic Matriarch | Bishop: Stone Chanter | Knight: Boulder Charger | Rook: Monolith | Pawn: Pebble Thrall",
+        passive: "Seismic Anchor: Friendly pieces on Tectonic tiles cannot be displaced or force-moved by enemy passives.",
+        ultimate: "Earth Cleave: Splits the 8x8 grid along fault lines, swallowing opposing backlines into the mantle."
+      },
+      {
+        id: "iron-tusk",
+        name: "The Iron-Tusk Horde",
+        category: "primal-blood",
+        element: "Orcish Warfare & Brutality",
+        icon: "🪓",
+        img: "../assets/img/game-dev/image19.png",
+        catalyst: "Conquest & Bloodlust",
+        hierarchy: "King: Warlord Supreme | Queen: War-Clan Matriarch | Bishop: Blood Shaman | Knight: Tusker Charger | Rook: Siege Tower | Pawn: Grunt",
+        passive: "Bloodrush: Moving into enemy territory grants aggressive tactical bonuses for consecutive pawn advances.",
+        ultimate: "Rampage: The War-Clan Matriarch summons a thundering stampede of war beasts flattening the opposition."
+      },
+      {
+        id: "sanguine",
+        name: "The Sanguine Court",
+        category: "primal-blood",
+        element: "Vampiric & Blood Magic",
+        icon: "🩸",
+        img: "../assets/img/game-dev/image20.png",
+        catalyst: "Decadence & Existential Dread",
+        hierarchy: "King: Sanguine Monarch | Queen: Blood Countess | Bishop: Crimson Priest | Knight: Night-Wing Charger | Rook: Mausoleum | Pawn: Thrall",
+        passive: "Life Siphon: Capturing an enemy unit restores a fallen friendly pawn onto an unoccupied friendly baseline file.",
+        ultimate: "Crimson Eclipse: Turns the battlefield sky blood-red, draining vital essence from every opposing unit."
+      },
+      {
+        id: "howling",
+        name: "The Howling Pack",
+        category: "primal-blood",
+        element: "Werewolf & Lunar Primal",
+        icon: "🐺",
+        img: "../assets/img/game-dev/image21.jpeg",
+        catalyst: "Ferity & Pack Loyalty",
+        hierarchy: "King: Alpha Sovereign | Queen: Lunar Matriarch | Bishop: Pack Shaman | Knight: Moon Stalker | Rook: Den Rock | Pawn: Wolfkin",
+        passive: "Moonlight Scent: Friendly pieces gain cooperative flank bonuses when attacking within 2 squares of the Queen.",
+        ultimate: "Spectral Tear: Summons a spectral lunar wolf pack that pounces across every open diagonal file."
+      },
+      {
+        id: "abyssal-veil",
+        name: "The Abyssal Veil",
+        category: "shadow-death",
+        element: "Void & Shadows",
+        icon: "🌑",
+        img: "../assets/img/game-dev/image22.jpeg",
+        catalyst: "Emptiness & Bitterness",
+        hierarchy: "King: Void King | Queen: Shadow Queen | Bishop: Void Mage | Knight: Shadow Stalker | Rook: Void Pillar | Pawn: Shade",
+        passive: "Shadow Walk: Once per match, a Shadow piece may swap positions with any friendly unit across infinite distance.",
+        ultimate: "The Vortex: Dissolves the planar board into a swirling black hole that pulls all remaining enemy pieces into nothingness."
+      },
+      {
+        id: "gearwork",
+        name: "The Gearwork Citadel",
+        category: "clock-desert",
+        element: "Clockwork & Steam Tech",
+        icon: "⚙️",
+        img: "../assets/img/game-dev/image23.jpeg",
+        catalyst: "Obsessive Perfectionism",
+        hierarchy: "King: Grand Inventor | Queen: Gear Matriarch | Bishop: Aether-Smith | Knight: Clockwork Steed | Rook: Steam Engine | Pawn: Automaton",
+        passive: "Overclock: Friendly units adjacent to Clockwork pieces gain +1 maximum movement distance on mechanical tiles.",
+        ultimate: "The Clockwork Mechanism: Retracts tiles into a colossal spinning brass clock-machine that grinds the board to dust."
+      },
+      {
+        id: "sun-scorched",
+        name: "The Sun-Scorched Sands",
+        category: "clock-desert",
+        element: "Desert Heat & Mirages",
+        icon: "🏜️",
+        img: "../assets/img/game-dev/image24.jpeg",
+        catalyst: "Endurance & Sorrow",
+        hierarchy: "King: Sultan of Sand | Queen: Sand Matriarch | Bishop: Dune Mage | Knight: Dune Strider | Rook: Oasis Gate | Pawn: Nomad",
+        passive: "Mirage Veil: Units targeted by long-range attacks (Bishops/Rooks) have a 50% chance of evading as a shimmering mirage.",
+        ultimate: "Colossal Sandstorm: Engulfs the entire board beneath thousands of tons of suffocating shifting dunes."
+      },
+      {
+        id: "grave-bound",
+        name: "The Grave-Bound Dynasty",
+        category: "shadow-death",
+        element: "Necromancy & Souls",
+        icon: "💀",
+        img: "../assets/img/game-dev/image25.jpeg",
+        catalyst: "Cold Acceptance & Remorse",
+        hierarchy: "King: The Lich Lord | Queen: The Death Matriarch | Bishop: The Soul-Weaver | Knight: Skeletal Charger | Rook: Crypt Guardian | Pawn: Risen Thrall",
+        passive: "Soul Binding: Captured pieces leave a Soul Well for 2 turns; moving onto it grants Spectral Protection from capture.",
+        ultimate: "Subterranean Abyss: Splits the earth, summoning thousands of skeletal arms that drag remaining pieces into the underworld."
+      }
+    ];
+
+    // Render 15 Kingdoms
+    function renderKingdoms(filter = "all") {
+      const container = document.getElementById('kingdomsGrid');
+      container.innerHTML = '';
+
+      const filtered = filter === "all" 
+        ? kingdomsData 
+        : kingdomsData.filter(k => k.category === filter);
+
+      filtered.forEach(k => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4';
+        col.innerHTML = `
+          <div class="glass-card h-100 d-flex flex-column">
+            <div class="position-relative overflow-hidden">
+              <img src="${k.img}" alt="${k.name}" class="w-100 kingdom-card-img">
+              <span class="position-absolute top-0 start-0 m-3 pill-badge bg-dark bg-opacity-75 border-secondary">
+                ${k.icon} ${k.element}
+              </span>
+            </div>
+            <div class="p-4 d-flex flex-column flex-grow-1">
+              <h4 class="h5 fw-bold text-white mb-2">${k.name}</h4>
+              <div class="mb-3">
+                <span class="tag-catalyst me-1 mb-1 d-inline-block"><i class="bi bi-heart-pulse-fill me-1"></i>${k.catalyst}</span>
+              </div>
+              
+              <div class="small text-muted mb-2">
+                <strong class="text-info font-mono">PASSIVE:</strong> ${k.passive.substring(0, 75)}...
+              </div>
+
+              <div class="small text-muted mb-3">
+                <strong class="text-warning font-mono">ULTIMATE:</strong> ${k.ultimate.substring(0, 75)}...
+              </div>
+
+              <button class="btn btn-sm btn-mythic-outline w-100 mt-auto" onclick="openKingdomModal('${k.id}')">
+                <i class="bi bi-info-circle me-1"></i> View Hierarchy &amp; Full Lore
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+    // Modal Handler
+    function openKingdomModal(id) {
+      const k = kingdomsData.find(item => item.id === id);
+      if (!k) return;
+
+      document.getElementById('modalKingdomName').textContent = k.name;
+      document.getElementById('modalKingdomIcon').textContent = k.icon;
+      document.getElementById('modalKingdomImg').src = k.img;
+      document.getElementById('modalKingdomImg').alt = k.name;
+      document.getElementById('modalKingdomElement').textContent = k.element;
+      document.getElementById('modalKingdomCatalyst').textContent = `Catalyst: ${k.catalyst}`;
+      document.getElementById('modalKingdomHierarchy').textContent = k.hierarchy;
+      document.getElementById('modalKingdomPassive').textContent = k.passive;
+      document.getElementById('modalKingdomUltimate').textContent = k.ultimate;
+
+      const modal = new bootstrap.Modal(document.getElementById('kingdomModal'));
+      modal.show();
+    }
+
+    // Filter Buttons
+    document.querySelectorAll('#kingdomFilters .filter-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#kingdomFilters .filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderKingdoms(btn.getAttribute('data-filter'));
+      });
+    });
+
+    // Interactive 8x8 Board Simulator Setup
+    const pieceIcons = {
+      p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚',
+      P: '♙', R: '♖', N: '♘', B: '♗', Q: '♕', K: '♔'
+    };
+
+    const initialBoard = [
+      ['r','n','b','q','k','b','n','r'],
+      ['p','p','p','p','p','p','p','p'],
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['','','','','','','',''],
+      ['P','P','P','P','P','P','P','P'],
+      ['R','N','B','Q','K','B','N','R']
+    ];
+
+    let currentBoardState = JSON.parse(JSON.stringify(initialBoard));
+    let cellTerrains = Array(8).fill(null).map(() => Array(8).fill(''));
+
+    function renderBoard() {
+      const boardEl = document.getElementById('tacticalBoard');
+      boardEl.innerHTML = '';
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const cell = document.createElement('div');
+          const isLight = (r + c) % 2 === 0;
+          cell.className = `board-cell ${isLight ? 'cell-light' : 'cell-dark'}`;
+          
+          if (cellTerrains[r][c]) {
+            cell.classList.add(`cell-${cellTerrains[r][c]}`);
+          }
+
+          const piece = currentBoardState[r][c];
+          if (piece) {
+            cell.textContent = pieceIcons[piece] || piece;
+            cell.style.color = piece === piece.toUpperCase() ? '#fbbf24' : '#e2e8f0';
+          }
+
+          cell.addEventListener('click', () => handleCellClick(r, c));
+          boardEl.appendChild(cell);
+        }
+      }
+    }
+
+    let selectedCell = null;
+
+    function handleCellClick(r, c) {
+      const faction = document.getElementById('simKingdomSelect').value;
+      const statusLog = document.getElementById('simStatusLog');
+
+      if (!selectedCell) {
+        if (currentBoardState[r][c]) {
+          selectedCell = { r, c, piece: currentBoardState[r][c] };
+          statusLog.textContent = `Selected piece at ${String.fromCharCode(97 + c)}${8 - r}. Click target square to advance.`;
+        }
+      } else {
+        // Move piece
+        const oldR = selectedCell.r;
+        const oldC = selectedCell.c;
+        const piece = selectedCell.piece;
+
+        currentBoardState[oldR][oldC] = '';
+        currentBoardState[r][c] = piece;
+
+        // Mutate terrain
+        cellTerrains[r][c] = faction;
+        statusLog.textContent = `Moved to ${String.fromCharCode(97 + c)}${8 - r}. Tile permanently transformed to ${faction.toUpperCase()} terrain!`;
+        selectedCell = null;
+        renderBoard();
+      }
+    }
+
+    // Reset Board
+    document.getElementById('btnResetBoard').addEventListener('click', () => {
+      currentBoardState = JSON.parse(JSON.stringify(initialBoard));
+      cellTerrains = Array(8).fill(null).map(() => Array(8).fill(''));
+      document.getElementById('simStatusLog').textContent = 'Board reset to neutral classical coordinates.';
+      renderBoard();
+    });
+
+    // Faction Selector
+    document.getElementById('simKingdomSelect').addEventListener('change', (e) => {
+      const val = e.target.value;
+      const pName = document.getElementById('simPassiveName');
+      const pDesc = document.getElementById('simPassiveDesc');
+
+      if (val === 'volcanic') {
+        pName.textContent = 'Active Passive: Heat Haze';
+        pDesc.textContent = 'Volcanic terrain emits thermal distortions reducing enemy ranged accuracy by 25%.';
+      } else if (val === 'verdant') {
+        pName.textContent = 'Active Passive: Root-Bound';
+        pDesc.textContent = 'Units landing on briars suffer root-bound movement limitations on subsequent turns.';
+      } else if (val === 'abyssal') {
+        pName.textContent = 'Active Passive: Tidal Flow';
+        pDesc.textContent = 'Units gain +1 diagonal movement extension across flooded planar tiles.';
+      } else if (val === 'frost') {
+        pName.textContent = 'Active Passive: Permafrost';
+        pDesc.textContent = 'Enemy pieces stepping on glacial terrain lose 1 movement turn due to freezing.';
+      } else if (val === 'void') {
+        pName.textContent = 'Active Passive: Shadow Walk';
+        pDesc.textContent = 'Allows instantaneous piece swap with any allied unit across the board.';
+      }
+    });
+
+    // Queen Ultimate Trigger
+    document.getElementById('btnQueenUltimate').addEventListener('click', () => {
+      const faction = document.getElementById('simKingdomSelect').value;
+      const statusLog = document.getElementById('simStatusLog');
+      statusLog.textContent = '🔥 QUEEN SIGNATURE ULTIMATE TRIGGERED! APOCALYPTIC PLANAR WIPEOUT IN PROGRESS...';
+
+      // Wave animation across all cells
+      const cells = document.querySelectorAll('.board-cell');
+      cells.forEach((cell, idx) => {
+        setTimeout(() => {
+          cell.classList.add(`cell-${faction}`);
+          cell.style.transform = 'scale(1.15)';
+          setTimeout(() => {
+            cell.style.transform = 'scale(1)';
+          }, 300);
+        }, idx * 15);
+      });
+
+      setTimeout(() => {
+        statusLog.textContent = 'Checkmate confirmed. Victorious Queen ultimate sequence completed.';
+      }, 1200);
+    });
+
+    // Init on DOM ready
+    document.addEventListener('DOMContentLoaded', () => {
+      renderKingdoms('all');
+      renderBoard();
+    });
+  </script>
+</body>
+</html>

@@ -37,6 +37,7 @@ $mimeTypes = @{
     ".xlsx" = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ".docx" = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ".pdf"  = "application/pdf"
+    ".zip"  = "application/zip"
 }
 
 while ($listener.IsListening) {

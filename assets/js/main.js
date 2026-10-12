@@ -112,6 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
       tech: ['JavaScript (ES6+)', 'Bootstrap 5.3', 'PayMongo API', 'J&T Express Logistics API', 'HTML5 / CSS3', 'HTML5 LocalStorage', 'Cinzel & Outfit Fonts'],
       erd: 'Client-server e-commerce architecture managing `CRYSTAL_PRODUCTS` (44 SKUs), `simulatedOrders` (Waybills & Timelines), `SPIRITUAL_SERVICES` (Appointments), and `cart` session storage.'
     },
+    'mythic-gambit': {
+      title: 'Mythic Gambit: Tactical High-Fantasy Chess RPG',
+      category: 'Game Systems Engineering, Strategy Mechanics & GDD Architecture',
+      overview: 'A visionary 3D turn-based tactical strategy game blueprint engineered by Lead Author Marcial Lawrence Jr V. Caronan and the BSIT development cohort at Datamex College of Saint Adeline (Submitted to Ms. Jeanniel T. Ilago). Bridges the classical 8x8 movement logic of chess with real-time planar terrain transformations, cinematic manifestation combat executions, 15 distinct mythical civilizations, and apocalyptic Queen Signature Ultimates.',
+      features: [
+        'Complete Game Design Document (GDD • 44.6 MB Microsoft Word) detailing narrative lore, systems design, 42 concept artworks, wireframes, and production timelines',
+        'The Manifestation Combat System: Capture events initiate 3D kingdom-specific cinematic combat sequences powered by elemental and cultural magic',
+        'Dynamic Planar Board & Terrains: Advancing units permanently convert tiles into elemental domains (Heat Haze, Root-Bound, Tidal Flow, Static Charge, Permafrost)',
+        'Extensive 15-Kingdom Elemental Hierarchy: Maps traditional chess pieces into unique thematic manifestations with customized emotional catalysts and passive traits',
+        'Queen Signature Ultimates: Dramatic post-checkmate apocalyptic cinematics (Lava Torrent, Thorn Surge, Crushing Deluge, The Vortex, Subterranean Abyss)',
+        'Quarterly Ranked Esports Ladder: 5-tier competitive progression (Bronze, Silver, Gold, Platinum, Mythic) governed by Victory Stars, seasonal rollback, and live-ops meta-balancing',
+        'Interactive Web Showcase Hub: Fully responsive browser-based GDD codex with filterable kingdom roster and playable 8x8 planar board simulator'
+      ],
+      tech: ['Game Design Architecture', 'Turn-Based Strategy Systems', 'Unity / Unreal Engine 5 Pipelines', 'PBR Shader Graph', 'FMOD / Wwise Audio', 'Competitive Matchmaking Netcode'],
+      erd: 'Game State Matrix: `TacticalGrid` (8x8 Coordinates a1-h8), `ActiveFaction` (15 Kingdoms), `PieceManifestation` (King to Pawn), `TileTerrainState` (Neutral vs Elemental), and `RankedMMR` (5 Tiers).'
+    },
     'employee-mgmt': {
       title: 'DATAMEX College HRIS & Automated Payroll Portal',
       category: 'Enterprise Web & Operations Engineering',
