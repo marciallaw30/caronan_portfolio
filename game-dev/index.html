@@ -237,78 +237,248 @@
     }
 
     /* Interactive 8x8 Board Simulator */
-    .tactical-board {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(8, 1fr);
-      gap: 3px;
+    /* ================= 3D / 4D PLANAR SIMULATION ENGINE ================= */
+    .planar-stage-3d {
+      perspective: 1200px;
+      perspective-origin: 50% 38%;
       width: 100%;
-      max-width: 500px;
-      aspect-ratio: 1 / 1;
-      background: #0f172a;
-      padding: 10px;
-      border-radius: 12px;
-      border: 2px solid rgba(168, 85, 247, 0.4);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      margin: 0 auto;
-    }
-
-    .board-cell {
+      min-height: 520px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
-      border-radius: 4px;
-      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 35%, #1e0d3a 0%, #0b051c 60%, #020108 100%);
+      border-radius: 20px;
+      border: 2px solid rgba(168, 85, 247, 0.45);
+      box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.95), 0 20px 45px rgba(0, 0, 0, 0.85);
       user-select: none;
-      transition: all 0.2s ease;
+    }
+
+    /* 4D Spacetime Orbital Celestial Rings */
+    .aether-ring-4d {
+      position: absolute;
+      width: 580px;
+      height: 580px;
+      border: 2px dashed rgba(236, 72, 153, 0.35);
+      border-radius: 50%;
+      transform: rotateX(72deg) translateZ(-60px);
+      animation: spinAetherRing 40s linear infinite;
+      pointer-events: none;
+      box-shadow: 0 0 35px rgba(236, 72, 153, 0.15);
+    }
+
+    .aether-ring-inner-4d {
+      position: absolute;
+      width: 440px;
+      height: 440px;
+      border: 1px dotted rgba(56, 189, 248, 0.3);
+      border-radius: 50%;
+      transform: rotateX(66deg) translateZ(-30px);
+      animation: spinAetherRingRev 28s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes spinAetherRing {
+      from { transform: rotateX(72deg) rotateZ(0deg) translateZ(-60px); }
+      to { transform: rotateX(72deg) rotateZ(360deg) translateZ(-60px); }
+    }
+
+    @keyframes spinAetherRingRev {
+      from { transform: rotateX(66deg) rotateZ(360deg) translateZ(-30px); }
+      to { transform: rotateX(66deg) rotateZ(0deg) translateZ(-30px); }
+    }
+
+    /* 3D Floating Planar Board */
+    .planar-board-3d {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 5px;
+      width: 420px;
+      height: 420px;
+      transform-style: preserve-3d;
+      padding: 14px;
+      background: linear-gradient(135deg, #241442 0%, #0e071f 100%);
+      border-radius: 16px;
+      border: 3px solid rgba(168, 85, 247, 0.65);
+      box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.95),
+        0 10px 25px rgba(139, 92, 246, 0.35),
+        inset 0 0 25px rgba(168, 85, 247, 0.3);
+      transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.5s ease;
       position: relative;
     }
 
-    .cell-dark {
-      background: #1e1b4b;
+    /* 3D Extrusion Foundation Underneath (Planar Rock Slab) */
+    .planar-board-3d::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #180a30, #04010b);
+      transform: translateZ(-24px);
+      box-shadow: 0 40px 60px rgba(0, 0, 0, 0.98);
+      border: 2px solid rgba(124, 58, 237, 0.4);
+      pointer-events: none;
     }
 
-    .cell-light {
-      background: #312e81;
+    /* Camera View Modes */
+    .planar-board-3d.view-isometric {
+      transform: rotateX(54deg) rotateZ(-22deg) translateZ(10px);
+    }
+    .planar-board-3d.view-cinematic {
+      transform: rotateX(66deg) rotateZ(-12deg) scale(1.15) translateZ(20px);
+    }
+    .planar-board-3d.view-topdown {
+      transform: rotateX(0deg) rotateZ(0deg) scale(0.96) translateZ(0);
+    }
+    .planar-board-3d.view-4d-phase {
+      transform: rotateX(50deg) rotateZ(32deg) scale(1.08) translateZ(25px);
+      filter: drop-shadow(0 0 35px rgba(236, 72, 153, 0.7)) hue-rotate(30deg);
+      animation: chronoFloat4D 5s ease-in-out infinite alternate;
     }
 
+    @keyframes chronoFloat4D {
+      0% { transform: rotateX(50deg) rotateZ(32deg) translateZ(15px); }
+      100% { transform: rotateX(56deg) rotateZ(28deg) translateZ(40px); }
+    }
+
+    /* 3D Cell Architecture */
+    .board-cell-3d {
+      transform-style: preserve-3d;
+      position: relative;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.25s ease, background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.08), 0 4px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    .board-cell-3d.cell-light {
+      background: linear-gradient(135deg, #3730a3 0%, #1e1b4b 100%);
+      border: 1px solid rgba(165, 180, 252, 0.22);
+    }
+
+    .board-cell-3d.cell-dark {
+      background: linear-gradient(135deg, #1a1033 0%, #0a0417 100%);
+      border: 1px solid rgba(139, 92, 246, 0.18);
+    }
+
+    .board-cell-3d:hover {
+      transform: translateZ(14px);
+      box-shadow: 0 10px 22px rgba(251, 191, 36, 0.45);
+      border-color: #fbbf24 !important;
+      z-index: 30;
+    }
+
+    /* 3D Kingdom Terrains */
     .cell-volcanic {
-      background: radial-gradient(circle, #b91c1c 0%, #450a0a 100%) !important;
-      border: 1px solid #ef4444 !important;
-      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+      background: radial-gradient(circle, #ef4444 0%, #991b1b 50%, #450a0a 100%) !important;
+      border: 1px solid #f87171 !important;
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.7), inset 0 0 8px rgba(254, 240, 138, 0.5) !important;
+      animation: magmaPulse 2.5s infinite alternate;
+    }
+    @keyframes magmaPulse {
+      from { box-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
+      to { box-shadow: 0 0 24px rgba(251, 146, 60, 0.95), inset 0 0 14px rgba(254, 240, 138, 0.7); }
     }
 
     .cell-verdant {
-      background: radial-gradient(circle, #047857 0%, #064e3b 100%) !important;
-      border: 1px solid #10b981 !important;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+      background: radial-gradient(circle, #10b981 0%, #065f46 60%, #022c22 100%) !important;
+      border: 1px solid #34d399 !important;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.7), inset 0 0 8px rgba(110, 231, 183, 0.5) !important;
+      animation: briarPulse 3s infinite alternate;
+    }
+    @keyframes briarPulse {
+      from { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+      to { box-shadow: 0 0 22px rgba(52, 211, 153, 0.9); }
     }
 
     .cell-abyssal {
-      background: radial-gradient(circle, #0369a1 0%, #082f49 100%) !important;
-      border: 1px solid #0284c7 !important;
-      box-shadow: 0 0 10px rgba(2, 132, 199, 0.5);
+      background: radial-gradient(circle, #0284c7 0%, #075985 60%, #032b43 100%) !important;
+      border: 1px solid #38bdf8 !important;
+      box-shadow: 0 0 18px rgba(2, 132, 199, 0.7) !important;
     }
 
     .cell-frost {
-      background: radial-gradient(circle, #0284c7 0%, #0e7490 100%) !important;
-      border: 1px solid #38bdf8 !important;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+      background: radial-gradient(circle, #38bdf8 0%, #0369a1 60%, #082f49 100%) !important;
+      border: 1px solid #7dd3fc !important;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7), inset 0 0 10px rgba(224, 242, 254, 0.6) !important;
     }
 
     .cell-void {
-      background: radial-gradient(circle, #581c87 0%, #18052e 100%) !important;
-      border: 1px solid #a855f7 !important;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+      background: radial-gradient(circle, #7c3aed 0%, #4c1d95 60%, #1e0938 100%) !important;
+      border: 1px solid #c084fc !important;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.85) !important;
     }
 
-    .cell-selected {
-      outline: 3px solid #f59e0b !important;
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.85) !important;
+    /* 3D Piece Architecture */
+    .piece-container-3d {
+      transform-style: preserve-3d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .piece-shadow-3d {
+      position: absolute;
+      bottom: 2px;
+      width: 24px;
+      height: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      filter: blur(2px);
+      transform: translateZ(2px);
+      transition: all 0.25s ease;
+    }
+
+    .piece-symbol-3d {
+      font-size: 1.5rem;
+      line-height: 1;
+      transform: translateZ(20px) rotateX(-35deg);
+      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
+      filter: drop-shadow(0 6px 6px rgba(0, 0, 0, 0.9));
+      position: relative;
       z-index: 10;
     }
 
+    .piece-gold .piece-symbol-3d {
+      color: #fef08a;
+      text-shadow: 0 0 12px rgba(245, 158, 11, 0.85), 0 0 20px rgba(217, 119, 6, 0.6);
+    }
+
+    .piece-black .piece-symbol-3d {
+      color: #f1f5f9;
+      text-shadow: 0 0 12px rgba(139, 92, 246, 0.85), 0 0 20px rgba(99, 102, 241, 0.6);
+    }
+
+    /* Selected 3D Levitation */
+    .cell-selected {
+      outline: 3px solid #f59e0b !important;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.9) !important;
+      z-index: 40;
+    }
+
+    .cell-selected .piece-symbol-3d {
+      transform: translateZ(36px) rotateX(-35deg) scale(1.25);
+      filter: drop-shadow(0 14px 18px rgba(245, 158, 11, 0.95));
+    }
+
+    .cell-selected .piece-shadow-3d {
+      width: 18px;
+      height: 7px;
+      background: rgba(245, 158, 11, 0.45);
+      filter: blur(4px);
+    }
+
+    /* Legal Move Highlights */
     .cell-valid-move::after {
       content: '';
       position: absolute;
@@ -316,14 +486,15 @@
       height: 14px;
       background: rgba(16, 185, 129, 0.9);
       border-radius: 50%;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.9);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.95);
+      transform: translateZ(8px);
       pointer-events: none;
     }
 
     .cell-valid-capture {
       outline: 2px dashed #f43f5e !important;
       background: rgba(244, 63, 94, 0.35) !important;
-      box-shadow: 0 0 14px rgba(244, 63, 94, 0.8) !important;
+      box-shadow: 0 0 16px rgba(244, 63, 94, 0.85) !important;
       animation: pulseCapture 1.4s infinite;
     }
 
@@ -340,12 +511,6 @@
     @keyframes flashCheck {
       from { box-shadow: 0 0 10px #dc2626; }
       to { box-shadow: 0 0 25px #f87171; }
-    }
-
-    .board-cell:hover {
-      transform: scale(1.08);
-      z-index: 5;
-      outline: 2px solid #fbbf24;
     }
 
     /* Sticky Navbar */
@@ -818,28 +983,55 @@
             </div>
           </div>
 
-          <!-- Right: Interactive 8x8 Board & Battlefield -->
+          <!-- Right: Interactive 3D / 4D Planar Battlefield -->
           <div class="col-lg-7 text-center">
-            <!-- Captured Units Graveyard Banner -->
-            <div class="glass-card p-2 px-3 mb-3 d-flex justify-content-between align-items-center font-mono small">
-              <div>
-                <span class="text-warning fw-bold">Captured Opponents:</span>
-                <span id="capturedBlack" class="text-light ms-2 fs-6">None</span>
+            <!-- 3D Camera & 4D Dimension Toolbar -->
+            <div class="glass-card p-2 px-3 mb-2 d-flex justify-content-between align-items-center flex-wrap gap-2 font-mono small">
+              <div class="d-flex align-items-center gap-1 flex-wrap">
+                <span class="text-warning fw-bold me-1"><i class="bi bi-camera-reels-fill me-1"></i>3D CAMERA:</span>
+                <button class="btn btn-xs btn-outline-warning active rounded-pill px-2 py-1 camera-btn" data-view="isometric" id="btnCamIso">3D Isometric (45°)</button>
+                <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 camera-btn text-light" data-view="cinematic" id="btnCamCinema">3D Cinematic Tilt</button>
+                <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 camera-btn text-light" data-view="topdown" id="btnCamTop">2D Satellite</button>
               </div>
-              <div>
-                <span class="text-info fw-bold">Active Board Mutators:</span>
-                <span id="activeMutatorsCount" class="badge bg-purple ms-1" style="background:#7c3aed;">0 Tiles</span>
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn btn-xs btn-outline-info rounded-pill px-2 py-1" id="btnCamPhase">
+                  <i class="bi bi-hourglass-split me-1"></i>4D Spacetime Phase
+                </button>
               </div>
             </div>
 
-            <!-- The 8x8 Tactical Grid -->
-            <div class="tactical-board" id="tacticalBoard">
-              <!-- 64 cells generated via JS -->
+            <!-- 4D Spacetime Telemetry & Temporal Replay -->
+            <div class="glass-card p-2 px-3 mb-3 d-flex justify-content-between align-items-center font-mono small flex-wrap gap-2" style="background: rgba(13, 8, 28, 0.85); border: 1px solid rgba(236,72,153,0.35);">
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-danger bg-opacity-75 font-mono" style="font-size:0.68rem;"><i class="bi bi-broadcast me-1"></i>4D DIMENSION</span>
+                <span class="text-muted" style="font-size:0.75rem;">Timeline Anchor: <strong class="text-white" id="timeDimensionAnchor">t = Present (Turn 1)</strong></span>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <button class="btn btn-xs btn-outline-secondary text-light rounded-pill px-2" id="btnTimeRewind" title="4D Temporal Step Backward">
+                  <i class="bi bi-skip-backward-fill me-1"></i>t - 1
+                </button>
+                <button class="btn btn-xs btn-outline-secondary text-light rounded-pill px-2" id="btnTimeForward" title="4D Temporal Step Forward">
+                  <i class="bi bi-skip-forward-fill me-1"></i>t + 1
+                </button>
+                <span id="activeMutatorsCount" class="badge bg-purple ms-2" style="background:#7c3aed;">0 Mutated Tiles</span>
+              </div>
+            </div>
+
+            <!-- The 3D Planar Stage Viewport -->
+            <div class="planar-stage-3d" id="planarStage">
+              <!-- Aether Cosmic Orbital Rings (4D Temporal Axis) -->
+              <div class="aether-ring-4d"></div>
+              <div class="aether-ring-inner-4d"></div>
+
+              <!-- 3D Planar Grid Floating Slab -->
+              <div class="planar-board-3d view-isometric" id="tacticalBoard">
+                <!-- 64 cells generated via JS with 3D elevation and dynamic shaders -->
+              </div>
             </div>
             
             <div class="d-flex justify-content-between align-items-center mt-3 font-mono small text-muted px-2">
-              <span>Standard 8x8 Grid • Files a–h, Ranks 1–8</span>
-              <span class="text-warning"><i class="bi bi-magic me-1"></i> Dynamic Planar Shifts Active</span>
+              <span><i class="bi bi-box-fill text-info me-1"></i> 3D Planar Board • High-Fantasy Geometry</span>
+              <span class="text-warning"><i class="bi bi-hourglass-top me-1"></i> 4D Temporal Phase Shifting Active</span>
             </div>
           </div>
         </div>
@@ -1704,11 +1896,56 @@
       return moves;
     }
 
-    // Render Board & State
+    // Render Board & State (3D Planar Grid & Layered Dimensional Tokens)
     let selectedCell = null;
     let currentLegalMoves = [];
     let aiOpponentEnabled = true;
     let isGameOver = false;
+
+    // --- 4D SPACETIME TIMELINE MEMORY & REPLAY ENGINE ---
+    let timelineHistory = [];
+    let currentTimelineIndex = -1;
+
+    function saveTimelineSnapshot(note = '') {
+      timelineHistory.push({
+        turn: moveTurn,
+        board: JSON.parse(JSON.stringify(currentBoardState)),
+        terrains: JSON.parse(JSON.stringify(cellTerrains)),
+        captured: [...capturedBlackPieces],
+        logText: document.getElementById('simStatusLog').textContent,
+        note
+      });
+      currentTimelineIndex = timelineHistory.length - 1;
+      updateTimelineHUD();
+    }
+
+    function updateTimelineHUD() {
+      const anchor = document.getElementById('timeDimensionAnchor');
+      if (!anchor) return;
+      if (currentTimelineIndex === timelineHistory.length - 1 || currentTimelineIndex === -1) {
+        anchor.textContent = `t = Present (Turn ${moveTurn})`;
+        anchor.className = 'text-white';
+      } else {
+        const snap = timelineHistory[currentTimelineIndex];
+        anchor.textContent = `t = Turn ${snap.turn} (4D Temporal Echo)`;
+        anchor.className = 'text-warning font-mono';
+      }
+    }
+
+    function restoreTimelineSnapshot(idx) {
+      if (idx < 0 || idx >= timelineHistory.length) return;
+      currentTimelineIndex = idx;
+      const snap = timelineHistory[idx];
+      currentBoardState = JSON.parse(JSON.stringify(snap.board));
+      cellTerrains = JSON.parse(JSON.stringify(snap.terrains));
+      capturedBlackPieces = [...snap.captured];
+      document.getElementById('simStatusLog').textContent = `[4D Temporal Jump]: Viewing match state at Turn ${snap.turn}.`;
+      selectedCell = null;
+      currentLegalMoves = [];
+      playSound('move');
+      renderBoard();
+      updateTimelineHUD();
+    }
 
     function renderBoard() {
       const boardEl = document.getElementById('tacticalBoard');
@@ -1719,7 +1956,7 @@
         for (let c = 0; c < 8; c++) {
           const cell = document.createElement('div');
           const isLight = (r + c) % 2 === 0;
-          cell.className = `board-cell ${isLight ? 'cell-light' : 'cell-dark'}`;
+          cell.className = `board-cell-3d ${isLight ? 'cell-light' : 'cell-dark'}`;
           
           if (cellTerrains[r][c]) {
             cell.classList.add(`cell-${cellTerrains[r][c]}`);
@@ -1744,10 +1981,23 @@
             }
           }
 
+          // Layered 3D Sculpted Piece Token Architecture
           const piece = currentBoardState[r][c];
           if (piece) {
-            cell.textContent = pieceIcons[piece] || piece;
-            cell.style.color = piece === piece.toUpperCase() ? '#fbbf24' : '#e2e8f0';
+            const isW = isWhite(piece);
+            const container = document.createElement('div');
+            container.className = `piece-container-3d ${isW ? 'piece-gold' : 'piece-black'}`;
+            
+            const shadow = document.createElement('div');
+            shadow.className = 'piece-shadow-3d';
+            
+            const symbol = document.createElement('div');
+            symbol.className = 'piece-symbol-3d';
+            symbol.textContent = pieceIcons[piece] || piece;
+
+            container.appendChild(shadow);
+            container.appendChild(symbol);
+            cell.appendChild(container);
           }
 
           cell.addEventListener('click', () => handleCellClick(r, c));
@@ -1755,7 +2005,7 @@
         }
       }
 
-      document.getElementById('activeMutatorsCount').textContent = `${mutatorCount} Tiles`;
+      document.getElementById('activeMutatorsCount').textContent = `${mutatorCount} Mutated Tiles`;
       document.getElementById('capturedBlack').textContent = capturedBlackPieces.length > 0 ? capturedBlackPieces.join(' ') : 'None';
     }
 
@@ -1780,7 +2030,7 @@
           if (currentLegalMoves.length === 0) {
             statusLog.textContent = `Selected ${pieceIcons[piece] || piece} at ${coordStr}, but it has no legal moves. Path is blocked!`;
           } else {
-            statusLog.textContent = `Selected ${pieceIcons[piece] || piece} at ${coordStr}. ${currentLegalMoves.length} legal squares highlighted.`;
+            statusLog.textContent = `Selected ${pieceIcons[piece] || piece} at ${coordStr}. ${currentLegalMoves.length} legal 3D tiles highlighted.`;
           }
           renderBoard();
         } else if (piece && isBlack(piece)) {
@@ -1823,7 +2073,7 @@
         const isCapture = validMove.isCapture;
         const capturedKing = targetPiece && targetPiece.toLowerCase() === 'k';
 
-        // Execute Move
+        // Execute 3D Move
         currentBoardState[oldR][oldC] = '';
         currentBoardState[r][c] = movingPiece;
         cellTerrains[r][c] = faction; // GDD: Tiles permanently absorb kingdom essence
@@ -1847,11 +2097,12 @@
 
         moveTurn++;
         document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (Player 1)`;
-        statusLog.textContent = `Moved to ${coordStr}. Tile permanently converted into ${prof.name.toUpperCase()} territory!`;
+        statusLog.textContent = `Advanced to ${coordStr}. 3D tile mutated into ${prof.name.toUpperCase()} territory!`;
 
         selectedCell = null;
         currentLegalMoves = [];
         renderBoard();
+        saveTimelineSnapshot(`Player 1 Move to ${coordStr}`);
 
         // Check if Enemy King was captured -> AUTOMATIC QUEEN SIGNATURE ULTIMATE! (GDD Storyboard 2)
         if (capturedKing) {
@@ -1932,29 +2183,42 @@
       }
 
       renderBoard();
+      saveTimelineSnapshot(`Opponent Move to ${coordStr}`);
     }
 
-    // Trigger Checkmate & Automatic Queen Ultimate (GDD Storyboard 2)
+    // Trigger Checkmate & Automatic 3D Queen Ultimate (GDD Storyboard 2)
     function triggerVictoryCheckmate() {
       isGameOver = true;
       const faction = document.getElementById('simKingdomSelect').value;
       const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
       const statusLog = document.getElementById('simStatusLog');
 
-      statusLog.innerHTML = `<strong class="text-warning fs-6">👑 CHECKMATE! ENEMY KING EXECUTED!</strong><br>${prof.attackerName.toUpperCase()} UNLEASHES QUEEN SIGNATURE ULTIMATE!`;
+      statusLog.innerHTML = `<strong class="text-warning fs-5">👑 CHECKMATE! ENEMY KING EXECUTED!</strong><br>${prof.attackerName.toUpperCase()} UNLEASHES QUEEN SIGNATURE ULTIMATE!`;
       playSound('ultimate');
 
-      // Sequential board eruption animation
-      const cells = document.querySelectorAll('.board-cell');
+      const board = document.getElementById('tacticalBoard');
+      board.classList.remove('view-topdown');
+      board.classList.add('view-cinematic');
+
+      // 3D Shatter & Cataclysmic Tile Decoupling
+      const cells = document.querySelectorAll('.board-cell-3d');
       cells.forEach((cell, idx) => {
+        const randZ = (Math.random() * 65 + 20).toFixed(0);
+        const randRotX = ((Math.random() - 0.5) * 50).toFixed(0);
+        const randRotY = ((Math.random() - 0.5) * 50).toFixed(0);
+
         setTimeout(() => {
+          cell.style.transform = `translateZ(${randZ}px) rotateX(${randRotX}deg) rotateY(${randRotY}deg)`;
           cell.classList.add(`cell-${faction}`);
-          cell.style.transform = 'scale(1.18)';
-          setTimeout(() => { cell.style.transform = 'scale(1)'; }, 300);
-        }, idx * 15);
+          cell.style.filter = 'brightness(1.6) saturate(1.8)';
+          setTimeout(() => {
+            cell.style.transform = '';
+            cell.style.filter = '';
+          }, 680);
+        }, idx * 16);
       });
 
-      // Eradicate remaining hostile pieces
+      // Eradicate remaining hostile pieces with 3D dematerialization
       setTimeout(() => {
         for (let r = 0; r < 8; r++) {
           for (let c = 0; c < 8; c++) {
@@ -1965,9 +2229,68 @@
           }
         }
         renderBoard();
+        saveTimelineSnapshot('Checkmate Victory');
         statusLog.innerHTML = `<strong class="text-success fs-5">VICTORY CHECKMATE VERIFIED!</strong><br>Planar battlefield consumed by ${prof.name}'s ultimate cataclysm.`;
       }, 1250);
     }
+
+    // Camera Mode Switching
+    document.querySelectorAll('.camera-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.camera-btn').forEach(b => {
+          b.classList.remove('active', 'btn-outline-warning');
+          b.classList.add('btn-outline-secondary', 'text-light');
+        });
+        btn.classList.add('active', 'btn-outline-warning');
+        btn.classList.remove('btn-outline-secondary', 'text-light');
+
+        const view = btn.getAttribute('data-view');
+        const board = document.getElementById('tacticalBoard');
+        board.classList.remove('view-isometric', 'view-cinematic', 'view-topdown', 'view-4d-phase');
+        board.classList.add(`view-${view}`);
+        playSound('terrain');
+      });
+    });
+
+    // 4D Spacetime Phase Shift Toggle
+    document.getElementById('btnCamPhase').addEventListener('click', () => {
+      const board = document.getElementById('tacticalBoard');
+      const isPhase = board.classList.contains('view-4d-phase');
+      board.classList.remove('view-isometric', 'view-cinematic', 'view-topdown', 'view-4d-phase');
+      
+      const btn = document.getElementById('btnCamPhase');
+      if (!isPhase) {
+        board.classList.add('view-4d-phase');
+        btn.classList.remove('btn-outline-info');
+        btn.classList.add('btn-info', 'text-dark', 'fw-bold');
+        btn.innerHTML = '<i class="bi bi-hourglass-bottom me-1"></i>4D Phase: ACTIVE';
+        playSound('ultimate');
+        document.getElementById('simStatusLog').textContent = '4D Spacetime Dimensional Phase activated! Quantum aether distortions applied to tactical grid.';
+      } else {
+        board.classList.add('view-isometric');
+        btn.classList.remove('btn-info', 'text-dark', 'fw-bold');
+        btn.classList.add('btn-outline-info');
+        btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>4D Spacetime Phase';
+        playSound('terrain');
+      }
+    });
+
+    // 4D Timeline Scrubber Controls
+    document.getElementById('btnTimeRewind').addEventListener('click', () => {
+      if (currentTimelineIndex > 0) {
+        restoreTimelineSnapshot(currentTimelineIndex - 1);
+      } else {
+        document.getElementById('simStatusLog').textContent = 'Reached earliest 4D timeline anchor (Turn 1).';
+      }
+    });
+
+    document.getElementById('btnTimeForward').addEventListener('click', () => {
+      if (currentTimelineIndex < timelineHistory.length - 1) {
+        restoreTimelineSnapshot(currentTimelineIndex + 1);
+      } else {
+        document.getElementById('simStatusLog').textContent = 'Already anchored at present spacetime (Current Turn).';
+      }
+    });
 
     // Toggle AI Mode Button
     document.getElementById('btnToggleAIMode').addEventListener('click', () => {
@@ -1993,11 +2316,14 @@
       selectedCell = null;
       currentLegalMoves = [];
       isGameOver = false;
+      timelineHistory = [];
+      currentTimelineIndex = -1;
       document.getElementById('turnIndicator').textContent = 'Turn: 1 (Player 1)';
       document.getElementById('moveLogList').innerHTML = '<div class="text-muted">• Match reset. Standard 8x8 planar grid initialized.</div>';
       document.getElementById('simStatusLog').textContent = 'Board reset to neutral coordinates. Ready for deployment.';
       playSound('move');
       renderBoard();
+      saveTimelineSnapshot('Initial Setup');
     });
 
     // Faction Selector Change
@@ -2018,6 +2344,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       renderKingdoms('all');
       renderBoard();
+      saveTimelineSnapshot('Game Initialized');
     });
   </script>
 </body>
