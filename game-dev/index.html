@@ -340,6 +340,82 @@
     .glass-card:hover .kingdom-card-img {
       transform: scale(1.04);
     }
+
+    /* Manifestation Combat Execution Overlay */
+    .manifestation-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(4, 6, 15, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 2100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .manifestation-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .combat-card {
+      background: linear-gradient(135deg, rgba(22, 17, 50, 0.96) 0%, rgba(10, 5, 25, 0.98) 100%);
+      border: 2px solid #c084fc;
+      box-shadow: 0 0 60px rgba(168, 85, 247, 0.5), inset 0 0 20px rgba(124, 58, 237, 0.3);
+      border-radius: 24px;
+      max-width: 820px;
+      width: 94%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .shake-anim {
+      animation: screenShake 0.45s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    @keyframes screenShake {
+      10%, 90% { transform: translate3d(-3px, 0, 0); }
+      20%, 80% { transform: translate3d(5px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-7px, 0, 0); }
+      40%, 60% { transform: translate3d(7px, 0, 0); }
+    }
+
+    .slash-glow {
+      position: absolute;
+      top: 50%;
+      left: -20%;
+      width: 140%;
+      height: 8px;
+      background: linear-gradient(90deg, transparent, #f43f5e, #fbbf24, #ffffff, #fbbf24, #f43f5e, transparent);
+      box-shadow: 0 0 30px #fbbf24, 0 0 60px #f43f5e;
+      transform: translateY(-50%) rotate(-25deg);
+      animation: slashSweep 0.55s ease-out forwards;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    @keyframes slashSweep {
+      0% { opacity: 0; transform: translateY(-50%) rotate(-25deg) scaleX(0); }
+      50% { opacity: 1; transform: translateY(-50%) rotate(-25deg) scaleX(1); }
+      100% { opacity: 0; transform: translateY(-50%) rotate(-25deg) scaleX(1.3); }
+    }
+
+    .cell-selected {
+      outline: 3px solid #fbbf24 !important;
+      box-shadow: 0 0 15px #fbbf24 !important;
+      z-index: 10;
+    }
+
+    .cell-target {
+      outline: 2px dashed #38bdf8 !important;
+      background: rgba(56, 189, 248, 0.28) !important;
+    }
   </style>
 </head>
 
@@ -596,60 +672,132 @@
     <!-- ================= INTERACTIVE 8X8 TACTICAL BOARD SIMULATOR ================= -->
     <section class="py-5 border-top border-secondary border-opacity-25" id="board-sim">
       <div class="container">
+
+        <!-- PROMINENT ACADEMIC PAPER & DOCUMENTATION NOTICE -->
+        <div class="glass-card p-4 p-md-5 mb-5" style="border: 1px solid rgba(245, 158, 11, 0.45); background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(15, 20, 38, 0.95) 100%);">
+          <div class="d-flex align-items-start gap-4 flex-column flex-md-row">
+            <div class="fs-1 text-warning flex-shrink-0 p-3 rounded-circle" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3);">📜</div>
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center gap-2 flex-wrap mb-2">
+                <span class="badge bg-warning text-dark fw-bold text-uppercase px-3 py-1 font-mono">Academic Research Paper &amp; Concept Design</span>
+                <span class="badge bg-dark border border-secondary text-info font-mono">Not an Actual Video Game Release</span>
+                <span class="badge bg-primary px-2 py-1 font-mono">BSIT Game Development Proposal</span>
+              </div>
+              <h3 class="h4 fw-bold text-white mb-2">Notice: Conceptual Prototype of Official Game Design Document (GDD)</h3>
+              <p class="text-light opacity-90 mb-3" style="line-height: 1.75; font-size: 0.95rem;">
+                This interactive module is an <strong>educational game design prototype</strong> engineered to bring the academic paper <strong class="text-warning">"Game Development: Mythic Gambit"</strong> to life. Authored by <strong>Marcial Lawrence Jr V. Caronan (Lead Author)</strong> and the BSIT development cohort at <strong>Datamex College of Saint Adeline</strong>, submitted to <strong>Ms. Jeanniel T. Ilago</strong>.
+                <br><br>
+                Please note that this is <strong>not a full commercial video game</strong>, but rather an authentic, interactive simulation demonstrating how the rules, planar terrain transformations, kingdom passives, and cinematic Manifestation combat executions formulated across the 44.6 MB academic paper operate.
+              </p>
+              <div class="d-flex gap-3 flex-wrap align-items-center">
+                <a href="../assets/docs/Game_Dev_Paper_Mythic_Gambit.docx" download="Game_Dev_Paper_Mythic_Gambit.docx" class="btn btn-mythic-gold btn-sm">
+                  <i class="bi bi-file-earmark-word-fill me-1"></i> Download Original Paper (.docx • 44.6 MB)
+                </a>
+                <a href="#kingdoms" class="btn btn-mythic-outline btn-sm">
+                  <i class="bi bi-shield-shaded me-1"></i> Browse 15 Kingdom Profiles
+                </a>
+                <span class="text-muted small font-mono"><i class="bi bi-info-circle me-1"></i> 443 Paragraphs • 42 Diagrams &amp; Concept Art</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="text-center mb-4">
-          <span class="pill-badge mb-2"><i class="bi bi-controller"></i> TACTICAL ENGINE PREVIEW</span>
-          <h2 class="display-5 font-title text-white">Interactive 8x8 Planar Board Simulator</h2>
-          <p class="text-muted mx-auto" style="max-width: 680px;">
-            Select a kingdom, click on tiles to simulate movement and watch dynamic terrain transformations take place in real-time. Test passive elemental abilities and trigger the Queen Ultimate animation.
+          <span class="pill-badge mb-2"><i class="bi bi-controller"></i> TACTICAL SIMULATION ENGINE</span>
+          <h2 class="display-5 font-title text-white">Interactive Tactical Combat &amp; Manifestation Simulator</h2>
+          <p class="text-muted mx-auto" style="max-width: 720px;">
+            Simulate actual encounters between kingdoms! Move units on the 8x8 planar grid to trigger permanent tile mutations, activate faction passives, experience cinematic <strong>Manifestation Executions</strong> upon captures, and unleash the Queen Ultimate finisher.
           </p>
         </div>
 
-        <div class="row align-items-center g-4">
-          <!-- Left: Controls & Stats -->
+        <div class="row align-items-start g-4">
+          <!-- Left: Tactical Controls, Matchup & Stats -->
           <div class="col-lg-5">
             <div class="glass-card p-4">
-              <h4 class="h5 fw-bold text-white mb-3"><i class="bi bi-sliders me-2 text-info"></i> Simulation Parameters</h4>
-              
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="h5 fw-bold text-white mb-0"><i class="bi bi-sliders me-2 text-info"></i> Battle Matchup &amp; Factions</h4>
+                <button id="btnToggleAudio" class="btn btn-xs btn-outline-info rounded-pill px-3 py-1 font-mono" style="font-size: 0.76rem;">
+                  <i class="bi bi-volume-up-fill me-1"></i> Audio: ON
+                </button>
+              </div>
+
+              <!-- Attacker Kingdom -->
               <div class="mb-3">
-                <label class="form-label small text-muted font-mono">ACTIVE FACTION DOMINION</label>
+                <label class="form-label small text-muted font-mono mb-1">PLAYER 1 FACTION (WHITE PIECES)</label>
                 <select id="simKingdomSelect" class="form-select bg-dark text-white border-secondary">
-                  <option value="volcanic">The Obsidian Roost (Fire / Volcanic)</option>
-                  <option value="verdant">The Verdant Court (Nature / Briars)</option>
-                  <option value="abyssal">The Abyssal Tides (Water / Tidal)</option>
-                  <option value="frost">The Frostbound Reach (Ice / Glacial)</option>
-                  <option value="void">The Abyssal Veil (Shadow / Void)</option>
+                  <option value="volcanic">The Obsidian Roost (Fire / Magma Terrain)</option>
+                  <option value="verdant">The Verdant Court (Nature / Thorny Briars)</option>
+                  <option value="abyssal">The Abyssal Tides (Water / Tidal Floods)</option>
+                  <option value="frost">The Frostbound Reach (Ice / Glacial Rime)</option>
+                  <option value="void">The Abyssal Veil (Shadow / Void Rifts)</option>
+                  <option value="gearwork">The Gearwork Citadel (Steam / Clockwork Tiles)</option>
+                  <option value="grave">The Grave-Bound Dynasty (Necromancy / Soul Wells)</option>
                 </select>
               </div>
 
-              <div class="p-3 rounded mb-3" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15);">
-                <div class="small fw-bold text-info mb-1" id="simPassiveName">Active Passive: Heat Haze</div>
-                <div class="small text-muted" id="simPassiveDesc">
-                  Enemy units attempting to target pieces on transformed volcanic tiles suffer reduced sightline clarity.
+              <!-- Passive Card -->
+              <div class="p-3 rounded mb-3" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(168, 85, 247, 0.35);">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="small fw-bold text-info" id="simPassiveName">Active Passive: Heat Haze</span>
+                  <span class="badge bg-secondary font-mono" style="font-size: 0.68rem;">GDD SECTION V.D</span>
+                </div>
+                <div class="small text-light opacity-90" id="simPassiveDesc">
+                  Volcanic terrain emits thermal distortions reducing enemy ranged attack accuracy by 25% on claimed tiles.
                 </div>
               </div>
 
-              <div class="d-flex flex-column gap-2 mb-3">
+              <!-- Action Controls -->
+              <div class="d-grid gap-2 mb-3">
+                <button class="btn btn-sm btn-danger fw-bold rounded-pill py-2" id="btnTestManifestation">
+                  <i class="bi bi-lightning-charge-fill me-1"></i> Test Manifestation Combat Execution
+                </button>
                 <button class="btn btn-sm btn-mythic-primary w-100" id="btnQueenUltimate">
                   <i class="bi bi-stars me-1"></i> Trigger Queen Signature Ultimate
                 </button>
                 <button class="btn btn-sm btn-outline-secondary rounded-pill w-100 text-light" id="btnResetBoard">
-                  <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Board to Neutral 8x8
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Board to Neutral Coordinates
                 </button>
               </div>
 
+              <!-- Live Algebraic Move Log -->
+              <div class="p-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 mb-2">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="font-mono small text-info fw-bold"><i class="bi bi-journal-text me-1"></i> Tactical Turn Log:</span>
+                  <span class="small text-muted font-mono" id="turnIndicator">Turn: 1 (Player 1)</span>
+                </div>
+                <div class="font-mono text-light small overflow-auto" id="moveLogList" style="max-height: 110px; font-size: 0.78rem; line-height: 1.5;">
+                  <div class="text-muted">• Game initialized. Standard 8x8 symmetric layout.</div>
+                </div>
+              </div>
+
               <div class="small font-mono text-muted text-center" id="simStatusLog">
-                Ready. Click any tile to move piece &amp; claim terrain.
+                Ready. Click any white piece, then click a target square to move.
               </div>
             </div>
           </div>
 
-          <!-- Right: Interactive 8x8 Board -->
+          <!-- Right: Interactive 8x8 Board & Battlefield -->
           <div class="col-lg-7 text-center">
+            <!-- Captured Units Graveyard Banner -->
+            <div class="glass-card p-2 px-3 mb-3 d-flex justify-content-between align-items-center font-mono small">
+              <div>
+                <span class="text-warning fw-bold">Captured Opponents:</span>
+                <span id="capturedBlack" class="text-light ms-2 fs-6">None</span>
+              </div>
+              <div>
+                <span class="text-info fw-bold">Active Board Mutators:</span>
+                <span id="activeMutatorsCount" class="badge bg-purple ms-1" style="background:#7c3aed;">0 Tiles</span>
+              </div>
+            </div>
+
+            <!-- The 8x8 Tactical Grid -->
             <div class="tactical-board" id="tacticalBoard">
               <!-- 64 cells generated via JS -->
             </div>
-            <div class="small text-muted font-mono mt-3">
-              Standard 8x8 Tactical Grid • Files a-h, Ranks 1-8 • Permanent Terrain Transformation Active
+            
+            <div class="d-flex justify-content-between align-items-center mt-3 font-mono small text-muted px-2">
+              <span>Standard 8x8 Grid • Files a–h, Ranks 1–8</span>
+              <span class="text-warning"><i class="bi bi-magic me-1"></i> Dynamic Planar Shifts Active</span>
             </div>
           </div>
         </div>
@@ -797,6 +945,64 @@
     </section>
 
   </main>
+
+  <!-- ================= CINEMATIC MANIFESTATION EXECUTION OVERLAY ================= -->
+  <div class="manifestation-overlay" id="manifestationOverlay">
+    <div class="combat-card p-4 p-md-5 text-center shake-anim">
+      <div class="slash-glow"></div>
+      
+      <div class="d-inline-flex align-items-center gap-2 mb-3 px-3 py-1 rounded-pill bg-danger bg-opacity-25 border border-danger">
+        <span class="fs-5">⚔️</span>
+        <span class="text-danger fw-bold font-mono text-uppercase" style="letter-spacing: 0.1em; font-size: 0.8rem;">MANIFESTATION COMBAT EXECUTION INVOKED</span>
+      </div>
+
+      <h3 class="display-6 font-fantasy text-white fw-bold mb-3" id="combatTitle">
+        The Ash Matriarch VS The Stag-Rider
+      </h3>
+
+      <div class="row align-items-center g-3 my-3 justify-content-center">
+        <!-- Attacker -->
+        <div class="col-5 col-md-4">
+          <div class="glass-card p-2 border-danger">
+            <img id="combatAttackerImg" src="../assets/img/game-dev/image4.png" alt="Attacker" class="w-100 rounded mb-2" style="height: 140px; object-fit: cover;">
+            <div class="font-fantasy fw-bold text-warning small" id="combatAttackerName">The Ash Matriarch</div>
+            <div class="text-danger small font-mono" id="combatAttackerRole">Obsidian Queen</div>
+          </div>
+        </div>
+
+        <!-- Clash VS Crest -->
+        <div class="col-2 text-center">
+          <div class="display-6 text-danger fw-extrabold font-fantasy">VS</div>
+          <span class="badge bg-danger text-uppercase font-mono mt-1">CLASH</span>
+        </div>
+
+        <!-- Target -->
+        <div class="col-5 col-md-4">
+          <div class="glass-card p-2 border-secondary">
+            <img id="combatDefenderImg" src="../assets/img/game-dev/image9.jpeg" alt="Defender" class="w-100 rounded mb-2" style="height: 140px; object-fit: cover; filter: grayscale(40%);">
+            <div class="font-fantasy fw-bold text-muted small" id="combatDefenderName">The Stag-Rider</div>
+            <div class="text-muted small font-mono" id="combatDefenderRole">Verdant Knight</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3 rounded my-3 text-start" style="background: rgba(0, 0, 0, 0.65); border: 1px solid rgba(244, 63, 94, 0.4);">
+        <div class="small font-mono text-warning fw-bold mb-1"><i class="bi bi-chat-quote-fill me-1"></i> Manifestation Combat Dialogue:</div>
+        <p class="small text-light mb-2 font-mono" id="combatDialogue">
+          "By the burning magma of the Obsidian Roost, your mortal frame crumbles to ash!"
+        </p>
+        <div class="small font-mono text-info" id="combatResult">
+          • Enemy piece eliminated from planar grid.<br>
+          • Target coordinate converted into permanent Volcanic Terrain.<br>
+          • Kingdom Passive "Heat Haze" granted to allied zone.
+        </div>
+      </div>
+
+      <button class="btn btn-mythic-gold px-4 py-2" id="btnCloseCombat">
+        <i class="bi bi-check-circle-fill me-1"></i> Continue Tactical Match
+      </button>
+    </div>
+  </div>
 
   <!-- ================= KINGDOM DETAILS MODAL ================= -->
   <div class="modal fade game-modal" id="kingdomModal" tabindex="-1" aria-labelledby="kingdomModalTitle" aria-hidden="true">
@@ -1124,10 +1330,213 @@
 
     let currentBoardState = JSON.parse(JSON.stringify(initialBoard));
     let cellTerrains = Array(8).fill(null).map(() => Array(8).fill(''));
+    let capturedBlackPieces = [];
+    let moveTurn = 1;
+    let audioEnabled = true;
+
+    // --- Web Audio API Synthesizer (No external sound files required) ---
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playSound(type) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+
+        if (type === 'move') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(480, now + 0.12);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } else if (type === 'terrain') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.linearRampToValueAtTime(90, now + 0.25);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'clash') {
+          // Deep impact + high blade resonant clash
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc1.type = 'square';
+          osc1.frequency.setValueAtTime(80, now);
+          osc1.frequency.exponentialRampToValueAtTime(40, now + 0.35);
+          osc2.type = 'sawtooth';
+          osc2.frequency.setValueAtTime(880, now);
+          osc2.frequency.exponentialRampToValueAtTime(220, now + 0.3);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(ctx.destination);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.35);
+          osc2.stop(now + 0.35);
+        } else if (type === 'ultimate') {
+          // Apocalyptic sweeping chord
+          [220, 330, 440, 660].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + (idx * 0.1));
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 1.2);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 1.5);
+          });
+        }
+      } catch (e) {
+        // Audio fallback
+      }
+    }
+
+    // Toggle Audio
+    document.getElementById('btnToggleAudio').addEventListener('click', () => {
+      audioEnabled = !audioEnabled;
+      const btn = document.getElementById('btnToggleAudio');
+      if (audioEnabled) {
+        btn.innerHTML = '<i class="bi bi-volume-up-fill me-1"></i> Audio: ON';
+        btn.className = 'btn btn-xs btn-outline-info rounded-pill px-3 py-1 font-mono';
+        playSound('move');
+      } else {
+        btn.innerHTML = '<i class="bi bi-volume-mute-fill me-1"></i> Audio: OFF';
+        btn.className = 'btn btn-xs btn-outline-secondary rounded-pill px-3 py-1 font-mono';
+      }
+    });
+
+    // Faction Manifestation Profiles for Combat Overlay
+    const factionCombatProfiles = {
+      volcanic: {
+        name: "The Obsidian Roost",
+        attackerName: "The Ash Matriarch",
+        attackerRole: "Obsidian Queen",
+        attackerImg: "../assets/img/game-dev/image4.png",
+        dialogue: '"By the sacred fire of the Eternal Drake, reduce the intruders to molten cinder!"',
+        passiveName: "Heat Haze",
+        passiveDesc: "Volcanic terrain emits thermal distortions reducing enemy ranged attack accuracy by 25% on claimed tiles.",
+        result: "• Enemy piece eradicated.<br>• Tile transformed into permanent Volcanic Magma.<br>• Heat Haze passive activated in allied zone."
+      },
+      verdant: {
+        name: "The Verdant Court",
+        attackerName: "The Forest Matriarch",
+        attackerRole: "Verdant Queen",
+        attackerImg: "../assets/img/game-dev/image8.jpeg",
+        dialogue: '"Primeval briars and ancient roots, entangle this transgressor into the soil!"',
+        passiveName: "Root-Bound",
+        passiveDesc: "Units landing on verdant tiles sprout thorny briars that restrict enemy mobility on subsequent turns.",
+        result: "• Enemy piece captured by primeval roots.<br>• Tile transformed into permanent Verdant Briar.<br>• Root-Bound debuff inflicts movement limitation."
+      },
+      abyssal: {
+        name: "The Abyssal Tides",
+        attackerName: "Leviathan Matriarch",
+        attackerRole: "Abyssal Queen",
+        attackerImg: "../assets/img/game-dev/image14.jpeg",
+        dialogue: '"From trench depths dark and silent, let the crushing pressure swallow your soul!"',
+        passiveName: "Tidal Flow",
+        passiveDesc: "Friendly pieces moving across flooded tiles gain +1 diagonal movement extension over watery boundaries.",
+        result: "• Enemy submerged into abyssal ocean depths.<br>• Tile transformed into permanent Tidal Water.<br>• Tidal Flow speed bonus active."
+      },
+      frost: {
+        name: "The Frostbound Reach",
+        attackerName: "The Frost Matriarch",
+        attackerRole: "Glacial Queen",
+        attackerImg: "../assets/img/game-dev/image15.jpeg",
+        dialogue: '"Sub-zero permafrost shatters brittle bone. Remain frozen for all eternity!"',
+        passiveName: "Permafrost",
+        passiveDesc: "Enemy pieces stepping onto Glacial terrain lose 1 movement turn due to freezing crystallizations.",
+        result: "• Enemy encased and shattered into glacial rime.<br>• Tile converted into permanent Permafrost.<br>• Glacial freeze debuff applied."
+      },
+      void: {
+        name: "The Abyssal Veil",
+        attackerName: "The Shadow Queen",
+        attackerRole: "Void Queen",
+        attackerImg: "../assets/img/game-dev/image22.jpeg",
+        dialogue: '"Enter the black vortex of silence where neither memory nor light exists!"',
+        passiveName: "Shadow Walk",
+        passiveDesc: "Allows instantaneous piece swap with any allied unit across the board once per game.",
+        result: "• Enemy pulled into nothingness.<br>• Tile converted into permanent Void Rift.<br>• Shadow Walk positioning bonus unlocked."
+      },
+      gearwork: {
+        name: "The Gearwork Citadel",
+        attackerName: "The Gear Matriarch",
+        attackerRole: "Clockwork Queen",
+        attackerImg: "../assets/img/game-dev/image23.jpeg",
+        dialogue: '"Organic weakness detected. Calibrating high-pressure steam pistons for structural liquidation!"',
+        passiveName: "Overclock",
+        passiveDesc: "Friendly units adjacent to Clockwork pieces gain +1 maximum movement distance on mechanical tiles.",
+        result: "• Enemy dismantled by industrial gearwork mechanisms.<br>• Tile transformed into Brass Clockwork plate.<br>• Overclock adjacency bonus granted."
+      },
+      grave: {
+        name: "The Grave-Bound Dynasty",
+        attackerName: "The Death Matriarch",
+        attackerRole: "Necromancy Queen",
+        attackerImg: "../assets/img/game-dev/image25.jpeg",
+        dialogue: '"Your breath ceases, mortal. Rise now as a thrall bound to my underworld!"',
+        passiveName: "Soul Binding",
+        passiveDesc: "Captured pieces leave a Soul Well for 2 turns; moving onto it grants Spectral Protection from capture.",
+        result: "• Enemy dragged into subterranean abyss.<br>• Tile marked as active Soul Well.<br>• Spectral Protection granted to allied vanguard."
+      }
+    };
+
+    function triggerManifestationCombat(attackerPiece, defenderPiece, coordStr, factionKey) {
+      const profile = factionCombatProfiles[factionKey] || factionCombatProfiles.volcanic;
+      
+      document.getElementById('combatTitle').textContent = `${profile.attackerName} VS Captured Unit (${coordStr})`;
+      document.getElementById('combatAttackerName').textContent = profile.attackerName;
+      document.getElementById('combatAttackerRole').textContent = profile.attackerRole;
+      document.getElementById('combatAttackerImg').src = profile.attackerImg;
+      document.getElementById('combatDialogue').textContent = profile.dialogue;
+      document.getElementById('combatResult').innerHTML = profile.result;
+
+      playSound('clash');
+
+      const overlay = document.getElementById('manifestationOverlay');
+      overlay.classList.add('active');
+    }
+
+    document.getElementById('btnCloseCombat').addEventListener('click', () => {
+      document.getElementById('manifestationOverlay').classList.remove('active');
+    });
+
+    document.getElementById('btnTestManifestation').addEventListener('click', () => {
+      const faction = document.getElementById('simKingdomSelect').value;
+      triggerManifestationCombat('Q', 'p', 'e5', faction);
+    });
+
+    // Render Board
+    let selectedCell = null;
 
     function renderBoard() {
       const boardEl = document.getElementById('tacticalBoard');
       boardEl.innerHTML = '';
+      let mutatorCount = 0;
 
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
@@ -1137,6 +1546,11 @@
           
           if (cellTerrains[r][c]) {
             cell.classList.add(`cell-${cellTerrains[r][c]}`);
+            mutatorCount++;
+          }
+
+          if (selectedCell && selectedCell.r === r && selectedCell.c === c) {
+            cell.classList.add('cell-selected');
           }
 
           const piece = currentBoardState[r][c];
@@ -1149,31 +1563,78 @@
           boardEl.appendChild(cell);
         }
       }
-    }
 
-    let selectedCell = null;
+      document.getElementById('activeMutatorsCount').textContent = `${mutatorCount} Tiles`;
+      document.getElementById('capturedBlack').textContent = capturedBlackPieces.length > 0 ? capturedBlackPieces.join(' ') : 'None';
+    }
 
     function handleCellClick(r, c) {
       const faction = document.getElementById('simKingdomSelect').value;
       const statusLog = document.getElementById('simStatusLog');
+      const piece = currentBoardState[r][c];
 
+      // Step 1: Selecting a piece
       if (!selectedCell) {
-        if (currentBoardState[r][c]) {
-          selectedCell = { r, c, piece: currentBoardState[r][c] };
-          statusLog.textContent = `Selected piece at ${String.fromCharCode(97 + c)}${8 - r}. Click target square to advance.`;
+        if (piece && piece === piece.toUpperCase()) { // Friendly white piece
+          selectedCell = { r, c, piece };
+          playSound('move');
+          statusLog.textContent = `Selected ${piece} at ${String.fromCharCode(97 + c)}${8 - r}. Click any valid square to move or capture.`;
+          renderBoard();
+        } else if (piece) {
+          statusLog.textContent = `Square contains enemy unit ${piece}. Select a golden allied piece first!`;
         }
       } else {
-        // Move piece
+        // Step 2: Target square selected
         const oldR = selectedCell.r;
         const oldC = selectedCell.c;
-        const piece = selectedCell.piece;
+        const movingPiece = selectedCell.piece;
+        const targetPiece = currentBoardState[r][c];
 
+        // Clicked same square to deselect
+        if (oldR === r && oldC === c) {
+          selectedCell = null;
+          statusLog.textContent = 'Deselected.';
+          renderBoard();
+          return;
+        }
+
+        // Cannot capture friendly unit
+        if (targetPiece && targetPiece === targetPiece.toUpperCase()) {
+          selectedCell = { r, c, piece: targetPiece };
+          playSound('move');
+          renderBoard();
+          return;
+        }
+
+        const coordStr = `${String.fromCharCode(97 + c)}${8 - r}`;
+        const isCapture = Boolean(targetPiece);
+
+        // Execute Move
         currentBoardState[oldR][oldC] = '';
-        currentBoardState[r][c] = piece;
-
-        // Mutate terrain
+        currentBoardState[r][c] = movingPiece;
         cellTerrains[r][c] = faction;
-        statusLog.textContent = `Moved to ${String.fromCharCode(97 + c)}${8 - r}. Tile permanently transformed to ${faction.toUpperCase()} terrain!`;
+
+        // Add to Move Log
+        const moveList = document.getElementById('moveLogList');
+        const logEntry = document.createElement('div');
+        const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
+
+        if (isCapture) {
+          capturedBlackPieces.push(pieceIcons[targetPiece] || targetPiece);
+          logEntry.innerHTML = `<span class="text-danger">#${moveTurn}. ${movingPiece}x${coordStr}</span> <span class="text-warning">[MANIFESTATION]</span> <span class="text-muted">(${prof.passiveName} Active)</span>`;
+          triggerManifestationCombat(movingPiece, targetPiece, coordStr, faction);
+        } else {
+          playSound('move');
+          setTimeout(() => playSound('terrain'), 80);
+          logEntry.innerHTML = `<span class="text-info">#${moveTurn}. ${movingPiece}${coordStr}</span> <span class="text-muted">(${prof.passiveName} claimed)</span>`;
+        }
+        moveList.appendChild(logEntry);
+        moveList.scrollTop = moveList.scrollHeight;
+
+        moveTurn++;
+        document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (Player 1)`;
+        statusLog.textContent = `Advanced to ${coordStr}. Tile permanently bound to ${prof.name.toUpperCase()}!`;
+        
         selectedCell = null;
         renderBoard();
       }
@@ -1183,41 +1644,34 @@
     document.getElementById('btnResetBoard').addEventListener('click', () => {
       currentBoardState = JSON.parse(JSON.stringify(initialBoard));
       cellTerrains = Array(8).fill(null).map(() => Array(8).fill(''));
-      document.getElementById('simStatusLog').textContent = 'Board reset to neutral classical coordinates.';
+      capturedBlackPieces = [];
+      moveTurn = 1;
+      selectedCell = null;
+      document.getElementById('turnIndicator').textContent = 'Turn: 1 (Player 1)';
+      document.getElementById('moveLogList').innerHTML = '<div class="text-muted">• Game reset to standard 8x8 layout.</div>';
+      document.getElementById('simStatusLog').textContent = 'Board reset to neutral coordinates.';
+      playSound('move');
       renderBoard();
     });
 
-    // Faction Selector
+    // Faction Selector Change
     document.getElementById('simKingdomSelect').addEventListener('change', (e) => {
       const val = e.target.value;
-      const pName = document.getElementById('simPassiveName');
-      const pDesc = document.getElementById('simPassiveDesc');
-
-      if (val === 'volcanic') {
-        pName.textContent = 'Active Passive: Heat Haze';
-        pDesc.textContent = 'Volcanic terrain emits thermal distortions reducing enemy ranged accuracy by 25%.';
-      } else if (val === 'verdant') {
-        pName.textContent = 'Active Passive: Root-Bound';
-        pDesc.textContent = 'Units landing on briars suffer root-bound movement limitations on subsequent turns.';
-      } else if (val === 'abyssal') {
-        pName.textContent = 'Active Passive: Tidal Flow';
-        pDesc.textContent = 'Units gain +1 diagonal movement extension across flooded planar tiles.';
-      } else if (val === 'frost') {
-        pName.textContent = 'Active Passive: Permafrost';
-        pDesc.textContent = 'Enemy pieces stepping on glacial terrain lose 1 movement turn due to freezing.';
-      } else if (val === 'void') {
-        pName.textContent = 'Active Passive: Shadow Walk';
-        pDesc.textContent = 'Allows instantaneous piece swap with any allied unit across the board.';
-      }
+      const prof = factionCombatProfiles[val] || factionCombatProfiles.volcanic;
+      document.getElementById('simPassiveName').textContent = `Active Passive: ${prof.passiveName}`;
+      document.getElementById('simPassiveDesc').textContent = prof.passiveDesc;
+      playSound('terrain');
     });
 
-    // Queen Ultimate Trigger
+    // Queen Signature Ultimate Trigger
     document.getElementById('btnQueenUltimate').addEventListener('click', () => {
       const faction = document.getElementById('simKingdomSelect').value;
+      const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
       const statusLog = document.getElementById('simStatusLog');
-      statusLog.textContent = '🔥 QUEEN SIGNATURE ULTIMATE TRIGGERED! APOCALYPTIC PLANAR WIPEOUT IN PROGRESS...';
+      
+      statusLog.textContent = `🔥 ${prof.attackerName.toUpperCase()} SIGNATURE ULTIMATE TRIGGERED! PLANAR BOARD CLEARED!`;
+      playSound('ultimate');
 
-      // Wave animation across all cells
       const cells = document.querySelectorAll('.board-cell');
       cells.forEach((cell, idx) => {
         setTimeout(() => {
@@ -1225,13 +1679,23 @@
           cell.style.transform = 'scale(1.15)';
           setTimeout(() => {
             cell.style.transform = 'scale(1)';
-          }, 300);
-        }, idx * 15);
+          }, 320);
+        }, idx * 16);
       });
 
+      // Clear enemy pieces in animation
       setTimeout(() => {
-        statusLog.textContent = 'Checkmate confirmed. Victorious Queen ultimate sequence completed.';
-      }, 1200);
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            if (currentBoardState[r][c] && currentBoardState[r][c] === currentBoardState[r][c].toLowerCase()) {
+              capturedBlackPieces.push(pieceIcons[currentBoardState[r][c]]);
+              currentBoardState[r][c] = '';
+            }
+          }
+        }
+        renderBoard();
+        statusLog.textContent = 'Apocalyptic Ultimate sequence completed. Checkmate verified by GDD rules.';
+      }, 1300);
     });
 
     // Init on DOM ready

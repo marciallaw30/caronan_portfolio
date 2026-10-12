@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'mythic-gambit': {
       title: 'Mythic Gambit: Tactical High-Fantasy Chess RPG',
       category: 'Game Systems Engineering, Strategy Mechanics & GDD Architecture',
-      overview: 'A visionary 3D turn-based tactical strategy game blueprint engineered by Lead Author Marcial Lawrence Jr V. Caronan and the BSIT development cohort at Datamex College of Saint Adeline (Submitted to Ms. Jeanniel T. Ilago). Bridges the classical 8x8 movement logic of chess with real-time planar terrain transformations, cinematic manifestation combat executions, 15 distinct mythical civilizations, and apocalyptic Queen Signature Ultimates.',
+      overview: 'An original academic Game Design Document (GDD / research paper) and conceptual simulation prototype engineered by Lead Author Marcial Lawrence Jr V. Caronan and the BSIT development cohort at Datamex College of Saint Adeline (Submitted to Ms. Jeanniel T. Ilago). Note: This is an academic research documentation project with an interactive web prototype demonstrating its mechanics—not a commercial video game release. Bridges classical 8x8 chess movement logic with real-time planar terrain transformations, cinematic manifestation combat executions, 15 distinct mythical civilizations, and apocalyptic Queen Signature Ultimates.',
       features: [
         'Complete Game Design Document (GDD • 44.6 MB Microsoft Word) detailing narrative lore, systems design, 42 concept artworks, wireframes, and production timelines',
         'The Manifestation Combat System: Capture events initiate 3D kingdom-specific cinematic combat sequences powered by elemental and cultural magic',
