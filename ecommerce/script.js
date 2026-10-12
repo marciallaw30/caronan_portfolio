@@ -1,97 +1,223 @@
 /**
- * TAROTKNIGHT CRYSTAL ART - CLIENT ENGINE
- * Datamex College of Saint Adeline | Lead: Marcial Lawrence Jr V. Caronan
- * PayMongo API Key: pk_test_wfW6N69auD5WdUXDq7dRQVam
- * Integrated Logistics: J&T Express Philippines (https://www.jtexpress.ph/)
+ * TAROTKNIGHT CRYSTAL ART - CLIENT ENGINE & RELATIONAL DATABASE PERSISTENCE
+ * Datamex College of Saint Adeline | Lead: Marcial Lawrence Jr V. Caronan & Team
+ * Faculty Adviser: Mr. Randy Villanueva | Subject: E-Business
+ * 
+ * Integrated Technologies:
+ * - PayMongo Online Payment Gateway API (pk_test_wfW6N69auD5WdUXDq7dRQVam)
+ * - J&T Express Philippines Logistics & Real-Time Tracking Engine
+ * - LocalStorage Relational State Persistence (Products, Orders, Bookings, Cart, Reviews)
+ * - AI Knowledge Base Engine (contact_admin.php simulation)
  */
 
-// PayMongo Test API Key
+// PayMongo Test API Key & J&T Logistics
 const PAYMONGO_TEST_PUBLIC_KEY = "pk_test_wfW6N69auD5WdUXDq7dRQVam";
 const JT_EXPRESS_URL = "https://www.jtexpress.ph/";
 
-// Shopping Cart State
-let cart = [];
+// Storage Keys for Relational Persistence
+const DB_KEYS = {
+  PRODUCTS: "tk_products_db",
+  ORDERS: "tk_orders_db",
+  BOOKINGS: "tk_bookings_db",
+  CART: "tk_cart_db",
+  REVIEWS: "tk_reviews_db"
+};
+
+// ================= 1. DATABASE INITIALIZATION & REPOSITORY =================
+const Database = {
+  // Initialize and load products from LocalStorage or seed from CRYSTAL_PRODUCTS
+  getProducts() {
+    const raw = localStorage.getItem(DB_KEYS.PRODUCTS);
+    if (!raw) {
+      localStorage.setItem(DB_KEYS.PRODUCTS, JSON.stringify(CRYSTAL_PRODUCTS));
+      return CRYSTAL_PRODUCTS;
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : CRYSTAL_PRODUCTS;
+    } catch (e) {
+      return CRYSTAL_PRODUCTS;
+    }
+  },
+
+  saveProducts(products) {
+    localStorage.setItem(DB_KEYS.PRODUCTS, JSON.stringify(products));
+  },
+
+  // Decrement inventory stock upon successful checkout
+  decrementStock(items) {
+    const products = this.getProducts();
+    items.forEach(cartItem => {
+      const target = products.find(p => p.id === cartItem.id);
+      if (target) {
+        target.stock = Math.max(0, target.stock - cartItem.qty);
+      }
+    });
+    this.saveProducts(products);
+  },
+
+  // Orders Ledger
+  getOrders() {
+    const raw = localStorage.getItem(DB_KEYS.ORDERS);
+    if (!raw) {
+      const defaultOrders = [
+        {
+          orderId: "TK-ORD-8941",
+          trackingNumber: "JNT-PH-8201948291",
+          customer: "Maria Santos",
+          city: "Parañaque City",
+          items: "Stellar Rain: Labradorite Meteor Shower Flash x1",
+          total: 1470,
+          paymentMethod: "PayMongo (GCash)",
+          status: "In Transit",
+          courier: "J&T Express Philippines",
+          timeline: [
+            { status: "Waybill Created & Paid", location: "TarotKnight Parañaque Studio", time: "Oct 10, 09:30 AM", done: true },
+            { status: "Parcel Picked Up by Courier", location: "J&T Hub Parañaque", time: "Oct 10, 02:15 PM", done: true },
+            { status: "Sorted at Sorting Center", location: "J&T Pasay Mega Hub", time: "Oct 11, 04:45 AM", done: true },
+            { status: "Out for Delivery", location: "Assigned to Rider (Kuya Arnel)", time: "Oct 12, 08:30 AM", done: false, active: true },
+            { status: "Delivered & Signed", location: "Recipient Address", time: "Pending", done: false }
+          ]
+        },
+        {
+          orderId: "TK-ORD-8930",
+          trackingNumber: "JNT-PH-7729104829",
+          customer: "Joshua Reyes",
+          city: "Quezon City",
+          items: "The Onyx Nexus x1, Timeless Devotion Rose Quartz x1",
+          total: 2350,
+          paymentMethod: "PayMongo (Card)",
+          status: "Delivered",
+          courier: "J&T Express Philippines",
+          timeline: [
+            { status: "Waybill Created & Paid", location: "TarotKnight Parañaque Studio", time: "Oct 08, 10:15 AM", done: true },
+            { status: "Parcel Picked Up by Courier", location: "J&T Hub Parañaque", time: "Oct 08, 03:00 PM", done: true },
+            { status: "Sorted at Sorting Center", location: "J&T Pasay Mega Hub", time: "Oct 09, 01:20 AM", done: true },
+            { status: "Out for Delivery", location: "J&T QC Delivery Hub", time: "Oct 09, 09:00 AM", done: true },
+            { status: "Delivered & Signed", location: "Received by J. Reyes", time: "Oct 09, 01:45 PM", done: true }
+          ]
+        }
+      ];
+      localStorage.setItem(DB_KEYS.ORDERS, JSON.stringify(defaultOrders));
+      return defaultOrders;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      return [];
+    }
+  },
+
+  saveOrder(newOrder) {
+    const orders = this.getOrders();
+    orders.unshift(newOrder);
+    localStorage.setItem(DB_KEYS.ORDERS, JSON.stringify(orders));
+  },
+
+  // Service Bookings Ledger
+  getBookings() {
+    const raw = localStorage.getItem(DB_KEYS.BOOKINGS);
+    if (!raw) {
+      const defaultBookings = [
+        {
+          bookingId: "TK-BKG-101",
+          clientName: "Catherine Velasco",
+          clientEmail: "cat.velasco@gmail.com",
+          service: "Tarot Divination & Life Path Consultation",
+          date: "2026-10-18",
+          time: "2:00 PM - 3:00 PM",
+          fee: 650,
+          status: "Confirmed",
+          paymentMethod: "PayMongo (GCash)"
+        }
+      ];
+      localStorage.setItem(DB_KEYS.BOOKINGS, JSON.stringify(defaultBookings));
+      return defaultBookings;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      return [];
+    }
+  },
+
+  saveBooking(booking) {
+    const bookings = this.getBookings();
+    bookings.unshift(booking);
+    localStorage.setItem(DB_KEYS.BOOKINGS, JSON.stringify(bookings));
+  },
+
+  // Cart Storage
+  getCart() {
+    const raw = localStorage.getItem(DB_KEYS.CART);
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      return [];
+    }
+  },
+
+  saveCart(cartData) {
+    localStorage.setItem(DB_KEYS.CART, JSON.stringify(cartData));
+  }
+};
+
+// ================= 2. ACTIVE RUNTIME STATE =================
+let cart = Database.getCart();
 let currentCategory = "All";
 let searchQuery = "";
 let selectedService = SPIRITUAL_SERVICES[0];
 
-// Mock Order & Tracking Database for J&T Simulation
-let simulatedOrders = [
-  {
-    orderId: "TK-ORD-8941",
-    trackingNumber: "JNT-PH-8201948291",
-    customer: "Maria Santos",
-    city: "Parañaque City",
-    items: "Celestial Amethyst Astral Wire-Wrapped Pendant x1",
-    total: 1370,
-    paymentMethod: "PayMongo (GCash)",
-    status: "In Transit",
-    courier: "J&T Express Philippines",
-    timeline: [
-      { status: "Waybill Created & Paid", location: "TarotKnight Parañaque Studio", time: "Oct 10, 09:30 AM", done: true },
-      { status: "Parcel Picked Up by Courier", location: "J&T Hub Parañaque", time: "Oct 10, 02:15 PM", done: true },
-      { status: "Sorted at Sorting Center", location: "J&T Pasay Mega Hub", time: "Oct 11, 04:45 AM", done: true },
-      { status: "Out for Delivery", location: "Assigned to Rider (Kuya Arnel)", time: "Oct 12, 08:30 AM", done: false, active: true },
-      { status: "Delivered & Signed", location: "Recipient Address", time: "Pending", done: false }
-    ]
-  },
-  {
-    orderId: "TK-ORD-8930",
-    trackingNumber: "JNT-PH-7729104829",
-    customer: "Joshua Reyes",
-    city: "Quezon City",
-    items: "Solar Citrine Abundance Talisman x1, Rose Quartz Mala x1",
-    total: 2350,
-    paymentMethod: "PayMongo (Card)",
-    status: "Delivered",
-    courier: "J&T Express Philippines",
-    timeline: [
-      { status: "Waybill Created & Paid", location: "TarotKnight Parañaque Studio", time: "Oct 08, 10:15 AM", done: true },
-      { status: "Parcel Picked Up by Courier", location: "J&T Hub Parañaque", time: "Oct 08, 03:00 PM", done: true },
-      { status: "Sorted at Sorting Center", location: "J&T Pasay Mega Hub", time: "Oct 09, 01:20 AM", done: true },
-      { status: "Out for Delivery", location: "J&T QC Delivery Hub", time: "Oct 09, 09:00 AM", done: true },
-      { status: "Delivered & Signed", location: "Received by J. Reyes", time: "Oct 09, 01:45 PM", done: true }
-    ]
-  }
-];
-
-// AI Spiritual Guide Knowledge Base (Matching paper's ai_knowledge_base)
+// AI Knowledge Base Engine (Simulating MySQL ai_knowledge_base)
 const AI_KNOWLEDGE_BASE = [
   {
-    keywords: ["amethyst", "sleep", "intuition", "third eye"],
-    response: "✨ <strong>Amethyst Metaphysical Insight:</strong> Amethyst resonates with the Crown and Third Eye Chakras (approx 963Hz frequency). It dispels insomnia, calms anxiety, and repels psychic interference. Recommended ritual: cleanse under moonlight or with a selenite plate."
+    keywords: ["labradorite", "flash", "aurora", "stellar", "meteor"],
+    response: "✨ <strong>Labradorite Metaphysical Insight:</strong> Renowned as the Temple of the Stars. Labradorite deflects unwanted psychic energies, balances the aura, and awakens innate psychic faculties. Recommended ritual: cleanse under the Full Moon or atop a Selenite slab."
   },
   {
-    keywords: ["citrine", "money", "wealth", "prosperity", "abundance"],
-    response: "🌟 <strong>Citrine Abundance Insight:</strong> Citrine carries solar warmth and does not accumulate negative energy. Keep our wire-wrapped Citrine in your purse, workspace, or cash box to attract contracts, sales, and joyful motivation."
+    keywords: ["rose quartz", "love", "heart", "devotion", "serenity"],
+    response: "💖 <strong>Rose Quartz Insight:</strong> The sovereign heart healer (Anahata frequency). It cleanses relational trauma, promotes unconditional self-love, and softens emotional barriers. Cleanse gently with rosewater or lunar light."
   },
   {
-    keywords: ["obsidian", "protection", "shield", "negative", "curse"],
-    response: "🛡️ <strong>Black Obsidian Insight:</strong> Formed from rapidly cooling volcanic lava, Obsidian forms a fierce auric mirror shield. It cuts psychic cords from toxic acquaintances and dissolves heavy electromagnetic fog."
+    keywords: ["onyx", "black onyx", "shield", "ward", "protection", "grounding"],
+    response: "🛡️ <strong>Black Onyx Shield Insight:</strong> A master grounding stone of sovereign boundary control. It absorbs and transmutes negative emotional projections, bestowing laser focus and unshakeable discipline."
   },
   {
-    keywords: ["rose quartz", "love", "heart", "relationship"],
-    response: "💖 <strong>Rose Quartz Insight:</strong> The sovereign stone of unconditional love and self-compassion. It softens grief, opens the heart chakra, and invites harmonious romantic alignment."
+    keywords: ["carnelian", "fire", "ember", "vitality", "creativity", "sacral"],
+    response: "🔥 <strong>Carnelian Agate Insight:</strong> Resonates powerfully with the Sacral Chakra. It dissolves artistic hesitation, fires up motivation and sexual confidence, and infuses your auric body with solar vitality."
   },
   {
-    keywords: ["paymongo", "payment", "gcash", "maya", "card"],
-    response: "💳 <strong>PayMongo Integration:</strong> We utilize official PayMongo API keys (Test Key: <code>pk_test_wfW6N69auD5WdUXDq7dRQVam</code>) supporting GCash, Maya, and Visa/Mastercard. Transactions validate via secure instant webhooks without manual receipt sending!"
+    keywords: ["jasper", "red jasper", "iron will", "earth", "stamina"],
+    response: "⛰️ <strong>Red Jasper & Picture Jasper:</strong> Known as the supreme nurturer. Connects the root chakra with deep planetary Gaia wisdom, providing steady endurance and physical grounding during prolonged stress."
   },
   {
-    keywords: ["j&t", "jnt", "shipping", "delivery", "track", "courier"],
-    response: "📦 <strong>J&T Express Shipping:</strong> All crystal artifacts are cleansed, packed in bubble silk pouches, and dispatched via J&T Express Philippines. Standard delivery takes 1-2 days for Metro Manila and 3-5 days for provincial areas. You can track anytime via our tracker or <a href='https://www.jtexpress.ph/' target='_blank' class='text-gold'>jtexpress.ph</a>!"
+    keywords: ["tiger's eye", "tigers eye", "focus", "wealth", "prosperity", "savannah"],
+    response: "🐯 <strong>Tiger's Eye Wealth Insight:</strong> Carries golden solar plexus courage and chatoyant discernment. Known for attracting business prosperity, practical wealth, and sharp commercial insight."
   },
   {
-    keywords: ["wire wrap", "wire", "copper", "bronze", "tarnish"],
-    response: "💍 <strong>Artisan Wire-Wrapping:</strong> All pendants and rings are handcrafted by Marcial Caronan and team using tarnish-resistant jewelry-grade copper, brass, and bronze wires. Avoid spraying direct perfume onto wirework."
+    keywords: ["rhodonite", "compassion", "trauma", "scars", "grace"],
+    response: "🌸 <strong>Rhodonite Heart Recovery:</strong> Pink manganese silicate laced with black dendrites. A master balancer that clears psychic scars from past heartbreaks, nurturing genuine forgiveness and peace."
   },
   {
-    keywords: ["tarot", "reading", "booking", "cleansing", "service"],
-    response: "🔮 <strong>Spiritual Consultations:</strong> You can book a 45-min Tarot reading (₱650), Chakra Cleansing (₱850), or Pre-Shipment Crystal Blessing (₱1,200) in our Booking Hub with instant calendar reservation and PayMongo checkout!"
+    keywords: ["paymongo", "payment", "gcash", "maya", "card", "checkout"],
+    response: "💳 <strong>PayMongo Gateway Integration:</strong> We utilize official PayMongo API keys (Test: <code>pk_test_wfW6N69auD5WdUXDq7dRQVam</code>). Supports GCash, Maya, and Visa/Mastercard test transactions with instant webhook status synchronization."
+  },
+  {
+    keywords: ["j&t", "jnt", "shipping", "delivery", "track", "courier", "dispatch"],
+    response: "📦 <strong>J&T Express Logistics:</strong> Every order is carefully packed with bubble cushioning and shipped via J&T Express Philippines. Standard transit is 1-2 days for Metro Manila and 3-5 days for provincial areas. Enter your waybill in our tracking tool or on <a href='https://www.jtexpress.ph/' target='_blank' class='text-gold'>jtexpress.ph</a>!"
+  },
+  {
+    keywords: ["wire wrap", "wire", "copper", "tarnish", "silver"],
+    response: "💍 <strong>Artisan Wire Craft:</strong> Hand-sculpted by Lead Marcial Lawrence Jr V. Caronan and team using jewelry-grade tarnish-resistant pure copper and sterling silver-tone wires. Clean gently with a microfiber polishing cloth."
+  },
+  {
+    keywords: ["tarot", "booking", "consultation", "reading", "service"],
+    response: "🔮 <strong>Spiritual Service Appointments:</strong> Book a 45-min Tarot reading (₱650), Chakra Cleansing (₱850), or Altar Crystal Activation (₱1,200) in our Booking Hub with instant calendar reservation and PayMongo checkout!"
   }
 ];
 
-// Initialize on DOM load
+// ================= 3. INITIALIZATION ON DOM READY =================
 document.addEventListener('DOMContentLoaded', () => {
   renderProducts();
   setupFilterPills();
@@ -106,16 +232,19 @@ document.addEventListener('DOMContentLoaded', () => {
   setupAdminDashboard();
 });
 
-// Render 32 Crystal Products
+// ================= 4. PRODUCT CATALOG RENDERING =================
 function renderProducts() {
   const container = document.getElementById('productsGrid');
   if (!container) return;
 
-  const filtered = CRYSTAL_PRODUCTS.filter(p => {
+  const products = Database.getProducts();
+
+  const filtered = products.filter(p => {
     const matchesCat = (currentCategory === "All") || (p.category === currentCategory);
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.chakra.toLowerCase().includes(searchQuery.toLowerCase());
+                          p.chakra.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.wireMaterial.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCat && matchesSearch;
   });
 
@@ -124,8 +253,8 @@ function renderProducts() {
       <div class="col-12 text-center py-5">
         <i class="bi bi-search text-gold fs-1 mb-3 d-block"></i>
         <h4 class="text-white">No Crystals Found Matching "${searchQuery}"</h4>
-        <p class="text-muted">Try another spiritual search query or clear the filter.</p>
-        <button class="btn btn-gold-primary mt-2" onclick="resetFilters()">View All 32 Crystals</button>
+        <p class="text-muted">Try another metaphysical keyword or clear your active category filter.</p>
+        <button class="btn btn-gold-primary mt-2" onclick="resetFilters()">View All 44 Crystals</button>
       </div>
     `;
     return;
@@ -137,7 +266,7 @@ function renderProducts() {
         <div class="product-thumb-wrap">
           <span class="product-tag-badge">${p.tag}</span>
           <span class="product-sku-badge">${p.sku}</span>
-          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='assets/crystals/6.png'">
         </div>
         <div class="product-card-body">
           <div class="product-category-meta">${p.category}</div>
@@ -156,8 +285,8 @@ function renderProducts() {
               <button class="btn btn-sm btn-outline-warning" onclick="openProductQuickView(${p.id})" title="Inspect Crystal Metaphysics">
                 <i class="bi bi-eye"></i>
               </button>
-              <button class="btn btn-add-cart" onclick="addToCart(${p.id})">
-                <i class="bi bi-bag-plus"></i> Add
+              <button class="btn btn-add-cart" onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''}>
+                <i class="bi bi-bag-plus"></i> ${p.stock <= 0 ? 'Sold Out' : 'Add'}
               </button>
             </div>
           </div>
@@ -205,7 +334,8 @@ function resetFilters() {
 
 // Quick View Modal
 function openProductQuickView(productId) {
-  const product = CRYSTAL_PRODUCTS.find(p => p.id === productId);
+  const products = Database.getProducts();
+  const product = products.find(p => p.id === productId);
   if (!product) return;
 
   const modalEl = document.getElementById('quickViewModal');
@@ -220,10 +350,11 @@ function openProductQuickView(productId) {
   document.getElementById('qvDesc').textContent = product.description;
   document.getElementById('qvWire').textContent = product.wireMaterial;
   document.getElementById('qvCleansing').textContent = product.cleansing;
-  document.getElementById('qvStock').textContent = `${product.stock} pieces in stock`;
+  document.getElementById('qvStock').textContent = product.stock > 0 ? `${product.stock} pieces in stock` : `Sold out`;
   
   const addBtn = document.getElementById('qvAddBtn');
   if (addBtn) {
+    addBtn.disabled = product.stock <= 0;
     addBtn.onclick = () => {
       addToCart(product.id);
       bootstrap.Modal.getInstance(modalEl).hide();
@@ -234,18 +365,25 @@ function openProductQuickView(productId) {
   modal.show();
 }
 
-// Shopping Cart Functions
+// ================= 5. SHOPPING CART ENGINE & PERSISTENCE =================
 function addToCart(productId) {
-  const product = CRYSTAL_PRODUCTS.find(p => p.id === productId);
-  if (!product) return;
+  const products = Database.getProducts();
+  const product = products.find(p => p.id === productId);
+  if (!product || product.stock <= 0) return;
 
   const existing = cart.find(item => item.id === productId);
   if (existing) {
-    existing.qty += 1;
+    if (existing.qty < product.stock) {
+      existing.qty += 1;
+    } else {
+      showToastNotification(`Maximum available stock reached for ${product.name}`);
+      return;
+    }
   } else {
     cart.push({ ...product, qty: 1 });
   }
 
+  Database.saveCart(cart);
   updateCartBadge();
   renderCartDrawer();
   showToastNotification(`Added "${product.name}" to Sacred Cart!`);
@@ -260,12 +398,14 @@ function updateCartQty(productId, delta) {
     cart = cart.filter(i => i.id !== productId);
   }
 
+  Database.saveCart(cart);
   updateCartBadge();
   renderCartDrawer();
 }
 
 function removeFromCart(productId) {
   cart = cart.filter(i => i.id !== productId);
+  Database.saveCart(cart);
   updateCartBadge();
   renderCartDrawer();
 }
@@ -308,7 +448,7 @@ function renderCartDrawer() {
     subtotal += itemTotal;
     return `
       <div class="cart-item-row">
-        <img src="${item.image}" alt="${item.name}" class="cart-item-thumb">
+        <img src="${item.image}" alt="${item.name}" class="cart-item-thumb" onerror="this.src='assets/crystals/6.png'">
         <div class="flex-grow-1">
           <div class="fw-bold text-white small" style="line-height: 1.2;">${item.name}</div>
           <div class="text-gold small">₱${item.price.toLocaleString()} each</div>
@@ -355,7 +495,7 @@ function setupCartEvents() {
 function showToastNotification(message) {
   const toast = document.createElement('div');
   toast.className = 'position-fixed bottom-0 end-0 m-3 p-3 rounded-3 shadow-lg';
-  toast.style.cssText = 'background: rgba(26, 14, 48, 0.96); border: 1px solid #d4af37; z-index: 9999; color: #fff; min-width: 280px;';
+  toast.style.cssText = 'background: rgba(30, 11, 56, 0.98); border: 1px solid #d4af37; z-index: 9999; color: #fff; min-width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);';
   toast.innerHTML = `
     <div class="d-flex align-items-center gap-2">
       <i class="bi bi-check-circle-fill text-gold fs-5"></i>
@@ -367,10 +507,10 @@ function showToastNotification(message) {
     toast.style.opacity = '0';
     toast.style.transition = 'opacity 0.4s ease';
     setTimeout(() => toast.remove(), 400);
-  }, 2200);
+  }, 2400);
 }
 
-// Render Spiritual Services
+// ================= 6. SERVICE BOOKING ENGINE =================
 function renderServices() {
   const container = document.getElementById('servicesGrid');
   if (!container) return;
@@ -413,7 +553,6 @@ function selectServiceForBooking(serviceId) {
   if (serviceSelect) serviceSelect.value = srv.id;
   updateBookingFee();
 
-  // Scroll to booking form
   const formEl = document.getElementById('bookingFormCard');
   if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
 }
@@ -445,7 +584,6 @@ function setupServiceBooking() {
         return;
       }
 
-      // Launch PayMongo Checkout for Service
       launchPayMongoModal({
         type: 'service',
         title: selectedService.name,
@@ -464,7 +602,7 @@ function updateBookingFee() {
   }
 }
 
-// PayMongo Online Payment Engine Integration
+// ================= 7. PAYMONGO CHECKOUT GATEWAY INTEGRATION =================
 function setupPayMongoCheckout() {
   const btnProceed = document.getElementById('btnProceedCheckout');
   if (btnProceed) {
@@ -474,7 +612,6 @@ function setupPayMongoCheckout() {
       const shipping = subtotal >= 2500 ? 0 : 120;
       const total = subtotal + shipping;
 
-      // Close cart modal
       const cartModalEl = document.getElementById('cartModal');
       if (cartModalEl) bootstrap.Modal.getInstance(cartModalEl).hide();
 
@@ -501,7 +638,6 @@ function launchPayMongoModal(payload) {
   document.getElementById('pmAmountDisplay').textContent = `₱${payload.amount.toLocaleString()}`;
   document.getElementById('pmApiKeyDisplay').textContent = PAYMONGO_TEST_PUBLIC_KEY;
 
-  // Reset steps
   document.getElementById('pmStepForm').classList.remove('d-none');
   document.getElementById('pmStepProcessing').classList.add('d-none');
   document.getElementById('pmStepSuccess').classList.add('d-none');
@@ -510,7 +646,6 @@ function launchPayMongoModal(payload) {
   modal.show();
 }
 
-// Payment method tab switching inside PayMongo modal
 function selectPaymentMethod(method) {
   document.querySelectorAll('.pm-method-pill').forEach(p => p.classList.remove('active'));
   document.getElementById(`pmTab_${method}`).classList.add('active');
@@ -522,7 +657,7 @@ function selectPaymentMethod(method) {
   document.getElementById(`pmFields_${method}`).classList.remove('d-none');
 }
 
-// Execute PayMongo Payment Simulation
+// Execute 3-Stage PayMongo Handshake and Database Persistence
 function executePayMongoTransaction() {
   const formEl = document.getElementById('pmStepForm');
   const procEl = document.getElementById('pmStepProcessing');
@@ -531,42 +666,45 @@ function executePayMongoTransaction() {
   formEl.classList.add('d-none');
   procEl.classList.remove('d-none');
 
-  // Simulate 3-stage PayMongo API Handshake & Webhook Callback
   const logBox = document.getElementById('pmLiveHandshakeLogs');
   logBox.innerHTML = `
     <div>[0.00s] POST https://api.paymongo.com/v1/checkout_sessions</div>
-    <div>[0.15s] Header: Authorization: Basic ${PAYMONGO_TEST_PUBLIC_KEY.substring(0, 14)}...</div>
+    <div>[0.15s] Authorization: Basic ${PAYMONGO_TEST_PUBLIC_KEY.substring(0, 14)}...</div>
     <div>[0.35s] Payload Amount: ${activeCheckoutPayload.amount * 100} centavos (PHP)</div>
   `;
 
   setTimeout(() => {
     logBox.innerHTML += `<div>[0.85s] PayMongo Gateway Responded: HTTP 200 OK (cs_test_session_active)</div>`;
-  }, 900);
+  }, 850);
 
   setTimeout(() => {
-    logBox.innerHTML += `<div>[1.60s] Webhook Received: event "payment.paid" validated</div>`;
-  }, 1700);
+    logBox.innerHTML += `<div>[1.60s] Webhook Received: event "payment.paid" validated cryptographically</div>`;
+  }, 1600);
 
   setTimeout(() => {
-    logBox.innerHTML += `<div>[2.20s] Database status transition: Pending -> PAID / CONFIRMED</div>`;
+    logBox.innerHTML += `<div>[2.20s] Relational Database: status Pending -> PAID / CONFIRMED</div>`;
     
-    // Complete Payment
     procEl.classList.add('d-none');
     succEl.classList.remove('d-none');
 
-    // Generate New Order in Database
     const newOrderId = `TK-ORD-${Math.floor(1000 + Math.random() * 9000)}`;
     const newTracking = `JNT-PH-${Math.floor(1000000000 + Math.random() * 9000000000)}`;
     const customerName = document.getElementById('pmInputName').value || "Valued Seeker";
     const customerCity = document.getElementById('pmInputCity').value || "Metro Manila";
 
+    // 1. Decrement Stock in Database if physical retail
+    if (activeCheckoutPayload.type === 'retail') {
+      Database.decrementStock(activeCheckoutPayload.items);
+    }
+
+    // 2. Persist Order Record in Local Relational Database
     const newOrderRecord = {
       orderId: newOrderId,
       trackingNumber: newTracking,
       customer: customerName,
       city: customerCity,
       items: activeCheckoutPayload.type === 'retail' 
-        ? cart.map(i => `${i.name} x${i.qty}`).join(', ')
+        ? activeCheckoutPayload.items.map(i => `${i.name} x${i.qty}`).join(', ')
         : activeCheckoutPayload.title,
       total: activeCheckoutPayload.amount,
       paymentMethod: "PayMongo Test Gateway",
@@ -576,30 +714,49 @@ function executePayMongoTransaction() {
         { status: "Payment Verified via PayMongo", location: "Online Gateway Callback", time: "Just Now", done: true },
         { status: "Waybill Created at TarotKnight Studio", location: "Parañaque City Studio", time: "Pending Courier Pickup", done: true, active: true },
         { status: "Parcel Picked Up by J&T Express", location: "J&T Hub Parañaque", time: "Scheduled Today", done: false },
-        { status: "In Transit via Sorting Center", location: "J&T Pasay Sorting Facility", time: "Scheduled", done: false },
+        { status: "In Transit via Mega Hub", location: "J&T Pasay Mega Hub", time: "Scheduled", done: false },
         { status: "Out for Delivery", location: customerCity, time: "Scheduled", done: false }
       ]
     };
 
-    simulatedOrders.unshift(newOrderRecord);
+    Database.saveOrder(newOrderRecord);
 
-    // Update Success Display
+    // 3. If Service Booking, Persist in tk_bookings_db
+    if (activeCheckoutPayload.type === 'service') {
+      const newBookingRecord = {
+        bookingId: `TK-BKG-${Math.floor(100 + Math.random() * 900)}`,
+        clientName: customerName,
+        clientEmail: activeCheckoutPayload.client ? activeCheckoutPayload.client.email : "seeker@gmail.com",
+        service: activeCheckoutPayload.bookingDetails.service,
+        date: activeCheckoutPayload.bookingDetails.date,
+        time: activeCheckoutPayload.bookingDetails.time,
+        fee: activeCheckoutPayload.amount,
+        status: "Confirmed",
+        paymentMethod: "PayMongo Verified"
+      };
+      Database.saveBooking(newBookingRecord);
+    }
+
+    // 4. Update Modal Display
     document.getElementById('pmSuccessOrderId').textContent = newOrderId;
     document.getElementById('pmSuccessTracking').textContent = newTracking;
     document.getElementById('pmSuccessAmount').textContent = `₱${activeCheckoutPayload.amount.toLocaleString()}`;
 
-    // Clear cart if retail
+    // 5. Clear Cart if retail order
     if (activeCheckoutPayload.type === 'retail') {
       cart = [];
+      Database.saveCart(cart);
       updateCartBadge();
+      renderCartDrawer();
     }
 
-    // Refresh Admin table
+    // 6. Refresh Product Catalog & Admin Dashboard with new stock & revenues
+    renderProducts();
     setupAdminDashboard();
-  }, 2600);
+  }, 2400);
 }
 
-// J&T Express Logistics Engine
+// ================= 8. J&T EXPRESS LOGISTICS & WAYBILL LOOKUP =================
 function setupJTTracking() {
   const btnTrack = document.getElementById('btnSearchTracking');
   const inputTrack = document.getElementById('trackingInput');
@@ -623,7 +780,8 @@ function performJTTrackingLookup(query) {
     return;
   }
 
-  const order = simulatedOrders.find(o => 
+  const orders = Database.getOrders();
+  const order = orders.find(o => 
     o.trackingNumber.toLowerCase() === query.toLowerCase() ||
     o.orderId.toLowerCase() === query.toLowerCase()
   );
@@ -633,7 +791,7 @@ function performJTTrackingLookup(query) {
       <div class="text-center py-4">
         <i class="bi bi-exclamation-triangle text-warning fs-2 d-block mb-2"></i>
         <h5 class="text-white">Waybill "${query}" Not Found</h5>
-        <p class="text-muted small">Check the number or verify with our studio. You can also track on the official website below.</p>
+        <p class="text-muted small">Verify your tracking code or check with our Parañaque studio. You can also track on the official J&T portal below.</p>
         <a href="${JT_EXPRESS_URL}" target="_blank" class="btn btn-sm btn-outline-danger">
           <i class="bi bi-box-arrow-up-right me-1"></i> Open J&T Express Portal (jtexpress.ph)
         </a>
@@ -679,7 +837,6 @@ function performJTTrackingLookup(query) {
   resultCard.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Quick prefill for sample tracking numbers
 function fillSampleTracking(waybill) {
   const input = document.getElementById('trackingInput');
   if (input) {
@@ -688,7 +845,7 @@ function fillSampleTracking(waybill) {
   }
 }
 
-// AI Spiritual Guide Chatbot
+// ================= 9. AI SPIRITUAL GUIDE CHATBOT =================
 function setupAIGuide() {
   const sendBtn = document.getElementById('btnSendAiChat');
   const chatInput = document.getElementById('aiChatInput');
@@ -709,7 +866,7 @@ function sendUserChatMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  // Add User Message
+  // Add User Bubble
   const userMsg = document.createElement('div');
   userMsg.className = 'chat-bubble chat-bubble-user';
   userMsg.textContent = text;
@@ -717,7 +874,7 @@ function sendUserChatMessage() {
   input.value = '';
   messageBox.scrollTop = messageBox.scrollHeight;
 
-  // Find AI Response matching keywords
+  // Keyword Matching Algorithm
   const lower = text.toLowerCase();
   let matched = AI_KNOWLEDGE_BASE.find(item => 
     item.keywords.some(k => lower.includes(k))
@@ -731,18 +888,18 @@ function sendUserChatMessage() {
       aiMsg.innerHTML = matched.response;
     } else {
       aiMsg.innerHTML = `
-        🔮 <em>Blessed greetings, seeker.</em> Your inquiry regarding "<strong>${text}</strong>" has been logged into our spiritual consult queue.
+        🔮 <em>Blessed greetings, seeker.</em> Your inquiry regarding "<strong>${text}</strong>" has been recorded into our spiritual inquiry ledger.
         <br><br>
-        Our lead artisan and reader, <strong>Marcial Caronan</strong>, has been notified. In the meantime, feel free to ask about our <strong>Amethyst</strong>, <strong>Citrine</strong>, <strong>PayMongo GCash checkout</strong>, or <strong>J&T Express tracking</strong>!
+        Lead artisan and reader, <strong>Marcial Lawrence Jr V. Caronan</strong>, has been alerted. You can explore our <strong>Labradorite</strong>, <strong>Rose Quartz</strong>, <strong>Black Onyx</strong>, <strong>PayMongo GCash checkout</strong>, or <strong>J&T Express tracking</strong>!
       `;
     }
 
     messageBox.appendChild(aiMsg);
     messageBox.scrollTop = messageBox.scrollHeight;
-  }, 600);
+  }, 500);
 }
 
-// Admin Control Center Dashboard
+// ================= 10. ADMINISTRATIVE CONTROL CENTER =================
 function setupAdminDashboard() {
   const totalRevEl = document.getElementById('adminGrossRevenue');
   const ordersCountEl = document.getElementById('adminOrdersCount');
@@ -750,18 +907,21 @@ function setupAdminDashboard() {
   const ordersTableBody = document.getElementById('adminOrdersTableBody');
   const inventoryTableBody = document.getElementById('adminInventoryTableBody');
 
-  const grossTotal = simulatedOrders.reduce((sum, o) => sum + o.total, 0);
+  const orders = Database.getOrders();
+  const products = Database.getProducts();
+
+  const grossTotal = orders.reduce((sum, o) => sum + o.total, 0);
 
   if (totalRevEl) totalRevEl.textContent = `₱${grossTotal.toLocaleString()}`;
-  if (ordersCountEl) ordersCountEl.textContent = simulatedOrders.length;
-  if (inventoryCountEl) inventoryCountEl.textContent = CRYSTAL_PRODUCTS.length;
+  if (ordersCountEl) ordersCountEl.textContent = orders.length;
+  if (inventoryCountEl) inventoryCountEl.textContent = products.length;
 
   if (ordersTableBody) {
-    ordersTableBody.innerHTML = simulatedOrders.map(o => `
+    ordersTableBody.innerHTML = orders.map(o => `
       <tr>
         <td class="font-monospace text-gold">${o.orderId}</td>
         <td><strong>${o.customer}</strong><br><small class="text-muted">${o.city}</small></td>
-        <td class="small">${o.items}</td>
+        <td class="small" style="max-width: 250px;">${o.items}</td>
         <td class="text-gold fw-bold">₱${o.total.toLocaleString()}</td>
         <td><span class="badge bg-dark border border-secondary text-info">${o.paymentMethod}</span></td>
         <td><span class="badge bg-success text-white">${o.status}</span></td>
@@ -771,7 +931,7 @@ function setupAdminDashboard() {
   }
 
   if (inventoryTableBody) {
-    inventoryTableBody.innerHTML = CRYSTAL_PRODUCTS.slice(0, 10).map(p => `
+    inventoryTableBody.innerHTML = products.slice(0, 15).map(p => `
       <tr>
         <td class="font-monospace text-gold">${p.sku}</td>
         <td><strong>${p.name}</strong></td>
