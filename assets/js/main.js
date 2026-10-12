@@ -847,24 +847,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       sections.forEach(sec => {
         const rect = sec.getBoundingClientRect();
-        // If far out of view, skip heavy calculation
-        if (rect.bottom < -250 || rect.top > vh + 250) {
+        // If out of view, keep in stable resting state
+        if (rect.bottom < -100 || rect.top > vh + 100) {
+          sec.style.transform = 'scale(0.985)';
+          sec.style.opacity = '0.75';
           return;
         }
 
         const secCenter = rect.top + rect.height / 2;
         const dist = secCenter - vCenter;
-        const normDist = dist / (vh * 0.72);
-        const clamped = Math.max(-1.3, Math.min(1.3, normDist));
+        const normDist = dist / (vh * 0.75);
+        const clamped = Math.max(-1, Math.min(1, normDist));
 
-        // When scrolling down, sections above center tilt backward (rotateX > 0)
-        // When scrolling down, sections below center tilt forward (rotateX < 0)
-        const angleX = -clamped * 20;
-        const zDist = -Math.pow(Math.abs(clamped), 1.55) * 85;
-        const scale = 1 - Math.min(0.06, Math.abs(clamped) * 0.04);
-        const opacity = 1 - Math.min(0.38, Math.abs(clamped) * 0.3);
+        // Safe cylindrical curvature that enhances 3D depth without causing vertical collisions
+        const angleX = -clamped * 2.2;
+        const scale = 1 - Math.abs(clamped) * 0.025;
+        const opacity = 1 - Math.abs(clamped) * 0.15;
 
-        sec.style.transform = `perspective(1300px) rotateX(${angleX.toFixed(2)}deg) translateZ(${zDist.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+        sec.style.transform = `perspective(1200px) rotateX(${angleX.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
         sec.style.opacity = opacity.toFixed(2);
       });
     }
