@@ -1,143 +1,425 @@
 document.addEventListener('DOMContentLoaded', () => {
-    try {
-        // Use rawData from data.js to bypass file:// CORS policy
-        const data = typeof rawData !== 'undefined' ? rawData : [];
-        if (data.length === 0) throw new Error("Data not loaded");
-        
-        // Populate KPIs
-        document.getElementById('kpi-total-transactions').innerText = data.length;
-        
-        let totalRevenue = 0;
-        let totalInternetHours = 0;
-        let studentCount = 0;
-        let maleRevenue = 0;
-        let femaleRevenue = 0;
-        let gamingRevenue = 0;
-        let nonGamingRevenue = 0;
-        
-        let totalPrinting = 0;
-        let totalScanning = 0;
-        
-        const days = [];
-        const salesData = [];
-        
-        const tableBody = document.querySelector('#dataTable tbody');
-        
-        data.forEach(row => {
-            const sales = parseFloat(row.Total_Sales) || 0;
-            const internetHrs = parseFloat(row.Internet_Hours) || 0;
-            const isStudent = row.Student === 'Yes';
-            const printing = parseFloat(row.Printing_Pages) || 0;
-            const scanning = parseFloat(row.Scanning_Pages) || 0;
-            const isGamer = row.Gaming === 'Yes';
-            
-            totalRevenue += sales;
-            totalInternetHours += internetHrs;
-            if (isStudent) studentCount++;
-            
-            if (row.Gender === 'Male') maleRevenue += sales;
-            else femaleRevenue += sales;
-            
-            if (isGamer) gamingRevenue += sales;
-            else nonGamingRevenue += sales;
-            
-            totalPrinting += printing;
-            totalScanning += scanning;
-            
-            days.push(`Day ${row.Day}`);
-            salesData.push(sales);
-            
-            // Populate Table
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><span class="badge bg-secondary">${row.Transaction_ID}</span></td>
-                <td>Day ${row.Day} <small class="text-muted">(${row.Day_of_Week})</small></td>
-                <td>${row.Costumer_Age}</td>
-                <td>${row.Gender === 'Male' ? '<i class="bi bi-gender-male text-info"></i>' : '<i class="bi bi-gender-female text-danger"></i>'} ${row.Gender}</td>
-                <td>${isStudent ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-dark border border-secondary">No</span>'}</td>
-                <td>${internetHrs} hrs</td>
-                <td>${printing}</td>
-                <td>${scanning}</td>
-                <td>${isGamer ? '<i class="bi bi-controller text-warning"></i>' : '-'}</td>
-                <td class="fw-bold text-success">₱${sales}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
-        
-        // Update KPIs
-        document.getElementById('kpi-total-revenue').innerText = `₱${totalRevenue.toLocaleString()}`;
-        document.getElementById('kpi-avg-hours').innerText = (totalInternetHours / data.length).toFixed(1) + ' hrs';
-        document.getElementById('kpi-student-ratio').innerText = Math.round((studentCount / data.length) * 100) + '%';
-        
-        // Configure Chart Defaults
-        Chart.defaults.color = '#94a3b8';
-        Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
-        Chart.defaults.font.family = 'Inter, sans-serif';
-        
-        // 1. Sales Trend Chart (Line)
-        new Chart(document.getElementById('salesChart'), {
-            type: 'line',
-            data: {
-                labels: days,
-                datasets: [{
-                    label: 'Daily Revenue (₱)',
-                    data: salesData,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#10b981'
-                }]
-            },
-            options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-        
-        // 2. Gender Revenue (Doughnut)
-        new Chart(document.getElementById('genderChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Male', 'Female'],
-                datasets: [{
-                    data: [maleRevenue, femaleRevenue],
-                    backgroundColor: ['#3b82f6', '#ec4899'],
-                    borderWidth: 0
-                }]
-            },
-            options: { responsive: true, cutout: '70%' }
-        });
-        
-        // 3. Gamers vs Non-Gamers (Bar)
-        new Chart(document.getElementById('gamingChart'), {
-            type: 'bar',
-            data: {
-                labels: ['Gamers', 'Non-Gamers'],
-                datasets: [{
-                    label: 'Total Revenue (₱)',
-                    data: [gamingRevenue, nonGamingRevenue],
-                    backgroundColor: ['#f59e0b', '#64748b'],
-                    borderRadius: 6
-                }]
-            },
-            options: { responsive: true, plugins: { legend: { display: false } } }
-        });
-        
-        // 4. Services Volume (Pie)
-        new Chart(document.getElementById('servicesChart'), {
-            type: 'pie',
-            data: {
-                labels: ['Internet Hours', 'Printing Pages', 'Scanning Pages'],
-                datasets: [{
-                    data: [totalInternetHours, totalPrinting, totalScanning],
-                    backgroundColor: ['#10b981', '#8b5cf6', '#06b6d4'],
-                    borderWidth: 0
-                }]
-            },
-            options: { responsive: true }
-        });
-        
-    } catch (error) {
-        console.error("Error loading JSON data:", error);
-        document.querySelector('.table-container').innerHTML = '<div class="alert alert-danger">Failed to load JSON data. Ensure you are running this on a local server.</div>';
+  try {
+    // 1. Populate Header & Metadata
+    if (typeof submissionInfo !== 'undefined') {
+      const studentTag = document.getElementById('meta-student');
+      const schoolTag = document.getElementById('meta-school');
+      const examTag = document.getElementById('meta-exam');
+      const dateTag = document.getElementById('meta-date');
+      if (studentTag) studentTag.textContent = submissionInfo.student;
+      if (schoolTag) schoolTag.textContent = submissionInfo.school;
+      if (examTag) examTag.textContent = submissionInfo.exam;
+      if (dateTag) dateTag.textContent = submissionInfo.date;
     }
+
+    // 2. Populate KPIs
+    if (typeof descriptiveStats !== 'undefined' && typeof studentVsNonStudent !== 'undefined') {
+      const salesStat = descriptiveStats.find(s => s.metric === "Total Sales");
+      const hrsStat = descriptiveStats.find(s => s.metric === "Internet Hours");
+      const printStat = descriptiveStats.find(s => s.metric === "Printing Pages");
+      const scanStat = descriptiveStats.find(s => s.metric === "Scanning Pages");
+
+      const kpiTx = document.getElementById('kpi-total-transactions');
+      const kpiRev = document.getElementById('kpi-total-revenue');
+      const kpiAvg = document.getElementById('kpi-avg-sales');
+      const kpiHrs = document.getElementById('kpi-avg-hours');
+      const kpiPrint = document.getElementById('kpi-total-printing');
+      const kpiScan = document.getElementById('kpi-total-scanning');
+      const kpiStud = document.getElementById('kpi-student-share');
+      const kpiCorrel = document.getElementById('kpi-correlation');
+
+      if (kpiTx) kpiTx.textContent = rawData.length;
+      if (kpiRev && salesStat) kpiRev.textContent = `₱${salesStat.total.toLocaleString()}`;
+      if (kpiAvg && salesStat) kpiAvg.textContent = `₱${salesStat.mean.toFixed(2)}`;
+      if (kpiHrs && hrsStat) kpiHrs.textContent = `${hrsStat.mean.toFixed(2)} hrs`;
+      if (kpiPrint && printStat) kpiPrint.textContent = `${printStat.total.toLocaleString()} pgs`;
+      if (kpiScan && scanStat) kpiScan.textContent = `${scanStat.total.toLocaleString()} pgs`;
+      if (kpiStud) kpiStud.textContent = studentVsNonStudent[0].pctCustomers;
+      if (kpiCorrel && typeof correlationInsight !== 'undefined') kpiCorrel.textContent = `r = ${correlationInsight.coefficient}`;
+    }
+
+    // 3. Populate Descriptive Statistics Table (Task 3 & 4)
+    const descTbody = document.querySelector('#descStatsTable tbody');
+    if (descTbody && typeof descriptiveStats !== 'undefined') {
+      descTbody.innerHTML = '';
+      descriptiveStats.forEach(st => {
+        const tr = document.createElement('tr');
+        const prefix = st.unit === '₱' ? '₱' : '';
+        const suffix = st.unit !== '₱' ? ` ${st.unit}` : '';
+        tr.innerHTML = `
+          <td class="fw-bold text-white"><i class="bi bi-calculator text-success me-2"></i>${st.metric}</td>
+          <td class="text-info fw-semibold">${prefix}${st.total.toLocaleString()}${suffix}</td>
+          <td class="text-success fw-bold">${prefix}${st.mean.toFixed(2)}${suffix}</td>
+          <td class="text-light">${prefix}${st.median.toFixed(2)}${suffix}</td>
+          <td class="text-muted">${prefix}${st.min}${suffix}</td>
+          <td class="text-warning fw-semibold">${prefix}${st.max}${suffix}</td>
+        `;
+        descTbody.appendChild(tr);
+      });
+    }
+
+    // 4. Populate Student vs Non-Student Table (Task 5)
+    const segTbody = document.querySelector('#segmentationTable tbody');
+    if (segTbody && typeof studentVsNonStudent !== 'undefined') {
+      segTbody.innerHTML = '';
+      studentVsNonStudent.forEach(seg => {
+        const isStudent = seg.category === 'Students';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="fw-bold ${isStudent ? 'text-success' : 'text-light'}">
+            <i class="bi ${isStudent ? 'bi-mortarboard-fill text-success' : 'bi-person-fill text-muted'} me-2"></i>${seg.category}
+          </td>
+          <td><span class="badge ${isStudent ? 'bg-success' : 'bg-secondary'}">${seg.customers} (${seg.pctCustomers})</span></td>
+          <td class="fw-bold text-success">₱${seg.totalSales.toLocaleString()} <small class="text-muted">(${seg.pctSales})</small></td>
+          <td class="fw-semibold">₱${seg.avgSale.toFixed(2)}</td>
+          <td>${seg.internetHours} hrs</td>
+          <td>${seg.printingPages} pgs</td>
+          <td>${seg.scanningPages} pgs</td>
+          <td><span class="text-warning fw-semibold">${seg.gaming}</span> / ${seg.nonGaming}</td>
+          <td>${seg.avgAge.toFixed(1)} yrs</td>
+        `;
+        segTbody.appendChild(tr);
+      });
+    }
+
+    // 5. Populate Day of Week Table (Task 6)
+    const dowTbody = document.querySelector('#dayOfWeekTable tbody');
+    if (dowTbody && typeof dayOfWeekSales !== 'undefined') {
+      dowTbody.innerHTML = '';
+      dayOfWeekSales.forEach(d => {
+        const isPeak = d.status.includes('Peak');
+        const isLow = d.status.includes('Trough');
+        const badgeClass = isPeak ? 'bg-success' : (isLow ? 'bg-danger' : 'bg-secondary');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="fw-bold text-white">${d.day}</td>
+          <td class="fw-bold text-success">₱${d.revenue.toLocaleString()}</td>
+          <td>${d.transactions}</td>
+          <td><span class="badge ${badgeClass}">${d.status}</span></td>
+          <td class="text-muted small">${d.note}</td>
+        `;
+        dowTbody.appendChild(tr);
+      });
+    }
+
+    // 6. Populate Top 5 Transactions Table (Task 11)
+    const topTbody = document.querySelector('#topTxTable tbody');
+    if (topTbody && typeof topTransactions !== 'undefined') {
+      topTbody.innerHTML = '';
+      topTransactions.forEach(t => {
+        const tr = document.createElement('tr');
+        const medal = t.rank === 1 ? '🥇' : (t.rank === 2 ? '🥈' : (t.rank === 3 ? '🥉' : `#${t.rank}`));
+        tr.innerHTML = `
+          <td class="fw-bold">${medal}</td>
+          <td><span class="badge bg-dark border border-success text-success">${t.id}</span></td>
+          <td class="fw-bold text-success fs-6">₱${t.revenue}</td>
+          <td class="text-light small">${t.day}</td>
+          <td>${t.age} yrs (${t.gender})</td>
+          <td>${t.student === 'Yes' ? '<span class="badge bg-success-subtle text-success">Student</span>' : '<span class="badge bg-secondary">Non-Student</span>'}</td>
+          <td>${t.internet} hrs</td>
+          <td>${t.printing} pgs</td>
+          <td>${t.scanning} pgs</td>
+          <td>${t.gaming === 'Yes' ? '<i class="bi bi-controller text-warning"></i>' : '-'}</td>
+        `;
+        topTbody.appendChild(tr);
+      });
+    }
+
+    // 7. Populate Recommendations Cards (Task 12)
+    const recContainer = document.getElementById('recommendationsContainer');
+    if (recContainer && typeof evidenceRecommendations !== 'undefined') {
+      recContainer.innerHTML = '';
+      evidenceRecommendations.forEach(r => {
+        const col = document.createElement('div');
+        col.className = 'col-lg-6';
+        col.innerHTML = `
+          <div class="stat-card h-100 text-start p-4" style="border-left: 4px solid var(--accent-green);">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold text-white mb-0">${r.pillar}</h5>
+              <span class="badge bg-${r.color} text-uppercase px-3 py-1" style="font-size: 0.75rem;">${r.badge}</span>
+            </div>
+            <div class="p-3 rounded mb-3" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+              <div class="small fw-bold text-info mb-1"><i class="bi bi-search me-1"></i> Empirical Evidence:</div>
+              <p class="small text-muted mb-0">${r.evidence}</p>
+            </div>
+            <div>
+              <div class="small fw-bold text-success mb-1"><i class="bi bi-lightbulb-fill me-1"></i> Strategic Action:</div>
+              <p class="text-light mb-0" style="line-height: 1.6;">${r.recommendation}</p>
+            </div>
+          </div>
+        `;
+        recContainer.appendChild(col);
+      });
+    }
+
+    // 8. Populate Data Dictionary Table
+    const dictTbody = document.querySelector('#dataDictTable tbody');
+    if (dictTbody && typeof dataDictionary !== 'undefined') {
+      dictTbody.innerHTML = '';
+      dataDictionary.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="fw-bold text-info font-monospace">${d.variable}</td>
+          <td><span class="badge bg-secondary">${d.type}</span></td>
+          <td class="text-light">${d.description}</td>
+        `;
+        dictTbody.appendChild(tr);
+      });
+    }
+
+    // 9. Populate Cleaning Methodology
+    const cleanContainer = document.getElementById('cleaningStepsContainer');
+    if (cleanContainer && typeof cleaningMethodology !== 'undefined') {
+      cleanContainer.innerHTML = '';
+      cleaningMethodology.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'col-md-4';
+        div.innerHTML = `
+          <div class="stat-card h-100 text-start p-3">
+            <h6 class="fw-bold text-success mb-2">${c.step}</h6>
+            <div class="badge bg-dark border border-secondary text-light mb-2 font-monospace">${c.method}</div>
+            <p class="small text-muted mb-0">${c.description}</p>
+          </div>
+        `;
+        cleanContainer.appendChild(div);
+      });
+    }
+
+    // 10. Charts Configuration
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.06)';
+    Chart.defaults.font.family = 'Inter, sans-serif';
+
+    // Chart 1: 50-Day Sales Trend (Line)
+    const salesCtx = document.getElementById('salesChart');
+    if (salesCtx) {
+      new Chart(salesCtx, {
+        type: 'line',
+        data: {
+          labels: rawData.map(r => `D${r.Day}`),
+          datasets: [{
+            label: 'Transaction Revenue (₱)',
+            data: rawData.map(r => r.Total_Sales),
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.35,
+            pointBackgroundColor: '#10b981',
+            pointRadius: 2.5,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ` ₱${ctx.raw} (Tx: ${rawData[ctx.dataIndex].Transaction_ID}, ${rawData[ctx.dataIndex].Day_of_Week})`
+              }
+            }
+          },
+          scales: {
+            y: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { callback: v => `₱${v}` }
+            },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // Chart 2: Day of Week Revenue (Bar)
+    const dowCtx = document.getElementById('dowChart');
+    if (dowCtx && typeof dayOfWeekSales !== 'undefined') {
+      new Chart(dowCtx, {
+        type: 'bar',
+        data: {
+          labels: dayOfWeekSales.map(d => d.day),
+          datasets: [{
+            label: 'Total Revenue (₱)',
+            data: dayOfWeekSales.map(d => d.revenue),
+            backgroundColor: dayOfWeekSales.map(d => d.day === 'Mon' || d.day === 'Sun' ? '#10b981' : (d.day === 'Wed' ? '#ef4444' : '#3b82f6')),
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ₱${ctx.raw} (${dayOfWeekSales[ctx.dataIndex].status})`
+              }
+            }
+          },
+          scales: {
+            y: { ticks: { callback: v => `₱${v}` } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // Chart 3: Pearson Correlation Scatter Plot (Internet Hours vs Sales)
+    const correlCtx = document.getElementById('correlationChart');
+    if (correlCtx) {
+      new Chart(correlCtx, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Customers (Hours vs ₱ Sales)',
+            data: rawData.map(r => ({ x: r.Internet_Hours, y: r.Total_Sales })),
+            backgroundColor: 'rgba(16, 185, 129, 0.75)',
+            borderColor: '#34d399',
+            pointRadius: 5,
+            pointHoverRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ` ${ctx.raw.x} hrs → ₱${ctx.raw.y} (${rawData[ctx.dataIndex].Student === 'Yes' ? 'Student' : 'Non-Student'})`
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Internet Hours (hrs)', color: '#94a3b8' },
+              min: 0,
+              max: 9
+            },
+            y: {
+              title: { display: true, text: 'Total Sales (₱)', color: '#94a3b8' },
+              ticks: { callback: v => `₱${v}` }
+            }
+          }
+        }
+      });
+    }
+
+    // Chart 4: Service Output Volume (Doughnut)
+    const serviceCtx = document.getElementById('serviceVolumeChart');
+    if (serviceCtx && typeof serviceRevenueVolume !== 'undefined') {
+      new Chart(serviceCtx, {
+        type: 'doughnut',
+        data: {
+          labels: serviceRevenueVolume.map(s => s.service),
+          datasets: [{
+            data: serviceRevenueVolume.map(s => s.total),
+            backgroundColor: ['#10b981', '#6366f1', '#06b6d4', '#f59e0b'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '68%',
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } }
+          }
+        }
+      });
+    }
+
+    // Chart 5: Demographics (Gender & Student Pie)
+    const demoCtx = document.getElementById('demographicChart');
+    if (demoCtx && typeof demographicBreakdown !== 'undefined') {
+      new Chart(demoCtx, {
+        type: 'pie',
+        data: {
+          labels: ['Male Students', 'Female Students', 'Male Non-Students', 'Female Non-Students'],
+          datasets: [{
+            data: [
+              demographicBreakdown.crossTab.students.male,
+              demographicBreakdown.crossTab.students.female,
+              demographicBreakdown.crossTab.nonStudents.male,
+              demographicBreakdown.crossTab.nonStudents.female
+            ],
+            backgroundColor: ['#10b981', '#34d399', '#6366f1', '#a855f7'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } }
+          }
+        }
+      });
+    }
+
+    // 11. Interactive Filterable Raw Data Table
+    const tableBody = document.querySelector('#rawDataTable tbody');
+    const searchInput = document.getElementById('tableSearchInput');
+    const filterSelect = document.getElementById('tableFilterSelect');
+    const recordCountBadge = document.getElementById('tableRecordCount');
+
+    function renderTable() {
+      if (!tableBody) return;
+      const search = (searchInput ? searchInput.value : '').toLowerCase().trim();
+      const filter = filterSelect ? filterSelect.value : 'all';
+
+      const filtered = rawData.filter(row => {
+        // Filter match
+        if (filter === 'student' && row.Student !== 'Yes') return false;
+        if (filter === 'non-student' && row.Student === 'Yes') return false;
+        if (filter === 'gaming' && row.Gaming !== 'Yes') return false;
+        if (filter === 'male' && row.Gender !== 'Male') return false;
+        if (filter === 'female' && row.Gender !== 'Female') return false;
+        if (filter === 'top-sales' && row.Total_Sales < 250) return false;
+
+        // Search match
+        if (search) {
+          const matchStr = `${row.Transaction_ID} ${row.Day} ${row.Day_of_Week} ${row.Costumer_Age} ${row.Gender} ${row.Total_Sales}`.toLowerCase();
+          return matchStr.includes(search);
+        }
+        return true;
+      });
+
+      if (recordCountBadge) {
+        recordCountBadge.textContent = `${filtered.length} of ${rawData.length} Records`;
+      }
+
+      tableBody.innerHTML = '';
+      if (filtered.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="10" class="text-center text-muted py-4">No matching transactions found.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(row => {
+        const isStudent = row.Student === 'Yes';
+        const isGamer = row.Gaming === 'Yes';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="badge bg-dark border border-secondary font-monospace">${row.Transaction_ID}</span></td>
+          <td>Day ${row.Day} <small class="text-muted">(${row.Day_of_Week})</small></td>
+          <td>${row.Costumer_Age}</td>
+          <td>${row.Gender === 'Male' ? '<i class="bi bi-gender-male text-info me-1"></i>' : '<i class="bi bi-gender-female text-danger me-1"></i>'}${row.Gender}</td>
+          <td>${isStudent ? '<span class="badge bg-success-subtle text-success">Yes</span>' : '<span class="badge bg-secondary-subtle text-muted">No</span>'}</td>
+          <td>${row.Internet_Hours} hrs</td>
+          <td>${row.Printing_Pages}</td>
+          <td>${row.Scanning_Pages}</td>
+          <td>${isGamer ? '<i class="bi bi-controller text-warning me-1"></i>Yes' : '<span class="text-muted">-</span>'}</td>
+          <td class="fw-bold text-success">₱${row.Total_Sales}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    if (searchInput) searchInput.addEventListener('input', renderTable);
+    if (filterSelect) filterSelect.addEventListener('change', renderTable);
+    renderTable();
+
+  } catch (err) {
+    console.error("Dashboard initialization error:", err);
+  }
 });

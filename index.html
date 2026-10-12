@@ -802,29 +802,39 @@
           </div>
         </div>
 
-        <!-- Project 2: Data Analysis — LIVE -->
+        <!-- Project 2: Data Analysis — LIVE & ORIGINAL EXCEL WORKBOOK -->
         <div class="col-lg-6 col-md-6">
           <div class="codespot-card h-100 d-flex flex-column"
-            style="border:1px solid rgba(16,185,129,0.5);opacity:1;box-shadow: 0 4px 15px rgba(16,185,129,0.1);">
+            style="border:1px solid rgba(16,185,129,0.5);opacity:1;box-shadow: 0 4px 15px rgba(16,185,129,0.15);">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <span class="badge bg-success text-uppercase px-3 py-2"><i class="bi bi-bar-chart-line-fill me-1"></i>
-                Data Analytics</span>
-              <span class="badge bg-success px-2 py-1 fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Live & Functional</span>
+                Data Analytics & Optimization</span>
+              <span class="badge bg-success px-2 py-1 fw-semibold"><i class="bi bi-check-circle-fill me-1"></i> Live & Excel Available</span>
             </div>
-            <h4 class="h5 fw-bold text-white mb-2">📊 Data Analysis Project</h4>
-            <p class="text-success fw-semibold small mb-3">Statistical Analysis • Data Visualization • JSON Driven
+            <h4 class="h5 fw-bold text-white mb-2">📊 Computer Shop Data Analysis (Original Excel)</h4>
+            <p class="text-success fw-semibold small mb-2">
+              Pearson Correlation (r = 0.7556) • Descriptive Statistics • 50 Transactions
             </p>
-            <p class="text-muted small flex-grow-1">
-              A comprehensive data analysis project originally extracted from an Excel dataset. Features a dynamic JSON-driven dashboard rendering real-time KPI metrics, demographic distributions, and internet cafe sales trends via Chart.js.
+            <p class="text-muted small mb-3">
+              Hands-on academic exam project analyzing 50 customer transactions across internet usage, 415 printing pages, scanning, and gaming revenue. Includes full descriptive statistics matrix, student demographic segmentation (76% volume), and weekly sales trend analysis.
             </p>
             <div class="mb-3">
-              <span class="skill-badge">JavaScript (JSON)</span>
+              <span class="skill-badge">Excel (Formulas & Toolpak)</span>
+              <span class="skill-badge">Pearson Correlation (r=0.7556)</span>
+              <span class="skill-badge">Cross-Tabulations</span>
               <span class="skill-badge">Chart.js</span>
-              <span class="skill-badge">Excel Data</span>
             </div>
-            <div class="d-flex gap-2 mt-auto">
-              <a href="data-analysis/index.html" class="btn-codespot-primary btn-pill px-4 py-2 w-100 text-center" target="_blank" style="background: linear-gradient(90deg, #10b981, #34d399); border: none; color: #fff;">
-                <i class="bi bi-graph-up me-2"></i> View Dashboard
+            <div class="d-flex flex-column gap-2 mt-auto">
+              <div class="d-flex gap-2">
+                <a href="data-analysis/index.html" class="btn-codespot-primary btn-pill px-3 py-2 flex-grow-1 text-center" target="_blank" style="background: linear-gradient(90deg, #10b981, #34d399); border: none; color: #fff;">
+                  <i class="bi bi-graph-up me-1"></i> View Live Dashboard
+                </a>
+                <button class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="data-analysis" title="View Full Investigation Details">
+                  <i class="bi bi-info-circle me-1"></i> Details
+                </button>
+              </div>
+              <a href="assets/docs/4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-outline-success btn-pill px-3 py-2 w-100 text-center" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" style="font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.6); color: #34d399;">
+                <i class="bi bi-file-earmark-excel-fill me-1"></i> Download Original Excel (.xlsx • 54.7 KB)
               </a>
             </div>
           </div>
@@ -1649,6 +1659,9 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
           </a>
           <a href="assets/docs/Marcial_Lawrence_Jr_V_Resume.docx" class="btn-codespot-outline btn-pill" download="Marcial_Lawrence_Jr_V_Resume.docx">
             <i class="bi bi-download me-2"></i> Download DOCX
+          </a>
+          <a href="assets/docs/4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn-codespot-outline btn-pill" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" style="border-color: rgba(16,185,129,0.5); color: #34d399;">
+            <i class="bi bi-file-earmark-excel-fill me-2"></i> Download Excel (.xlsx)
           </a>
           <button class="btn-codespot-outline btn-pill" onclick="printResumeDocument()">
             <i class="bi bi-printer-fill me-2"></i> Print / Save as PDF

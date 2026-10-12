@@ -4,261 +4,809 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Analysis Dashboard - Marcial Lawrence</title>
+  <title>Data Analysis & Revenue Optimization — Marcial Lawrence Jr V. Caronan (BSIT)</title>
   
-  <!-- Bootstrap 5 CSS -->
+  <!-- Bootstrap 5.3 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Chart.js -->
+  <!-- Google Fonts: Inter & Outfit & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
-      --bg-color: #05010d;
-      --card-bg: rgba(15, 5, 29, 0.9);
-      --accent-green: #10b981;
-      --accent-green-glow: rgba(16, 185, 129, 0.4);
+      --bg-darkest: #04010a;
+      --bg-primary: #090214;
+      --bg-card: rgba(13, 5, 26, 0.94);
+      --border-card: rgba(168, 85, 247, 0.18);
+      --border-emerald: rgba(16, 185, 129, 0.35);
+      --accent-emerald: #10b981;
+      --accent-emerald-neon: #34d399;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.4);
+      --accent-violet: #a855f7;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Fira Code', monospace;
     }
 
     body {
-      background-color: var(--bg-color);
+      background-color: var(--bg-darkest);
       color: var(--text-main);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.15), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 85% 60%, rgba(147, 51, 234, 0.12), transparent 70%);
+      background-attachment: fixed;
     }
 
-    /* Navbar */
-    .navbar {
-      background-color: rgba(5, 1, 13, 0.95) !important;
-      border-bottom: 1px solid rgba(16, 185, 129, 0.3);
-      backdrop-filter: blur(10px);
+    h1, h2, h3, h4, h5, h6, .brand-title {
+      font-family: var(--font-heading);
     }
 
-    .navbar-brand {
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--text-main) !important;
+    /* Custom Navbar */
+    .custom-navbar {
+      background: rgba(8, 2, 17, 0.92) !important;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-emerald);
+      z-index: 1050;
     }
 
-    .navbar-brand span {
-      color: var(--accent-green);
+    .btn-pill {
+      border-radius: 9999px;
     }
 
-    .nav-link {
-      color: var(--text-muted) !important;
-      font-weight: 500;
-      transition: color 0.3s ease;
+    .btn-emerald {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      border: 1px solid rgba(52, 211, 153, 0.5);
+      font-weight: 600;
+      box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+      transition: all 0.3s ease;
     }
 
-    .nav-link:hover, .nav-link.active {
-      color: var(--accent-green) !important;
+    .btn-emerald:hover {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 26px rgba(16, 185, 129, 0.6);
+      transform: translateY(-2px);
     }
 
-    .dashboard-header {
-      padding: 100px 0 40px 0;
+    .btn-outline-emerald {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid var(--accent-emerald);
+      color: var(--accent-emerald-neon);
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-emerald:hover {
+      background: var(--accent-emerald);
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Academic Banner Card */
+    .academic-hero {
+      padding: 110px 0 35px 0;
       text-align: center;
-      background: radial-gradient(circle at top, rgba(16, 185, 129, 0.15), transparent 60%);
     }
 
+    .download-excel-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(15, 5, 29, 0.95) 100%);
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 35px -5px rgba(0, 0, 0, 0.7), 0 0 25px rgba(16, 185, 129, 0.2);
+      margin-bottom: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-excel-banner::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Cards */
     .stat-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
     }
 
     .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 30px var(--accent-green-glow);
-      border-color: rgba(16, 185, 129, 0.5);
+      transform: translateY(-4px);
+      border-color: var(--accent-emerald);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.22);
     }
 
     .stat-value {
-      font-size: 2.5rem;
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
       font-weight: 800;
-      background: linear-gradient(90deg, #10b981, #34d399);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--accent-emerald-neon);
+      line-height: 1.1;
+      margin-bottom: 0.25rem;
     }
 
-    .chart-container {
-      background: var(--card-bg);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    .stat-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      font-weight: 600;
     }
 
+    /* Nav Tabs */
+    .nav-tabs-custom {
+      border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+      gap: 8px;
+    }
+
+    .nav-tabs-custom .nav-link {
+      background: rgba(15, 5, 29, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: none;
+      color: #94a3b8;
+      border-radius: 12px 12px 0 0;
+      font-weight: 600;
+      padding: 0.75rem 1.4rem;
+      transition: all 0.25s ease;
+    }
+
+    .nav-tabs-custom .nav-link:hover {
+      color: #ffffff;
+      border-color: rgba(52, 211, 153, 0.4);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .nav-tabs-custom .nav-link.active {
+      background: var(--bg-card);
+      color: var(--accent-emerald-neon);
+      border-color: var(--accent-emerald);
+      border-bottom: 2px solid var(--accent-emerald);
+      box-shadow: 0 -4px 15px rgba(16, 185, 129, 0.18);
+    }
+
+    /* Tables */
     .table-container {
-      background: var(--card-bg);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      border-radius: 12px;
-      padding: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 1.5rem;
       overflow-x: auto;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
     }
 
-    table {
-      color: var(--text-main) !important;
+    .custom-table {
+      width: 100%;
+      color: var(--text-main);
+      border-collapse: separate;
+      border-spacing: 0;
     }
 
-    th {
-      background-color: rgba(16, 185, 129, 0.1) !important;
-      color: var(--accent-green) !important;
-      border-bottom: 2px solid rgba(16, 185, 129, 0.3) !important;
+    .custom-table th {
+      background: rgba(16, 185, 129, 0.12) !important;
+      color: var(--accent-emerald-neon) !important;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 12px 16px;
+      border-bottom: 2px solid rgba(16, 185, 129, 0.35);
     }
 
-    td {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-      background-color: transparent !important;
-      color: #e2e8f0 !important;
+    .custom-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.92rem;
+      vertical-align: middle;
+      background: transparent !important;
+      color: #e2e8f0;
     }
 
-    .badge-green {
-      background-color: rgba(16, 185, 129, 0.2);
-      color: #34d399;
-      border: 1px solid #10b981;
+    .custom-table tr:hover td {
+      background: rgba(16, 185, 129, 0.05) !important;
     }
-    
-    /* Override Bootstrap text-muted for dark mode */
-    .text-muted {
-      color: #94a3b8 !important;
+
+    .badge-pill-emerald {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid var(--accent-emerald);
+      color: var(--accent-emerald-neon);
+      border-radius: 9999px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .badge-pill-violet {
+      background: rgba(168, 85, 247, 0.18);
+      border: 1px solid var(--accent-violet);
+      color: #c084fc;
+      border-radius: 9999px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    /* Chart Wrappers */
+    .chart-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      height: 380px;
+      position: relative;
+    }
+
+    .chart-box-tall {
+      height: 420px;
+    }
+
+    /* Search & Filter Inputs */
+    .filter-input {
+      background: rgba(10, 4, 20, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 8px 14px;
+    }
+
+    .filter-input:focus {
+      background: rgba(15, 5, 29, 0.95);
+      border-color: var(--accent-emerald);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+      outline: none;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg fixed-top custom-navbar py-3">
+  <!-- Top Navigation -->
+  <nav class="navbar navbar-expand-lg fixed-top custom-navbar py-2">
     <div class="container">
-      <a class="navbar-brand" href="../index.html"><i class="bi bi-bar-chart-fill me-2"></i>Data<span>Analytics</span></a>
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <i class="bi bi-list text-white fs-2"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto gap-3">
-          <li class="nav-item">
-            <a class="nav-link" href="../index.html"><i class="bi bi-arrow-left me-1"></i> Back to Portfolio</a>
-          </li>
-        </ul>
+      <a class="navbar-brand d-flex align-items-center gap-2" href="../index.html">
+        <span class="badge bg-success p-2"><i class="bi bi-file-earmark-spreadsheet-fill text-white"></i></span>
+        <span class="brand-title fw-bold text-white fs-5">M. Caronan <span class="text-success fs-6">• Data Analytics</span></span>
+      </a>
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <a href="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-emerald btn-pill btn-sm px-3 py-2" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx">
+          <i class="bi bi-download me-1"></i> Download Original Excel (.xlsx)
+        </a>
+        <a href="../index.html#projects" class="btn btn-outline-emerald btn-pill btn-sm px-3 py-2">
+          <i class="bi bi-arrow-left me-1"></i> Back to Portfolio
+        </a>
       </div>
     </div>
   </nav>
 
-  <!-- Header -->
-  <section class="dashboard-header">
+  <!-- Academic Header & Hero -->
+  <section class="academic-hero">
     <div class="container">
-      <span class="badge badge-green px-3 py-2 mb-3 text-uppercase fw-bold letter-spacing-1">JSON-Powered Dashboard</span>
-      <h1 class="display-4 fw-bold mb-3">Internet Cafe <span style="color: var(--accent-green);">Data Analysis</span></h1>
-      <p class="lead text-muted mx-auto" style="max-width: 700px;">
-        An interactive dashboard rendering parsed JSON data originally extracted from a raw Excel dataset. 
-        Visualizing internet usage, customer demographics, and total sales metrics.
+      <div class="d-inline-flex align-items-center gap-2 badge-pill-emerald mb-3">
+        <i class="bi bi-mortarboard-fill"></i>
+        <span>Datamex College of Saint Adeline • 4th Year BSIT Set A</span>
+      </div>
+      <h1 class="display-4 fw-extrabold text-white mb-2">
+        Computer Shop <span style="background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Data Analysis & Revenue Optimization</span>
+      </h1>
+      <p class="lead text-muted mx-auto mb-4" style="max-width: 820px;">
+        Hands-on empirical analysis examining 50 operational customer transactions across internet stations, printing volume, scanning, and gaming revenue. Validated using statistical models, frequency tables, and Pearson correlation coefficients.
+      </p>
+
+      <!-- Authenticated Student Examination Card -->
+      <div class="d-flex justify-content-center flex-wrap gap-4 text-start p-3 rounded-4 mb-4 mx-auto" style="max-width: 900px; background: rgba(13, 5, 26, 0.8); border: 1px solid rgba(168, 85, 247, 0.2);">
+        <div>
+          <small class="text-muted d-block text-uppercase" style="font-size:0.7rem;">Examinee / Author</small>
+          <strong class="text-white" id="meta-student">Marcial Lawrence Jr V. Caronan</strong>
+        </div>
+        <div class="border-start border-secondary ps-3">
+          <small class="text-muted d-block text-uppercase" style="font-size:0.7rem;">Course & Section</small>
+          <strong class="text-info">4th Year BSIT — Set A</strong>
+        </div>
+        <div class="border-start border-secondary ps-3">
+          <small class="text-muted d-block text-uppercase" style="font-size:0.7rem;">Curriculum Subject</small>
+          <strong class="text-success" id="meta-exam">Data Analysis Midterm Exam (Hands-On Examination)</strong>
+        </div>
+        <div class="border-start border-secondary ps-3">
+          <small class="text-muted d-block text-uppercase" style="font-size:0.7rem;">Date Validated</small>
+          <strong class="text-warning" id="meta-date">September 17, 2026</strong>
+        </div>
+      </div>
+
+      <!-- Prominent Original Excel Download Card -->
+      <div class="download-excel-banner text-start">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <i class="bi bi-file-earmark-excel-fill text-success fs-1"></i>
+              <div>
+                <h3 class="h4 fw-bold text-white mb-0">Original Excel Workbook Available for Download</h3>
+                <span class="badge bg-success-subtle text-success">Verified Submission Artifact • 54.7 KB • .xlsx</span>
+              </div>
+            </div>
+            <p class="text-light opacity-90 small mb-2" style="max-width: 680px; line-height: 1.6;">
+              Contains all 5 original sheets created and submitted by Marcial Lawrence Jr V. Caronan:
+              <strong class="text-info">Submission_Info</strong>, 
+              <strong class="text-info">Data_Dictionary</strong>, 
+              <strong class="text-info">Raw_Data</strong> (50 transactions), 
+              <strong class="text-info">Exam_Tasks</strong> (Tasks 1 through 11 with formulas), and 
+              <strong class="text-info">Recommendations</strong> (Task 12).
+            </p>
+            <div class="d-flex flex-wrap gap-2 pt-1">
+              <span class="badge bg-dark border border-secondary text-muted">xl/workbook.xml</span>
+              <span class="badge bg-dark border border-secondary text-muted">SUM & AVERAGE Formulas</span>
+              <span class="badge bg-dark border border-secondary text-muted">CORREL Function (r = 0.7556)</span>
+              <span class="badge bg-dark border border-secondary text-muted">Cross-Tabulations</span>
+            </div>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a href="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-emerald btn-pill px-4 py-3 w-100 mb-2" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx">
+              <i class="bi bi-cloud-arrow-down-fill me-2 fs-5"></i> Download Original Excel (.xlsx)
+            </a>
+            <div class="text-muted small text-center text-lg-end">
+              <i class="bi bi-shield-check text-success me-1"></i> Exact file submitted for grading
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Executive KPIs Metric Grid -->
+  <section class="pb-4">
+    <div class="container">
+      <div class="row g-3">
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-receipt text-success me-1"></i>Total Transactions</div>
+            <div class="stat-value" id="kpi-total-transactions">50</div>
+            <div class="text-muted small">Recorded Sample Period</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-currency-dollar text-success me-1"></i>Total Sales</div>
+            <div class="stat-value" id="kpi-total-revenue">₱9,690</div>
+            <div class="text-muted small">Overall Revenue Generated</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-cash-stack text-success me-1"></i>Average Transaction</div>
+            <div class="stat-value" id="kpi-avg-sales">₱193.80</div>
+            <div class="text-muted small">Median: ₱202.50</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-clock-history text-success me-1"></i>Internet Station Time</div>
+            <div class="stat-value" id="kpi-avg-hours">3.98 hrs</div>
+            <div class="text-muted small">Total: 199 Hours Logged</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-printer-fill text-success me-1"></i>Printing Volume</div>
+            <div class="stat-value" id="kpi-total-printing">415 pgs</div>
+            <div class="text-muted small">Rank #1 Volume Driver</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-scanner text-success me-1"></i>Scanning Volume</div>
+            <div class="stat-value" id="kpi-total-scanning">180 pgs</div>
+            <div class="text-muted small">Average: 3.60 pgs/client</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-mortarboard-fill text-success me-1"></i>Student Share</div>
+            <div class="stat-value" id="kpi-student-share">76.0%</div>
+            <div class="text-muted small">₱7,370 of Total Sales</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card text-center">
+            <div class="stat-label mb-1"><i class="bi bi-graph-up-arrow text-success me-1"></i>Pearson Correlation</div>
+            <div class="stat-value text-info" id="kpi-correlation">r = 0.7556</div>
+            <div class="text-muted small">Strong Positive (Hours vs ₱)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Analysis Navigation Tabs -->
+  <section class="py-4">
+    <div class="container">
+      <ul class="nav nav-tabs nav-tabs-custom mb-4" id="analysisTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
+            <i class="bi bi-bar-chart-line-fill me-1"></i> Overview & Visual Charts
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="stats-tab" data-bs-toggle="tab" data-bs-target="#stats" type="button" role="tab">
+            <i class="bi bi-calculator-fill me-1"></i> Descriptive Stats & Correlation
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="segment-tab" data-bs-toggle="tab" data-bs-target="#segment" type="button" role="tab">
+            <i class="bi bi-people-fill me-1"></i> Customer Segmentation (Students)
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="recommendations-tab" data-bs-toggle="tab" data-bs-target="#recommendations" type="button" role="tab">
+            <i class="bi bi-lightbulb-fill me-1"></i> Strategic Recommendations (Task 12)
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="dict-tab" data-bs-toggle="tab" data-bs-target="#dict" type="button" role="tab">
+            <i class="bi bi-book-fill me-1"></i> Data Dictionary & Methodology
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="raw-tab" data-bs-toggle="tab" data-bs-target="#raw" type="button" role="tab">
+            <i class="bi bi-table me-1"></i> 50-Record Raw Data Explorer
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content Panes -->
+      <div class="tab-content" id="analysisTabsContent">
+
+        <!-- TAB 1: OVERVIEW & CHARTS -->
+        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+          <div class="row g-4 mb-4">
+            <!-- Daily Sales Trend Chart -->
+            <div class="col-lg-8">
+              <div class="chart-box chart-box-tall">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-graph-up text-success me-2"></i>Daily Sales Trend (50 Days Sequence)</h5>
+                  <span class="badge bg-success-subtle text-success">Task 9</span>
+                </div>
+                <div style="height: 330px;">
+                  <canvas id="salesChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Day of Week Revenue -->
+            <div class="col-lg-4">
+              <div class="chart-box chart-box-tall">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-calendar-week text-success me-2"></i>Weekly Revenue Breakdown</h5>
+                  <span class="badge bg-success-subtle text-success">Task 6</span>
+                </div>
+                <div style="height: 330px;">
+                  <canvas id="dowChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <!-- Multi-Service Volume Doughnut -->
+            <div class="col-lg-6">
+              <div class="chart-box">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-pie-chart-fill text-info me-2"></i>Service Output Utilization Volume</h5>
+                  <span class="badge bg-info-subtle text-info">Task 7</span>
+                </div>
+                <p class="text-muted small mb-2">Printing Pages (415) represent the single highest volume service output.</p>
+                <div style="height: 280px;">
+                  <canvas id="serviceVolumeChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Demographic Segmentation Chart -->
+            <div class="col-lg-6">
+              <div class="chart-box">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-gender-ambiguous text-warning me-2"></i>Demographics (Gender × Student Status)</h5>
+                  <span class="badge bg-warning-subtle text-warning">Task 8</span>
+                </div>
+                <p class="text-muted small mb-2">Cross-tabulation reveals male students as the primary computer shop demographic.</p>
+                <div style="height: 280px;">
+                  <canvas id="demographicChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: DESCRIPTIVE STATS & CORRELATION -->
+        <div class="tab-pane fade" id="stats" role="tabpanel">
+          <div class="table-container mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="fw-bold text-white mb-1"><i class="bi bi-calculator text-success me-2"></i>Task 3: Descriptive Statistics Matrix</h4>
+                <p class="text-muted small mb-0">Summary parameters computed directly across all 50 recorded transactions in Excel.</p>
+              </div>
+              <span class="badge badge-pill-emerald">SUM • AVERAGE • MEDIAN • MIN • MAX</span>
+            </div>
+            <table class="custom-table" id="descStatsTable">
+              <thead>
+                <tr>
+                  <th>Variable Metric</th>
+                  <th>Sum Total</th>
+                  <th>Mean (Average)</th>
+                  <th>Median</th>
+                  <th>Minimum</th>
+                  <th>Maximum</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated dynamically via script.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Task 10: Correlation Deep-Dive -->
+          <div class="row g-4 align-items-stretch">
+            <div class="col-lg-7">
+              <div class="chart-box chart-box-tall">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-diagram-3-fill text-success me-2"></i>Task 10: Pearson Correlation Scatter Plot</h5>
+                  <span class="badge bg-success">r = 0.7556</span>
+                </div>
+                <p class="text-muted small mb-2">Customer Internet Hours (X-Axis) plotted against Total Sales (Y-Axis).</p>
+                <div style="height: 330px;">
+                  <canvas id="correlationChart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="stat-card h-100 p-4 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="badge-pill-emerald d-inline-block mb-3">Statistical Proof</div>
+                  <h4 class="fw-bold text-white mb-3">Strong Positive Correlation: r = 0.7556</h4>
+                  <div class="p-3 rounded mb-3" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25);">
+                    <div class="fw-bold text-success mb-1"><i class="bi bi-check2-circle me-1"></i> Coefficient Interpretation:</div>
+                    <p class="small text-light mb-0" style="line-height: 1.65;">
+                      The computed Pearson Correlation Coefficient between <strong>Internet Hours</strong> and <strong>Total Sales</strong> is <strong>0.7556</strong> ($R^2 \approx 0.571$).
+                    </p>
+                  </div>
+                  <p class="text-muted small mb-3" style="line-height: 1.7;">
+                    This indicates a robust, statistically significant positive relationship: as customers stay longer at internet stations, their likelihood of purchasing supplementary high-margin services (such as document printing, thesis scanning, and gaming) multiplies exponentially.
+                  </p>
+                </div>
+                <div class="p-3 rounded" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+                  <div class="small fw-bold text-warning mb-1"><i class="bi bi-lightning-charge-fill me-1"></i> Business Takeaway:</div>
+                  <div class="small text-light">Extending customer session duration is the primary commercial engine of the computer shop.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: CUSTOMER SEGMENTATION (STUDENTS VS NON-STUDENTS) -->
+        <div class="tab-pane fade" id="segment" role="tabpanel">
+          <div class="table-container mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="fw-bold text-white mb-1"><i class="bi bi-pie-chart text-success me-2"></i>Task 5: Student vs. Non-Student Customer Comparison</h4>
+                <p class="text-muted small mb-0">Demographic cross-segmentation demonstrating student dominance across revenue and service usage.</p>
+              </div>
+              <span class="badge badge-pill-emerald">76% of Net Volume</span>
+            </div>
+            <table class="custom-table" id="segmentationTable">
+              <thead>
+                <tr>
+                  <th>Customer Segment</th>
+                  <th>Client Volume</th>
+                  <th>Total Sales</th>
+                  <th>Avg Spend</th>
+                  <th>Internet Hrs</th>
+                  <th>Printing</th>
+                  <th>Scanning</th>
+                  <th>Gaming (Yes/No)</th>
+                  <th>Avg Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated dynamically via script.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row g-4">
+            <!-- Day of Week Table -->
+            <div class="col-lg-6">
+              <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-calendar3 text-success me-2"></i>Task 6: Weekly Sales Performance</h5>
+                  <span class="badge bg-success">Sunday & Monday Peak</span>
+                </div>
+                <table class="custom-table" id="dayOfWeekTable">
+                  <thead>
+                    <tr>
+                      <th>Day</th>
+                      <th>Total Sales</th>
+                      <th>Tx Count</th>
+                      <th>Classification</th>
+                      <th>Operational Observation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Top 5 High-Value Transactions -->
+            <div class="col-lg-6">
+              <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-trophy-fill text-warning me-2"></i>Task 11: Top 5 Highest-Value Transactions</h5>
+                  <span class="badge bg-warning text-dark fw-bold">Leaderboard</span>
+                </div>
+                <table class="custom-table" id="topTxTable">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Tx ID</th>
+                      <th>Sales</th>
+                      <th>Day</th>
+                      <th>Customer</th>
+                      <th>Student</th>
+                      <th>Internet</th>
+                      <th>Print</th>
+                      <th>Scan</th>
+                      <th>Game</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: EVIDENCE-BASED RECOMMENDATIONS -->
+        <div class="tab-pane fade" id="recommendations" role="tabpanel">
+          <div class="p-4 rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 5, 29, 0.9) 100%); border: 1px solid rgba(16, 185, 129, 0.3);">
+            <div class="d-flex align-items-center gap-3">
+              <div class="badge bg-success p-3 rounded-circle"><i class="bi bi-award-fill fs-3 text-white"></i></div>
+              <div>
+                <h4 class="fw-bold text-white mb-1">Task 12: Evidence-Based Business Recommendations</h4>
+                <p class="text-light opacity-90 small mb-0">
+                  Synthesized from statistical evidence across correlation coefficients, demographic matrices, and service volume distributions.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="row g-4" id="recommendationsContainer">
+            <!-- Populated dynamically via script.js -->
+          </div>
+        </div>
+
+        <!-- TAB 5: DATA DICTIONARY & METHODOLOGY -->
+        <div class="tab-pane fade" id="dict" role="tabpanel">
+          <div class="row g-4 mb-4" id="cleaningStepsContainer">
+            <!-- Populated dynamically via script.js -->
+          </div>
+
+          <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="fw-bold text-white mb-1"><i class="bi bi-card-checklist text-info me-2"></i>Complete Variable Data Dictionary</h4>
+                <p class="text-muted small mb-0">Definitions, column formats, and constraints defined in the original Data_Dictionary sheet.</p>
+              </div>
+              <span class="badge badge-pill-violet">11 Attributes Documented</span>
+            </div>
+            <table class="custom-table" id="dataDictTable">
+              <thead>
+                <tr>
+                  <th>Variable Name</th>
+                  <th>Data Type</th>
+                  <th>Operational Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated dynamically via script.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 6: RAW DATA EXPLORER -->
+        <div class="tab-pane fade" id="raw" role="tabpanel">
+          <div class="table-container">
+            <div class="row g-3 align-items-center mb-4">
+              <div class="col-md-5">
+                <div class="input-group">
+                  <span class="input-group-text bg-dark border-secondary text-muted"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control filter-input" id="tableSearchInput" placeholder="Search by Transaction ID, Day, Age, Gender, Sales...">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <select class="form-select filter-input" id="tableFilterSelect">
+                  <option value="all">Filter: All Records (50)</option>
+                  <option value="student">Students Only (38)</option>
+                  <option value="non-student">Non-Students Only (12)</option>
+                  <option value="gaming">Gamers Only (14)</option>
+                  <option value="male">Male Clients (28)</option>
+                  <option value="female">Female Clients (22)</option>
+                  <option value="top-sales">High Value (&gt;= ₱250)</option>
+                </select>
+              </div>
+              <div class="col-md-3 text-md-end">
+                <span class="badge badge-pill-emerald fs-6" id="tableRecordCount">50 of 50 Records</span>
+              </div>
+            </div>
+
+            <table class="custom-table" id="rawDataTable">
+              <thead>
+                <tr>
+                  <th>Tx ID</th>
+                  <th>Day</th>
+                  <th>Age</th>
+                  <th>Gender</th>
+                  <th>Student</th>
+                  <th>Internet</th>
+                  <th>Printing</th>
+                  <th>Scanning</th>
+                  <th>Gaming</th>
+                  <th>Total Sales</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated dynamically via script.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-4 text-center border-top border-secondary border-opacity-25 mt-5">
+    <div class="container">
+      <p class="small text-muted mb-1">
+        &copy; 2026 Marcial Lawrence Jr V. Caronan • Bachelor of Science in Information Technology (BSIT)
+      </p>
+      <p class="small text-secondary mb-0">
+        Datamex College of Saint Adeline • Validated Academic Portfolio Project Artifact
       </p>
     </div>
-  </section>
+  </footer>
 
-  <!-- KPI Cards -->
-  <section class="py-4">
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-md-3">
-          <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-people-fill me-2"></i>Total Transactions</div>
-            <div class="stat-value" id="kpi-total-transactions">0</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-currency-dollar me-2"></i>Total Revenue</div>
-            <div class="stat-value" id="kpi-total-revenue">₱0</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-clock-history me-2"></i>Avg Internet Hours</div>
-            <div class="stat-value" id="kpi-avg-hours">0</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="stat-card">
-            <div class="text-muted small mb-2 text-uppercase fw-bold" style="color: #cbd5e1 !important;"><i class="bi bi-person-badge-fill me-2"></i>Student Ratio</div>
-            <div class="stat-value" id="kpi-student-ratio">0%</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Charts Section -->
-  <section class="py-4">
-    <div class="container">
-      <div class="row g-4">
-        <div class="col-lg-8">
-          <div class="chart-container">
-            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-graph-up text-success me-2"></i>Daily Sales Trend</h5>
-            <canvas id="salesChart" height="100"></canvas>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="chart-container">
-            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-pie-chart-fill text-success me-2"></i>Revenue by Gender</h5>
-            <canvas id="genderChart" height="200"></canvas>
-          </div>
-        </div>
-      </div>
-      <div class="row g-4">
-        <div class="col-lg-6">
-          <div class="chart-container">
-            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-controller text-success me-2"></i>Gamers vs Non-Gamers Revenue</h5>
-            <canvas id="gamingChart"></canvas>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="chart-container">
-            <h5 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-printer text-success me-2"></i>Services Distribution</h5>
-            <canvas id="servicesChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Data Table -->
-  <section class="py-5 mb-5">
-    <div class="container">
-      <h3 class="fw-bold mb-4" style="color: #e2e8f0;"><i class="bi bi-table text-success me-2"></i>Raw JSON Data Feed</h3>
-      <div class="table-container">
-        <table class="table table-hover mb-0" id="dataTable">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Day</th>
-              <th>Age</th>
-              <th>Gender</th>
-              <th>Student</th>
-              <th>Internet Hrs</th>
-              <th>Printing</th>
-              <th>Scanning</th>
-              <th>Gaming</th>
-              <th>Total Sales (₱)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Populated via JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Data Model Script -->
   <script src="data.js"></script>
+  <!-- Interactive Controller Script -->
   <script src="script.js"></script>
 </body>
 </html>

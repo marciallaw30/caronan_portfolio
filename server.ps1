@@ -34,6 +34,9 @@ $mimeTypes = @{
     ".ico"  = "image/x-icon"
     ".md"   = "text/plain; charset=utf-8"
     ".sql"  = "text/plain; charset=utf-8"
+    ".xlsx" = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ".docx" = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ".pdf"  = "application/pdf"
 }
 
 while ($listener.IsListening) {

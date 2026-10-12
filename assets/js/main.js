@@ -127,6 +127,22 @@ document.addEventListener('DOMContentLoaded', () => {
       tech: ['PHP 8.2', 'MySQL / MariaDB (3NF)', 'JavaScript (ES6)', 'FPDF Library', 'Bootstrap 5', 'Bcrypt Security'],
       erd: 'Normalized 3NF relational database across `employees`, `attendance`, `payroll`, `benefits`, `benefits_deductions`, `announcements`, `events`, and `feedback`.'
     },
+    'data-analysis': {
+      title: 'Computer Shop Data Analysis & Revenue Optimization (Original Excel)',
+      category: 'Data Analytics, Statistical Modeling & Operations Engineering',
+      overview: 'Official hands-on examination project for Datamex College of Saint Adeline (4th Year BSIT Set A) authored by Marcial Lawrence Jr V. Caronan. Analyzes 50 customer transactions across internet hours, printing output, scanning, and gaming revenue using statistical parameters, demographic cross-tabulations, and Pearson correlation analysis.',
+      features: [
+        'Complete 12-task analytical investigation extracted from the original 4A_Marcial Lawrence Jr V. Caronan.xlsx workbook',
+        'Pearson Correlation Analysis (r = 0.7556) mathematically confirming that internet station usage directly drives upsells across printing and retail sales',
+        'Demographic Customer Segmentation proving that students represent 76% of all patrons (38 of 50 customers) and drive ₱7,370 in revenue',
+        'Weekly Sales Breakdown isolating Sunday & Monday as peak volume days (₱1,500 each) and Wednesday as the lowest trough (₱1,215)',
+        'Service Output Volume Analysis revealing Printing Pages as the #1 volume driver with 415 output pages',
+        'Direct download link to the original authentic graded Excel workbook (.xlsx, 54.7 KB) with full formula integrity',
+        'Interactive live web dashboard with Chart.js trend visualizations, filterable 50-record explorer, and evidence-based recommendations'
+      ],
+      tech: ['MS Excel (Formulas & Data Analysis Toolpak)', 'Pearson Correlation (r = 0.7556)', 'JavaScript (ES6)', 'Chart.js', 'Bootstrap 5.3', 'Data Wrangling'],
+      erd: 'Multi-sheet workbook schema: `Submission_Info`, `Data_Dictionary` (11 variables), `Raw_Data` (50 transactions), `Exam_Tasks` (Tasks 1–11), and `Recommendations` (Task 12).'
+    },
     'iot-soil': {
       title: 'Arduino: Soil Moisture Sensor for Plants Modified w/ Speaker',
       category: 'Embedded Systems & IoT Hardware Engineering',
