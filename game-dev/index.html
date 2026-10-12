@@ -303,6 +303,45 @@
       box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
     }
 
+    .cell-selected {
+      outline: 3px solid #f59e0b !important;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.85) !important;
+      z-index: 10;
+    }
+
+    .cell-valid-move::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: rgba(16, 185, 129, 0.9);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.9);
+      pointer-events: none;
+    }
+
+    .cell-valid-capture {
+      outline: 2px dashed #f43f5e !important;
+      background: rgba(244, 63, 94, 0.35) !important;
+      box-shadow: 0 0 14px rgba(244, 63, 94, 0.8) !important;
+      animation: pulseCapture 1.4s infinite;
+    }
+
+    @keyframes pulseCapture {
+      0%, 100% { outline-color: #f43f5e; box-shadow: 0 0 10px rgba(244, 63, 94, 0.8); }
+      50% { outline-color: #fbbf24; box-shadow: 0 0 18px rgba(251, 191, 36, 0.9); }
+    }
+
+    .cell-in-check {
+      background: radial-gradient(circle, #dc2626 0%, #7f1d1d 100%) !important;
+      animation: flashCheck 1s infinite alternate;
+    }
+
+    @keyframes flashCheck {
+      from { box-shadow: 0 0 10px #dc2626; }
+      to { box-shadow: 0 0 25px #f87171; }
+    }
+
     .board-cell:hover {
       transform: scale(1.08);
       z-index: 5;
@@ -748,6 +787,9 @@
 
               <!-- Action Controls -->
               <div class="d-grid gap-2 mb-3">
+                <button class="btn btn-sm btn-outline-info rounded-pill py-2 font-mono fw-bold" id="btnToggleAIMode">
+                  <i class="bi bi-robot me-1"></i> Opponent AI Mode: <span class="text-success" id="aiModeLabel">ENABLED (Verdant Court)</span>
+                </button>
                 <button class="btn btn-sm btn-danger fw-bold rounded-pill py-2" id="btnTestManifestation">
                   <i class="bi bi-lightning-charge-fill me-1"></i> Test Manifestation Combat Execution
                 </button>
@@ -1530,8 +1572,143 @@
       triggerManifestationCombat('Q', 'p', 'e5', faction);
     });
 
-    // Render Board
+    // --- CHESS ENGINE & MOVEMENT FRAMEWORK (Matching GDD Section IV) ---
+    function isInside(r, c) {
+      return r >= 0 && r < 8 && c >= 0 && c < 8;
+    }
+
+    function isWhite(p) {
+      return Boolean(p && p === p.toUpperCase());
+    }
+
+    function isBlack(p) {
+      return Boolean(p && p === p.toLowerCase());
+    }
+
+    function getLegalMoves(r, c, board) {
+      const piece = board[r][c];
+      if (!piece) return [];
+      const moves = [];
+      const isW = isWhite(piece);
+      const type = piece.toUpperCase();
+
+      if (type === 'P') {
+        // PAWN: 1 step forward, 2 steps from starting row, diagonal captures
+        const dir = isW ? -1 : 1;
+        const startRow = isW ? 6 : 1;
+        if (isInside(r + dir, c) && board[r + dir][c] === '') {
+          moves.push({ r: r + dir, c, isCapture: false });
+          if (r === startRow && board[r + 2 * dir][c] === '') {
+            moves.push({ r: r + 2 * dir, c, isCapture: false });
+          }
+        }
+        [-1, 1].forEach(dc => {
+          const nr = r + dir, nc = c + dc;
+          if (isInside(nr, nc)) {
+            const target = board[nr][nc];
+            if (target && (isW ? isBlack(target) : isWhite(target))) {
+              moves.push({ r: nr, c: nc, isCapture: true });
+            }
+          }
+        });
+      } else if (type === 'N') {
+        // KNIGHT: L-shaped hops over any intervening pieces (GDD Section IV)
+        const hops = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
+        hops.forEach(([dr, dc]) => {
+          const nr = r + dr, nc = c + dc;
+          if (isInside(nr, nc)) {
+            const target = board[nr][nc];
+            if (!target) {
+              moves.push({ r: nr, c: nc, isCapture: false });
+            } else if (isW ? isBlack(target) : isWhite(target)) {
+              moves.push({ r: nr, c: nc, isCapture: true });
+            }
+          }
+        });
+      } else if (type === 'B') {
+        // BISHOP: Diagonal sweeps across open files
+        const dirs = [[-1,-1],[-1,1],[1,-1],[1,1]];
+        dirs.forEach(([dr, dc]) => {
+          let step = 1;
+          while (true) {
+            const nr = r + dr * step, nc = c + dc * step;
+            if (!isInside(nr, nc)) break;
+            const target = board[nr][nc];
+            if (!target) {
+              moves.push({ r: nr, c: nc, isCapture: false });
+            } else {
+              if (isW ? isBlack(target) : isWhite(target)) {
+                moves.push({ r: nr, c: nc, isCapture: true });
+              }
+              break;
+            }
+            step++;
+          }
+        });
+      } else if (type === 'R') {
+        // ROOK: Orthogonal sweeps (GDD Section IV)
+        const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
+        dirs.forEach(([dr, dc]) => {
+          let step = 1;
+          while (true) {
+            const nr = r + dr * step, nc = c + dc * step;
+            if (!isInside(nr, nc)) break;
+            const target = board[nr][nc];
+            if (!target) {
+              moves.push({ r: nr, c: nc, isCapture: false });
+            } else {
+              if (isW ? isBlack(target) : isWhite(target)) {
+                moves.push({ r: nr, c: nc, isCapture: true });
+              }
+              break;
+            }
+            step++;
+          }
+        });
+      } else if (type === 'Q') {
+        // QUEEN: Combined orthogonal and diagonal sweeps
+        const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
+        dirs.forEach(([dr, dc]) => {
+          let step = 1;
+          while (true) {
+            const nr = r + dr * step, nc = c + dc * step;
+            if (!isInside(nr, nc)) break;
+            const target = board[nr][nc];
+            if (!target) {
+              moves.push({ r: nr, c: nc, isCapture: false });
+            } else {
+              if (isW ? isBlack(target) : isWhite(target)) {
+                moves.push({ r: nr, c: nc, isCapture: true });
+              }
+              break;
+            }
+            step++;
+          }
+        });
+      } else if (type === 'K') {
+        // KING: Single square in any direction
+        const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
+        dirs.forEach(([dr, dc]) => {
+          const nr = r + dr, nc = c + dc;
+          if (isInside(nr, nc)) {
+            const target = board[nr][nc];
+            if (!target) {
+              moves.push({ r: nr, c: nc, isCapture: false });
+            } else if (isW ? isBlack(target) : isWhite(target)) {
+              moves.push({ r: nr, c: nc, isCapture: true });
+            }
+          }
+        });
+      }
+
+      return moves;
+    }
+
+    // Render Board & State
     let selectedCell = null;
+    let currentLegalMoves = [];
+    let aiOpponentEnabled = true;
+    let isGameOver = false;
 
     function renderBoard() {
       const boardEl = document.getElementById('tacticalBoard');
@@ -1553,6 +1730,20 @@
             cell.classList.add('cell-selected');
           }
 
+          // Check if this square is a legal move or capture for selected unit
+          if (currentLegalMoves.length > 0) {
+            const legalMove = currentLegalMoves.find(m => m.r === r && m.c === c);
+            if (legalMove) {
+              if (legalMove.isCapture) {
+                cell.classList.add('cell-valid-capture');
+                cell.title = 'Legal Capture (Triggers Manifestation Combat!)';
+              } else {
+                cell.classList.add('cell-valid-move');
+                cell.title = 'Legal Standard Move';
+              }
+            }
+          }
+
           const piece = currentBoardState[r][c];
           if (piece) {
             cell.textContent = pieceIcons[piece] || piece;
@@ -1569,76 +1760,229 @@
     }
 
     function handleCellClick(r, c) {
+      if (isGameOver) {
+        document.getElementById('simStatusLog').textContent = 'Match concluded via Checkmate. Click "Reset Board" to initiate a fresh encounter.';
+        return;
+      }
+
       const faction = document.getElementById('simKingdomSelect').value;
       const statusLog = document.getElementById('simStatusLog');
       const piece = currentBoardState[r][c];
 
-      // Step 1: Selecting a piece
+      // Phase 1: Selecting a piece
       if (!selectedCell) {
-        if (piece && piece === piece.toUpperCase()) { // Friendly white piece
+        if (piece && isWhite(piece)) {
           selectedCell = { r, c, piece };
+          currentLegalMoves = getLegalMoves(r, c, currentBoardState);
           playSound('move');
-          statusLog.textContent = `Selected ${piece} at ${String.fromCharCode(97 + c)}${8 - r}. Click any valid square to move or capture.`;
+
+          const coordStr = `${String.fromCharCode(97 + c)}${8 - r}`;
+          if (currentLegalMoves.length === 0) {
+            statusLog.textContent = `Selected ${pieceIcons[piece] || piece} at ${coordStr}, but it has no legal moves. Path is blocked!`;
+          } else {
+            statusLog.textContent = `Selected ${pieceIcons[piece] || piece} at ${coordStr}. ${currentLegalMoves.length} legal squares highlighted.`;
+          }
           renderBoard();
-        } else if (piece) {
-          statusLog.textContent = `Square contains enemy unit ${piece}. Select a golden allied piece first!`;
+        } else if (piece && isBlack(piece)) {
+          statusLog.textContent = `Enemy unit ${pieceIcons[piece] || piece} selected. Select your golden allied piece first!`;
         }
       } else {
-        // Step 2: Target square selected
+        // Phase 2: Choosing target square
         const oldR = selectedCell.r;
         const oldC = selectedCell.c;
         const movingPiece = selectedCell.piece;
         const targetPiece = currentBoardState[r][c];
 
-        // Clicked same square to deselect
+        // Clicked same square: deselect
         if (oldR === r && oldC === c) {
           selectedCell = null;
-          statusLog.textContent = 'Deselected.';
+          currentLegalMoves = [];
+          statusLog.textContent = 'Piece deselected.';
           renderBoard();
           return;
         }
 
-        // Cannot capture friendly unit
-        if (targetPiece && targetPiece === targetPiece.toUpperCase()) {
+        // Clicked another friendly piece: switch selection
+        if (targetPiece && isWhite(targetPiece)) {
           selectedCell = { r, c, piece: targetPiece };
+          currentLegalMoves = getLegalMoves(r, c, currentBoardState);
           playSound('move');
+          statusLog.textContent = `Switched selection to ${pieceIcons[targetPiece] || targetPiece} at ${String.fromCharCode(97 + c)}${8 - r}.`;
           renderBoard();
+          return;
+        }
+
+        // Validate move according to GDD standard chess rules
+        const validMove = currentLegalMoves.find(m => m.r === r && m.c === c);
+        if (!validMove) {
+          statusLog.textContent = `Illegal move for ${pieceIcons[movingPiece] || movingPiece}! Abiding strictly by GDD classical chess geometry.`;
           return;
         }
 
         const coordStr = `${String.fromCharCode(97 + c)}${8 - r}`;
-        const isCapture = Boolean(targetPiece);
+        const isCapture = validMove.isCapture;
+        const capturedKing = targetPiece && targetPiece.toLowerCase() === 'k';
 
         // Execute Move
         currentBoardState[oldR][oldC] = '';
         currentBoardState[r][c] = movingPiece;
-        cellTerrains[r][c] = faction;
+        cellTerrains[r][c] = faction; // GDD: Tiles permanently absorb kingdom essence
 
-        // Add to Move Log
+        // Add to Tactical Turn Log
         const moveList = document.getElementById('moveLogList');
         const logEntry = document.createElement('div');
         const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
 
         if (isCapture) {
           capturedBlackPieces.push(pieceIcons[targetPiece] || targetPiece);
-          logEntry.innerHTML = `<span class="text-danger">#${moveTurn}. ${movingPiece}x${coordStr}</span> <span class="text-warning">[MANIFESTATION]</span> <span class="text-muted">(${prof.passiveName} Active)</span>`;
+          logEntry.innerHTML = `<span class="text-danger font-mono">#${moveTurn}. ${movingPiece}x${coordStr}</span> <span class="badge bg-danger font-mono" style="font-size:0.65rem;">MANIFESTATION</span> <span class="text-muted">(${prof.passiveName})</span>`;
           triggerManifestationCombat(movingPiece, targetPiece, coordStr, faction);
         } else {
           playSound('move');
-          setTimeout(() => playSound('terrain'), 80);
-          logEntry.innerHTML = `<span class="text-info">#${moveTurn}. ${movingPiece}${coordStr}</span> <span class="text-muted">(${prof.passiveName} claimed)</span>`;
+          setTimeout(() => playSound('terrain'), 90);
+          logEntry.innerHTML = `<span class="text-info font-mono">#${moveTurn}. ${movingPiece}${coordStr}</span> <span class="text-muted">(${prof.passiveName} claimed)</span>`;
         }
         moveList.appendChild(logEntry);
         moveList.scrollTop = moveList.scrollHeight;
 
         moveTurn++;
         document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (Player 1)`;
-        statusLog.textContent = `Advanced to ${coordStr}. Tile permanently bound to ${prof.name.toUpperCase()}!`;
-        
+        statusLog.textContent = `Moved to ${coordStr}. Tile permanently converted into ${prof.name.toUpperCase()} territory!`;
+
         selectedCell = null;
+        currentLegalMoves = [];
         renderBoard();
+
+        // Check if Enemy King was captured -> AUTOMATIC QUEEN SIGNATURE ULTIMATE! (GDD Storyboard 2)
+        if (capturedKing) {
+          triggerVictoryCheckmate();
+          return;
+        }
+
+        // If Opponent AI is enabled, initiate Black counter-move after brief tactical delay
+        if (aiOpponentEnabled && !isGameOver) {
+          setTimeout(makeOpponentAIMove, 650);
+        }
       }
     }
+
+    // Tactical Opponent AI (Verdant Court Response)
+    function makeOpponentAIMove() {
+      if (isGameOver) return;
+
+      const allBlackMoves = [];
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (isBlack(currentBoardState[r][c])) {
+            const legal = getLegalMoves(r, c, currentBoardState);
+            legal.forEach(m => {
+              allBlackMoves.push({
+                fromR: r, fromC: c,
+                toR: m.r, toC: m.c,
+                piece: currentBoardState[r][c],
+                isCapture: m.isCapture,
+                target: currentBoardState[m.r][m.c]
+              });
+            });
+          }
+        }
+      }
+
+      if (allBlackMoves.length === 0) {
+        triggerVictoryCheckmate();
+        return;
+      }
+
+      // Prioritize captures of golden pieces, then forward advances
+      allBlackMoves.sort((a, b) => {
+        if (a.isCapture && !b.isCapture) return -1;
+        if (!a.isCapture && b.isCapture) return 1;
+        return (b.toR - a.toR);
+      });
+
+      const chosen = allBlackMoves[0];
+      const coordStr = `${String.fromCharCode(97 + chosen.toC)}${8 - chosen.toR}`;
+      const targetPiece = currentBoardState[chosen.toR][chosen.toC];
+
+      currentBoardState[chosen.fromR][chosen.fromC] = '';
+      currentBoardState[chosen.toR][chosen.toC] = chosen.piece;
+      cellTerrains[chosen.toR][chosen.toC] = 'verdant';
+
+      const moveList = document.getElementById('moveLogList');
+      const logEntry = document.createElement('div');
+
+      if (chosen.isCapture) {
+        playSound('clash');
+        logEntry.innerHTML = `<span class="text-warning font-mono">#${moveTurn}. Opponent ${chosen.piece}x${coordStr}</span> <span class="badge bg-secondary font-mono" style="font-size:0.65rem;">VERDANT CLASH</span>`;
+      } else {
+        playSound('move');
+        logEntry.innerHTML = `<span class="text-secondary font-mono">#${moveTurn}. Opponent ${chosen.piece}${coordStr}</span> <span class="text-muted small">(Verdant Court Root)</span>`;
+      }
+      moveList.appendChild(logEntry);
+      moveList.scrollTop = moveList.scrollHeight;
+
+      moveTurn++;
+      document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (Your Move - Player 1)`;
+      document.getElementById('simStatusLog').textContent = `Opponent moved ${pieceIcons[chosen.piece] || chosen.piece} to ${coordStr}. Select a unit for your turn!`;
+
+      // Check if Player King was captured
+      if (targetPiece && targetPiece.toUpperCase() === 'K') {
+        isGameOver = true;
+        document.getElementById('simStatusLog').textContent = 'CHECKMATE! Allied King fallen. Verdant Court claims planar dominance.';
+      }
+
+      renderBoard();
+    }
+
+    // Trigger Checkmate & Automatic Queen Ultimate (GDD Storyboard 2)
+    function triggerVictoryCheckmate() {
+      isGameOver = true;
+      const faction = document.getElementById('simKingdomSelect').value;
+      const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
+      const statusLog = document.getElementById('simStatusLog');
+
+      statusLog.innerHTML = `<strong class="text-warning fs-6">👑 CHECKMATE! ENEMY KING EXECUTED!</strong><br>${prof.attackerName.toUpperCase()} UNLEASHES QUEEN SIGNATURE ULTIMATE!`;
+      playSound('ultimate');
+
+      // Sequential board eruption animation
+      const cells = document.querySelectorAll('.board-cell');
+      cells.forEach((cell, idx) => {
+        setTimeout(() => {
+          cell.classList.add(`cell-${faction}`);
+          cell.style.transform = 'scale(1.18)';
+          setTimeout(() => { cell.style.transform = 'scale(1)'; }, 300);
+        }, idx * 15);
+      });
+
+      // Eradicate remaining hostile pieces
+      setTimeout(() => {
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            if (currentBoardState[r][c] && isBlack(currentBoardState[r][c])) {
+              capturedBlackPieces.push(pieceIcons[currentBoardState[r][c]]);
+              currentBoardState[r][c] = '';
+            }
+          }
+        }
+        renderBoard();
+        statusLog.innerHTML = `<strong class="text-success fs-5">VICTORY CHECKMATE VERIFIED!</strong><br>Planar battlefield consumed by ${prof.name}'s ultimate cataclysm.`;
+      }, 1250);
+    }
+
+    // Toggle AI Mode Button
+    document.getElementById('btnToggleAIMode').addEventListener('click', () => {
+      aiOpponentEnabled = !aiOpponentEnabled;
+      const label = document.getElementById('aiModeLabel');
+      if (aiOpponentEnabled) {
+        label.textContent = 'ENABLED (Verdant Court)';
+        label.className = 'text-success';
+        document.getElementById('simStatusLog').textContent = 'Opponent AI counter-play enabled. Black pieces will respond!';
+      } else {
+        label.textContent = 'DISABLED (Sandbox Free-play)';
+        label.className = 'text-warning';
+        document.getElementById('simStatusLog').textContent = 'Sandbox Free-play enabled. Both sides can be controlled manually.';
+      }
+    });
 
     // Reset Board
     document.getElementById('btnResetBoard').addEventListener('click', () => {
@@ -1647,9 +1991,11 @@
       capturedBlackPieces = [];
       moveTurn = 1;
       selectedCell = null;
+      currentLegalMoves = [];
+      isGameOver = false;
       document.getElementById('turnIndicator').textContent = 'Turn: 1 (Player 1)';
-      document.getElementById('moveLogList').innerHTML = '<div class="text-muted">• Game reset to standard 8x8 layout.</div>';
-      document.getElementById('simStatusLog').textContent = 'Board reset to neutral coordinates.';
+      document.getElementById('moveLogList').innerHTML = '<div class="text-muted">• Match reset. Standard 8x8 planar grid initialized.</div>';
+      document.getElementById('simStatusLog').textContent = 'Board reset to neutral coordinates. Ready for deployment.';
       playSound('move');
       renderBoard();
     });
@@ -1663,39 +2009,9 @@
       playSound('terrain');
     });
 
-    // Queen Signature Ultimate Trigger
+    // Manual Queen Signature Ultimate Trigger
     document.getElementById('btnQueenUltimate').addEventListener('click', () => {
-      const faction = document.getElementById('simKingdomSelect').value;
-      const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
-      const statusLog = document.getElementById('simStatusLog');
-      
-      statusLog.textContent = `🔥 ${prof.attackerName.toUpperCase()} SIGNATURE ULTIMATE TRIGGERED! PLANAR BOARD CLEARED!`;
-      playSound('ultimate');
-
-      const cells = document.querySelectorAll('.board-cell');
-      cells.forEach((cell, idx) => {
-        setTimeout(() => {
-          cell.classList.add(`cell-${faction}`);
-          cell.style.transform = 'scale(1.15)';
-          setTimeout(() => {
-            cell.style.transform = 'scale(1)';
-          }, 320);
-        }, idx * 16);
-      });
-
-      // Clear enemy pieces in animation
-      setTimeout(() => {
-        for (let r = 0; r < 8; r++) {
-          for (let c = 0; c < 8; c++) {
-            if (currentBoardState[r][c] && currentBoardState[r][c] === currentBoardState[r][c].toLowerCase()) {
-              capturedBlackPieces.push(pieceIcons[currentBoardState[r][c]]);
-              currentBoardState[r][c] = '';
-            }
-          }
-        }
-        renderBoard();
-        statusLog.textContent = 'Apocalyptic Ultimate sequence completed. Checkmate verified by GDD rules.';
-      }, 1300);
+      triggerVictoryCheckmate();
     });
 
     // Init on DOM ready
