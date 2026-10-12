@@ -95,19 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
       erd: 'Serverless architecture. Data flows directly from the client browser to Google Generative Language API via HTTPS POST requests, retaining conversation context in local memory.'
     },
     'ecommerce': {
-      title: 'E-Commerce Web Application (Flagship Enterprise)',
-      category: 'Full-Stack Web & E-Commerce Engineering',
-      overview: 'A full-featured digital marketplace engineering project designed for end-to-end commerce operations. Built with a focus on transactional integrity, the system integrates secure online payment gateway APIs, real-time order and delivery status tracking, direct customer-owner messaging channels, real-time dynamic inventory management with stock replenishment alerts, and an executive administration dashboard.',
+      title: 'TarotKnight Crystal Art: E-Commerce Web Application',
+      category: 'E-Business, Fintech & Logistics Integration',
+      overview: 'An academic e-commerce web platform developed for Datamex College of Saint Adeline (In Partial Fulfillment in E-Business under Faculty Adviser Mr. Randy Villanueva). Engineered by Lead Marcial Lawrence Jr V. Caronan and team, the platform combines handcrafted wire-wrapped crystal jewelry retail with real-time spiritual reading appointments, automated PayMongo API gateway verification, and nationwide J&T Express parcel logistics tracking.',
       features: [
-        'Secure multi-tier role authentication (Customer, Store Owner, System Administrator)',
-        'Payment Gateway integration with webhook transaction verification & cryptographic signature validation',
-        'Real-time order lifecycle & dispatch tracking (Placed -> Processing -> Dispatched -> Delivered)',
-        'Dynamic inventory subtraction with race condition prevention using atomic database transactions',
-        'Customer-to-Store communication portal for order inquiries and RMA support',
-        'Executive Analytics Dashboard tracking daily revenue, best-selling SKUs, and inventory turnover'
+        'Artisan Product Catalog featuring 32 handcrafted crystal items with instant search, category filtering, and modal detail views',
+        'Automated PayMongo payment gateway integration (GCash, Maya, Visa/Mastercard) eliminating manual screenshot receipt checking',
+        'Interactive J&T Express parcel logistics tracker with simulated waybills and milestone checkpoints',
+        'Spiritual reading appointment booking calendar with automated time-slot conflict prevention and client confirmation',
+        'Client-side responsive shopping cart drawer with live subtotal, shipping fee calculation, and order placement',
+        'Integrated AI Spiritual Consultation Guide Bot powered by domain knowledge matching',
+        'Administrative Control Center modal monitoring gross settled revenue, order count, and real-time inventory ledger'
       ],
-      tech: ['PHP 8.2', 'MySQL / MariaDB', 'JavaScript (ES6+)', 'Bootstrap 5', 'REST API', 'JSON Web Tokens', 'Bcrypt'],
-      erd: 'Normalized to 3NF: `users`, `products`, `inventory_batches`, `orders`, `order_items`, `payments`, `messages`, and `audit_logs`.'
+      tech: ['JavaScript (ES6+)', 'Bootstrap 5.3', 'PayMongo API', 'J&T Express Logistics API', 'HTML5 / CSS3', 'HTML5 LocalStorage', 'Fira Code & Outfit Fonts'],
+      erd: 'Client-server e-commerce architecture managing `CRYSTAL_PRODUCTS` (32 SKUs), `simulatedOrders` (Waybills & Timelines), `SPIRITUAL_SERVICES` (Appointments), and `cart` session storage.'
     },
     'employee-mgmt': {
       title: 'DATAMEX College HRIS & Automated Payroll Portal',
