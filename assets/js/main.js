@@ -130,8 +130,8 @@ document.addEventListener('DOMContentLoaded', () => {
       overview: 'An embedded microcontroller project developed at Datamex College of Saint Adeline (BSIT OOP & Discrete Structures). Employs an Arduino Uno R3, capacitive/resistive soil moisture sensor, and modified PWM speaker to provide real-time audio and visual telemetry for precision plant hydration monitoring.',
       features: [
         'Dynamic floating-point ratio math: moistureRatio = currentMoistureLevel / maximumMoistureLevel',
-        'Multi-frequency PWM acoustic synthesizer: 1000Hz alert tone ("I\'m thirsty!"), 1500Hz confirmation chime ("I\'m full!"), and 5-6kHz boot chime',
-        'Diffused LED status array: Green LED (Pin D1, >30% moisture) & Red LED (Pin D3, ≤30% moisture) protected by 10kΩ resistors',
+        'Acoustic PWM buzzer alert: 1000Hz tone triggered exclusively when soil is dry (<= 10%), with complete silence (noTone) for moderate and saturated hydration',
+        'Diffused LED status array: Green LED (Pin D1, >30% moisture) & Red LED (Pin D3, <=30% moisture) protected by 10kΩ resistors',
         'Continuous 10Hz sampling loop with 9600 baud UART Serial Monitor telemetry logging for laboratory debugging',
         'Empirical test validation across dry, moderate, and saturated soil environments with recorded video demo'
       ],

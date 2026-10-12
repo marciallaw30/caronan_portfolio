@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
   <meta charset="UTF-8">
@@ -21,8 +21,79 @@
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- Custom Hardware Cyber CSS -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Custom Hardware Cyber CSS (with cache-buster) -->
+  <link rel="stylesheet" href="style.css?v=20261012-pure-white-v3">
+
+  <!-- Guaranteed Pure White High-Contrast Readability Overrides -->
+  <style>
+    :root, [data-bs-theme=dark], [data-bs-theme=light], body {
+      --bs-body-color: #ffffff !important;
+      --bs-secondary-color: #ffffff !important;
+      --bs-tertiary-color: #ffffff !important;
+      --bs-body-color-rgb: 255, 255, 255 !important;
+      --bs-secondary-color-rgb: 255, 255, 255 !important;
+      --bs-tertiary-color-rgb: 255, 255, 255 !important;
+      --bs-light-rgb: 255, 255, 255 !important;
+      color: #ffffff !important;
+      color-scheme: dark !important;
+    }
+
+    * {
+      --bs-text-opacity: 1 !important;
+    }
+
+    /* Universal Pure White for all paragraphs, cards, lists, tables, and typography */
+    html body, body, p, li, ul, ol, td, th, label, small,
+    strong:not([class*="text-"]):not([class*="badge"]),
+    em, b,
+    .cyber-card, .cyber-card p, .cyber-card li,
+    .academic-chip, .academic-chip strong:not([class*="text-"]), .academic-chip span:not([class*="text-"]), .academic-chip small,
+    .team-list-tag,
+    .bom-table th, .bom-table td,
+    .wiring-card, .wiring-card span:not([class*="text-"]):not([class*="badge"]), .wiring-card strong:not([class*="text-"]), .wiring-card div,
+    .test-card, .test-card div, .test-card span:not([class*="text-"]):not([class*="badge"]),
+    .architecture-card, .architecture-card p, .architecture-card li,
+    .text-muted, .text-dim, .text-light, .text-white, .section-subtitle, .lead {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      opacity: 1 !important;
+    }
+
+    /* Hardware & Sensor Accent Colors */
+    .text-cyan { color: #06b6d4 !important; -webkit-text-fill-color: #06b6d4 !important; }
+    .text-cyan-bright { color: #22d3ee !important; -webkit-text-fill-color: #22d3ee !important; }
+    .text-amber { color: #f59e0b !important; -webkit-text-fill-color: #f59e0b !important; }
+    .text-green { color: #10b981 !important; -webkit-text-fill-color: #10b981 !important; }
+    .text-red { color: #ef4444 !important; -webkit-text-fill-color: #ef4444 !important; }
+
+    .cyber-card {
+      background: rgba(13, 23, 49, 0.95) !important;
+      border: 1px solid rgba(6, 182, 212, 0.4) !important;
+    }
+    .academic-chip {
+      background: rgba(13, 23, 49, 0.95) !important;
+      border: 1px solid rgba(6, 182, 212, 0.45) !important;
+    }
+    .team-list-tag {
+      color: #ffffff !important;
+      background: rgba(13, 23, 49, 0.95) !important;
+      border: 1px solid rgba(6, 182, 212, 0.5) !important;
+      font-weight: 500 !important;
+      opacity: 1 !important;
+    }
+    .wiring-card {
+      background: rgba(13, 23, 49, 0.95) !important;
+      border: 1px solid rgba(6, 182, 212, 0.4) !important;
+    }
+    .test-card {
+      background: rgba(13, 23, 49, 0.95) !important;
+      border: 1px solid rgba(6, 182, 212, 0.4) !important;
+    }
+    .architecture-card {
+      background: rgba(13, 23, 49, 0.95) !important;
+      border: 1px solid rgba(6, 182, 212, 0.4) !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -50,34 +121,47 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navArduino">
-        <ul class="navbar-nav ms-auto align-items-xl-center gap-1">
-          <li class="nav-item">
-            <a class="nav-link" href="../index.html"><i class="bi bi-arrow-left"></i> Main Portfolio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#overview"><i class="bi bi-info-circle"></i> Overview</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#simulator"><i class="bi bi-play-circle-fill"></i> Virtual Lab</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#video-demo"><i class="bi bi-film"></i> Video & Photos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#components"><i class="bi bi-motherboard"></i> Hardware BOM</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#firmware"><i class="bi bi-code-slash"></i> C++ Firmware</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#testing"><i class="bi bi-clipboard-check"></i> Test Matrix</a>
-          </li>
-          <li class="nav-item ms-xl-2">
-            <a href="assets/arduino_soil_sensor_report.docx" class="btn-cyber-primary py-2 px-3 text-nowrap" download>
-              <i class="bi bi-file-earmark-word-fill"></i> Download DOCX
+        <div class="navbar-nav-wrapper ms-auto d-flex flex-column flex-xl-row align-items-xl-center gap-2">
+          <!-- Back to Main Portfolio Button -->
+          <a class="nav-back-btn" href="../index.html" title="Return to Main Portfolio">
+            <i class="bi bi-arrow-left"></i>
+            <span>Main Portfolio</span>
+          </a>
+
+          <!-- Glass Pill Tabs for In-Page Navigation -->
+          <nav class="nav-tabs-pill-bar" aria-label="Page Sections">
+            <a class="nav-tab-pill" href="#overview">
+              <i class="bi bi-info-circle"></i>
+              <span>Overview</span>
             </a>
-          </li>
-        </ul>
+            <a class="nav-tab-pill" href="#simulator">
+              <i class="bi bi-play-circle-fill"></i>
+              <span>Virtual Lab</span>
+            </a>
+            <a class="nav-tab-pill" href="#video-demo">
+              <i class="bi bi-film"></i>
+              <span>Video &amp; Photos</span>
+            </a>
+            <a class="nav-tab-pill" href="#components">
+              <i class="bi bi-motherboard"></i>
+              <span>Hardware BOM</span>
+            </a>
+            <a class="nav-tab-pill" href="#firmware">
+              <i class="bi bi-code-slash"></i>
+              <span>C++ Firmware</span>
+            </a>
+            <a class="nav-tab-pill" href="#testing">
+              <i class="bi bi-clipboard-check"></i>
+              <span>Test Matrix</span>
+            </a>
+          </nav>
+
+          <!-- Download DOCX Button -->
+          <a href="assets/arduino_soil_sensor_report.docx" class="btn-cyber-primary nav-download-btn py-2 px-3 text-nowrap ms-xl-1" download>
+            <i class="bi bi-file-earmark-word-fill"></i>
+            <span>Download DOCX</span>
+          </a>
+        </div>
       </div>
     </div>
   </nav>
@@ -105,41 +189,41 @@
               Alert</span>
           </h1>
 
-          <p class="lead text-muted mb-4" style="max-width: 720px;">
+          <p class="lead text-light mb-4" style="max-width: 720px; line-height: 1.75; font-size: 1.15rem; color: #f8fafc !important;">
             A smart microcontroller-driven agricultural telemetry system that measures real-time soil hydration via
             capacitive resistance, providing instant dual-modality alerts using <strong class="text-white">LED visual
               indicators</strong> and a <strong class="text-cyan-bright">PWM speaker audio frequency synthesizer</strong>.
           </p>
 
           <!-- Academic Affiliation Box -->
-          <div class="academic-chip mb-4">
+          <div class="academic-chip mb-4" style="background: rgba(13, 23, 49, 0.92) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important;">
             <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
               <div>
-                <strong class="text-white d-block">Department of Information Technology</strong>
-                <span class="text-muted small">Course: Object Oriented Programming and Discrete Structures</span>
+                <strong class="text-white d-block" style="color: #ffffff !important; font-size: 0.95rem;">Department of Information Technology</strong>
+                <span class="text-light small" style="color: #e2e8f0 !important;">Course: Object Oriented Programming and Discrete Structures</span>
               </div>
               <div>
-                <span class="text-muted small d-block">Faculty Adviser:</span>
-                <strong class="text-cyan">Mr. Randy Villanueva</strong>
+                <span class="text-light small d-block" style="color: #cbd5e1 !important;">Faculty Adviser:</span>
+                <strong class="text-cyan" style="color: #06b6d4 !important;">Mr. Randy Villanueva</strong>
               </div>
             </div>
           </div>
 
           <!-- Project Authors -->
           <div class="mb-4">
-            <div class="small text-muted mb-2 fw-semibold text-uppercase" style="letter-spacing: 0.05em;">
+            <div class="small text-light mb-2 fw-semibold text-uppercase" style="letter-spacing: 0.05em; color: #e2e8f0 !important;">
               <i class="bi bi-people-fill text-cyan me-1"></i> Project Engineering Team:
             </div>
             <div class="d-flex flex-wrap gap-2">
-              <span class="team-list-tag" style="border-color: #06b6d4; background: rgba(6, 182, 212, 0.18); color: #fff;">
-                <i class="bi bi-star-fill text-warning"></i> <strong>Marcial Lawrence Jr V. Caronan</strong> (Lead)
+              <span class="team-list-tag" style="border-color: #06b6d4 !important; background: rgba(6, 182, 212, 0.22) !important; color: #ffffff !important; font-weight: 600;">
+                <i class="bi bi-star-fill text-warning"></i> <strong class="text-white">Marcial Lawrence Jr V. Caronan</strong> (Lead)
               </span>
-              <span class="team-list-tag">Tyron John L. Dela Cruz</span>
-              <span class="team-list-tag">Shan Benedict Rodriguez</span>
-              <span class="team-list-tag">Rowena Clores</span>
-              <span class="team-list-tag">Justiene Edriel Padual</span>
-              <span class="team-list-tag">Nathaniel Ilago</span>
-              <span class="team-list-tag">Edsel Villanueva</span>
+              <span class="team-list-tag" style="color: #f8fafc !important; background: rgba(13, 23, 49, 0.9) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important;">Tyron John L. Dela Cruz</span>
+              <span class="team-list-tag" style="color: #f8fafc !important; background: rgba(13, 23, 49, 0.9) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important;">Shan Benedict Rodriguez</span>
+              <span class="team-list-tag" style="color: #f8fafc !important; background: rgba(13, 23, 49, 0.9) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important;">Rowena Clores</span>
+              <span class="team-list-tag" style="color: #f8fafc !important; background: rgba(13, 23, 49, 0.9) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important;">Justiene Edriel Padual</span>
+              <span class="team-list-tag" style="color: #f8fafc !important; background: rgba(13, 23, 49, 0.9) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important;">Nathaniel Ilago</span>
+              <span class="team-list-tag" style="color: #f8fafc !important; background: rgba(13, 23, 49, 0.9) !important; border: 1px solid rgba(6, 182, 212, 0.4) !important;">Edsel Villanueva</span>
             </div>
           </div>
 
@@ -165,33 +249,33 @@
               <i class="bi bi-cpu-fill text-cyan-bright" style="font-size: 3rem;"></i>
             </div>
             <h3 class="h5 fw-bold text-white mb-2">Arduino Uno R3 Core</h3>
-            <p class="text-muted small mb-3">
+            <p class="text-light small mb-3" style="color: #f1f5f9 !important;">
               Microchip ATmega328P 16MHz processor orchestrating 10-bit analog conversion (A0), GPIO switching (D1, D3), and
               PWM tone synthesis (D5).
             </p>
 
             <div class="row g-2 text-start small">
               <div class="col-6">
-                <div class="p-2 rounded" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
-                  <span class="text-muted d-block" style="font-size: 0.72rem;">ANALOG IN</span>
+                <div class="p-2 rounded-3" style="background: rgba(13, 23, 49, 0.85); border: 1px solid rgba(6, 182, 212, 0.35);">
+                  <span class="text-light d-block fw-semibold" style="font-size: 0.72rem; letter-spacing: 0.04em; color: #cbd5e1 !important;">ANALOG IN</span>
                   <strong class="text-cyan">A0 (0-1023)</strong>
                 </div>
               </div>
               <div class="col-6">
-                <div class="p-2 rounded" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
-                  <span class="text-muted d-block" style="font-size: 0.72rem;">PWM SPEAKER</span>
+                <div class="p-2 rounded-3" style="background: rgba(13, 23, 49, 0.85); border: 1px solid rgba(245, 158, 11, 0.35);">
+                  <span class="text-light d-block fw-semibold" style="font-size: 0.72rem; letter-spacing: 0.04em; color: #cbd5e1 !important;">PWM SPEAKER</span>
                   <strong class="text-amber">Pin D5 (1-6 kHz)</strong>
                 </div>
               </div>
               <div class="col-6">
-                <div class="p-2 rounded" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
-                  <span class="text-muted d-block" style="font-size: 0.72rem;">GREEN LED</span>
+                <div class="p-2 rounded-3" style="background: rgba(13, 23, 49, 0.85); border: 1px solid rgba(16, 185, 129, 0.35);">
+                  <span class="text-light d-block fw-semibold" style="font-size: 0.72rem; letter-spacing: 0.04em; color: #cbd5e1 !important;">GREEN LED</span>
                   <strong class="text-green">Pin D1 (>30%)</strong>
                 </div>
               </div>
               <div class="col-6">
-                <div class="p-2 rounded" style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-subtle);">
-                  <span class="text-muted d-block" style="font-size: 0.72rem;">RED LED</span>
+                <div class="p-2 rounded-3" style="background: rgba(13, 23, 49, 0.85); border: 1px solid rgba(239, 68, 68, 0.35);">
+                  <span class="text-light d-block fw-semibold" style="font-size: 0.72rem; letter-spacing: 0.04em; color: #cbd5e1 !important;">RED LED</span>
                   <strong class="text-red">Pin D3 (≤30%)</strong>
                 </div>
               </div>
@@ -224,7 +308,7 @@
               </div>
               <h3 class="h5 fw-bold text-white mb-0">The Problem</h3>
             </div>
-            <p class="text-muted small">
+            <p class="text-white small mb-0" style="line-height: 1.75; font-size: 0.95rem; color: #ffffff !important;">
               In urban gardening and smallholder agriculture, irregular watering schedules and seasonal droughts often lead
               to irreversible root dehydration or over-watering root rot. Without objective soil telemetry, caretakers rely on
               inaccurate visual soil surface inspection.
@@ -241,7 +325,7 @@
               </div>
               <h3 class="h5 fw-bold text-white mb-0">The Solution</h3>
             </div>
-            <p class="text-muted small">
+            <p class="text-white small mb-0" style="line-height: 1.75; font-size: 0.95rem; color: #ffffff !important;">
               This system deploys a capacitive/resistive probe directly into the plant root zone. The Arduino continuously
               reads the analog voltage divider signal on pin A0, computes the hydration ratio against calibrated saturation,
               and actuates visual and audible alerts in real time.
@@ -258,11 +342,11 @@
               </div>
               <h3 class="h5 fw-bold text-white mb-0">Core Objectives</h3>
             </div>
-            <ul class="text-muted small ps-3 mb-0" style="line-height: 1.8;">
-              <li>Detect real-time soil moisture with low-latency sampling (100ms cycle).</li>
-              <li>Dual feedback modalities: Visual LED array + Auditory PWM speaker.</li>
-              <li>Acoustic differentiation: "I'm Thirsty" alarm (1000Hz) vs "I'm Full" confirmation (1500Hz).</li>
-              <li>Cost-effective architecture deployable by students, urban gardeners, and hobbyists.</li>
+            <ul class="text-white small ps-3 mb-0" style="line-height: 1.8; font-size: 0.92rem; color: #ffffff !important;">
+              <li style="color: #ffffff !important;">Detect real-time soil moisture with low-latency sampling (100ms cycle).</li>
+              <li style="color: #ffffff !important;">Dual feedback modalities: Visual LED array + Auditory PWM speaker.</li>
+              <li style="color: #ffffff !important;"><strong class="text-white">Acoustic Alert Logic:</strong> 1000Hz speaker alarm sounds ONLY when soil is moderate to dry (&le; 30%); completely MUTED and silent (0 sound / <code>noTone()</code>) in optimal to saturated state (31% &ndash; 100%).</li>
+              <li style="color: #ffffff !important;">Cost-effective architecture deployable by students, urban gardeners, and hobbyists.</li>
             </ul>
           </div>
         </div>
@@ -290,7 +374,7 @@
               <span class="pulse-dot"></span>
               ARDUINO UNO R3 • FIRMWARE RUNNING
             </span>
-            <span class="small text-muted">Sampling: Pin A0 @ 10Hz</span>
+            <span class="small text-light">Sampling: Pin A0 @ 10Hz</span>
           </div>
 
           <div class="d-flex align-items-center gap-2">
@@ -310,7 +394,7 @@
               <div>
                 <div class="d-flex justify-content-between align-items-center mb-3">
                   <h4 class="h6 fw-bold text-white mb-0"><i class="bi bi-motherboard text-cyan me-1"></i> Output Actuators</h4>
-                  <span class="badge bg-dark border border-secondary text-dim" style="font-size: 0.68rem;">GPIO D1, D3, D5</span>
+                  <span class="badge bg-dark border border-cyan text-light" style="font-size: 0.68rem;">GPIO D1, D3, D5</span>
                 </div>
 
                 <!-- LEDs -->
@@ -319,26 +403,26 @@
                   <div class="virtual-led">
                     <div id="redLedBulb" class="led-bulb led-bulb-red"></div>
                     <span class="led-label text-red">RED LED (D3)</span>
-                    <span class="text-dim" style="font-size: 0.68rem;">≤ 30% Moisture</span>
+                    <span class="text-light" style="font-size: 0.68rem; color: #cbd5e1 !important;">≤ 30% Moisture (Alarm)</span>
                   </div>
 
                   <!-- Green LED -->
                   <div class="virtual-led">
                     <div id="greenLedBulb" class="led-bulb led-bulb-green active"></div>
                     <span class="led-label text-green">GREEN LED (D1)</span>
-                    <span class="text-dim" style="font-size: 0.68rem;">&gt; 30% Moisture</span>
+                    <span class="text-light" style="font-size: 0.68rem; color: #cbd5e1 !important;">&gt; 30% Moisture (Silent)</span>
                   </div>
                 </div>
 
                 <!-- Speaker Buzzer -->
                 <div class="virtual-speaker mb-3">
-                  <div id="speakerCone" class="speaker-cone chime">
-                    <i class="bi bi-bell-fill"></i>
+                  <div id="speakerCone" class="speaker-cone">
+                    <i class="bi bi-volume-mute-fill"></i>
                   </div>
                   <div class="text-center">
                     <span class="small fw-bold text-white d-block">Piezo Speaker (Pin D5)</span>
                     <div id="speakerStatus" class="small mt-1">
-                      <span class="text-green fw-bold">1500Hz Chime ("I'm full!")</span>
+                      <span class="text-light" style="color: #cbd5e1 !important;"><i class="bi bi-volume-mute-fill me-1"></i>Silent (noTone) • Sound removed on saturated</span>
                     </div>
                   </div>
                 </div>
@@ -353,7 +437,7 @@
                   Optimal Plant Hydration
                 </div>
                 <div id="plantSubtext" class="plant-subtext">
-                  Moisture &gt; 30%. Soil is adequately damp and healthy.
+                  Moisture &gt; 30%. Soil is adequately damp and healthy; speaker is silent.
                 </div>
               </div>
             </div>
@@ -368,52 +452,51 @@
                   <span class="badge bg-dark border border-cyan text-cyan" style="font-size: 0.68rem;">ANALOG A0</span>
                 </div>
 
-                <p class="text-muted small mb-3">
+                <p class="text-white small mb-3" style="color: #ffffff !important;">
                   Adjust the simulated probe depth/hydration in soil. The firmware compares the ratio against maximum calibrated saturation.
                 </p>
 
                 <!-- Slider Control Group -->
                 <div class="slider-control-group">
                   <div class="slider-label-row">
-                    <span class="small text-muted">Moisture Level:</span>
+                    <span class="small text-white" style="color: #ffffff !important;">Moisture Level:</span>
                     <span id="moistureReadout" class="moisture-readout">65% (ADC: 665)</span>
                   </div>
 
                   <input type="range" id="moistureSlider" class="moisture-slider" min="0" max="100" value="65">
 
                   <div class="slider-threshold-marks">
-                    <span class="text-red">0% (Dry Alert)</span>
-                    <span class="text-amber">10% - 30%</span>
-                    <span class="text-green">100% (Saturated)</span>
+                    <span class="text-red">0% (Dry Alarm: 1000Hz)</span>
+                    <span class="text-amber">10% - 30% (Moderate Alarm: 1000Hz)</span>
+                    <span class="text-green">31% - 100% (MUTED / SILENT)</span>
                   </div>
                 </div>
 
                 <!-- Presets -->
                 <div class="mt-4">
-                  <div class="small text-muted mb-2 fw-semibold">Quick Test Presets:</div>
+                  <div class="small text-white mb-2 fw-semibold" style="color: #ffffff !important;">Quick Test Presets:</div>
                   <div class="preset-button-row">
                     <button class="btn-preset" data-value="8">
                       <i class="bi bi-exclamation-triangle-fill text-red"></i> 8% Dry Alarm
                     </button>
                     <button class="btn-preset" data-value="22">
-                      <i class="bi bi-dash-circle text-amber"></i> 22% Moderate
+                      <i class="bi bi-exclamation-triangle-fill text-amber"></i> 22% Moderate Alarm
                     </button>
                     <button class="btn-preset active" data-value="65">
-                      <i class="bi bi-check-circle-fill text-green"></i> 65% Optimal
+                      <i class="bi bi-volume-mute-fill text-green"></i> 65% Optimal (Muted)
                     </button>
-                    <button class="btn-preset" data-value="95">
-                      <i class="bi bi-water text-cyan"></i> 95% Saturated
+                    <button class="btn-preset" data-value="100">
+                      <i class="bi bi-volume-mute-fill text-cyan"></i> 100% Saturated (Muted)
                     </button>
                   </div>
                 </div>
               </div>
 
               <!-- Micro Logic Note -->
-              <div class="p-3 rounded-3 mt-3" style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.76rem;">
-                <span class="text-cyan fw-bold d-block mb-1">C++ Logic Rules:</span>
-                <div>• <code class="text-red">ratio &lt;= 0.10</code>: Red LED ON, 1000Hz Tone (2s delay)</div>
-                <div>• <code class="text-amber">0.10 &lt; ratio &lt;= 0.30</code>: Red LED ON, noTone()</div>
-                <div>• <code class="text-green">ratio &gt; 0.30</code>: Green LED ON, 1500Hz Tone</div>
+              <div class="p-3 rounded-3 mt-3" style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(6, 182, 212, 0.3); font-size: 0.78rem; color: #ffffff !important;">
+                <span class="text-cyan fw-bold d-block mb-1">C++ Firmware Logic Rules:</span>
+                <div>• <code class="text-red">ratio &lt;= 0.30</code>: Red LED ON, 1000Hz Sound Alarm ACTIVE (Moderate to Dry Alert)</div>
+                <div>• <code class="text-green">ratio &gt; 0.30 (to 100%)</code>: Green LED ON, noTone() (100% MUTED in Optimal &amp; Saturated State)</div>
               </div>
             </div>
           </div>
@@ -427,7 +510,7 @@
                 </span>
                 <div class="d-flex align-items-center gap-2">
                   <span class="serial-baud">9600 Baud</span>
-                  <button id="btnClearSerial" class="btn btn-xs btn-outline-secondary rounded px-2 py-0 text-muted" style="font-size: 0.7rem;">
+                  <button id="btnClearSerial" class="btn btn-xs btn-outline-info rounded px-2 py-0 text-light" style="font-size: 0.7rem;">
                     Clear
                   </button>
                 </div>
@@ -435,7 +518,7 @@
               <div id="serialBody" class="serial-body flex-grow-1">
                 <!-- Log lines streaming dynamically -->
               </div>
-              <div class="p-2 border-top border-secondary border-opacity-25 bg-dark small text-dim text-center" style="font-size: 0.72rem;">
+              <div class="p-2 border-top border-secondary border-opacity-25 bg-dark small text-light text-center" style="font-size: 0.72rem; color: #cbd5e1 !important;">
                 Streaming <code>Serial.println(currentMoistureLevel);</code> telemetry in real-time.
               </div>
             </div>
@@ -465,9 +548,9 @@
               Your browser does not support the video tag.
             </video>
           </div>
-          <div class="d-flex justify-content-between align-items-center mt-2 px-2 text-muted small">
-            <span><i class="bi bi-play-circle-fill text-cyan me-1"></i> Prototype Testing Demonstration (Nov 2024)</span>
-            <span class="badge bg-dark border border-secondary text-info">Recorded at DCSA Lab</span>
+          <div class="d-flex justify-content-between align-items-center mt-2 px-2 text-light small">
+            <span style="color: #cbd5e1 !important;"><i class="bi bi-play-circle-fill text-cyan me-1"></i> Prototype Testing Demonstration (Nov 2024)</span>
+            <span class="badge bg-dark border border-cyan text-info">Recorded at DCSA Lab</span>
           </div>
         </div>
 
@@ -481,16 +564,16 @@
             <div class="media-thumbnail-card mb-3" data-title="Actual Assembled Hardware Breadboard">
               <img src="assets/circuit_photo.png" alt="Actual circuit photo of Arduino Uno, breadboard, and soil probe">
             </div>
-            <p class="text-muted small mb-0">
+            <p class="text-light small mb-0" style="color: #f1f5f9 !important;">
               Assembled testing rig: Arduino Uno R3 connected to the capacitive soil probe, dual diffused LEDs with 10kΩ current-limiting resistors, and the speaker output line.
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Schematics & Diagrams Row -->
-      <div class="row g-4">
-        <div class="col-md-6">
+      <!-- Circuit Schematic Diagram Row -->
+      <div class="row g-4 justify-content-center">
+        <div class="col-lg-8 col-md-10">
           <div class="cyber-card p-3">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="fw-bold text-white small"><i class="bi bi-diagram-3 text-cyan me-1"></i> Circuit Schematic Diagram</span>
@@ -498,18 +581,6 @@
             </div>
             <div class="media-thumbnail-card" data-title="Circuit Wiring Schematic Diagram">
               <img src="assets/circuit_diagram.jpg" alt="Arduino Soil Moisture Circuit Diagram">
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="cyber-card p-3">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="fw-bold text-white small"><i class="bi bi-diagram-2 text-cyan me-1"></i> Hardware Interconnection Diagram</span>
-              <span class="badge bg-info-subtle text-info small">Click to Zoom</span>
-            </div>
-            <div class="media-thumbnail-card" data-title="Hardware Interconnection Architecture">
-              <img src="assets/hardware_schematic.png" alt="Hardware Interconnection Diagram">
             </div>
           </div>
         </div>
@@ -593,7 +664,7 @@
               <td class="text-cyan fw-bold">08</td>
               <td><strong class="text-white">Speaker / Piezo Transducer</strong></td>
               <td>8Ω / Piezo electromagnetic audio transducer</td>
-              <td>Generates audible alert tones using PWM frequencies (1000Hz alert, 1500Hz confirmation, 5-6kHz boot).</td>
+              <td>Generates audible alarm tone using PWM frequencies (1000Hz alert ONLY when moderate to dry &le; 30%, 5-6kHz startup test). Completely MUTED and 100% silent (0 sound / noTone) in optimal to saturated state (&gt; 30% to 100%).</td>
               <td><span class="pinout-badge badge-pin-d5">Pin D5 (PWM)</span></td>
             </tr>
             <tr>
@@ -621,31 +692,31 @@
         </h3>
         <div class="row g-3 small">
           <div class="col-md-3 col-6">
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
-              <span class="text-muted d-block">Soil Moisture Sensor</span>
+            <div class="wiring-card">
+              <span class="text-light d-block fw-semibold mb-1" style="color: #f1f5f9 !important;">Soil Moisture Sensor</span>
               <strong class="text-cyan">VCC &rarr; 5V | GND &rarr; GND</strong>
-              <div class="text-dim mt-1">Signal &rarr; Pin A0</div>
+              <div class="text-light mt-1" style="color: #cbd5e1 !important;">Signal &rarr; Pin A0</div>
             </div>
           </div>
           <div class="col-md-3 col-6">
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
-              <span class="text-muted d-block">Green LED</span>
+            <div class="wiring-card">
+              <span class="text-light d-block fw-semibold mb-1" style="color: #f1f5f9 !important;">Green LED</span>
               <strong class="text-green">Anode (+) &rarr; Pin D1</strong>
-              <div class="text-dim mt-1">Cathode &rarr; 10kΩ &rarr; GND</div>
+              <div class="text-light mt-1" style="color: #cbd5e1 !important;">Cathode &rarr; 10kΩ &rarr; GND</div>
             </div>
           </div>
           <div class="col-md-3 col-6">
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
-              <span class="text-muted d-block">Red LED</span>
+            <div class="wiring-card">
+              <span class="text-light d-block fw-semibold mb-1" style="color: #f1f5f9 !important;">Red LED</span>
               <strong class="text-red">Anode (+) &rarr; Pin D3</strong>
-              <div class="text-dim mt-1">Cathode &rarr; 10kΩ &rarr; GND</div>
+              <div class="text-light mt-1" style="color: #cbd5e1 !important;">Cathode &rarr; 10kΩ &rarr; GND</div>
             </div>
           </div>
           <div class="col-md-3 col-6">
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
-              <span class="text-muted d-block">Speaker (Modified)</span>
+            <div class="wiring-card">
+              <span class="text-light d-block fw-semibold mb-1" style="color: #f1f5f9 !important;">Speaker (Modified)</span>
               <strong class="text-amber">Positive (+) &rarr; Pin D5 (PWM)</strong>
-              <div class="text-dim mt-1">Negative (-) &rarr; GND</div>
+              <div class="text-light mt-1" style="color: #cbd5e1 !important;">Negative (-) &rarr; GND</div>
             </div>
           </div>
         </div>
@@ -681,32 +752,26 @@
 <span class="c-comm">// Team Lead: Marcial Lawrence Jr V. Caronan | Datamex College of Saint Adeline</span>
 
 <span class="c-type">int</span> greenLight = <span class="c-num">1</span>;      <span class="c-comm">// Pin for Green LED (Above 30% moisture level)</span>
-<span class="c-type">int</span> redLight = <span class="c-num">3</span>;        <span class="c-comm">// Pin for Red LED (Below 10% moisture level)</span>
-<span class="c-type">int</span> speakerPin = <span class="c-num">5</span>;      <span class="c-comm">// Pin for speaker (Replaces buzzer via PWM)</span>
+<span class="c-type">int</span> redLight = <span class="c-num">3</span>;        <span class="c-comm">// Pin for Red LED (30% moisture level and below)</span>
+<span class="c-type">int</span> speakerPin = <span class="c-num">5</span>;      <span class="c-comm">// Pin for speaker (PWM tone alert)</span>
 <span class="c-type">int</span> maximumMoistureLevel; <span class="c-comm">// Maximum moisture level (calibrated baseline)</span>
 <span class="c-type">int</span> currentMoistureLevel; <span class="c-comm">// Current moisture level (reading from sensor)</span>
 
 <span class="c-type">void</span> <span class="c-func">moistureDetection</span>() {
   <span class="c-type">float</span> moistureRatio = (<span class="c-type">float</span>)currentMoistureLevel / (<span class="c-type">float</span>)maximumMoistureLevel;
 
-  <span class="c-comm">// Moisture level less than 10%: "I'm thirsty" sound and red light</span>
-  <span class="c-keyword">if</span> (moistureRatio &lt;= <span class="c-num">0.1</span>) {
+  <span class="c-comm">// Moisture 30% and below: Moderate to Dry Soil -> Red LED ON, 1000Hz Sound Alarm ACTIVE</span>
+  <span class="c-keyword">if</span> (moistureRatio &lt;= <span class="c-num">0.3</span>) {
     <span class="c-func">digitalWrite</span>(greenLight, <span class="c-num">LOW</span>);  <span class="c-comm">// Turn off green light</span>
     <span class="c-func">digitalWrite</span>(redLight, <span class="c-num">HIGH</span>);   <span class="c-comm">// Turn on red light</span>
-    <span class="c-func">tone</span>(speakerPin, <span class="c-num">1000</span>, <span class="c-num">500</span>);    <span class="c-comm">// 1000Hz Sound for "I'm thirsty"</span>
-    <span class="c-func">delay</span>(<span class="c-num">2000</span>);                    <span class="c-comm">// Wait for 2 seconds before proceeding</span>
+    <span class="c-func">tone</span>(speakerPin, <span class="c-num">1000</span>, <span class="c-num">500</span>);    <span class="c-comm">// 1000Hz Sound Alarm (Moderate to Dry)</span>
+    <span class="c-func">delay</span>(<span class="c-num">2000</span>);                    <span class="c-comm">// 2-second alert cadence</span>
   } 
-  <span class="c-comm">// Moisture level between 10% and 30%: Red light (no sound)</span>
-  <span class="c-keyword">else if</span> (moistureRatio &lt;= <span class="c-num">0.3</span> &amp;&amp; moistureRatio &gt; <span class="c-num">0.1</span>) {
-    <span class="c-func">digitalWrite</span>(greenLight, <span class="c-num">LOW</span>);  <span class="c-comm">// Turn off green light</span>
-    <span class="c-func">digitalWrite</span>(redLight, <span class="c-num">HIGH</span>);   <span class="c-comm">// Keep red light on</span>
-    <span class="c-func">noTone</span>(speakerPin);             <span class="c-comm">// No sound</span>
-  }
-  <span class="c-comm">// Moisture level above 30%: "I'm full" sound and green light</span>
+  <span class="c-comm">// Moisture above 30% to 100%: Optimal to Saturated Soil -> Green LED ON, 100% MUTED (Silent)</span>
   <span class="c-keyword">else</span> {
     <span class="c-func">digitalWrite</span>(greenLight, <span class="c-num">HIGH</span>); <span class="c-comm">// Turn on green light</span>
     <span class="c-func">digitalWrite</span>(redLight, <span class="c-num">LOW</span>);    <span class="c-comm">// Turn off red light</span>
-    <span class="c-func">tone</span>(speakerPin, <span class="c-num">1500</span>, <span class="c-num">500</span>);    <span class="c-comm">// 1500Hz Sound for "I'm full"</span>
+    <span class="c-func">noTone</span>(speakerPin);             <span class="c-comm">// Completely MUTED & silent in optimal/saturated state (0 sound)</span>
   }
 }
 
@@ -752,34 +817,33 @@
               <i class="bi bi-journal-code text-cyan me-2"></i> Architectural Breakdown
             </h3>
 
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
+            <div class="architecture-card">
               <strong class="text-cyan-bright d-block mb-1">1. Startup Self-Test & Calibration (setup)</strong>
-              <p class="text-muted small mb-0">
+              <p class="text-light small mb-0">
                 Calibrates baseline reading via <code>analogRead(A0)</code> and issues a dual-chirp chime at 5,000Hz and 6,000Hz,
                 confirming speaker and power line health before entering the loop.
               </p>
             </div>
 
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
+            <div class="architecture-card">
               <strong class="text-cyan-bright d-block mb-1">2. Dynamic Ratio Math (moistureDetection)</strong>
-              <p class="text-muted small mb-0">
+              <p class="text-light small mb-0">
                 Divides <code>currentMoistureLevel</code> by <code>maximumMoistureLevel</code> as a floating-point ratio, making
                 detection resilient to sensor aging or supply rail drops.
               </p>
             </div>
 
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
-              <strong class="text-cyan-bright d-block mb-1">3. Three-State Alert Thresholds</strong>
-              <ul class="text-muted small ps-3 mb-0" style="line-height: 1.6;">
-                <li><strong>&le; 10% (Critical)</strong>: Red LED, 1000Hz tone for 500ms, followed by 2000ms delay.</li>
-                <li><strong>10% to 30% (Warning)</strong>: Red LED ON, audio muted with <code>noTone()</code>.</li>
-                <li><strong>&gt; 30% (Hydrated)</strong>: Green LED ON, pleasant 1500Hz confirmation chime.</li>
+            <div class="architecture-card">
+              <strong class="text-cyan-bright d-block mb-1">3. State Alert Thresholds</strong>
+              <ul class="text-white small ps-3 mb-0" style="line-height: 1.6; color: #ffffff !important;">
+                <li style="color: #ffffff !important;"><strong class="text-white">&le; 30% (Moderate to Dry Alarm):</strong> Red LED ON, 1000Hz sound alarm active to warn caretakers of irrigation need.</li>
+                <li style="color: #ffffff !important;"><strong class="text-white">&gt; 30% to 100% (Optimal to Saturated):</strong> Green LED ON, completely MUTED and 100% silent (<code>noTone()</code>).</li>
               </ul>
             </div>
 
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-25">
+            <div class="architecture-card">
               <strong class="text-cyan-bright d-block mb-1">4. Sampling & Telemetry (loop)</strong>
-              <p class="text-muted small mb-0">
+              <p class="text-white small mb-0" style="color: #ffffff !important;">
                 Executes every 100ms (10Hz sampling frequency) and outputs telemetry over UART Serial at 9600 baud for lab
                 debugging.
               </p>
@@ -796,7 +860,7 @@
       <div class="text-center mb-5">
         <div class="section-tag"><i class="bi bi-clipboard-data"></i> Experimental Validation</div>
         <h2 class="section-title">Testing & <span class="text-cyan-bright">Evaluation Matrix</span></h2>
-        <p class="section-subtitle">
+        <p class="section-subtitle" style="color: #ffffff !important;">
           Summary of the empirical test cases documented in the academic paper across varying moisture environments.
         </p>
       </div>
@@ -809,10 +873,10 @@
               <span class="fw-bold text-white small">Test Case 1</span>
               <span class="badge-pass">PASS</span>
             </div>
-            <div class="text-cyan small fw-semibold mb-2">Dry Soil Detection</div>
-            <div class="small text-muted mb-1"><strong>Input:</strong> 10% moisture</div>
-            <div class="small text-muted mb-1"><strong>Expected:</strong> Red light + 1000Hz sound</div>
-            <div class="small text-light"><strong>Actual:</strong> Red light with sound confirmed</div>
+            <div class="text-red small fw-semibold mb-2">Critical Dry Soil</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Input:</strong> &le; 10% moisture</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Expected:</strong> Red LED + 1000Hz Alarm</div>
+            <div class="small text-white" style="color: #ffffff !important;"><strong>Actual:</strong> Red LED &amp; 1000Hz Sound Confirmed</div>
           </div>
         </div>
 
@@ -823,10 +887,10 @@
               <span class="fw-bold text-white small">Test Case 2</span>
               <span class="badge-pass">PASS</span>
             </div>
-            <div class="text-green small fw-semibold mb-2">Wet Soil Detection</div>
-            <div class="small text-muted mb-1"><strong>Input:</strong> &gt; 30% moisture</div>
-            <div class="small text-muted mb-1"><strong>Expected:</strong> Green light, no alarm</div>
-            <div class="small text-light"><strong>Actual:</strong> Green light confirmed</div>
+            <div class="text-amber small fw-semibold mb-2">Moderate Soil Band</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Input:</strong> 11% &ndash; 30% moisture</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Expected:</strong> Red LED + 1000Hz Alarm</div>
+            <div class="small text-white" style="color: #ffffff !important;"><strong>Actual:</strong> Red LED &amp; 1000Hz Sound Confirmed</div>
           </div>
         </div>
 
@@ -837,10 +901,10 @@
               <span class="fw-bold text-white small">Test Case 3</span>
               <span class="badge-pass">PASS</span>
             </div>
-            <div class="text-amber small fw-semibold mb-2">Threshold Stress Check</div>
-            <div class="small text-muted mb-1"><strong>Input:</strong> Low hydration transition</div>
-            <div class="small text-muted mb-1"><strong>Expected:</strong> Red alert + sound</div>
-            <div class="small text-light"><strong>Actual:</strong> Red alert + sound confirmed</div>
+            <div class="text-green small fw-semibold mb-2">Optimal Soil Hydration</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Input:</strong> 31% &ndash; 70% moisture</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Expected:</strong> Green LED, MUTED (0 sound)</div>
+            <div class="small text-white" style="color: #ffffff !important;"><strong>Actual:</strong> Green LED &amp; Silence Confirmed</div>
           </div>
         </div>
 
@@ -851,10 +915,10 @@
               <span class="fw-bold text-white small">Test Case 4</span>
               <span class="badge-pass">PASS</span>
             </div>
-            <div class="text-cyan small fw-semibold mb-2">Hydrated Recovery</div>
-            <div class="small text-muted mb-1"><strong>Input:</strong> Post-watering recovery</div>
-            <div class="small text-muted mb-1"><strong>Expected:</strong> Green light confirmed</div>
-            <div class="small text-light"><strong>Actual:</strong> Green light, silence confirmed</div>
+            <div class="text-cyan small fw-semibold mb-2">100% Saturated Soil</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Input:</strong> 71% &ndash; 100% moisture</div>
+            <div class="small text-white mb-1" style="color: #ffffff !important;"><strong>Expected:</strong> Green LED, MUTED (0 sound)</div>
+            <div class="small text-white" style="color: #ffffff !important;"><strong>Actual:</strong> Green LED &amp; Silence Confirmed</div>
           </div>
         </div>
       </div>
@@ -866,7 +930,7 @@
             <h4 class="h6 fw-bold text-white mb-2">
               <i class="bi bi-shield-exclamation text-amber me-2"></i> Challenge 1: Sensor Calibration Drift
             </h4>
-            <p class="text-muted small mb-0">
+            <p class="text-light small mb-0" style="color: #f1f5f9 !important;">
               <strong>Observation:</strong> Different potting substrates (sandy loam vs compost) exhibited varying dielectric conductivity curves.<br>
               <strong>Resolution:</strong> Implemented <code>moistureRatio = current / maximum</code> relative calculation in firmware instead of static hardcoded thresholds, providing automatic substrate baseline scaling.
             </p>
@@ -878,7 +942,7 @@
             <h4 class="h6 fw-bold text-white mb-2">
               <i class="bi bi-soundwave text-cyan me-2"></i> Challenge 2: Speaker Noise & Ripple Current
             </h4>
-            <p class="text-muted small mb-0">
+            <p class="text-light small mb-0" style="color: #f1f5f9 !important;">
               <strong>Observation:</strong> Rapid PWM switching produced transient ripple current on the 5V bus when tone toggled.<br>
               <strong>Resolution:</strong> Added a small decoupling capacitor across speaker terminals and tuned the square wave duty cycle in firmware to stabilize current and prevent microcontroller resets.
             </p>
@@ -896,7 +960,7 @@
         <div class="col-lg-6">
           <div class="section-tag mb-3"><i class="bi bi-arrow-up-right-circle"></i> Roadmap</div>
           <h3 class="h4 fw-bold text-white mb-3">Future Research & <span class="text-cyan-bright">IoT Enhancements</span></h3>
-          <p class="text-muted small mb-4">
+          <p class="text-light small mb-4" style="color: #f1f5f9 !important;">
             Identified scalability vectors from Section 6.2 of the project paper for turning this standalone prototype into a full-scale precision agriculture IoT ecosystem:
           </p>
 
@@ -905,7 +969,7 @@
               <i class="bi bi-display text-cyan fs-5 mt-1"></i>
               <div>
                 <strong class="text-white small d-block">OLED / I2C Liquid Crystal Display</strong>
-                <span class="text-muted small">Show real-time numeric soil moisture percentages and temperature readings directly on an attached display.</span>
+                <span class="text-light small" style="color: #e2e8f0 !important;">Show real-time numeric soil moisture percentages and temperature readings directly on an attached display.</span>
               </div>
             </div>
 
@@ -913,7 +977,7 @@
               <i class="bi bi-wifi text-green fs-5 mt-1"></i>
               <div>
                 <strong class="text-white small d-block">ESP32 / Wi-Fi & Cloud Telemetry Logging</strong>
-                <span class="text-muted small">Stream soil moisture degradation trends to a cloud dashboard (e.g., Supabase or Firebase) for historical graphing.</span>
+                <span class="text-light small" style="color: #e2e8f0 !important;">Stream soil moisture degradation trends to a cloud dashboard (e.g., Supabase or Firebase) for historical graphing.</span>
               </div>
             </div>
 
@@ -921,7 +985,7 @@
               <i class="bi bi-chat-dots-fill text-amber fs-5 mt-1"></i>
               <div>
                 <strong class="text-white small d-block">GSM / SMS Alert Notification Module</strong>
-                <span class="text-muted small">Send automatic SMS text notifications to farmers when soil moisture drops below critical levels during drought.</span>
+                <span class="text-light small" style="color: #e2e8f0 !important;">Send automatic SMS text notifications to farmers when soil moisture drops below critical levels during drought.</span>
               </div>
             </div>
 
@@ -929,7 +993,7 @@
               <i class="bi bi-sun-fill text-warning fs-5 mt-1"></i>
               <div>
                 <strong class="text-white small d-block">Solar Harvesting & Automated Water Pump Relay</strong>
-                <span class="text-muted small">Equip with a 5V relay module and solar panel for closed-loop autonomous irrigation without human intervention.</span>
+                <span class="text-light small" style="color: #e2e8f0 !important;">Equip with a 5V relay module and solar panel for closed-loop autonomous irrigation without human intervention.</span>
               </div>
             </div>
           </div>
@@ -939,7 +1003,7 @@
         <div class="col-lg-6">
           <div class="section-tag mb-3"><i class="bi bi-book"></i> Literature</div>
           <h3 class="h4 fw-bold text-white mb-3">Project References & <span class="text-cyan-bright">Citations</span></h3>
-          <p class="text-muted small mb-4">
+          <p class="text-light small mb-4" style="color: #f1f5f9 !important;">
             Official references and foundational hardware tutorials cited in the project report (Section 7):
           </p>
 
@@ -948,7 +1012,7 @@
               class="cyber-card p-3 d-flex align-items-center justify-content-between text-decoration-none">
               <div>
                 <span class="text-white fw-bold small d-block">Arduino Gets Started</span>
-                <span class="text-muted" style="font-size: 0.76rem;">Tutorials: Arduino Soil Moisture Sensor Interfacing</span>
+                <span class="text-light" style="font-size: 0.78rem; color: #cbd5e1 !important;">Tutorials: Arduino Soil Moisture Sensor Interfacing</span>
               </div>
               <i class="bi bi-box-arrow-up-right text-cyan"></i>
             </a>
@@ -957,7 +1021,7 @@
               class="cyber-card p-3 d-flex align-items-center justify-content-between text-decoration-none">
               <div>
                 <span class="text-white fw-bold small d-block">Circuit Digest</span>
-                <span class="text-muted" style="font-size: 0.76rem;">Interfacing Soil Moisture Sensor with Arduino Uno & Microcontrollers</span>
+                <span class="text-light" style="font-size: 0.78rem; color: #cbd5e1 !important;">Interfacing Soil Moisture Sensor with Arduino Uno & Microcontrollers</span>
               </div>
               <i class="bi bi-box-arrow-up-right text-cyan"></i>
             </a>
@@ -966,7 +1030,7 @@
               class="cyber-card p-3 d-flex align-items-center justify-content-between text-decoration-none">
               <div>
                 <span class="text-white fw-bold small d-block">GeeksforGeeks Electronics</span>
-                <span class="text-muted" style="font-size: 0.76rem;">Soil Moisture Measurement Principles & Embedded Logic</span>
+                <span class="text-light" style="font-size: 0.78rem; color: #cbd5e1 !important;">Soil Moisture Measurement Principles & Embedded Logic</span>
               </div>
               <i class="bi bi-box-arrow-up-right text-cyan"></i>
             </a>
@@ -975,17 +1039,17 @@
               class="cyber-card p-3 d-flex align-items-center justify-content-between text-decoration-none">
               <div>
                 <span class="text-white fw-bold small d-block">Official Arduino Project Hub</span>
-                <span class="text-muted" style="font-size: 0.76rem;">Soil Moisture Sensor Projects & Calibration Techniques</span>
+                <span class="text-light" style="font-size: 0.78rem; color: #cbd5e1 !important;">Soil Moisture Sensor Projects & Calibration Techniques</span>
               </div>
               <i class="bi bi-box-arrow-up-right text-cyan"></i>
             </a>
           </div>
 
-          <div class="mt-4 p-3 rounded-3" style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3);">
+          <div class="mt-4 p-3 rounded-3" style="background: rgba(6, 182, 212, 0.12); border: 1px solid rgba(6, 182, 212, 0.35);">
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
               <div>
                 <strong class="text-white small d-block">Download Full Academic Paper</strong>
-                <span class="text-muted" style="font-size: 0.75rem;">Complete research report with all figures and team submissions (DOCX format)</span>
+                <span class="text-light" style="font-size: 0.78rem; color: #cbd5e1 !important;">Complete research report with all figures and team submissions (DOCX format)</span>
               </div>
               <a href="assets/arduino_soil_sensor_report.docx" class="btn-cyber-primary py-2 px-3 text-nowrap" download>
                 <i class="bi bi-download"></i> Download Report
@@ -1003,7 +1067,7 @@
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
         <div>
           <span class="fw-bold text-white">Marcial Lawrence Jr V. Caronan</span>
-          <span class="text-dim small d-block">Datamex College of Saint Adeline • Bachelor of Science in Information Technology</span>
+          <span class="text-light small d-block" style="color: #cbd5e1 !important;">Datamex College of Saint Adeline • Bachelor of Science in Information Technology</span>
         </div>
         <div class="d-flex align-items-center gap-3">
           <a href="../index.html" class="btn btn-sm btn-outline-info rounded-pill px-3">
@@ -1035,8 +1099,8 @@
   <!-- Bootstrap 5.3 Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Custom Hardware Script -->
-  <script src="script.js"></script>
+  <!-- Custom Hardware Script (with cache-buster) -->
+  <script src="script.js?v=20261012-pure-white-v3"></script>
 
   <script>
     // Activate modal on thumbnail click

@@ -120,8 +120,10 @@ function updateHardwareState(percent, triggerAudio = true) {
     readout.textContent = `${currentMoisturePercent}% (ADC: ${rawAnalog})`;
   }
 
-  // Logic 1: <= 10% -> Critical Dryness, Red LED ON, 1000Hz Tone ("I'm Thirsty")
-  if (moistureRatio <= 0.1) {
+  // =========================================================================
+  // STATE 1 & 2: MODERATE TO DRY (<= 30%) -> RED LED ON, 1000Hz ALARM ACTIVE
+  // =========================================================================
+  if (moistureRatio <= 0.3) {
     if (greenLed) greenLed.classList.remove('active');
     if (redLed) redLed.classList.add('active');
 
@@ -130,20 +132,27 @@ function updateHardwareState(percent, triggerAudio = true) {
       speakerCone.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
     }
     if (speakerStatus) {
-      speakerStatus.innerHTML = '<span class="text-red fw-bold">ALERT: 1000Hz ("I\'m thirsty!")</span>';
+      if (moistureRatio <= 0.1) {
+        speakerStatus.innerHTML = '<span class="text-red fw-bold"><i class="bi bi-volume-up-fill me-1"></i>ALARM: Dry Soil Emergency (1000Hz)</span>';
+      } else {
+        speakerStatus.innerHTML = '<span class="text-amber fw-bold"><i class="bi bi-volume-up-fill me-1"></i>ALARM: Moderate Soil Warning (1000Hz)</span>';
+      }
     }
 
     if (plantStatus) {
-      plantStatus.textContent = 'Wilting & Severely Dehydrated';
-      plantStatus.className = 'plant-status-text text-red';
+      plantStatus.textContent = moistureRatio <= 0.1 ? 'Wilting & Severely Dehydrated' : 'Soil Moisture Depleting (Moderate)';
+      plantStatus.className = 'plant-status-text ' + (moistureRatio <= 0.1 ? 'text-red' : 'text-amber');
     }
     if (plantSubtext) {
-      plantSubtext.textContent = 'Soil moisture ≤ 10%. Immediate irrigation required!';
+      plantSubtext.textContent = moistureRatio <= 0.1 
+        ? 'Soil moisture ≤ 10%. Critical drought! Red LED & 1000Hz sound alarm active.'
+        : 'Moisture 10% - 30%. Moderate range! Red LED & 1000Hz sound alarm active.';
     }
     if (plantSvg) {
-      plantSvg.innerHTML = getPlantSvg('dry');
+      plantSvg.innerHTML = getPlantSvg(moistureRatio <= 0.1 ? 'dry' : 'moderate');
     }
 
+    // Trigger 1000Hz alarm tone
     if (triggerAudio) {
       const now = Date.now();
       if (now - lastToneTime > 1800) {
@@ -152,67 +161,36 @@ function updateHardwareState(percent, triggerAudio = true) {
       }
     }
 
-    logSerial(`[A0: ${rawAnalog}] moistureRatio: ${(moistureRatio).toFixed(2)} &lt;= 0.10 -> RED LED ON | TONE: 1000Hz (I'm thirsty!)`, 'alert');
+    logSerial(`[A0: ${rawAnalog}] moistureRatio: ${(moistureRatio).toFixed(2)} &lt;= 0.30 -> RED LED ON | 1000Hz SOUND ALARM ACTIVE (${moistureRatio <= 0.1 ? 'Dry Alert' : 'Moderate Alert'})`, 'alert');
   } 
-  // Logic 2: 10% < moistureRatio <= 30% -> Red LED ON, Speaker Silent (noTone)
-  else if (moistureRatio <= 0.3 && moistureRatio > 0.1) {
-    if (greenLed) greenLed.classList.remove('active');
-    if (redLed) redLed.classList.add('active');
+  // =========================================================================
+  // STATE 3: OPTIMAL TO SATURATED (> 30% TO 100%) -> GREEN LED ON, 100% MUTED
+  // =========================================================================
+  else {
+    if (greenLed) greenLed.classList.add('active');
+    if (redLed) redLed.classList.remove('active');
 
     if (speakerCone) {
       speakerCone.className = 'speaker-cone';
       speakerCone.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
     }
     if (speakerStatus) {
-      speakerStatus.innerHTML = '<span class="text-amber">Silent (noTone) • Approaching dry threshold</span>';
+      speakerStatus.innerHTML = '<span class="text-white fw-bold"><i class="bi bi-volume-mute-fill me-1"></i>MUTED (100% Silent) • Mute in Optimal & Saturated State (noTone)</span>';
     }
 
     if (plantStatus) {
-      plantStatus.textContent = 'Soil Moisture Depleting';
-      plantStatus.className = 'plant-status-text text-amber';
-    }
-    if (plantSubtext) {
-      plantSubtext.textContent = 'Moisture 10% - 30%. Red LED active; watering recommended soon.';
-    }
-    if (plantSvg) {
-      plantSvg.innerHTML = getPlantSvg('moderate');
-    }
-
-    logSerial(`[A0: ${rawAnalog}] moistureRatio: ${(moistureRatio).toFixed(2)} (10%-30%) -> RED LED ON | noTone()`);
-  } 
-  // Logic 3: > 30% -> Adequate Moisture, Green LED ON, 1500Hz Confirmation Tone ("I'm Full")
-  else {
-    if (greenLed) greenLed.classList.add('active');
-    if (redLed) redLed.classList.remove('active');
-
-    if (speakerCone) {
-      speakerCone.className = 'speaker-cone chime';
-      speakerCone.innerHTML = '<i class="bi bi-bell-fill"></i>';
-    }
-    if (speakerStatus) {
-      speakerStatus.innerHTML = '<span class="text-green fw-bold">1500Hz Chime ("I\'m full!")</span>';
-    }
-
-    if (plantStatus) {
-      plantStatus.textContent = 'Optimal Plant Hydration';
+      plantStatus.textContent = currentMoisturePercent >= 90 ? 'Saturated Soil Hydration (100%)' : 'Optimal Soil Hydration';
       plantStatus.className = 'plant-status-text text-green';
     }
     if (plantSubtext) {
-      plantSubtext.textContent = 'Moisture > 30%. Soil is adequately damp and healthy.';
+      plantSubtext.textContent = `Moisture ${currentMoisturePercent}%. Optimal to saturated state (> 30% to 100%). Speaker is completely MUTED & 100% silent.`;
     }
     if (plantSvg) {
       plantSvg.innerHTML = getPlantSvg('healthy');
     }
 
-    if (triggerAudio) {
-      const now = Date.now();
-      if (now - lastToneTime > 2500) {
-        lastToneTime = now;
-        playArduinoTone(1500, 350);
-      }
-    }
-
-    logSerial(`[A0: ${rawAnalog}] moistureRatio: ${(moistureRatio).toFixed(2)} &gt; 0.30 -> GREEN LED ON | TONE: 1500Hz (I'm full!)`);
+    // Completely muted on optimal to saturated: zero sound
+    logSerial(`[A0: ${rawAnalog}] moistureRatio: ${(moistureRatio).toFixed(2)} &gt; 0.30 -> GREEN LED ON | MUTED noTone() (100% Silent in Optimal/Saturated State)`);
   }
 }
 
@@ -341,7 +319,10 @@ document.addEventListener('DOMContentLoaded', () => {
         audioToggleBtn.innerHTML = '<i class="bi bi-volume-up-fill"></i> Sound: Enabled';
         audioToggleBtn.classList.add('btn-outline-info');
         audioToggleBtn.classList.remove('btn-outline-secondary');
-        playArduinoTone(1500, 200);
+        // Only beep if currently in alarm range (moderate to dry <= 30%)
+        if (currentMoisturePercent <= 30) {
+          playArduinoTone(1000, 300);
+        }
       }
     });
   }
@@ -379,6 +360,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // ScrollSpy for Header Nav Tabs
+  const pageSections = document.querySelectorAll('section[id], header[id]');
+  const navTabLinks = document.querySelectorAll('.nav-tab-pill');
+
+  function updateActiveTabOnScroll() {
+    const scrollPosition = window.scrollY + 130;
+    pageSections.forEach(section => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      const id = section.getAttribute('id');
+      if (scrollPosition >= top && scrollPosition < top + height) {
+        navTabLinks.forEach(tab => {
+          if (tab.getAttribute('href') === `#${id}`) {
+            tab.classList.add('active');
+          } else {
+            tab.classList.remove('active');
+          }
+        });
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveTabOnScroll, { passive: true });
+  updateActiveTabOnScroll();
 
   // Initial State
   updateHardwareState(65, false);

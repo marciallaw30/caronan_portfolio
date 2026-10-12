@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="TarotKnight Crystal Art — E-Commerce Website with PayMongo Online Payment & J&T Express Logistics Integration. Official Academic Project by Marcial Lawrence Jr V. Caronan & Team, Datamex College of Saint Adeline.">
+  <meta name="author" content="Marcial Lawrence Jr V. Caronan">
+  <title>TarotKnight Crystal Art | E-Commerce with PayMongo & J&T Express</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Custom Sacred Luxury E-Commerce CSS -->
+  <link rel="stylesheet" href="style.css?v=20261012-v1">
+
+  <!-- Guaranteed Pure White Text Readability -->
+  <style>
+    :root, [data-bs-theme=dark], body {
+      --bs-body-color: #ffffff !important;
+      --bs-secondary-color: #ffffff !important;
+      --bs-tertiary-color: #ffffff !important;
+      color: #ffffff !important;
+    }
+    body, p, li, ul, ol, td, th, label, small, strong:not([class*="text-"]), b,
+    .text-light, .text-muted, .text-dim, .section-subtitle, .lead {
+      color: #ffffff !important;
+      -webkit-text-fill-color: #ffffff !important;
+      opacity: 1 !important;
+    }
+    .text-gold { color: #d4af37 !important; -webkit-text-fill-color: #d4af37 !important; }
+    .text-gold-light { color: #f3e5ab !important; -webkit-text-fill-color: #f3e5ab !important; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Cosmic Celestial Spiritual Glow Background -->
+  <div class="celestial-bg" aria-hidden="true">
+    <div class="auric-orb orb-indigo"></div>
+    <div class="auric-orb orb-gold"></div>
+    <div class="auric-orb orb-purple"></div>
+    <div class="starlight-grid"></div>
+  </div>
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <nav class="navbar navbar-expand-xl navbar-tarot fixed-top">
+    <div class="container">
+      <a class="navbar-brand-tarot" href="#hero">
+        <div class="brand-icon-gem">
+          <i class="bi bi-gem"></i>
+        </div>
+        <div>
+          <div class="brand-title">TAROTKNIGHT</div>
+          <div class="brand-subtitle">Crystal Art &amp; Spiritual Sanctuary</div>
+        </div>
+      </a>
+
+      <!-- Mobile Hamburger Toggler -->
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navTarotKnight"
+        aria-controls="navTarotKnight" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navTarotKnight">
+        <div class="navbar-nav ms-auto align-items-xl-center gap-1 my-3 my-xl-0">
+          <a class="nav-link-tarot" href="../index.html" title="Return to Main Portfolio">
+            <i class="bi bi-arrow-left text-gold"></i>
+            <span>Main Portfolio</span>
+          </a>
+          <a class="nav-link-tarot" href="#shop">
+            <i class="bi bi-bag-heart-fill"></i>
+            <span>Shop Crystals</span>
+          </a>
+          <a class="nav-link-tarot" href="#booking">
+            <i class="bi bi-calendar2-check-fill"></i>
+            <span>Book Reading</span>
+          </a>
+          <a class="nav-link-tarot" href="#tracking">
+            <i class="bi bi-truck"></i>
+            <span>J&amp;T Tracking</span>
+          </a>
+          <a class="nav-link-tarot" href="#paymongo">
+            <i class="bi bi-credit-card-2-front-fill"></i>
+            <span>PayMongo</span>
+          </a>
+          <a class="nav-link-tarot" href="#consultation">
+            <i class="bi bi-chat-quote-fill"></i>
+            <span>AI Guide</span>
+          </a>
+          <a class="nav-link-tarot" href="#research">
+            <i class="bi bi-file-earmark-text-fill"></i>
+            <span>Paper</span>
+          </a>
+        </div>
+
+        <!-- Action Buttons: Admin Modal & Floating Cart Drawer -->
+        <div class="d-flex align-items-center gap-2 ms-xl-3">
+          <button class="btn btn-sm btn-outline-warning text-gold py-2 px-3 rounded-pill" data-bs-toggle="modal"
+            data-bs-target="#adminModal" title="Open Administrative Control Center">
+            <i class="bi bi-speedometer2 me-1"></i> Admin
+          </button>
+          <button class="btn-nav-cart" data-bs-toggle="modal" data-bs-target="#cartModal" title="View Shopping Cart">
+            <i class="bi bi-cart3"></i>
+            <span>Cart</span>
+            <span class="cart-badge-count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================= HERO SECTION ================= -->
+  <header id="hero" class="hero-tarot">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+          <!-- Academic Meta Badge -->
+          <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <span class="badge bg-dark border border-warning text-gold px-3 py-2 fw-semibold">
+              <i class="bi bi-mortarboard-fill me-1"></i> Datamex College of Saint Adeline - Parañaque
+            </span>
+            <span class="badge bg-dark border border-secondary text-light px-3 py-2">
+              <i class="bi bi-journal-code me-1"></i> In Partial Fulfillment in E-Business
+            </span>
+            <span class="badge bg-success bg-opacity-25 border border-success text-success-emphasis px-3 py-2 fw-semibold" style="color: #4ade80 !important;">
+              <i class="bi bi-shield-check me-1"></i> PayMongo Verified
+            </span>
+          </div>
+
+          <h1 class="display-4 fw-extrabold mb-3">
+            <span class="gold-gradient-text">TarotKnight: E-Commerce Website</span>
+            <span class="d-block indigo-gradient-text" style="font-size: clamp(1.4rem, 3.2vw, 2.3rem);">
+              Handcrafted Crystal Art w/ PayMongo &amp; J&amp;T Express
+            </span>
+          </h1>
+
+          <p class="lead mb-4" style="max-width: 680px; line-height: 1.75; font-size: 1.15rem; color: #ffffff !important;">
+            A dual-purpose digital sanctuary that harmonizes <strong>handcrafted artisan crystal jewelry retail</strong>
+            with a <strong>high-precision spiritual service booking calendar</strong>. Powered by automated
+            <strong class="text-gold">PayMongo API gateway verification</strong> (GCash, Maya, Cards) and nationwide
+            <strong class="text-gold">J&amp;T Express tracking logistics</strong>.
+          </p>
+
+          <!-- Academic Affiliation & Engineering Team Box -->
+          <div class="hero-academic-box mb-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-2 mb-2 border-bottom border-secondary">
+              <div>
+                <strong class="text-white d-block" style="font-size: 0.95rem;">Department of Information Technology</strong>
+                <span class="text-gold small">Course: Bachelor of Science in Information Technology</span>
+              </div>
+              <div>
+                <span class="text-muted small d-block">Faculty Adviser:</span>
+                <strong class="text-gold">Mr. Randy Villanueva</strong>
+              </div>
+            </div>
+
+            <div class="small text-gold-light mb-2 fw-semibold text-uppercase" style="letter-spacing: 0.05em;">
+              <i class="bi bi-people-fill text-gold me-1"></i> Project Engineering Team:
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="team-pill-badge" style="background: rgba(212, 175, 55, 0.25) !important; border-color: #d4af37 !important;">
+                <i class="bi bi-star-fill text-warning"></i> <strong>Marcial Lawrence Jr V. Caronan</strong> (Lead)
+              </span>
+              <span class="team-pill-badge">Jhay L. Castro</span>
+              <span class="team-pill-badge">Tyron John L. Dela Cruz</span>
+              <span class="team-pill-badge">Kerr Cassel Pangan</span>
+              <span class="team-pill-badge">Kaye Emmannuele Nercua</span>
+            </div>
+          </div>
+
+          <!-- CTAs -->
+          <div class="d-flex flex-wrap gap-3">
+            <a href="#shop" class="btn-gold-primary">
+              <i class="bi bi-bag-heart-fill"></i> Explore 32 Artisan Crystals
+            </a>
+            <a href="#booking" class="btn-purple-outline">
+              <i class="bi bi-calendar2-check-fill text-gold"></i> Book Spiritual Session
+            </a>
+            <a href="#tracking" class="btn-purple-outline">
+              <i class="bi bi-truck text-gold"></i> Track J&amp;T Package
+            </a>
+            <a href="assets/docs/TAROTKNIGHT.docx" class="btn btn-outline-secondary py-2 px-3 rounded-pill text-light" download title="Download official research paper">
+              <i class="bi bi-file-earmark-word-fill text-primary"></i> Research Paper (.DOCX)
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Graphic & Integrations Card -->
+        <div class="col-lg-5">
+          <div class="tarot-card text-center p-4">
+            <div class="position-relative d-inline-block mb-3">
+              <img src="assets/crystals/6242187155002298189.jpg" alt="Celestial Amethyst Wire Pendant"
+                class="img-fluid rounded-4 shadow-lg border border-warning"
+                style="max-height: 290px; object-fit: cover; width: 100%;">
+              <span class="badge bg-dark border border-warning text-gold position-absolute bottom-0 start-50 translate-middle-x mb-2 px-3 py-2 shadow">
+                <i class="bi bi-sparkles text-gold me-1"></i> Hand-Wrapped Wire Art • ₱1,250
+              </span>
+            </div>
+
+            <h4 class="text-white fw-bold mb-2">Automated E-Commerce Ecosystem</h4>
+            <p class="text-light small mb-3">
+              Eliminating manual screenshot verifications with verified Philippine fintech &amp; logistics APIs.
+            </p>
+
+            <div class="row g-2 text-start small">
+              <div class="col-6">
+                <div class="p-2 rounded-3" style="background: rgba(14, 6, 26, 0.9); border: 1px solid rgba(212, 175, 55, 0.35);">
+                  <span class="text-gold d-block fw-bold" style="font-size: 0.72rem;">PAYMENT GATEWAY</span>
+                  <strong class="text-white"><i class="bi bi-check-circle text-success me-1"></i>PayMongo API</strong>
+                  <div class="font-monospace text-muted" style="font-size: 0.65rem;">GCash • Maya • Cards</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 rounded-3" style="background: rgba(14, 6, 26, 0.9); border: 1px solid rgba(225, 29, 72, 0.45);">
+                  <span class="text-danger d-block fw-bold" style="font-size: 0.72rem;">NATIONWIDE DISPATCH</span>
+                  <strong class="text-white"><i class="bi bi-truck text-danger me-1"></i>J&amp;T Express</strong>
+                  <div class="text-muted" style="font-size: 0.65rem;">Waybill Tracking API</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 rounded-3" style="background: rgba(14, 6, 26, 0.9); border: 1px solid rgba(147, 51, 234, 0.45);">
+                  <span class="text-purple d-block fw-bold" style="font-size: 0.72rem;">SCHEDULING ENGINE</span>
+                  <strong class="text-white">Real-Time Calendar</strong>
+                  <div class="text-muted" style="font-size: 0.65rem;">Zero Double-Bookings</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 rounded-3" style="background: rgba(14, 6, 26, 0.9); border: 1px solid rgba(56, 189, 248, 0.45);">
+                  <span class="text-cyan d-block fw-bold" style="font-size: 0.72rem;">AI KNOWLEDGE BASE</span>
+                  <strong class="text-white">Spiritual Guide Bot</strong>
+                  <div class="text-muted" style="font-size: 0.65rem;">Keyword Matching Logic</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= SECTION 1: ARTISAN CRYSTAL STOREFRONT ================= -->
+  <section id="shop" class="section-padding" style="background: rgba(14, 6, 26, 0.6);">
+    <div class="container">
+      <div class="text-center mb-4">
+        <div class="section-tag"><i class="bi bi-gem"></i> Handcrafted Mineral Artifacts</div>
+        <h2 class="section-title">The Sacred <span class="gold-gradient-text">Crystal Gallery</span></h2>
+        <p class="section-subtitle">
+          Every crystal is ethically sourced, cleansed under lunar light, and intuitively wire-wrapped by hand.
+          Each unique artifact is priced at <strong>₱500 and above</strong> with authentic metaphysical attributes.
+        </p>
+      </div>
+
+      <!-- Search & Filter Controls -->
+      <div class="row justify-content-center mb-4 g-3">
+        <div class="col-lg-6 col-md-8">
+          <div class="input-group shadow">
+            <span class="input-group-text bg-dark border-warning text-gold"><i class="bi bi-search"></i></span>
+            <input type="text" id="crystalSearchInput" class="form-control bg-dark border-warning text-white"
+              placeholder="Search by crystal name (e.g. Amethyst, Citrine, Obsidian, Love, Shield)...">
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="filter-pill-bar">
+        <button class="btn-filter-pill active" data-category="All"><i class="bi bi-stars"></i> All Crystals (32)</button>
+        <button class="btn-filter-pill" data-category="Pendants"><i class="bi bi-circle"></i> Wire Pendants</button>
+        <button class="btn-filter-pill" data-category="Bracelets"><i class="bi bi-infinity"></i> Mala Bracelets</button>
+        <button class="btn-filter-pill" data-category="Rings"><i class="bi bi-suit-diamond"></i> Aura Rings</button>
+        <button class="btn-filter-pill" data-category="Clusters"><i class="bi bi-boxes"></i> Raw Clusters &amp; Geodes</button>
+        <button class="btn-filter-pill" data-category="Wands"><i class="bi bi-lightning-charge"></i> Sacred Wands</button>
+      </div>
+
+      <!-- Products Grid (Dynamically Populated by script.js from CRYSTAL_PRODUCTS) -->
+      <div class="row g-4" id="productsGrid">
+        <!-- Javascript renders 32 crystal items here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 2: SPIRITUAL SERVICE BOOKING HUB ================= -->
+  <section id="booking" class="section-padding">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-calendar2-heart"></i> Divination &amp; Energy Healing</div>
+        <h2 class="section-title">Spiritual Consultation <span class="indigo-gradient-text">Booking Hub</span></h2>
+        <p class="section-subtitle">
+          Bridge the physical and ethereal. Reserve professional Tarot divinations, chakra sweeps, and crystal consecrations
+          with instantaneous PayMongo confirmation and zero double-bookings.
+        </p>
+      </div>
+
+      <!-- Services Grid (3 Core Packages) -->
+      <div class="row g-4 mb-5" id="servicesGrid">
+        <!-- Javascript renders services from SPIRITUAL_SERVICES -->
+      </div>
+
+      <!-- Interactive Booking Calendar Form Card -->
+      <div class="row justify-content-center" id="bookingFormCard">
+        <div class="col-lg-8">
+          <div class="tarot-card p-4 p-md-5">
+            <div class="d-flex align-items-center gap-3 mb-4 border-bottom border-warning pb-3">
+              <div class="brand-icon-gem" style="background: linear-gradient(135deg, #7e22ce, #d4af37);">
+                <i class="bi bi-calendar-event"></i>
+              </div>
+              <div>
+                <h3 class="h4 text-white fw-bold mb-1">Reserve Your Spiritual Session</h3>
+                <small class="text-gold">Integrated Real-Time Calendar • Automated PayMongo Checkout</small>
+              </div>
+            </div>
+
+            <form id="appointmentBookingForm">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label text-gold-light small fw-bold">Select Spiritual Service</label>
+                  <select id="bookingServiceSelect" class="form-select bg-dark border-warning text-white">
+                    <option value="SRV-TAROT">Tarot Divination &amp; Life Path Consultation (₱650)</option>
+                    <option value="SRV-HEAL">Chakra Energy Cleansing &amp; Aura Repair (₱850)</option>
+                    <option value="SRV-BLESS">Holistic Crystal Activation &amp; Blessing Ceremony (₱1,200)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label text-gold-light small fw-bold">Full Name</label>
+                  <input type="text" id="bookingClientName" class="form-control bg-dark border-warning text-white"
+                    placeholder="e.g. Maria Santos" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label text-gold-light small fw-bold">Email Address</label>
+                  <input type="email" id="bookingClientEmail" class="form-control bg-dark border-warning text-white"
+                    placeholder="maria@example.com" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label text-gold-light small fw-bold">Contact Number (GCash/SMS)</label>
+                  <input type="tel" id="bookingClientPhone" class="form-control bg-dark border-warning text-white"
+                    placeholder="0917-123-4567" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label text-gold-light small fw-bold">Preferred Session Date</label>
+                  <input type="date" id="bookingDate" class="form-control bg-dark border-warning text-white"
+                    value="2026-10-15" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label text-gold-light small fw-bold">Preferred Time Slot</label>
+                  <select id="bookingTime" class="form-select bg-dark border-warning text-white">
+                    <option value="10:00 AM">10:00 AM - 10:45 AM (Morning Alignment)</option>
+                    <option value="02:00 PM">02:00 PM - 02:45 PM (Solar High Energy)</option>
+                    <option value="04:30 PM">04:30 PM - 05:15 PM (Twilight Reflection)</option>
+                    <option value="08:00 PM" selected>08:00 PM - 08:45 PM (Evening Lunar Divination)</option>
+                  </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                  <div class="p-3 rounded-3 d-flex justify-content-between align-items-center"
+                    style="background: rgba(14, 6, 26, 0.9); border: 1px solid var(--border-gold);">
+                    <div>
+                      <span class="text-muted small d-block">Computed Fee (PayMongo Bridge):</span>
+                      <strong class="text-gold fs-4" id="computedBookingFee">₱650</strong>
+                    </div>
+                    <button type="submit" class="btn-gold-primary">
+                      <i class="bi bi-shield-lock-fill me-1"></i> Proceed to PayMongo Payment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 3: J&T EXPRESS LOGISTICS & TRACKING ================= -->
+  <section id="tracking" class="section-padding" style="background: rgba(14, 6, 26, 0.65);">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-truck"></i> Integrated Shipping API</div>
+        <h2 class="section-title">J&amp;T Express <span class="gold-gradient-text">Logistics &amp; Tracking Hub</span></h2>
+        <p class="section-subtitle">
+          Ensuring sacred transit from our Parañaque studio to your doorstep. All packages are insured,
+          safely bubble-wrapped in velvet pouches, and dispatched nationwide via J&amp;T Express Philippines.
+        </p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <div class="jnt-tracking-box">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+              <div class="jnt-logo-banner">
+                <i class="bi bi-box-seam-fill"></i> J&amp;T EXPRESS PHILIPPINES
+              </div>
+              <a href="https://www.jtexpress.ph/" target="_blank" class="btn btn-outline-danger btn-sm text-white px-3 py-2 rounded-pill">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Official J&amp;T Portal (jtexpress.ph)
+              </a>
+            </div>
+
+            <!-- Tracking Input Search -->
+            <div class="mb-4">
+              <label class="form-label text-gold-light small fw-bold">Enter J&amp;T Waybill Tracking Number or Order ID:</label>
+              <div class="input-group input-group-lg shadow">
+                <input type="text" id="trackingInput" class="form-control bg-dark border-danger text-white font-monospace"
+                  placeholder="e.g. JNT-PH-8201948291 or TK-ORD-8941">
+                <button id="btnSearchTracking" class="btn btn-danger px-4 fw-bold">
+                  <i class="bi bi-search me-1"></i> Track Parcel
+                </button>
+              </div>
+              <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+                <span class="text-muted small">Quick Test Waybills:</span>
+                <button class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill font-monospace"
+                  onclick="fillSampleTracking('JNT-PH-8201948291')">JNT-PH-8201948291 (In Transit)</button>
+                <button class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill font-monospace"
+                  onclick="fillSampleTracking('JNT-PH-7729104829')">JNT-PH-7729104829 (Delivered)</button>
+              </div>
+            </div>
+
+            <!-- Tracking Result Display Container -->
+            <div id="trackingResultCard" class="tarot-card p-4 d-none">
+              <!-- Dynamically populated by performJTTrackingLookup() -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 4: PAYMONGO PAYMENT GATEWAY ARCHITECTURE ================= -->
+  <section id="paymongo" class="section-padding">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-shield-check"></i> Financial Technology</div>
+        <h2 class="section-title">PayMongo API <span class="indigo-gradient-text">Automated Gateway Integration</span></h2>
+        <p class="section-subtitle">
+          Say goodbye to manual screenshot verifications. TarotKnight implements automated webhook callbacks
+          and PCI-DSS compliance using official PayMongo developer keys.
+        </p>
+      </div>
+
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-6">
+          <div class="paymongo-badge-card h-100">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="p-3 rounded-3" style="background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e;">
+                <i class="bi bi-credit-card-2-front text-success fs-3"></i>
+              </div>
+              <div>
+                <h3 class="h5 fw-bold text-white mb-0">Active PayMongo Public API Key</h3>
+                <small class="text-success fw-semibold">Authenticated Test Sandbox Mode</small>
+              </div>
+            </div>
+
+            <div class="api-key-display mb-3">
+              <code>pk_test_wfW6N69auD5WdUXDq7dRQVam</code>
+              <span class="badge bg-success text-dark fw-bold">ACTIVE</span>
+            </div>
+
+            <p class="text-light small mb-3">
+              The integration utilizes <code>paymongo_booking_handler.php</code> to negotiate checkout sessions,
+              dispatch encrypted HMAC webhook signatures, and automatically transition orders from
+              <strong>Pending</strong> to <strong>Paid / Confirmed</strong> with zero human delay.
+            </p>
+
+            <div class="row g-2 text-start small">
+              <div class="col-6">
+                <div class="p-2 rounded-3" style="background: rgba(14, 6, 26, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);">
+                  <strong class="text-white d-block"><i class="bi bi-wallet2 text-primary me-1"></i>GCash &amp; Maya</strong>
+                  <span class="text-muted" style="font-size: 0.72rem;">Instant QR / App Auth</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 rounded-3" style="background: rgba(14, 6, 26, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);">
+                  <strong class="text-white d-block"><i class="bi bi-credit-card text-warning me-1"></i>Visa &amp; Mastercard</strong>
+                  <span class="text-muted" style="font-size: 0.72rem;">3D Secure 2.0 Auth</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="tarot-card h-100 p-4">
+            <h4 class="text-gold fw-bold mb-3"><i class="bi bi-arrow-left-right me-2"></i>Manual Verification vs. PayMongo Automation</h4>
+            
+            <div class="mb-3 p-3 rounded-3" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+              <strong class="text-red d-block mb-1"><i class="bi bi-x-circle me-1"></i>Traditional Social Media Method (Old):</strong>
+              <p class="text-muted small mb-0">
+                Customers send GCash screenshots via Messenger. Sellers must cross-reference SMS alerts and bank ledgers manually,
+                leading to fraudulent receipt submissions, overselling, and prolonged shipping delays.
+              </p>
+            </div>
+
+            <div class="p-3 rounded-3" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);">
+              <strong class="text-success d-block mb-1"><i class="bi bi-check-circle me-1"></i>TarotKnight PayMongo Method (New):</strong>
+              <p class="text-light small mb-0">
+                100% autonomous. PayMongo handles PCI-DSS checkout, receives funds, fires webhook <code>payment.paid</code>,
+                triggers automatic database status transition in MySQL, and immediately emits J&amp;T Express waybill instructions!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 5: AI SPIRITUAL GUIDE CHATBOT ================= -->
+  <section id="consultation" class="section-padding" style="background: rgba(14, 6, 26, 0.65);">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-stars"></i> Automated Consultation Engine</div>
+        <h2 class="section-title">Spiritual AI Guide &amp; <span class="gold-gradient-text">Live Knowledge Base</span></h2>
+        <p class="section-subtitle">
+          Emulating the paper's <code>contact_admin.php</code> AI logic. Ask our intelligent guide about crystal healing properties,
+          wire-wrap specifications, J&amp;T delivery schedules, or PayMongo checkout safety.
+        </p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="chat-container shadow-lg">
+            <div class="chat-header">
+              <div class="d-flex align-items-center gap-2">
+                <div class="brand-icon-gem" style="width: 34px; height: 34px; font-size: 1rem;">
+                  <i class="bi bi-gem"></i>
+                </div>
+                <div>
+                  <strong class="text-white d-block" style="font-size: 0.95rem;">TarotKnight Spiritual Oracle AI</strong>
+                  <small class="text-gold" style="font-size: 0.72rem;"><i class="bi bi-circle-fill text-success me-1" style="font-size: 0.5rem;"></i>Online • Querying ai_knowledge_base</small>
+                </div>
+              </div>
+              <span class="badge bg-dark border border-warning text-gold">PHP 8.x Engine</span>
+            </div>
+
+            <div class="chat-messages" id="aiChatMessages">
+              <div class="chat-bubble chat-bubble-ai">
+                🔮 <em>Greetings, blessed seeker!</em> I am the TarotKnight Spiritual Guide.
+                You can ask me about:
+                <ul class="mb-0 mt-1 ps-3 small">
+                  <li><strong>Amethyst</strong>, <strong>Citrine</strong>, <strong>Obsidian</strong>, or <strong>Rose Quartz</strong> energy</li>
+                  <li>How our <strong>PayMongo</strong> payment gateway operates</li>
+                  <li>How to track parcels via <strong>J&amp;T Express</strong></li>
+                  <li>How to book a <strong>Tarot Reading</strong> or <strong>Chakra Cleansing</strong></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="chat-input-bar">
+              <input type="text" id="aiChatInput" class="form-control bg-dark border-warning text-white"
+                placeholder="Ask a spiritual question or type keywords (e.g. amethyst, gcash, shipping, tarot)...">
+              <button id="btnSendAiChat" class="btn btn-gold-primary px-3">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SECTION 6: ACADEMIC RESEARCH PAPER & ARCHITECTURE ================= -->
+  <section id="research" class="section-padding">
+    <div class="container">
+      <div class="text-center mb-5">
+        <div class="section-tag"><i class="bi bi-file-earmark-code"></i> Academic Artifact &amp; Paper</div>
+        <h2 class="section-title">System Architecture &amp; <span class="indigo-gradient-text">Research Paper</span></h2>
+        <p class="section-subtitle">
+          In Partial Fulfillment in E-Business, Datamex College of Saint Adeline.
+          Exhaustive software engineering documentation, MySQL schemas, and 3-Tier model.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Abstract & Paper Card -->
+        <div class="col-lg-6">
+          <div class="tarot-card h-100 p-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="brand-icon-gem" style="background: linear-gradient(135deg, #1e3a8a, #d4af37);">
+                <i class="bi bi-file-earmark-word-fill"></i>
+              </div>
+              <div>
+                <h3 class="h5 fw-bold text-white mb-0">Official Project Research Paper</h3>
+                <small class="text-gold">TAROTKNIGHT.docx (2.27 MB)</small>
+              </div>
+            </div>
+
+            <p class="text-light small mb-3" style="line-height: 1.7;">
+              <strong>Abstract Summary:</strong> The TarotKnight Crystal Art project represents an extensive digital transformation,
+              migrating a traditional niche artisanal craft into a dual-purpose ecosystem harmonizing e-commerce retail with
+              professional spiritual service scheduling. Leverages PayMongo API for automated transactions, MySQL relational
+              persistence, and integrated J&amp;T Express parcel fulfillment.
+            </p>
+
+            <div class="p-3 rounded-3 mb-4" style="background: rgba(14, 6, 26, 0.9); border: 1px solid var(--border-gold);">
+              <div class="small text-muted mb-1">Authors &amp; Institution:</div>
+              <strong class="text-white d-block">Marcial Lawrence Jr V. Caronan (Lead)</strong>
+              <span class="text-light small d-block">Jhay L. Castro • Tyron John Dela Cruz • Kerr Cassel Pangan • Kaye Emmannuele Nercua</span>
+              <span class="text-gold small d-block mt-1">Faculty Adviser: Mr. Randy Villanueva</span>
+              <span class="text-muted small">Datamex College of Saint Adeline - Parañaque</span>
+            </div>
+
+            <a href="assets/docs/TAROTKNIGHT.docx" class="btn-gold-primary w-100 text-center" download>
+              <i class="bi bi-cloud-arrow-down-fill me-1"></i> Download Official Research Paper (.DOCX)
+            </a>
+          </div>
+        </div>
+
+        <!-- 3-Tier Web Model & Database Schema -->
+        <div class="col-lg-6">
+          <div class="tarot-card h-100 p-4">
+            <h4 class="text-gold fw-bold mb-3"><i class="bi bi-diagram-3-fill me-2"></i>3-Tier System Architecture</h4>
+
+            <div class="d-flex flex-column gap-3">
+              <div class="p-3 rounded-3" style="background: rgba(14, 6, 26, 0.85); border: 1px solid rgba(56, 189, 248, 0.35);">
+                <span class="badge bg-info text-dark fw-bold mb-1">Tier 1: Presentation Tier</span>
+                <strong class="text-white d-block">HTML5, Custom CSS3 &amp; JavaScript ES6</strong>
+                <p class="text-light small mb-0">
+                  Responsive spiritual storefront, dynamic price calculator for spiritual sessions, and client-side cart persistence.
+                </p>
+              </div>
+
+              <div class="p-3 rounded-3" style="background: rgba(14, 6, 26, 0.85); border: 1px solid rgba(147, 51, 234, 0.35);">
+                <span class="badge bg-purple text-white fw-bold mb-1" style="background: #9333ea;">Tier 2: Application Tier</span>
+                <strong class="text-white d-block">PHP 8.x Server-Side &amp; PayMongo Webhook Handlers</strong>
+                <p class="text-light small mb-0">
+                  Secure session guards, <code>paymongo_booking_handler.php</code> API negotiation, and AI knowledge base pattern matching.
+                </p>
+              </div>
+
+              <div class="p-3 rounded-3" style="background: rgba(14, 6, 26, 0.85); border: 1px solid rgba(212, 175, 55, 0.35);">
+                <span class="badge bg-warning text-dark fw-bold mb-1">Tier 3: Data Tier</span>
+                <strong class="text-white d-block">MySQL Relational Persistence &amp; Polymorphic Reviews</strong>
+                <p class="text-light small mb-0">
+                  Relational tables for <code>users</code>, <code>products</code>, <code>bookings</code>, and shared polymorphic <code>reviews</code> table.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="py-5" style="background: #08030e; border-top: 1px solid var(--border-gold);">
+    <div class="container text-center">
+      <div class="d-inline-flex align-items-center gap-2 mb-3">
+        <div class="brand-icon-gem" style="width: 32px; height: 32px; font-size: 0.9rem;">
+          <i class="bi bi-gem"></i>
+        </div>
+        <strong class="text-gold fs-5">TAROTKNIGHT CRYSTAL ART</strong>
+      </div>
+      <p class="text-light small max-w-600 mx-auto mb-3">
+        Developed in Partial Fulfillment in E-Business, Bachelor of Science in Information Technology.<br>
+        Datamex College of Saint Adeline - Parañaque City.
+      </p>
+      <div class="d-flex justify-content-center gap-3 mb-3">
+        <a href="../index.html" class="text-gold text-decoration-none small"><i class="bi bi-arrow-left me-1"></i>Back to Portfolio</a>
+        <a href="#shop" class="text-gold text-decoration-none small">Crystal Gallery</a>
+        <a href="#booking" class="text-gold text-decoration-none small">Book Reading</a>
+        <a href="https://www.jtexpress.ph/" target="_blank" class="text-gold text-decoration-none small">J&amp;T Express</a>
+      </div>
+      <small class="text-muted">
+        &copy; 2024-2026 Marcial Lawrence Jr V. Caronan &amp; Team. All Rights Reserved.
+      </small>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Cart Drawer Modal -->
+  <div class="modal fade modal-tarot" id="cartModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-bag-heart-fill text-gold fs-4"></i>
+            <h5 class="modal-title fw-bold text-white mb-0">Sacred Shopping Cart</h5>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="cartItemsList">
+            <!-- Dynamically populated by renderCartDrawer() -->
+          </div>
+
+          <div class="p-3 rounded-3 mt-4" style="background: rgba(14, 6, 26, 0.9); border: 1px solid var(--border-gold);">
+            <div class="d-flex justify-content-between text-muted small mb-2">
+              <span>Subtotal:</span>
+              <strong class="text-white" id="cartSubtotal">₱0</strong>
+            </div>
+            <div class="d-flex justify-content-between text-muted small mb-2">
+              <span>J&amp;T Express Shipping:</span>
+              <strong class="text-gold" id="cartShipping">₱120</strong>
+            </div>
+            <div class="d-flex justify-content-between text-white fs-5 fw-bold pt-2 border-top border-secondary">
+              <span>Grand Total:</span>
+              <span class="text-gold" id="cartTotal">₱0</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Continue Browsing</button>
+          <button type="button" id="btnProceedCheckout" class="btn-gold-primary">
+            <i class="bi bi-shield-lock-fill me-1"></i> Proceed to PayMongo Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PayMongo Checkout Modal -->
+  <div class="modal fade modal-tarot" id="paymongoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-shield-check text-success fs-3"></i>
+            <div>
+              <h5 class="modal-title fw-bold text-white mb-0">PayMongo Secure Checkout</h5>
+              <small class="text-gold" id="pmApiKeyDisplay">pk_test_wfW6N69auD5WdUXDq7dRQVam</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Step 1: Payment Method Form -->
+          <div id="pmStepForm">
+            <div class="p-3 rounded-3 mb-4" style="background: rgba(14, 6, 26, 0.95); border: 1px solid var(--border-gold);">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="text-muted small d-block">Payment For:</span>
+                  <strong class="text-white fs-6" id="pmOrderTitle">Crystal Order</strong>
+                </div>
+                <div class="text-end">
+                  <span class="text-muted small d-block">Amount Due:</span>
+                  <strong class="text-gold fs-4" id="pmAmountDisplay">₱0</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Method Pills -->
+            <label class="form-label text-gold-light small fw-bold">Select Philippine Payment Method:</label>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <button type="button" id="pmTab_card" class="btn btn-sm btn-outline-warning pm-method-pill active" onclick="selectPaymentMethod('card')">
+                <i class="bi bi-credit-card me-1"></i> Visa / Mastercard
+              </button>
+              <button type="button" id="pmTab_gcash" class="btn btn-sm btn-outline-warning pm-method-pill" onclick="selectPaymentMethod('gcash')">
+                <i class="bi bi-wallet2 me-1"></i> GCash (PayMongo)
+              </button>
+              <button type="button" id="pmTab_maya" class="btn btn-sm btn-outline-warning pm-method-pill" onclick="selectPaymentMethod('maya')">
+                <i class="bi bi-phone me-1"></i> Maya
+              </button>
+            </div>
+
+            <!-- Customer Details -->
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <label class="form-label text-light small">Customer Full Name</label>
+                <input type="text" id="pmInputName" class="form-control bg-dark border-secondary text-white" value="Maria Santos">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-light small">Delivery City</label>
+                <input type="text" id="pmInputCity" class="form-control bg-dark border-secondary text-white" value="Parañaque City">
+              </div>
+            </div>
+
+            <!-- Card Fields -->
+            <div id="pmFields_card">
+              <div class="mb-2">
+                <label class="form-label text-light small">Test Card Number (PayMongo Sandbox)</label>
+                <input type="text" class="form-control bg-dark border-secondary text-white font-monospace" value="4242 4242 4242 4242">
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                  <label class="form-label text-light small">Exp Date</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-white font-monospace" value="12/28">
+                </div>
+                <div class="col-6">
+                  <label class="form-label text-light small">CVV</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-white font-monospace" value="123">
+                </div>
+              </div>
+            </div>
+
+            <!-- GCash Fields -->
+            <div id="pmFields_gcash" class="d-none">
+              <div class="p-3 rounded-3" style="background: rgba(37, 99, 235, 0.15); border: 1px solid rgba(37, 99, 235, 0.4);">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="bi bi-phone-fill text-primary fs-4"></i>
+                  <strong class="text-white">GCash Payment via PayMongo E-Wallet</strong>
+                </div>
+                <p class="text-light small mb-2">You will be securely authenticated with your GCash registered mobile number.</p>
+                <input type="text" class="form-control bg-dark border-primary text-white font-monospace" value="0917 123 4567">
+              </div>
+            </div>
+
+            <!-- Maya Fields -->
+            <div id="pmFields_maya" class="d-none">
+              <div class="p-3 rounded-3" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4);">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="bi bi-wallet-fill text-success fs-4"></i>
+                  <strong class="text-white">Maya Payment Bridge</strong>
+                </div>
+                <p class="text-light small mb-2">Scan QR or log in via PayMongo's Maya direct settlement gateway.</p>
+                <input type="text" class="form-control bg-dark border-success text-white font-monospace" value="0918 765 4321">
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <button type="button" class="btn-gold-primary w-100 py-3" onclick="executePayMongoTransaction()">
+                <i class="bi bi-lock-fill me-1"></i> Authorize &amp; Pay via PayMongo (Sandbox)
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Processing Live Logs -->
+          <div id="pmStepProcessing" class="text-center py-4 d-none">
+            <div class="spinner-border text-warning mb-3" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
+            <h5 class="text-white fw-bold mb-2">Negotiating with PayMongo Servers...</h5>
+            <p class="text-muted small mb-3">Authenticating transaction and awaiting asynchronous webhook confirmation.</p>
+            <div id="pmLiveHandshakeLogs" class="p-3 rounded-3 text-start font-monospace small"
+              style="background: #020617; border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; max-height: 180px; overflow-y: auto;">
+              <!-- Javascript streams API log lines -->
+            </div>
+          </div>
+
+          <!-- Step 3: Success & Waybill Generated -->
+          <div id="pmStepSuccess" class="text-center py-4 d-none">
+            <div class="p-3 d-inline-block rounded-circle bg-success bg-opacity-25 border border-success mb-3">
+              <i class="bi bi-check2-circle text-success" style="font-size: 3.5rem;"></i>
+            </div>
+            <h4 class="text-white fw-bold mb-1">Payment Successfully Verified!</h4>
+            <p class="text-gold small mb-4">PayMongo Webhook Callback Processed • Database Status: PAID</p>
+
+            <div class="p-4 rounded-3 text-start mx-auto mb-4"
+              style="background: rgba(14, 6, 26, 0.95); border: 2px solid var(--border-gold); max-width: 520px;">
+              <div class="d-flex justify-content-between border-bottom border-secondary pb-2 mb-2">
+                <span class="text-muted small">Official Order ID:</span>
+                <strong class="text-gold font-monospace" id="pmSuccessOrderId">TK-ORD-8941</strong>
+              </div>
+              <div class="d-flex justify-content-between border-bottom border-secondary pb-2 mb-2">
+                <span class="text-muted small">J&amp;T Express Waybill:</span>
+                <strong class="text-white font-monospace" id="pmSuccessTracking">JNT-PH-8201948291</strong>
+              </div>
+              <div class="d-flex justify-content-between border-bottom border-secondary pb-2 mb-2">
+                <span class="text-muted small">Total Settled:</span>
+                <strong class="text-gold" id="pmSuccessAmount">₱1,370</strong>
+              </div>
+              <div class="d-flex justify-content-between">
+                <span class="text-muted small">Status:</span>
+                <span class="badge bg-success text-white">Paid &amp; Ready for Courier Pickup</span>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-3">
+              <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+              <button class="btn btn-gold-primary" onclick="bootstrap.Modal.getInstance(document.getElementById('paymongoModal')).hide(); performJTTrackingLookup(document.getElementById('pmSuccessTracking').textContent);">
+                <i class="bi bi-truck me-1"></i> Track Waybill in J&amp;T Hub
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Product Quick View Modal -->
+  <div class="modal fade modal-tarot" id="quickViewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-dark border border-warning text-gold" id="qvCategory">Pendants</span>
+            <span class="text-muted small font-monospace" id="qvSku">TK-CRY-001</span>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-4 align-items-center">
+            <div class="col-md-5 text-center">
+              <img id="qvImage" src="" alt="Crystal" class="img-fluid rounded-4 border border-warning shadow" style="max-height: 280px; width: 100%; object-fit: cover;">
+            </div>
+            <div class="col-md-7">
+              <h4 class="text-white fw-bold mb-2" id="qvTitle">Celestial Crystal</h4>
+              <div class="text-gold fs-3 fw-bold mb-2" id="qvPrice">₱1,250</div>
+              <div class="badge bg-dark border border-purple text-purple mb-3" id="qvChakra" style="color: #c084fc !important;">Chakra</div>
+              <p class="text-light small mb-3" id="qvDesc"></p>
+              
+              <div class="p-3 rounded-3 mb-3 small" style="background: rgba(14, 6, 26, 0.9); border: 1px solid var(--border-gold);">
+                <div class="mb-1"><strong class="text-gold">Wire Craft:</strong> <span class="text-white" id="qvWire"></span></div>
+                <div><strong class="text-gold">Cleansing Ritual:</strong> <span class="text-white" id="qvCleansing"></span></div>
+              </div>
+              
+              <div class="d-flex align-items-center justify-content-between">
+                <span class="text-success small fw-bold" id="qvStock">In stock</span>
+                <button type="button" id="qvAddBtn" class="btn-gold-primary">
+                  <i class="bi bi-bag-plus-fill me-1"></i> Add to Sacred Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Administrative Control Center Modal -->
+  <div class="modal fade modal-tarot" id="adminModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-speedometer2 text-gold fs-4"></i>
+            <div>
+              <h5 class="modal-title fw-bold text-white mb-0">Administrative Control Center</h5>
+              <small class="text-gold">TarotKnight Lead: Marcial Lawrence Jr V. Caronan • Datamex College of Saint Adeline</small>
+            </div>
+          </div>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- KPIs -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <div class="p-3 rounded-3" style="background: rgba(34, 197, 94, 0.15); border: 1px solid #22c55e;">
+                <span class="text-success small fw-bold text-uppercase d-block">Gross Settled Revenue (PayMongo)</span>
+                <h3 class="text-white fw-bold mb-0" id="adminGrossRevenue">₱3,720</h3>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="p-3 rounded-3" style="background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8;">
+                <span class="text-cyan small fw-bold text-uppercase d-block">Total Orders Logged</span>
+                <h3 class="text-white fw-bold mb-0" id="adminOrdersCount">2</h3>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="p-3 rounded-3" style="background: rgba(212, 175, 55, 0.15); border: 1px solid var(--border-gold);">
+                <span class="text-gold small fw-bold text-uppercase d-block">Active Crystal Catalog SKUs</span>
+                <h3 class="text-white fw-bold mb-0" id="adminInventoryCount">32</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Orders Ledger Table -->
+          <h5 class="text-gold fw-bold mb-2"><i class="bi bi-receipt me-1"></i>Live Orders Ledger &amp; J&amp;T Dispatch Monitor</h5>
+          <div class="table-responsive mb-4 rounded-3 border border-secondary">
+            <table class="table admin-table mb-0 text-white">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Items Purchased</th>
+                  <th>Total</th>
+                  <th>Gateway</th>
+                  <th>Status</th>
+                  <th>J&amp;T Waybill</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTableBody">
+                <!-- Dynamically populated by setupAdminDashboard() -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Catalog CRUD Overview -->
+          <h5 class="text-gold fw-bold mb-2"><i class="bi bi-box-seam me-1"></i>Active Crystal Inventory Ledger</h5>
+          <div class="table-responsive rounded-3 border border-secondary">
+            <table class="table admin-table mb-0 text-white">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Artisan Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock Count</th>
+                </tr>
+              </thead>
+              <tbody id="adminInventoryTableBody">
+                <!-- Dynamically populated by setupAdminDashboard() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Product Catalog Data -->
+  <script src="products.js?v=20261012-v1"></script>
+  <!-- Client Engine & PayMongo / J&T Logic -->
+  <script src="script.js?v=20261012-v1"></script>
+</body>
+
+</html>

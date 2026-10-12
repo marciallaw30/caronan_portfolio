@@ -645,14 +645,25 @@ a {
 }
 
 .skill-badge {
-  font-size: 0.75rem;
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  font-size: 0.72rem;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.28);
   color: #e9d5ff;
-  padding: 4px 10px;
+  padding: 4px 9px;
   border-radius: 6px;
-  display: inline-block;
-  margin: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 2px 2px;
+  transition: all 0.2s ease;
+  line-height: 1.35;
+}
+
+.skill-badge:hover {
+  background: rgba(168, 85, 247, 0.24);
+  border-color: rgba(192, 132, 252, 0.6);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 /* ================= Experience Timeline & Cards ================= */
