@@ -3,10 +3,11 @@ import React, { useState, useEffect, useRef, HTMLAttributes } from 'react';
 // A simple utility for conditional class names
 const cn = (...classes: (string | undefined | null | false)[]) => {
   return classes.filter(Boolean).join(' ');
-}
+};
 
 // Define the type for a single gallery item
 export interface GalleryItem {
+  id?: string;
   common: string;
   binomial: string;
   photo: {
@@ -14,6 +15,15 @@ export interface GalleryItem {
     text: string;
     pos?: string;
     by: string;
+  };
+  details?: {
+    element?: string;
+    icon?: string;
+    catalyst?: string;
+    hierarchy?: string;
+    passive?: string;
+    ultimate?: string;
+    [key: string]: any;
   };
 }
 
@@ -24,13 +34,15 @@ interface CircularGalleryProps extends HTMLAttributes<HTMLDivElement> {
   radius?: number;
   /** Controls the speed of auto-rotation when not scrolling. */
   autoRotateSpeed?: number;
+  /** Optional callback fired when an item card is clicked */
+  onItemClick?: (item: GalleryItem, index: number) => void;
 }
 
 const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
-  ({ items, className, radius = 600, autoRotateSpeed = 0.02, ...props }, ref) => {
+  ({ items, className, radius = 600, autoRotateSpeed = 0.02, onItemClick, ...props }, ref) => {
     const [rotation, setRotation] = useState(0);
     const [isScrolling, setIsScrolling] = useState(false);
-    const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const scrollTimeoutRef = useRef<NodeJS.Timeout | number | null>(null);
     const animationFrameRef = useRef<number | null>(null);
 
     // Effect to handle scroll-based rotation
@@ -38,7 +50,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       const handleScroll = () => {
         setIsScrolling(true);
         if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
+          clearTimeout(scrollTimeoutRef.current as any);
         }
 
         const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -55,7 +67,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       return () => {
         window.removeEventListener('scroll', handleScroll);
         if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
+          clearTimeout(scrollTimeoutRef.current as any);
         }
       };
     }, []);
@@ -78,7 +90,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       };
     }, [isScrolling, autoRotateSpeed]);
 
-    const anglePerItem = 360 / items.length;
+    const anglePerItem = items.length > 0 ? 360 / items.length : 0;
     
     return (
       <div
@@ -105,10 +117,14 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
 
             return (
               <div
-                key={item.photo.url} 
+                key={item.id || item.photo.url} 
                 role="group"
                 aria-label={item.common}
-                className="absolute w-[300px] h-[400px]"
+                className={cn(
+                  "absolute w-[300px] h-[400px] select-none",
+                  onItemClick ? "cursor-pointer" : ""
+                )}
+                onClick={() => onItemClick?.(item, i)}
                 style={{
                   transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
                   left: '50%',
@@ -116,21 +132,39 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   marginLeft: '-150px',
                   marginTop: '-200px',
                   opacity: opacity,
-                  transition: 'opacity 0.3s linear'
+                  transition: 'opacity 0.3s linear, transform 0.2s ease',
+                  pointerEvents: opacity > 0.4 ? 'auto' : 'none'
                 }}
               >
-                <div className="relative w-full h-full rounded-lg shadow-2xl overflow-hidden group border border-border bg-card/70 dark:bg-card/30 backdrop-blur-lg">
+                <div className="relative w-full h-full rounded-2xl shadow-2xl overflow-hidden group border border-border bg-card/70 dark:bg-card/30 backdrop-blur-lg hover:border-amber-400 hover:shadow-amber-500/20 transition-all duration-300 hover:-translate-y-2">
                   <img
                     src={item.photo.url}
                     alt={item.photo.text}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     style={{ objectPosition: item.photo.pos || 'center' }}
                   />
-                  {/* Replaced text-primary-foreground with text-white for consistent color */}
-                  <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-                    <h2 className="text-xl font-bold">{item.common}</h2>
-                    <em className="text-sm italic opacity-80">{item.binomial}</em>
-                    <p className="text-xs mt-2 opacity-70">Photo by: {item.photo.by}</p>
+                  {/* Overlay gradient with Kingdom / Animal details */}
+                  <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/90 via-black/60 to-transparent text-white">
+                    <div className="flex items-center justify-between mb-1">
+                      <h2 className="text-xl font-bold leading-tight drop-shadow">{item.common}</h2>
+                      {item.details?.icon && (
+                        <span className="text-xl filter drop-shadow">{item.details.icon}</span>
+                      )}
+                    </div>
+                    <em className="text-sm italic opacity-85 block drop-shadow-sm">{item.binomial}</em>
+                    
+                    {item.details?.catalyst && (
+                      <div className="mt-1 text-xs text-amber-300 font-mono">
+                        <span className="text-amber-400 font-semibold">Catalyst:</span> {item.details.catalyst}
+                      </div>
+                    )}
+
+                    <div className="mt-2 pt-2 border-t border-white/20 flex items-center justify-between text-xs">
+                      <span className="opacity-70 truncate max-w-[170px]">Photo: {item.photo.by}</span>
+                      <span className="text-cyan-300 font-semibold group-hover:text-amber-300 group-hover:translate-x-1 transition-all flex items-center gap-1">
+                        Details &rarr;
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

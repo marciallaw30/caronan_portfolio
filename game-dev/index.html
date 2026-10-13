@@ -329,6 +329,91 @@
       font-weight: 700;
     }
 
+    /* ================= 3D CIRCULAR CYLINDER GALLERY FOR KINGDOMS ================= */
+    .kingdoms-3d-stage-wrapper {
+      position: relative;
+      width: 100%;
+      height: 570px;
+      margin: 0 auto;
+      overflow: hidden;
+      perspective: 2000px;
+      perspective-origin: 50% 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.14) 0%, rgba(8, 11, 24, 0.96) 65%, #02040a 100%);
+      border-radius: 24px;
+      border: 1.5px solid rgba(168, 85, 247, 0.4);
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.92), inset 0 0 100px rgba(0, 0, 0, 0.85);
+      user-select: none;
+      cursor: grab;
+    }
+    .kingdoms-3d-stage-wrapper:active {
+      cursor: grabbing;
+    }
+
+    .kingdoms-3d-cylinder {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.1s linear;
+      will-change: transform;
+    }
+
+    .kingdom-cylinder-card {
+      position: absolute;
+      width: 280px;
+      height: 390px;
+      left: 50%;
+      top: 50%;
+      margin-left: -140px;
+      margin-top: -195px;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      transition: opacity 0.3s linear, transform 0.25s ease;
+    }
+
+    .kingdom-cylinder-card .card-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(18, 22, 48, 0.94);
+      border: 1.5px solid rgba(168, 85, 247, 0.45);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(14px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .kingdom-cylinder-card:hover .card-shell {
+      transform: translateY(-8px) scale(1.04);
+      border-color: #fbbf24;
+      box-shadow: 0 25px 60px rgba(245, 158, 11, 0.45), 0 0 30px rgba(245, 158, 11, 0.55);
+    }
+
+    .kingdom-cylinder-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .kingdom-cylinder-card:hover .kingdom-cylinder-img {
+      transform: scale(1.08);
+    }
+
+    .kingdom-cylinder-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(to top, rgba(3, 7, 18, 0.96) 0%, rgba(3, 7, 18, 0.7) 60%, transparent 100%);
+      color: #ffffff;
+      z-index: 2;
+    }
+
     /* Interactive 8x8 Board Simulator */
     /* ================= 3D / 4D PLANAR SIMULATION ENGINE ================= */
     .planar-stage-3d {
@@ -982,9 +1067,33 @@
         <div class="text-center mb-4">
           <span class="pill-badge mb-2"><i class="bi bi-shield-fill-check"></i> THE ROSTER</span>
           <h2 class="display-5 font-title text-white">The 15 Mythical Kingdoms</h2>
-          <p class="section-subtitle mx-auto mb-4" style="max-width: 700px;">
-            Filter and explore all fifteen civilizations featured in the Game Design Document. Each faction maps classical chess pieces into custom thematic unit hierarchies, passive terrain traits, and Queen Ultimates.
+          <p class="section-subtitle mx-auto mb-3" style="max-width: 780px;">
+            Explore all fifteen civilizations featured in the Game Design Document in an interactive 3D circular cylindrical gallery. Drag horizontally or scroll to spin the 3D cylinder — click any kingdom card to inspect full unit hierarchy, passive traits, and Queen Ultimates.
           </p>
+
+          <!-- View Mode & Interactive Cylinder Controls -->
+          <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mb-3">
+            <div class="p-1 rounded-pill bg-dark bg-opacity-75 border border-secondary border-opacity-50 d-inline-flex gap-1">
+              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold active btn-mythic-gold" id="btnView3DCylinder">
+                <i class="bi bi-arrow-repeat me-1"></i> 3D Circular Gallery View
+              </button>
+              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold text-light btn-outline-secondary" id="btnViewGrid">
+                <i class="bi bi-grid-3x3-gap-fill me-1"></i> Tactical Grid View
+              </button>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 ms-md-3">
+              <button class="btn btn-sm btn-outline-secondary text-light rounded-pill px-3" id="btnCylinderRotateToggle">
+                <i class="bi bi-pause-fill me-1" id="cylinderRotateIcon"></i> <span id="cylinderRotateLabel">Pause Auto-Rotate</span>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary text-light rounded-pill px-2" id="btnCylinderPrev" title="Rotate Left (t - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary text-light rounded-pill px-2" id="btnCylinderNext" title="Rotate Right (t + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
 
           <!-- Category Filter Buttons -->
           <div class="d-flex justify-content-center gap-2 flex-wrap mb-4" id="kingdomFilters">
@@ -998,7 +1107,31 @@
           </div>
         </div>
 
-        <div class="row g-4" id="kingdomsGrid">
+        <!-- 3D Cylindrical Gallery Stage -->
+        <div id="kingdoms3DStageWrapper" class="kingdoms-3d-stage-wrapper position-relative mb-4">
+          <div class="position-absolute top-0 start-0 m-3 z-3 badge bg-dark bg-opacity-75 border border-secondary text-info font-mono small d-flex align-items-center gap-2">
+            <span class="spinner-grow spinner-grow-sm text-warning" role="status"></span>
+            <span id="cylinderFacingLabel">Facing: The Obsidian Roost 🔥</span>
+          </div>
+
+          <div class="position-absolute top-0 end-0 m-3 z-3 badge bg-dark bg-opacity-75 border border-secondary text-warning font-mono small d-none d-sm-inline-block">
+            <i class="bi bi-cursor-fill me-1"></i> Drag / Scroll to Spin • Click Card for Full Lore
+          </div>
+
+          <!-- The Rotating 3D Cylinder -->
+          <div id="kingdoms3DCylinder" class="kingdoms-3d-cylinder"></div>
+
+          <!-- Left / Right Touch / Click Nav Overlays -->
+          <button class="btn position-absolute top-50 start-0 translate-middle-y ms-2 ms-md-4 rounded-circle bg-dark bg-opacity-75 border border-secondary text-white z-3 shadow-lg p-2 p-md-3" id="btnCylinderFloatLeft" aria-label="Rotate Left">
+            <i class="bi bi-chevron-left fs-5 fs-md-4"></i>
+          </button>
+          <button class="btn position-absolute top-50 end-0 translate-middle-y me-2 me-md-4 rounded-circle bg-dark bg-opacity-75 border border-secondary text-white z-3 shadow-lg p-2 p-md-3" id="btnCylinderFloatRight" aria-label="Rotate Right">
+            <i class="bi bi-chevron-right fs-5 fs-md-4"></i>
+          </button>
+        </div>
+
+        <!-- Tactical Card Grid View (Toggleable) -->
+        <div class="row g-4 d-none" id="kingdomsGrid">
           <!-- Kingdom Cards will be rendered dynamically by JavaScript -->
         </div>
       </div>
@@ -1818,9 +1951,138 @@
       }
     ];
 
-    // Render 15 Kingdoms
+    // ================= 3D CYLINDRICAL GALLERY ENGINE FOR 15 KINGDOMS =================
+    let currentCylinderFilter = 'all';
+    let cylinderRotation = 0;
+    let isCylinderAutoRotating = true;
+    let cylinderSpeed = 0.08; // smooth auto-rotation degrees per frame
+    let isDraggingCylinder = false;
+    let dragStartX = 0;
+    let dragStartRotation = 0;
+    let cylinderAnimFrame = null;
+    let filteredCylinderData = [...kingdomsData];
+
+    function renderKingdoms3DCylinder(filter = "all") {
+      currentCylinderFilter = filter;
+      const cylinderEl = document.getElementById('kingdoms3DCylinder');
+      if (!cylinderEl) return;
+      cylinderEl.innerHTML = '';
+
+      filteredCylinderData = filter === "all" 
+        ? kingdomsData 
+        : kingdomsData.filter(k => k.category === filter);
+
+      const count = filteredCylinderData.length;
+      if (count === 0) {
+        cylinderEl.innerHTML = '<div class="text-center text-muted p-5">No kingdoms found in this category.</div>';
+        return;
+      }
+
+      // Calculate radius dynamically to ensure cards are properly spaced in 3D circle
+      const cardWidth = 280;
+      const radius = Math.max(540, Math.min(880, Math.round((cardWidth * count) / (2 * Math.PI) * 1.25)));
+      const anglePerItem = 360 / count;
+
+      filteredCylinderData.forEach((k, idx) => {
+        const itemAngle = idx * anglePerItem;
+        const card = document.createElement('div');
+        card.className = 'kingdom-cylinder-card';
+        card.setAttribute('data-index', idx);
+        card.setAttribute('data-id', k.id);
+        card.setAttribute('title', `Click to inspect ${k.name} lore and piece hierarchy`);
+
+        card.innerHTML = `
+          <div class="card-shell" onclick="openKingdomModal('${k.id}')">
+            <img src="${k.img}" alt="${k.name}" class="kingdom-cylinder-img">
+            <span class="position-absolute top-0 start-0 m-3 pill-badge bg-dark bg-opacity-75 border-secondary" style="font-size:0.75rem; z-index:3;">
+              ${k.icon} ${k.element}
+            </span>
+            <div class="kingdom-cylinder-overlay">
+              <h4 class="h5 fw-bold text-white mb-1 drop-shadow">${k.name}</h4>
+              <div class="mb-2">
+                <span class="tag-catalyst" style="font-size:0.7rem;"><i class="bi bi-heart-pulse-fill me-1"></i>${k.catalyst}</span>
+              </div>
+              <div class="small text-light opacity-90 mb-2 font-mono" style="font-size:0.72rem; line-height:1.4;">
+                <span class="text-info fw-bold">TRAIT:</span> ${k.passive.substring(0, 52)}...
+              </div>
+              <button type="button" class="btn btn-xs btn-mythic-outline w-100 py-1" style="font-size:0.75rem;">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Click for Full Codex &rarr;
+              </button>
+            </div>
+          </div>
+        `;
+
+        card.style.transform = `rotateY(${itemAngle}deg) translateZ(${radius}px)`;
+        cylinderEl.appendChild(card);
+      });
+
+      updateCylinderCardTransforms();
+    }
+
+    function updateCylinderCardTransforms() {
+      const cylinderEl = document.getElementById('kingdoms3DCylinder');
+      if (!cylinderEl) return;
+      cylinderEl.style.transform = `rotateY(${cylinderRotation}deg)`;
+
+      const count = filteredCylinderData.length;
+      if (count === 0) return;
+      const anglePerItem = 360 / count;
+
+      const cards = cylinderEl.querySelectorAll('.kingdom-cylinder-card');
+      let minAngleDist = 999;
+      let facingIndex = 0;
+
+      cards.forEach((card, i) => {
+        const itemAngle = i * anglePerItem;
+        const totalRotation = cylinderRotation % 360;
+        const relativeAngle = (itemAngle + totalRotation + 360) % 360;
+        const normalized = Math.abs(relativeAngle > 180 ? 360 - relativeAngle : relativeAngle);
+
+        if (normalized < minAngleDist) {
+          minAngleDist = normalized;
+          facingIndex = i;
+        }
+
+        // Depth opacity & pointer events: cards in back fade out and don't intercept clicks
+        const opacity = Math.max(0.18, 1 - (normalized / 180) * 0.95);
+        card.style.opacity = opacity.toFixed(2);
+        card.style.pointerEvents = normalized > 105 ? 'none' : 'auto';
+        card.style.filter = normalized > 105 ? 'blur(2px) grayscale(40%)' : 'none';
+      });
+
+      // Update facing indicator
+      const facingKingdom = filteredCylinderData[facingIndex];
+      const facingLabel = document.getElementById('cylinderFacingLabel');
+      if (facingKingdom && facingLabel) {
+        facingLabel.innerHTML = `Facing: <strong>${facingKingdom.name}</strong> ${facingKingdom.icon} <span class="text-muted ms-1 font-mono">(${facingKingdom.element})</span>`;
+      }
+    }
+
+    function startCylinderAnimation() {
+      function tick() {
+        if (isCylinderAutoRotating && !isDraggingCylinder) {
+          cylinderRotation -= cylinderSpeed;
+          updateCylinderCardTransforms();
+        }
+        cylinderAnimFrame = requestAnimationFrame(tick);
+      }
+      if (!cylinderAnimFrame) {
+        cylinderAnimFrame = requestAnimationFrame(tick);
+      }
+    }
+
+    function stepCylinder(direction = 1) {
+      const count = filteredCylinderData.length;
+      if (count === 0) return;
+      const angleStep = 360 / count;
+      cylinderRotation += direction * angleStep;
+      updateCylinderCardTransforms();
+    }
+
+    // Render 15 Kingdoms Grid (Fallback / Toggleable)
     function renderKingdoms(filter = "all") {
       const container = document.getElementById('kingdomsGrid');
+      if (!container) return;
       container.innerHTML = '';
 
       const filtered = filter === "all" 
@@ -1881,14 +2143,126 @@
       modal.show();
     }
 
-    // Filter Buttons
+    // Filter Buttons - updates both 3D cylinder and grid
     document.querySelectorAll('#kingdomFilters .filter-tab').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('#kingdomFilters .filter-tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        renderKingdoms(btn.getAttribute('data-filter'));
+        const filterVal = btn.getAttribute('data-filter');
+        renderKingdoms(filterVal);
+        renderKingdoms3DCylinder(filterVal);
       });
     });
+
+    // View Mode Switcher
+    const btnView3D = document.getElementById('btnView3DCylinder');
+    const btnViewGrid = document.getElementById('btnViewGrid');
+    const stage3DWrap = document.getElementById('kingdoms3DStageWrapper');
+    const gridWrap = document.getElementById('kingdomsGrid');
+
+    if (btnView3D && btnViewGrid && stage3DWrap && gridWrap) {
+      btnView3D.addEventListener('click', () => {
+        btnView3D.classList.add('active', 'btn-mythic-gold');
+        btnView3D.classList.remove('btn-outline-secondary');
+        btnViewGrid.classList.remove('active', 'btn-mythic-gold');
+        btnViewGrid.classList.add('btn-outline-secondary');
+        stage3DWrap.classList.remove('d-none');
+        gridWrap.classList.add('d-none');
+        updateCylinderCardTransforms();
+      });
+
+      btnViewGrid.addEventListener('click', () => {
+        btnViewGrid.classList.add('active', 'btn-mythic-gold');
+        btnViewGrid.classList.remove('btn-outline-secondary');
+        btnView3D.classList.remove('active', 'btn-mythic-gold');
+        btnView3D.classList.add('btn-outline-secondary');
+        gridWrap.classList.remove('d-none');
+        stage3DWrap.classList.add('d-none');
+      });
+    }
+
+    // Auto-Rotate Play/Pause Toggle
+    const btnRotateToggle = document.getElementById('btnCylinderRotateToggle');
+    const iconRotate = document.getElementById('cylinderRotateIcon');
+    const labelRotate = document.getElementById('cylinderRotateLabel');
+
+    if (btnRotateToggle) {
+      btnRotateToggle.addEventListener('click', () => {
+        isCylinderAutoRotating = !isCylinderAutoRotating;
+        if (isCylinderAutoRotating) {
+          iconRotate.className = 'bi bi-pause-fill me-1';
+          labelRotate.textContent = 'Pause Auto-Rotate';
+          btnRotateToggle.classList.remove('btn-warning');
+          btnRotateToggle.classList.add('btn-outline-secondary');
+        } else {
+          iconRotate.className = 'bi bi-play-fill me-1';
+          labelRotate.textContent = 'Resume Rotation';
+          btnRotateToggle.classList.add('btn-warning');
+          btnRotateToggle.classList.remove('btn-outline-secondary');
+        }
+      });
+    }
+
+    // Prev / Next Step Buttons
+    const btnCylPrev = document.getElementById('btnCylinderPrev');
+    const btnCylNext = document.getElementById('btnCylinderNext');
+    const btnFloatLeft = document.getElementById('btnCylinderFloatLeft');
+    const btnFloatRight = document.getElementById('btnCylinderFloatRight');
+
+    if (btnCylPrev) btnCylPrev.addEventListener('click', () => stepCylinder(1));
+    if (btnCylNext) btnCylNext.addEventListener('click', () => stepCylinder(-1));
+    if (btnFloatLeft) btnFloatLeft.addEventListener('click', () => stepCylinder(1));
+    if (btnFloatRight) btnFloatRight.addEventListener('click', () => stepCylinder(-1));
+
+    // Drag to spin cylinder interaction
+    if (stage3DWrap) {
+      stage3DWrap.addEventListener('mousedown', (e) => {
+        // Don't drag if clicking buttons
+        if (e.target.closest('button')) return;
+        isDraggingCylinder = true;
+        dragStartX = e.clientX;
+        dragStartRotation = cylinderRotation;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDraggingCylinder) return;
+        const dx = e.clientX - dragStartX;
+        cylinderRotation = dragStartRotation + dx * 0.35;
+        updateCylinderCardTransforms();
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDraggingCylinder = false;
+      });
+
+      // Touch drag
+      stage3DWrap.addEventListener('touchstart', (e) => {
+        if (e.target.closest('button')) return;
+        if (e.touches.length === 1) {
+          isDraggingCylinder = true;
+          dragStartX = e.touches[0].clientX;
+          dragStartRotation = cylinderRotation;
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isDraggingCylinder || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - dragStartX;
+        cylinderRotation = dragStartRotation + dx * 0.45;
+        updateCylinderCardTransforms();
+      }, { passive: true });
+
+      window.addEventListener('touchend', () => {
+        isDraggingCylinder = false;
+      });
+
+      // Mouse wheel to rotate
+      stage3DWrap.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        cylinderRotation += e.deltaY * 0.12;
+        updateCylinderCardTransforms();
+      }, { passive: false });
+    }
 
     // Interactive 8x8 Board Simulator Setup
     const pieceIcons = {
@@ -2825,6 +3199,8 @@
     // Init on DOM ready
     document.addEventListener('DOMContentLoaded', () => {
       renderKingdoms('all');
+      renderKingdoms3DCylinder('all');
+      startCylinderAnimation();
       renderBoard();
       saveTimelineSnapshot('Game Initialized');
     });

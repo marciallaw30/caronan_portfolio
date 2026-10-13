@@ -8,6 +8,7 @@ declare module 'react' {
     role?: string;
     'aria-label'?: string;
     children?: any;
+    onClick?: (e?: any) => void;
     [key: string]: any;
   }
   export function useState<T>(initialState: T | (() => T)): [T, (newState: T | ((prev: T) => T)) => void];
@@ -38,4 +39,24 @@ declare namespace JSX {
     [elemName: string]: any;
   }
   interface Element extends any {}
+}
+
+declare namespace NodeJS {
+  type Timeout = any;
+}
+
+declare module 'lucide-react' {
+  const content: Record<string, any>;
+  export default content;
+  export const Info: any;
+  export const RotateCcw: any;
+  export const Play: any;
+  export const Pause: any;
+  export const ChevronLeft: any;
+  export const ChevronRight: any;
+  export const Shield: any;
+  export const Sparkles: any;
+  export const Sword: any;
+  export const X: any;
+  export const ExternalLink: any;
 }
