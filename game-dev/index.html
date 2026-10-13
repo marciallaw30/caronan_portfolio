@@ -504,19 +504,34 @@
     }
 
     /* Camera View Modes (Calibrated for Perfect Coordinate Visibility & Zero Misclicks) */
+    .planar-board-wrapper.view-isometric,
     .planar-board-3d.view-isometric {
       transform: rotateX(34deg) rotateZ(-12deg) translateZ(8px);
     }
+    .planar-board-wrapper.view-cinematic,
     .planar-board-3d.view-cinematic {
       transform: rotateX(46deg) rotateZ(-6deg) scale(1.04) translateZ(16px);
     }
+    .planar-board-wrapper.view-topdown,
     .planar-board-3d.view-topdown {
       transform: rotateX(0deg) rotateZ(0deg) scale(1) translateZ(0);
     }
+    .planar-board-wrapper.view-4d-phase,
     .planar-board-3d.view-4d-phase {
       transform: rotateX(28deg) rotateZ(16deg) translateZ(12px);
       filter: drop-shadow(0 0 35px rgba(236, 72, 153, 0.7)) hue-rotate(25deg);
       animation: chronoFloat4D 6s ease-in-out infinite alternate;
+    }
+
+    .planar-board-wrapper .planar-board-3d {
+      transform: none !important;
+      animation: none !important;
+      border: 1.5px solid rgba(168, 85, 247, 0.45);
+      background: rgba(12, 6, 26, 0.88);
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.95);
+    }
+    .planar-board-wrapper .planar-board-3d::after {
+      display: none;
     }
 
     @keyframes chronoFloat4D {
@@ -524,33 +539,116 @@
       100% { transform: rotateX(34deg) rotateZ(12deg) translateZ(24px); }
     }
 
+    /* 3D Planar Outer Frame & Beveled Coordinates (GDD Figure C.26) */
+    .planar-board-wrapper {
+      position: relative;
+      display: inline-block;
+      padding: 30px;
+      border-radius: 26px;
+      background: radial-gradient(circle at 50% 35%, #22143d 0%, #0d061c 65%, #03010a 100%);
+      box-shadow: 
+        0 35px 80px rgba(0, 0, 0, 0.96),
+        0 0 50px rgba(124, 58, 237, 0.35),
+        inset 0 0 24px rgba(251, 191, 36, 0.3);
+      border: 3.5px solid #d97706;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .planar-board-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(251, 191, 36, 0.5);
+      pointer-events: none;
+    }
+
+    /* Coordinate Bevel Bars (A-H, 1-8) */
+    .board-coord-bar-x {
+      position: absolute;
+      left: 30px;
+      right: 30px;
+      display: flex;
+      justify-content: space-around;
+      font-family: var(--font-mono, monospace);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: #fde68a;
+      text-shadow: 0 0 10px rgba(245, 158, 11, 0.9);
+      pointer-events: none;
+      user-select: none;
+    }
+    .board-coord-bar-x.top { top: 8px; }
+    .board-coord-bar-x.bottom { bottom: 8px; }
+
+    .board-coord-bar-y {
+      position: absolute;
+      top: 30px;
+      bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      font-family: var(--font-mono, monospace);
+      font-weight: 700;
+      font-size: 0.78rem;
+      color: #fde68a;
+      text-shadow: 0 0 10px rgba(245, 158, 11, 0.9);
+      pointer-events: none;
+      user-select: none;
+      width: 22px;
+      text-align: center;
+    }
+    .board-coord-bar-y.left { left: 6px; }
+    .board-coord-bar-y.right { right: 6px; }
+
+    /* Arcane Corner Obelisks (GDD Figure C.25) */
+    .corner-obelisk {
+      position: absolute;
+      width: 22px;
+      height: 44px;
+      pointer-events: none;
+      z-index: 45;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 0 14px rgba(168, 85, 247, 0.95));
+    }
+    .corner-obelisk.obelisk-nw { top: -6px; left: -6px; }
+    .corner-obelisk.obelisk-ne { top: -6px; right: -6px; }
+    .corner-obelisk.obelisk-sw { bottom: -6px; left: -6px; }
+    .corner-obelisk.obelisk-se { bottom: -6px; right: -6px; }
+
     /* 3D Cell Architecture */
     .board-cell-3d {
       position: relative;
-      border-radius: 6px;
+      border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 2px 5px rgba(0, 0, 0, 0.6);
       user-select: none;
+      transform-style: preserve-3d;
+      transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
+    /* Light Stone Marble Tile (GDD Ivory Granite) */
     .board-cell-3d.cell-light {
-      background: linear-gradient(135deg, #3730a3 0%, #1e1b4b 100%);
-      border: 1px solid rgba(165, 180, 252, 0.28);
+      background: linear-gradient(135deg, #ded2c1 0%, #bfb09b 60%, #9e8e7a 100%);
+      border: 1px solid rgba(254, 243, 199, 0.45);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
+    /* Dark Basalt Obsidian Tile (GDD Volcanic Basalt) */
     .board-cell-3d.cell-dark {
-      background: linear-gradient(135deg, #180e2f 0%, #080314 100%);
-      border: 1px solid rgba(139, 92, 246, 0.22);
+      background: linear-gradient(135deg, #1b162a 0%, #100b1e 60%, #06030c 100%);
+      border: 1px solid rgba(168, 85, 247, 0.28);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.75);
     }
 
     .board-cell-3d:hover {
-      box-shadow: 0 0 16px rgba(251, 191, 36, 0.7), inset 0 0 8px rgba(251, 191, 36, 0.4);
+      box-shadow: 0 0 22px rgba(251, 191, 36, 0.85), inset 0 0 10px rgba(251, 191, 36, 0.5) !important;
       border-color: #fbbf24 !important;
-      z-index: 15;
+      z-index: 25;
     }
 
     /* Subdued Coordinate Label in Cell Corner */
@@ -558,128 +656,236 @@
       position: absolute;
       top: 2px;
       left: 3px;
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       font-family: var(--font-mono, monospace);
-      color: rgba(255, 255, 255, 0.35);
+      color: rgba(255, 255, 255, 0.4);
       pointer-events: none;
       line-height: 1;
-      font-weight: 600;
+      font-weight: 700;
+      z-index: 2;
     }
     .board-cell-3d:hover .cell-coord-label {
       color: #fbbf24;
     }
 
-    /* 3D Kingdom Terrains */
+    /* 3D Kingdom Terrains (GDD Figure C.28) */
     .cell-volcanic {
-      background: radial-gradient(circle, #ef4444 0%, #991b1b 50%, #450a0a 100%) !important;
-      border: 1px solid #f87171 !important;
-      box-shadow: 0 0 18px rgba(239, 68, 68, 0.7), inset 0 0 8px rgba(254, 240, 138, 0.5) !important;
-      animation: magmaPulse 2.5s infinite alternate;
+      background: radial-gradient(circle, #f97316 0%, #b91c1c 45%, #450a0a 100%) !important;
+      border: 1.5px solid #f87171 !important;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), inset 0 0 10px rgba(254, 240, 138, 0.7) !important;
+      animation: magmaPulse 2.4s infinite alternate;
     }
     @keyframes magmaPulse {
-      from { box-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
-      to { box-shadow: 0 0 24px rgba(251, 146, 60, 0.95), inset 0 0 14px rgba(254, 240, 138, 0.7); }
+      from { box-shadow: 0 0 14px rgba(239, 68, 68, 0.7); }
+      to { box-shadow: 0 0 28px rgba(251, 146, 60, 0.95), inset 0 0 16px rgba(254, 240, 138, 0.85); }
     }
 
     .cell-verdant {
-      background: radial-gradient(circle, #10b981 0%, #065f46 60%, #022c22 100%) !important;
-      border: 1px solid #34d399 !important;
-      box-shadow: 0 0 18px rgba(16, 185, 129, 0.7), inset 0 0 8px rgba(110, 231, 183, 0.5) !important;
-      animation: briarPulse 3s infinite alternate;
+      background: radial-gradient(circle, #22c55e 0%, #15803d 50%, #052e16 100%) !important;
+      border: 1.5px solid #4ade80 !important;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.8), inset 0 0 10px rgba(187, 247, 208, 0.6) !important;
+      animation: briarPulse 2.8s infinite alternate;
     }
     @keyframes briarPulse {
-      from { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
-      to { box-shadow: 0 0 22px rgba(52, 211, 153, 0.9); }
+      from { box-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+      to { box-shadow: 0 0 26px rgba(74, 222, 128, 0.95); }
     }
 
     .cell-abyssal {
       background: radial-gradient(circle, #0284c7 0%, #075985 60%, #032b43 100%) !important;
       border: 1px solid #38bdf8 !important;
-      box-shadow: 0 0 18px rgba(2, 132, 199, 0.7) !important;
+      box-shadow: 0 0 20px rgba(2, 132, 199, 0.8) !important;
     }
 
     .cell-frost {
       background: radial-gradient(circle, #38bdf8 0%, #0369a1 60%, #082f49 100%) !important;
       border: 1px solid #7dd3fc !important;
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.7), inset 0 0 10px rgba(224, 242, 254, 0.6) !important;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.8) !important;
     }
 
     .cell-void {
       background: radial-gradient(circle, #7c3aed 0%, #4c1d95 60%, #1e0938 100%) !important;
       border: 1px solid #c084fc !important;
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.85) !important;
+      box-shadow: 0 0 22px rgba(168, 85, 247, 0.9) !important;
     }
 
-    /* Grounded Piece Architecture */
-    .piece-container-3d {
+    /* ================= REALISTIC 3D TABLETOP MINIATURE PIECES ================= */
+    .miniature-slot {
+      position: absolute;
+      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      width: 100%;
-      height: 100%;
       pointer-events: none;
+      transform-style: preserve-3d;
     }
 
-    .piece-pedestal-3d {
+    /* Soft Floor Contact Drop Shadow */
+    .miniature-shadow {
       position: absolute;
-      width: 32px;
-      height: 32px;
+      width: 42px;
+      height: 22px;
       border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
+      transform: translateZ(1px);
+      filter: blur(2px);
+      transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* Arcane Selection Glyphs & Aether Ring (GDD Figure C.36) */
+    .miniature-aether-ring {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border: 2px dashed #fbbf24;
+      border-radius: 50%;
+      opacity: 0;
+      transform: translateZ(2px) scale(0.6);
+      transition: all 0.25s ease;
+      box-shadow: 0 0 16px rgba(251, 191, 36, 0.9);
+      animation: spinAetherMini 6s linear infinite;
       pointer-events: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.75);
-      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    @keyframes spinAetherMini {
+      from { transform: translateZ(2px) rotate(0deg); }
+      to { transform: translateZ(2px) rotate(360deg); }
     }
 
-    .piece-gold .piece-pedestal-3d {
-      background: radial-gradient(circle, #fde047 0%, #b45309 75%, #451a03 100%);
-      border: 1.5px solid #fef08a;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.75), inset 0 1px 2px rgba(255, 255, 255, 0.9);
-    }
-
-    .piece-black .piece-pedestal-3d {
-      background: radial-gradient(circle, #475569 0%, #1e1b4b 75%, #020617 100%);
-      border: 1.5px solid #c084fc;
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.75), inset 0 1px 2px rgba(192, 132, 252, 0.7);
-    }
-
-    .piece-symbol-3d {
-      font-size: 2.1rem;
-      line-height: 1;
-      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.95));
+    /* Upright Sculpted Figurine Body - Counter-rotates so miniature stands tall */
+    .miniature-body {
       position: relative;
-      z-index: 10;
-      user-select: none;
-      pointer-events: none;
-      transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      transform-style: preserve-3d;
+      transform: rotateX(-34deg) rotateZ(12deg) translateZ(8px);
+      transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
+      pointer-events: auto;
+      cursor: pointer;
     }
 
-    .piece-gold .piece-symbol-3d {
-      color: #fef08a;
-      text-shadow: 0 0 14px rgba(245, 158, 11, 0.95), 0 0 24px rgba(217, 119, 6, 0.75);
+    /* Dynamic Camera Counter-Rotations */
+    .view-isometric .miniature-body {
+      transform: rotateX(-34deg) rotateZ(12deg) translateZ(8px);
+    }
+    .view-cinematic .miniature-body {
+      transform: rotateX(-46deg) rotateZ(6deg) translateZ(14px);
+    }
+    .view-topdown .miniature-body {
+      transform: rotateX(0deg) rotateZ(0deg) translateZ(4px);
+    }
+    .view-4d-phase .miniature-body {
+      transform: rotateX(-28deg) rotateZ(-16deg) translateZ(12px);
     }
 
-    .piece-black .piece-symbol-3d {
-      color: #f1f5f9;
-      text-shadow: 0 0 14px rgba(139, 92, 246, 0.95), 0 0 24px rgba(99, 102, 241, 0.75);
+    /* Figurine Sculpture Artwork */
+    .miniature-sculpture {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.85));
+      transition: transform 0.25s ease;
+    }
+    .miniature-sculpture svg {
+      display: block;
+      overflow: visible;
+      transition: filter 0.2s ease, transform 0.2s ease;
     }
 
-    /* Selected 3D Levitation & Luminous Ring */
+    /* Sculpted Pedestal Base with Faction Shield Crest */
+    .miniature-pedestal-base {
+      position: relative;
+      width: 44px;
+      height: 14px;
+      border-radius: 8px;
+      margin-top: -6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.9), inset 0 1px 3px rgba(255, 255, 255, 0.5);
+      z-index: 5;
+    }
+
+    .pedestal-faction-obsidian {
+      background: linear-gradient(180deg, #3f3f46 0%, #18181b 60%, #09090b 100%);
+      border: 1.5px solid #f97316;
+      box-shadow: 0 0 14px rgba(249, 115, 22, 0.7), inset 0 1px 3px rgba(254, 215, 170, 0.7);
+    }
+
+    .pedestal-faction-verdant {
+      background: linear-gradient(180deg, #27272a 0%, #14532d 60%, #052e16 100%);
+      border: 1.5px solid #22c55e;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.7), inset 0 1px 3px rgba(187, 247, 208, 0.7);
+    }
+
+    .miniature-crest {
+      font-size: 0.68rem;
+      line-height: 1;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.95));
+    }
+
+    /* Selected 3D Levitation */
     .cell-selected {
       outline: 3px solid #fbbf24 !important;
-      box-shadow: 0 0 25px rgba(245, 158, 11, 0.95), inset 0 0 14px rgba(245, 158, 11, 0.4) !important;
-      z-index: 25;
-      background: rgba(251, 191, 36, 0.25) !important;
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.95), inset 0 0 14px rgba(245, 158, 11, 0.5) !important;
+      z-index: 35;
+      background: rgba(251, 191, 36, 0.28) !important;
     }
 
-    .cell-selected .piece-pedestal-3d {
-      transform: scale(1.15);
-      box-shadow: 0 0 20px rgba(251, 191, 36, 0.95);
+    .cell-selected .miniature-body {
+      filter: drop-shadow(0 18px 30px rgba(245, 158, 11, 0.95)) brightness(1.2);
+    }
+    .view-isometric .cell-selected .miniature-body {
+      transform: rotateX(-34deg) rotateZ(12deg) translateZ(40px) scale(1.15);
+    }
+    .view-cinematic .cell-selected .miniature-body {
+      transform: rotateX(-46deg) rotateZ(6deg) translateZ(48px) scale(1.18);
+    }
+    .view-topdown .cell-selected .miniature-body {
+      transform: rotateX(0deg) rotateZ(0deg) translateZ(30px) scale(1.15);
+    }
+    .view-4d-phase .cell-selected .miniature-body {
+      transform: rotateX(-28deg) rotateZ(-16deg) translateZ(45px) scale(1.18);
     }
 
-    .cell-selected .piece-symbol-3d {
-      transform: scale(1.24);
-      filter: drop-shadow(0 8px 16px rgba(245, 158, 11, 0.95));
+    .cell-selected .miniature-shadow {
+      width: 58px;
+      height: 32px;
+      opacity: 0.45;
+      filter: blur(6px);
+      transform: translateZ(1px) scale(1.3);
+    }
+    .cell-selected .miniature-aether-ring {
+      opacity: 1;
+      transform: translateZ(2px) scale(1.15);
+    }
+
+    /* Miniature Name & Archetype Tooltip on Hover */
+    .miniature-tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(5, 8, 20, 0.96);
+      border: 1px solid #fbbf24;
+      color: #ffffff;
+      font-family: var(--font-mono, monospace);
+      font-size: 0.72rem;
+      font-weight: 700;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 60;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.95);
+    }
+    .miniature-body:hover .miniature-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* Legal Move Highlights */
@@ -1236,6 +1442,48 @@
                 <span class="font-mono text-white small fs-6" id="capturedBlack">None</span>
               </div>
 
+              <!-- Live Game Development Language Engine Architecture HUD -->
+              <div class="p-3 rounded mb-2" style="background: rgba(9, 13, 26, 0.94); border: 1px solid rgba(56, 189, 248, 0.45); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);">
+                <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-1">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fs-6 text-info"><i class="bi bi-cpu-fill"></i></span>
+                    <span class="small font-mono fw-bold text-white" style="letter-spacing: 0.05em;">ENGINE RUNTIME ARCHITECTURE:</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-1">
+                    <span class="badge font-mono" id="engineActiveTag" style="background: rgba(14, 165, 233, 0.25); border: 1px solid #38bdf8; color: #38bdf8; font-size: 0.7rem;">C++ (UE5)</span>
+                    <a href="#game-dev-languages" class="btn btn-xs btn-outline-info rounded-pill px-2 py-0 font-mono text-decoration-none" style="font-size: 0.68rem;" title="View Top Game Development Languages Documentation">
+                      <i class="bi bi-box-arrow-up-right me-1"></i>Tech Stack
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Language Switcher Tabs -->
+                <div class="d-flex gap-1 flex-wrap mb-2" id="engineLanguageSelector">
+                  <button class="btn btn-xs btn-mythic-gold active rounded-pill px-2 py-1 font-mono engine-lang-btn" data-lang="cpp">C++ UE5</button>
+                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="csharp">C# Unity</button>
+                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="gdscript">GDScript</button>
+                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="python">Python</button>
+                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="rust">Rust Bevy</button>
+                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="js">JS WebGL</button>
+                </div>
+
+                <!-- Real-Time Code Execution Terminal -->
+                <div class="position-relative">
+                  <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded-top" style="background: #0d1326; border: 1px solid rgba(255,255,255,0.12); border-bottom: none;">
+                    <span class="font-mono text-info" style="font-size: 0.68rem;" id="engineTerminalFilename">AMythicPieceCharacter.cpp • Unreal Engine 5.4</span>
+                    <div class="d-flex gap-2 align-items-center">
+                      <button id="btnCopyEngineCode" class="btn btn-xs btn-link p-0 text-warning font-mono text-decoration-none" style="font-size: 0.68rem;">
+                        <i class="bi bi-clipboard me-1"></i>Copy
+                      </button>
+                      <button id="btnClearEngineCode" class="btn btn-xs btn-link p-0 text-muted font-mono text-decoration-none" style="font-size: 0.68rem;">
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                  <pre id="engineLiveCodeTerminal" class="p-2 m-0 rounded-bottom font-mono overflow-auto" style="max-height: 125px; min-height: 85px; font-size: 0.71rem; line-height: 1.45; background: #03060f; border: 1px solid rgba(255,255,255,0.12); color: #7dd3fc; white-space: pre-wrap; word-break: break-word;"></pre>
+                </div>
+              </div>
+
               <!-- Live Algebraic Move Log -->
               <div class="p-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 mb-2">
                 <div class="d-flex justify-content-between align-items-center mb-1">
@@ -1293,9 +1541,43 @@
               <div class="aether-ring-4d"></div>
               <div class="aether-ring-inner-4d"></div>
 
-              <!-- 3D Planar Grid Floating Slab -->
-              <div class="planar-board-3d view-isometric" id="tacticalBoard">
-                <!-- 64 cells generated via JS with 3D elevation and dynamic shaders -->
+              <!-- 3D Planar Board Outer Wrapper with Coordinates and Corner Obelisks (GDD Fig C.25 & C.26) -->
+              <div class="planar-board-wrapper view-isometric" id="boardWrapper">
+                <!-- Top Coordinate Bar (A - H) -->
+                <div class="board-coord-bar-x top">
+                  <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span>
+                </div>
+                <!-- Left Coordinate Bar (8 - 1) -->
+                <div class="board-coord-bar-y left">
+                  <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                </div>
+                <!-- Right Coordinate Bar (8 - 1) -->
+                <div class="board-coord-bar-y right">
+                  <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                </div>
+                <!-- Bottom Coordinate Bar (A - H) -->
+                <div class="board-coord-bar-x bottom">
+                  <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span>
+                </div>
+
+                <!-- 4 Arcane Corner Obelisks (GDD Figure C.25) -->
+                <div class="corner-obelisk obelisk-nw">
+                  <svg viewBox="0 0 24 48" fill="none"><path d="M12 2L22 14L18 46L6 46L2 14Z" fill="url(#obeliskGradNW)" stroke="#f59e0b" stroke-width="1.2"/><circle cx="12" cy="16" r="3.5" fill="#fbbf24"/><defs><linearGradient id="obeliskGradNW" x1="0" y1="0" x2="24" y2="48"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#1e1136"/></linearGradient></defs></svg>
+                </div>
+                <div class="corner-obelisk obelisk-ne">
+                  <svg viewBox="0 0 24 48" fill="none"><path d="M12 2L22 14L18 46L6 46L2 14Z" fill="url(#obeliskGradNE)" stroke="#f59e0b" stroke-width="1.2"/><circle cx="12" cy="16" r="3.5" fill="#fbbf24"/><defs><linearGradient id="obeliskGradNE" x1="0" y1="0" x2="24" y2="48"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#1e1136"/></linearGradient></defs></svg>
+                </div>
+                <div class="corner-obelisk obelisk-sw">
+                  <svg viewBox="0 0 24 48" fill="none"><path d="M12 2L22 14L18 46L6 46L2 14Z" fill="url(#obeliskGradSW)" stroke="#f59e0b" stroke-width="1.2"/><circle cx="12" cy="16" r="3.5" fill="#fbbf24"/><defs><linearGradient id="obeliskGradSW" x1="0" y1="0" x2="24" y2="48"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#1e1136"/></linearGradient></defs></svg>
+                </div>
+                <div class="corner-obelisk obelisk-se">
+                  <svg viewBox="0 0 24 48" fill="none"><path d="M12 2L22 14L18 46L6 46L2 14Z" fill="url(#obeliskGradSE)" stroke="#f59e0b" stroke-width="1.2"/><circle cx="12" cy="16" r="3.5" fill="#fbbf24"/><defs><linearGradient id="obeliskGradSE" x1="0" y1="0" x2="24" y2="48"><stop stop-color="#a855f7"/><stop offset="1" stop-color="#1e1136"/></linearGradient></defs></svg>
+                </div>
+
+                <!-- 3D Planar Grid Floating Slab -->
+                <div class="planar-board-3d view-isometric" id="tacticalBoard">
+                  <!-- 64 cells generated via JS with 3D elevation and dynamic shaders -->
+                </div>
               </div>
             </div>
             
@@ -2698,10 +2980,695 @@
       updateTimelineHUD();
     }
 
+    // ================= REALISTIC PIECE LORE & GDD CHARACTER PROFILES =================
+    const factionCrests = {
+      volcanic: '🔥',
+      verdant: '🌿',
+      abyssal: '🌊',
+      frost: '❄️',
+      void: '🌑',
+      gearwork: '⚙️',
+      grave: '💀'
+    };
+
+    function getPieceLore(piece, factionKey) {
+      if (!piece) return { name: '', role: '', stats: '' };
+      const isW = isWhite(piece);
+      const type = piece.toUpperCase();
+
+      if (!isW) {
+        // Verdant Court (Opponent AI Faction - GDD Figure C.2)
+        const verdantMap = {
+          'K': { name: 'The Elder Dryad', role: 'Woodland Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square Omnidirectional' },
+          'Q': { name: 'The Forest Matriarch', role: 'Verdant Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
+          'B': { name: 'The Sylvaris', role: 'Thorn Warden', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
+          'N': { name: 'The Stag-Rider', role: 'Celestial Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
+          'R': { name: 'The Treant Guardian', role: 'Ironbark Treant', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
+          'P': { name: 'The Sapling', role: 'Living Sproutling', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares Forward' }
+        };
+        return verdantMap[type] || { name: 'Verdant Unit', role: 'Unit', stats: '' };
+      }
+
+      // Player 1 Faction (Default: The Obsidian Roost - GDD Figure C.1)
+      const factionLoreMap = {
+        volcanic: {
+          'K': { name: 'The Eternal Drake', role: 'Obsidian Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square Omnidirectional' },
+          'Q': { name: 'The Ash Matriarch', role: 'Obsidian Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
+          'B': { name: 'The Ember Seer', role: 'Cinder Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
+          'N': { name: 'Flame-Winged Vanguard', role: 'Drake Knight', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
+          'R': { name: 'The Obsidian Fortress', role: 'Magma Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
+          'P': { name: 'The Roostling', role: 'Scaled Hatchling', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares Forward' }
+        },
+        abyssal: {
+          'K': { name: 'Abyssal Monarch', role: 'Trench Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
+          'Q': { name: 'Leviathan Matriarch', role: 'Abyssal Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
+          'B': { name: 'Trench Oracle', role: 'Deep Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
+          'N': { name: 'Deep-Sea Manta', role: 'Tidal Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
+          'R': { name: 'Coral Fortress', role: 'Bioluminescent Spire', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
+          'P': { name: 'Nautiloid', role: 'Trench Hatchling', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+        },
+        frost: {
+          'K': { name: 'Glacial Sovereign', role: 'Permafrost King', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
+          'Q': { name: 'The Frost Matriarch', role: 'Glacial Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
+          'B': { name: 'Shard Weaver', role: 'Rime Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
+          'N': { name: 'Ice-Fang Wolf', role: 'Frost Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
+          'R': { name: 'Spire of Rime', role: 'Glacial Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
+          'P': { name: 'Snow Strider', role: 'Glacial Sentry', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+        },
+        void: {
+          'K': { name: 'Void Sovereign', role: 'Nether King', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
+          'Q': { name: 'The Shadow Queen', role: 'Void Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
+          'B': { name: 'Nether Oracle', role: 'Shadow Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
+          'N': { name: 'Rift Stalker', role: 'Void Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
+          'R': { name: 'Oblivion Spire', role: 'Abyssal Monolith', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
+          'P': { name: 'Void Wisp', role: 'Nether Thrall', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+        },
+        gearwork: {
+          'K': { name: 'Clockwork Emperor', role: 'Steam Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
+          'Q': { name: 'The Gear Matriarch', role: 'Clockwork Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
+          'B': { name: 'Steam Artificer', role: 'Brass Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
+          'N': { name: 'Piston Automaton', role: 'Clockwork Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
+          'R': { name: 'Foundry Spire', role: 'Brass Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
+          'P': { name: 'Cogwheel Sentry', role: 'Steam Thrall', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+        },
+        grave: {
+          'K': { name: 'Necro Sovereign', role: 'Dynasty Monarch', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
+          'Q': { name: 'The Death Matriarch', role: 'Necromancy Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
+          'B': { name: 'Soul Priest', role: 'Underworld Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
+          'N': { name: 'Skeletal Cavalier', role: 'Undead Knight', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
+          'R': { name: 'Mausoleum Spire', role: 'Crypt Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
+          'P': { name: 'Bone Thrall', role: 'Risen Sentry', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+        }
+      };
+
+      const set = factionLoreMap[factionKey] || factionLoreMap.volcanic;
+      return set[type] || { name: 'Mythic Unit', role: 'Unit', stats: '' };
+    }
+
+    // ================= REALISTIC 3D TABLETOP MINIATURE SVG GENERATOR =================
+    // Authentic character silhouettes from GDD Figures C.1 (Obsidian Roost) & C.2 (Verdant Court)
+    function getPieceMiniatureSVG(piece, factionKey, isWhitePiece) {
+      const type = piece.toUpperCase();
+
+      if (!isWhitePiece) {
+        // --- VERDANT COURT FIGURINES (Opponent - Green / Jade / Nature) ---
+        if (type === 'K') {
+          // The Elder Dryad (Antlered Oak Monarch)
+          return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="dryadBark" x1="24" y1="8" x2="24" y2="52"><stop stop-color="#1e293b"/><stop offset="0.5" stop-color="#14532d"/><stop offset="1" stop-color="#052e16"/></linearGradient>
+            </defs>
+            <path d="M21 12 C17 8, 12 5, 8 2 M12 6 C10 10, 8 13, 6 15 M15 8 C14 5, 12 3, 10 1" stroke="#4ade80" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M27 12 C31 8, 36 5, 40 2 M36 6 C38 10, 40 13, 42 15 M33 8 C34 5, 36 3, 38 1" stroke="#4ade80" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M17 26 C15 36, 16 46, 18 51 L30 51 C32 46, 33 36, 31 26 Z" fill="url(#dryadBark)" stroke="#22c55e" stroke-width="1.2"/>
+            <path d="M16 28 C20 32, 28 32, 32 28 C30 36, 18 36, 16 28 Z" fill="#15803d"/>
+            <path d="M24 33 L27 38 L24 43 L21 38 Z" fill="#6ee7b7" stroke="#10b981" stroke-width="1"/>
+            <circle cx="24" cy="38" r="2" fill="#ecfdf5"/>
+            <path d="M24 12 L20 18 L24 25 L28 18 Z" fill="url(#dryadBark)" stroke="#4ade80" stroke-width="1.2"/>
+            <circle cx="22" cy="18" r="1.2" fill="#6ee7b7"/>
+            <circle cx="26" cy="18" r="1.2" fill="#6ee7b7"/>
+            <path d="M19 12 L21 7 L24 10 L27 7 L29 12 Z" fill="#22c55e" stroke="#86efac" stroke-width="0.8"/>
+          </svg>`;
+        } else if (type === 'Q') {
+          // The Forest Matriarch (Floral Blossom Empress & Briar Scepter)
+          return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="forestQueen" x1="24" y1="8" x2="24" y2="52"><stop stop-color="#14532d"/><stop offset="0.6" stop-color="#052e16"/><stop offset="1" stop-color="#022c22"/></linearGradient>
+            </defs>
+            <path d="M24 18 C15 14, 8 20, 7 32 C13 36, 18 35, 24 38 C30 35, 35 36, 41 32 C40 20, 33 14, 24 18 Z" fill="#15803d" opacity="0.85"/>
+            <path d="M19 24 C17 34, 15 44, 17 51 L31 51 C33 44, 31 34, 29 24 Z" fill="url(#forestQueen)" stroke="#4ade80" stroke-width="1.2"/>
+            <path d="M24 24 L24 51 M19 33 C22 36, 26 36, 29 33 M18 43 C22 46, 26 46, 30 43" stroke="#86efac" stroke-width="1" stroke-linecap="round"/>
+            <circle cx="24" cy="18" r="5" fill="#d1fae5" stroke="#059669" stroke-width="1"/>
+            <path d="M18 14 L19 7 L21 11 L24 5 L27 11 L29 7 L30 14 Z" fill="#22c55e" stroke="#4ade80" stroke-width="1"/>
+            <circle cx="24" cy="5" r="2" fill="#ec4899"/>
+            <circle cx="19" cy="7" r="1.3" fill="#f472b6"/>
+            <circle cx="29" cy="7" r="1.3" fill="#f472b6"/>
+            <line x1="38" y1="8" x2="36" y2="51" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="38" cy="8" r="3.2" fill="#f472b6"/>
+            <circle cx="38" cy="8" r="1.5" fill="#fef08a"/>
+          </svg>`;
+        } else if (type === 'B') {
+          // The Sylvaris (Druid Cowl & Nature Orb Staff)
+          return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="druidRobe" x1="24" y1="16" x2="24" y2="52"><stop stop-color="#14532d"/><stop offset="0.6" stop-color="#052e16"/><stop offset="1" stop-color="#022c22"/></linearGradient>
+            </defs>
+            <circle cx="24" cy="18" r="12" fill="none" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <path d="M24 7 C19 13, 17 19, 18 25 C21 27, 27 27, 30 25 C31 19, 29 13, 24 7 Z" fill="#0f2e1a" stroke="#4ade80" stroke-width="1.2"/>
+            <ellipse cx="24" cy="20" rx="3.5" ry="4" fill="#051b0f"/>
+            <circle cx="22.5" cy="19.5" r="1" fill="#6ee7b7"/>
+            <circle cx="25.5" cy="19.5" r="1" fill="#6ee7b7"/>
+            <path d="M18 26 C16 35, 15 45, 17 51 L31 51 C33 45, 32 35, 30 26 Z" fill="url(#druidRobe)" stroke="#22c55e" stroke-width="1.2"/>
+            <line x1="36" y1="10" x2="34" y2="51" stroke="#84cc16" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="36" cy="10" r="3.5" fill="#4ade80"/>
+            <circle cx="36" cy="10" r="1.5" fill="#fef08a"/>
+          </svg>`;
+        } else if (type === 'N') {
+          // The Stag-Rider (Celestial Antlered White Stag Cavalier)
+          return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="stagGrad" x1="0" y1="0" x2="48" y2="52"><stop stop-color="#f8fafc"/><stop offset="0.5" stop-color="#6ee7b7"/><stop offset="1" stop-color="#047857"/></linearGradient>
+            </defs>
+            <path d="M22 10 C16 6, 12 3, 9 1 M14 5 C11 8, 9 11, 7 13 M18 7 C16 4, 14 2, 12 1" stroke="#a7f3d0" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M27 10 C32 6, 36 3, 39 1 M34 5 C37 8, 39 11, 41 13 M30 7 C32 4, 34 2, 36 1" stroke="#a7f3d0" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M20 12 C18 16, 21 24, 24 25 C27 24, 30 16, 28 12 C26 10, 22 10, 20 12 Z" fill="#f1f5f9" stroke="#34d399" stroke-width="1.2"/>
+            <circle cx="21" cy="16" r="1" fill="#059669"/>
+            <circle cx="27" cy="16" r="1" fill="#059669"/>
+            <path d="M16 26 C15 36, 16 46, 18 51 L32 51 C34 46, 35 36, 34 26 Z" fill="url(#stagGrad)" stroke="#10b981" stroke-width="1.2"/>
+            <line x1="38" y1="4" x2="38" y2="48" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+            <path d="M38 4 L40 10 L36 10 Z" fill="#a7f3d0"/>
+          </svg>`;
+        } else if (type === 'R') {
+          // The Treant Guardian (Living Ironbark Forest Bastion)
+          return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="treantBark" x1="24" y1="6" x2="24" y2="52"><stop stop-color="#14532d"/><stop offset="0.5" stop-color="#0f2a1a"/><stop offset="1" stop-color="#051b0f"/></linearGradient>
+            </defs>
+            <path d="M10 20 L12 51 L36 51 L38 20 Z" fill="url(#treantBark)" stroke="#22c55e" stroke-width="1.4"/>
+            <rect x="6" y="32" width="7" height="15" rx="3" fill="#15803d" stroke="#4ade80" stroke-width="1"/>
+            <rect x="35" y="32" width="7" height="15" rx="3" fill="#15803d" stroke="#4ade80" stroke-width="1"/>
+            <path d="M10 14 C12 6, 18 6, 20 12 C22 4, 26 4, 28 12 C30 6, 36 6, 38 14 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.2"/>
+            <circle cx="20" cy="22" r="1.5" fill="#6ee7b7"/>
+            <circle cx="28" cy="22" r="1.5" fill="#6ee7b7"/>
+            <path d="M19 28 L17 46 M29 28 L31 46 M24 32 L24 48" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>`;
+        } else {
+          // The Sapling (Living Woodland Sproutling Pawn)
+          return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="saplingGrad" x1="24" y1="12" x2="24" y2="52"><stop stop-color="#4ade80"/><stop offset="0.5" stop-color="#16a34a"/><stop offset="1" stop-color="#052e16"/></linearGradient>
+            </defs>
+            <path d="M19 28 C17 37, 18 45, 20 51 L28 51 C30 45, 31 37, 29 28 Z" fill="url(#saplingGrad)" stroke="#4ade80" stroke-width="1.2"/>
+            <ellipse cx="24" cy="22" rx="5" ry="6" fill="#15803d" stroke="#86efac" stroke-width="1.2"/>
+            <path d="M22 16 C19 10, 15 8, 12 10 C13 14, 18 16, 21 16" fill="#4ade80" stroke="#86efac" stroke-width="0.8"/>
+            <path d="M26 16 C29 10, 33 8, 36 10 C35 14, 30 16, 27 16" fill="#4ade80" stroke="#86efac" stroke-width="0.8"/>
+            <circle cx="22" cy="22" r="1.2" fill="#ecfdf5"/>
+            <circle cx="26" cy="22" r="1.2" fill="#ecfdf5"/>
+            <path d="M12 28 C12 24, 18 24, 18 28 C18 36, 15 42, 12 44 C9 42, 6 36, 6 28 Z" fill="#22c55e" stroke="#86efac" stroke-width="1.2"/>
+            <line x1="12" y1="28" x2="12" y2="40" stroke="#a7f3d0" stroke-width="0.8"/>
+          </svg>`;
+        }
+      }
+
+      // --- OBSIDIAN ROOST FIGURINES (Player 1 - Gold / Molten / Volcanic) ---
+      if (type === 'K') {
+        // The Eternal Drake (Dragon Sovereign King - GDD Fig C.1)
+        return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="drakeGold" x1="0" y1="0" x2="48" y2="54"><stop stop-color="#fef08a"/><stop offset="0.4" stop-color="#f59e0b"/><stop offset="1" stop-color="#b45309"/></linearGradient>
+            <linearGradient id="drakeWing" x1="0" y1="0" x2="48" y2="40"><stop stop-color="#ef4444"/><stop offset="0.6" stop-color="#7f1d1d"/><stop offset="1" stop-color="#18181b"/></linearGradient>
+            <linearGradient id="drakeBody" x1="24" y1="10" x2="24" y2="52"><stop stop-color="#3f3f46"/><stop offset="0.5" stop-color="#1c1917"/><stop offset="1" stop-color="#09090b"/></linearGradient>
+          </defs>
+          <path d="M24 22 C18 12, 6 10, 2 18 C2 26, 12 34, 24 38 C36 34, 46 26, 46 18 C42 10, 30 12, 24 22 Z" fill="url(#drakeWing)" stroke="#f59e0b" stroke-width="1.2"/>
+          <path d="M2 18 L10 16 M46 18 L38 16 M14 26 L8 30 M34 26 L40 30" stroke="#fde047" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M17 26 C15 36, 16 46, 19 51 L29 51 C32 46, 33 36, 31 26 Z" fill="url(#drakeBody)" stroke="#d97706" stroke-width="1.2"/>
+          <path d="M20 32 L24 36 L28 32 M21 38 L24 42 L27 38 M22 44 L24 47 L26 44" stroke="#f97316" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="24" cy="34" r="3" fill="#fde047"/>
+          <path d="M24 10 L20 18 L24 26 L28 18 Z" fill="url(#drakeBody)" stroke="#fbbf24" stroke-width="1.2"/>
+          <path d="M21 13 C16 8, 12 4, 10 2 C12 7, 16 12, 19 14" fill="#18181b" stroke="#f59e0b" stroke-width="1"/>
+          <path d="M27 13 C32 8, 36 4, 38 2 C36 7, 32 12, 29 14" fill="#18181b" stroke="#f59e0b" stroke-width="1"/>
+          <path d="M20 8 L22 3 L24 7 L26 3 L28 8 Z" fill="url(#drakeGold)" stroke="#fbbf24" stroke-width="0.8"/>
+          <circle cx="22" cy="18" r="1.2" fill="#fef08a"/>
+          <circle cx="26" cy="18" r="1.2" fill="#fef08a"/>
+          <path d="M18 25 C21 27, 27 27, 30 25" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+        </svg>`;
+      } else if (type === 'Q') {
+        // The Ash Matriarch (Sorceress Queen & Molten Staff - GDD Fig C.1)
+        return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="queenFlame" x1="0" y1="0" x2="48" y2="54"><stop stop-color="#fef08a"/><stop offset="0.3" stop-color="#f97316"/><stop offset="0.8" stop-color="#b91c1c"/><stop offset="1" stop-color="#450a0a"/></linearGradient>
+            <linearGradient id="queenRobe" x1="24" y1="14" x2="24" y2="52"><stop stop-color="#27272a"/><stop offset="0.6" stop-color="#18181b"/><stop offset="1" stop-color="#09090b"/></linearGradient>
+          </defs>
+          <path d="M24 18 C16 14, 8 20, 7 32 C12 36, 18 36, 24 38 C30 36, 36 36, 41 32 C40 20, 32 14, 24 18 Z" fill="url(#queenFlame)" opacity="0.85"/>
+          <path d="M19 24 C17 34, 15 44, 17 51 L31 51 C33 44, 31 34, 29 24 Z" fill="url(#queenRobe)" stroke="#f97316" stroke-width="1.2"/>
+          <path d="M24 24 L24 51 M18 42 L24 45 L30 42 M19 32 L24 35 L29 32" stroke="#fbbf24" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="24" cy="18" r="5" fill="#fde68a" stroke="#d97706" stroke-width="1"/>
+          <path d="M19 19 C20 14, 28 14, 29 19 C28 22, 20 22, 19 19 Z" fill="#18181b"/>
+          <path d="M18 14 L19 7 L21 11 L24 5 L27 11 L29 7 L30 14 Z" fill="url(#queenFlame)" stroke="#fde047" stroke-width="1"/>
+          <circle cx="24" cy="4" r="1.5" fill="#fef08a"/>
+          <line x1="38" y1="8" x2="36" y2="51" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M38 4 L41 9 L38 14 L35 9 Z" fill="#fef08a" stroke="#ea580c" stroke-width="1"/>
+          <circle cx="38" cy="9" r="2.5" fill="#f97316"/>
+        </svg>`;
+      } else if (type === 'B') {
+        // The Ember Seer (Cinder Cleric with Solar Radiant Halo)
+        return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="seerHalo" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#fef08a"/><stop offset="0.5" stop-color="#f59e0b"/><stop offset="1" stop-color="#b45309"/></linearGradient>
+            <linearGradient id="seerRobe" x1="24" y1="16" x2="24" y2="52"><stop stop-color="#3f3f46"/><stop offset="0.6" stop-color="#18181b"/><stop offset="1" stop-color="#09090b"/></linearGradient>
+          </defs>
+          <circle cx="24" cy="18" r="12" fill="none" stroke="url(#seerHalo)" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <path d="M24 4 L24 7 M24 29 L24 32 M10 18 L13 18 M35 18 L38 18 M14 8 L16 10 M32 26 L34 28" stroke="#fbbf24" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M18 26 C16 35, 15 45, 17 51 L31 51 C33 45, 32 35, 30 26 Z" fill="url(#seerRobe)" stroke="#f59e0b" stroke-width="1.2"/>
+          <path d="M20 26 L22 51 M28 26 L26 51" stroke="#f59e0b" stroke-width="1.5"/>
+          <path d="M24 7 C19 13, 17 19, 18 25 C21 27, 27 27, 30 25 C31 19, 29 13, 24 7 Z" fill="#18181b" stroke="#f59e0b" stroke-width="1.2"/>
+          <ellipse cx="24" cy="20" rx="3.5" ry="4" fill="#09090b"/>
+          <circle cx="22.5" cy="19.5" r="1" fill="#fef08a"/>
+          <circle cx="25.5" cy="19.5" r="1" fill="#fef08a"/>
+          <circle cx="24" cy="33" r="3.5" fill="#f97316"/>
+          <circle cx="24" cy="33" r="1.8" fill="#fef08a"/>
+        </svg>`;
+      } else if (type === 'N') {
+        // Flame-Winged Vanguard (Dragon Knight & Blazing Broadsword)
+        return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="knightBlade" x1="0" y1="0" x2="20" y2="30"><stop stop-color="#fef08a"/><stop offset="0.4" stop-color="#f97316"/><stop offset="1" stop-color="#b91c1c"/></linearGradient>
+            <linearGradient id="knightArmor" x1="20" y1="10" x2="20" y2="52"><stop stop-color="#52525b"/><stop offset="0.5" stop-color="#27272a"/><stop offset="1" stop-color="#09090b"/></linearGradient>
+          </defs>
+          <path d="M22 20 C14 14, 6 18, 4 28 C10 32, 18 30, 24 32" fill="url(#knightBlade)" opacity="0.9"/>
+          <path d="M16 26 C15 36, 16 46, 18 51 L32 51 C34 46, 35 36, 34 26 Z" fill="url(#knightArmor)" stroke="#f59e0b" stroke-width="1.2"/>
+          <path d="M18 32 L25 36 L32 32 M25 36 L25 51" stroke="#f59e0b" stroke-width="1.2"/>
+          <path d="M19 14 C19 8, 30 8, 30 14 C31 20, 31 24, 25 26 C19 24, 19 20, 19 14 Z" fill="url(#knightArmor)" stroke="#fbbf24" stroke-width="1.2"/>
+          <path d="M20 12 C16 7, 13 4, 11 3 C13 7, 16 10, 19 12" fill="#18181b" stroke="#f59e0b" stroke-width="1"/>
+          <path d="M29 12 C33 7, 36 4, 38 3 C36 7, 33 10, 30 12" fill="#18181b" stroke="#f59e0b" stroke-width="1"/>
+          <path d="M21 16 L29 16 M25 16 L25 21" stroke="#fef08a" stroke-width="1.6" stroke-linecap="round"/>
+          <line x1="37" y1="4" x2="37" y2="46" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M37 4 L39 12 L35 12 Z" fill="#fef08a"/>
+          <path d="M34 32 L40 32" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+        </svg>`;
+      } else if (type === 'R') {
+        // The Obsidian Fortress (Magma Bastion Monolith)
+        return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fortressRock" x1="24" y1="6" x2="24" y2="52"><stop stop-color="#3f3f46"/><stop offset="0.4" stop-color="#18181b"/><stop offset="1" stop-color="#09090b"/></linearGradient>
+            <linearGradient id="magmaFissure" x1="0" y1="0" x2="0" y2="52"><stop stop-color="#fef08a"/><stop offset="0.5" stop-color="#f97316"/><stop offset="1" stop-color="#ef4444"/></linearGradient>
+          </defs>
+          <path d="M12 16 L14 51 L34 51 L36 16 Z" fill="url(#fortressRock)" stroke="#f59e0b" stroke-width="1.4"/>
+          <path d="M10 8 L10 16 L14 16 L14 12 L18 12 L18 16 L30 16 L30 12 L34 12 L34 16 L38 16 L38 8 L33 8 L33 11 L29 11 L29 8 L19 8 L19 11 L15 11 L15 8 Z" fill="url(#fortressRock)" stroke="#fbbf24" stroke-width="1.2"/>
+          <path d="M18 18 L19 28 L17 38 L19 50" stroke="url(#magmaFissure)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M30 18 L29 28 L31 38 L29 50" stroke="url(#magmaFissure)" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M21 51 L21 40 C21 37, 27 37, 27 40 L27 51 Z" fill="#ef4444" stroke="#fbbf24" stroke-width="1.2"/>
+          <circle cx="24" cy="44" r="2" fill="#fef08a"/>
+          <line x1="13" y1="26" x2="35" y2="26" stroke="#52525b" stroke-width="0.8"/>
+          <line x1="13" y1="36" x2="35" y2="36" stroke="#52525b" stroke-width="0.8"/>
+        </svg>`;
+      } else {
+        // The Roostling (Scaled Hatchling Drake Pawn)
+        return `<svg viewBox="0 0 48 54" width="44" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="pawnScale" x1="24" y1="12" x2="24" y2="52"><stop stop-color="#ea580c"/><stop offset="0.5" stop-color="#7c2d12"/><stop offset="1" stop-color="#18181b"/></linearGradient>
+          </defs>
+          <path d="M19 28 C17 37, 18 45, 20 51 L28 51 C30 45, 31 37, 29 28 Z" fill="url(#pawnScale)" stroke="#f59e0b" stroke-width="1.2"/>
+          <path d="M24 14 L20 22 L24 28 L28 22 Z" fill="#27272a" stroke="#fbbf24" stroke-width="1.2"/>
+          <path d="M21 16 L17 11 M27 16 L31 11" stroke="#f59e0b" stroke-width="1.4" stroke-linecap="round"/>
+          <circle cx="22" cy="21" r="1" fill="#fef08a"/>
+          <circle cx="26" cy="21" r="1" fill="#fef08a"/>
+          <path d="M12 28 C12 24, 18 24, 18 28 C18 36, 15 42, 12 44 C9 42, 6 36, 6 28 Z" fill="#b91c1c" stroke="#fbbf24" stroke-width="1.2"/>
+          <circle cx="12" cy="33" r="2" fill="#fef08a"/>
+          <line x1="33" y1="26" x2="35" y2="42" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M33 24 L35 29 L31 29 Z" fill="#fef08a"/>
+        </svg>`;
+      }
+    }
+
+    // ================= LIVE GAME ENGINE RUNTIME ARCHITECTURE DISPATCHER =================
+    let currentEngineLanguage = 'cpp';
+    let lastEngineAction = {
+      type: 'init',
+      data: { turn: 1 }
+    };
+
+    const engineLangConfig = {
+      cpp: {
+        tag: 'C++ (UE5.4)',
+        filename: 'AMythicTacticalEngine.cpp • Unreal Engine 5.4',
+        color: '#38bdf8'
+      },
+      csharp: {
+        tag: 'C# (Unity / Godot)',
+        filename: 'TacticalMovementSystem.cs • Unity 2023.2 ECS',
+        color: '#c084fc'
+      },
+      gdscript: {
+        tag: 'GDScript (Godot 4)',
+        filename: 'tactical_board_node.gd • Godot Engine 4.3',
+        color: '#60a5fa'
+      },
+      python: {
+        tag: 'Python (MCTS / Balance)',
+        filename: 'mcts_balance_sim.py • Python 3.12 Architecture',
+        color: '#fde047'
+      },
+      rust: {
+        tag: 'Rust (Bevy 0.14)',
+        filename: 'tactical_systems.rs • Bevy Engine ECS',
+        color: '#f97316'
+      },
+      js: {
+        tag: 'JavaScript (WebGL)',
+        filename: 'planarBoardRenderer.js • WebGL 3D Matrix',
+        color: '#34d399'
+      }
+    };
+
+    function renderEngineSnippet(actionType, data, lang) {
+      if (actionType === 'init') {
+        if (lang === 'cpp') {
+          return `// [Unreal Engine 5.4 - Tactical Planar Subsystem Initialized]
+void UMythicChessSubsystem::Initialize(FSubsystemCollectionBase& Collection) {
+    GridBounds = FIntPoint(8, 8);
+    ActivePlanarWorld = GetWorld()->SpawnActor<APlanarBoardActor>(FVector::ZeroVector, FRotator::ZeroRotator);
+    ActivePlanarWorld->ConfigureCameraProjection(ECameraMode::Isometric45);
+    UE_LOG(LogMythicTactics, Log, TEXT("8x8 Planar Board slab initialized. Symmetric army spawned."));
+}`;
+        } else if (lang === 'csharp') {
+          return `// [Unity 2023.2 DOTS - Planar Board Grid Boot]
+[BurstCompile]
+public struct InitializeBoardSystem : ISystem {
+    public void OnCreate(ref SystemState state) {
+        var boardEntity = state.EntityManager.CreateEntity();
+        state.EntityManager.AddComponentData(boardEntity, new PlanarGridConfig { Size = new int2(8, 8) });
+        Debug.Log("[Unity ECS] Standard 8x8 Planar battlefield spawned with PBR Shaders.");
+    }
+}`;
+        } else if (lang === 'gdscript') {
+          return `# [Godot 4.3 Engine - Board Ready Handler]
+func _ready() -> void:
+    planar_grid.initialize_grid(8, 8)
+    camera_rig.set_view_angle(CameraAngle.ISOMETRIC)
+    print_rich("[color=cyan][Godot 4][/color] Planar grid initialized with 64 coordinate nodes.")`;
+        } else if (lang === 'python') {
+          return `# [Mythic Gambit - Monte Carlo Balance Engine Boot]
+mcts_engine = MonteCarloTreeSearch(iterations=12000, exploration_c=1.414)
+initial_state = PlanarBoardState.standard_symmetric_8x8()
+print(f"[MCTS] Initialized game state matrix | Static Heuristic: {initial_state.evaluate():+.2f}")`;
+        } else if (lang === 'rust') {
+          return `// [Bevy Engine 0.14 - Startup Schedule]
+fn setup_tactical_board(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>) {
+    commands.spawn((PlanarBoardBundle::new(8, 8), SpatialBundle::default()));
+    info!("[Bevy] Initialized 8x8 planar coordinate grid. Parallel system pipelines ready.");
+}`;
+        } else {
+          return `// [WebGL / Three.js 3D Planar Grid Pipeline]
+const boardGroup = new THREE.Group();
+createPlanarGridSlab(8, 8, { bevel: 0.15, obelisks: 4 });
+scene.add(boardGroup);
+console.log("[WebGL] 8x8 Planar Board slab constructed with PBR metalness shaders.");`;
+        }
+      }
+
+      if (actionType === 'select') {
+        const c = data.c !== undefined ? data.c : 4;
+        const r = data.r !== undefined ? data.r : 6;
+        const coord = data.coordStr || 'e2';
+        const name = data.loreName || 'Piece';
+        const count = data.legalCount || 0;
+
+        if (lang === 'cpp') {
+          return `// [Unreal Engine 5.4 - Gameplay Ability System & Chaos Raycast]
+FHitResult Hit = UChaosRaycast::LineTraceByChannel(MouseRay, ECC_TacticalPiece);
+AMythicPieceCharacter* Unit = Cast<AMythicPieceCharacter>(Hit.GetActor());
+if (Unit && Unit->IsAllied()) {
+    FGameplayTag AbilityTag = FGameplayTag::RequestGameplayTag("Ability.Tactical.Select");
+    Unit->GetAbilitySystemComponent()->TryActivateAbilityByTag(AbilityTag);
+    TArray<FIntPoint> LegalTiles = UChessEngine::ComputeLegalPaths(FIntPoint(${c}, ${r}));
+    UE_LOG(LogTactics, Log, TEXT("Selected: %s at [${coord}]. Highlighted %d valid tiles."), *Unit->GetLoreName(), LegalTiles.Num());
+}`;
+        } else if (lang === 'csharp') {
+          return `// [Unity 2023.2 - DOTS ECS Movement Validation Job]
+[BurstCompile]
+public void OnPieceSelected(Entity pieceEntity, int2 gridCoord) {
+    var piece = SystemAPI.GetComponent<TacticalPieceComponent>(pieceEntity);
+    var validMoves = new NativeList<int2>(Allocator.TempJob);
+    new ComputeLegalMovesJob { Origin = new int2(${c}, ${r}), Faction = piece.Faction, Output = validMoves }.Run();
+    AudioManager.Play(audioClips.pieceLift);
+    Debug.Log($"[ECS] Selected {piece.LoreName} at [${coord}]. Evaluated {validMoves.Length} destination paths.");
+}`;
+        } else if (lang === 'gdscript') {
+          return `# [Godot 4.3 Engine - Node Tree & Signal Dispatch]
+@rpc("call_local", "reliable")
+func _on_miniature_clicked(piece: TacticalPiece, grid_pos: Vector2i) -> void:
+    var valid_tiles: Array[Vector2i] = TacticalRuleEngine.get_legal_moves(board_state, Vector2i(${c}, ${r}))
+    piece.levitate_3d_transform(40.0, 0.25)
+    emit_signal("legal_moves_calculated", valid_tiles)
+    print_rich("[color=yellow][Godot][/color] Selected %s at [${coord}]. %d legal tiles computed." % [piece.lore_name, valid_tiles.size()])`;
+        } else if (lang === 'python') {
+          return `# [Mythic Gambit - Monte Carlo Tree Search Policy Evaluator]
+selected_unit = board_matrix[${r}][${c}]
+legal_branches = mcts_simulator.generate_legal_actions(board_matrix, origin=(${c}, ${r}))
+q_value = mcts_simulator.estimate_node_value(selected_unit, depth=6)
+print(f"[MCTS] Unit: '${name}' at [${coord}] | Branches: {len(legal_branches)} | State Q-Val: {q_value:+.3f}")`;
+        } else if (lang === 'rust') {
+          return `// [Bevy Engine 0.14 - System Query & Event Dispatcher]
+fn select_piece_system(
+    mut commands: Commands,
+    q_pieces: Query<(Entity, &PieceClass, &BoardCoord)>,
+    mut sel_res: ResMut<SelectedUnit>,
+) {
+    if let Some((e, class, coord)) = q_pieces.iter().find(|(_, _, c)| c.x == ${c} && c.y == ${r}) {
+        sel_res.entity = Some(e);
+        info!("[Bevy] Selected {:?} at [${coord}]. Computing sparse legal graph.", class);
+    }
+}`;
+        } else {
+          return `// [WebGL / Three.js Matrix Traversal & Dynamic Shaders]
+const raycaster = new THREE.Raycaster();
+raycaster.setFromCamera(mouse, activeCamera);
+const intersects = raycaster.intersectObjects(miniaturesGroup.children, true);
+if (intersects.length > 0) {
+    const miniature = intersects[0].object.parent;
+    gsap.to(miniature.position, { z: 40, duration: 0.28, ease: "power2.out" });
+    boardMaterial.uniforms.uSelectedCoord.value.set(${c}, ${r});
+    console.log("[WebGL] Lifted ${name} to z:40. Activated Aether Ring shader.");
+}`;
+        }
+      }
+
+      if (actionType === 'move') {
+        const fromCoord = data.fromCoord || 'e2';
+        const toCoord = data.toCoord || 'e4';
+        const name = data.pieceName || 'Piece';
+        const faction = data.faction || 'volcanic';
+
+        if (lang === 'cpp') {
+          return `// [Unreal Engine 5.4 - Traversal Spline & Tile Mutation Subsystem]
+FVector TargetWorldPos = UGridSubsystem::CoordToWorld(FIntPoint(${data.toC || 4}, ${data.toR || 4}));
+Unit->ExecuteSmoothStepTraversal(TargetWorldPos, 0.24f);
+UTerrainSubsystem::Get()->MutateSubstrateTile(FIntPoint(${data.toC || 4}, ${data.toR || 4}), ETerrain::${faction.toUpperCase()});
+UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_TileTerraform, TargetWorldPos);
+UAkGameplayStatics::PostEventByName("Play_SFX_StoneSlide", Unit);`;
+        } else if (lang === 'csharp') {
+          return `// [Unity 2023.2 - NavMesh / DOTween Grid Lerp & Substrate Material Swap]
+transform.DOJump(targetWorldPos, jumpPower: 1.4f, numJumps: 1, duration: 0.22f)
+    .OnComplete(() => {
+        TerrainGridManager.Instance.ApplySubstrateMutation(targetCoord, FactionType.${faction});
+        VFXManager.Spawn(VFXType.TileTerraform, targetWorldPos);
+        AudioManager.Play(audioClips.terrainClaim);
+    });`;
+        } else if (lang === 'gdscript') {
+          return `# [Godot 4.3 - Tween Animation & Terrain TileMap3D Mutation]
+var tween: Tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+tween.tween_property(piece, "global_position", target_world_pos, 0.22)
+terrain_tilemap.set_cell_terrain_data(target_coord, TERRAIN_LAYER_${faction.toUpperCase()})
+$SFXTerrain.play()`;
+        } else if (lang === 'python') {
+          return `# [MCTS Balance Engine - State Mutation & Transition Log]
+new_state = board.apply_transition(Move(from_sq="${fromCoord}", to_sq="${toCoord}"))
+zonal_ownership["${toCoord}"] = "${faction}"
+mcts_simulator.record_move(new_state)
+print(f"[State Transition] '${name}' moved ${fromCoord}->${toCoord}. Substrate claimed by ${faction}.")`;
+        } else if (lang === 'rust') {
+          return `// [Bevy Engine 0.14 - Move Event Writer & Tile Substrate Mutator]
+move_writer.send(UnitMoveEvent { from: "${fromCoord}", to: "${toCoord}" });
+tile_query.get_mut(target_tile_entity)?.substrate = Substrate::${faction};
+info!("[Bevy ECS] Unit moved to [${toCoord}]. Tile substrate updated to ${faction}.");`;
+        } else {
+          return `// [WebGL / Three.js - Matrix Transform & Terrain Splat Map]
+gsap.to(pieceMesh.position, { x: targetX, y: targetY, z: 8, duration: 0.24, ease: "power2.out" });
+tileTerrainTextures["${toCoord}"] = "${faction}";
+updateTerrainSplatMapUniform();
+playSoundBuffer('move');`;
+        }
+      }
+
+      if (actionType === 'capture') {
+        const attacker = data.attackerName || 'Attacker';
+        const defender = data.defenderName || 'Defender';
+        const coord = data.toCoord || 'e4';
+        const faction = data.faction || 'volcanic';
+
+        if (lang === 'cpp') {
+          return `// [Unreal Engine 5.4 - Cinematic Manifestation Combat Execution]
+UCombatSubsystem::Get()->TriggerManifestationCameraCut(AttackerActor, DefenderActor);
+UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NS_ManifestationClash, ClashLocation);
+UAkGameplayStatics::PostEventByName("Play_Manifestation_Impact", AttackerActor);
+UTerrainSubsystem::Get()->ClaimPermanentSubstrate(FIntPoint(${data.toC || 4}, ${data.toR || 4}), ETerrain::${faction.toUpperCase()});
+UE_LOG(LogMythicCombat, Display, TEXT("Combat Manifestation at [${coord}]: %s captured %s."), *AttackerActor->GetLoreName(), *DefenderActor->GetLoreName());`;
+        } else if (lang === 'csharp') {
+          return `// [Unity 2023.2 - Timeline Sequence & VFX Graph Manifestation Burst]
+ManifestationCombatDirector.Instance.PlayCinematicEncounter(attacker, defender);
+VFXGraphManager.Trigger(VFXGraphType.ManifestationExecution, clashPoint);
+AudioSource.PlayClipAtPoint(audioClips.manifestationClash, clashPoint);
+TerrainGridManager.Instance.ApplySubstrateMutation(targetCoord, FactionType.${faction});`;
+        } else if (lang === 'gdscript') {
+          return `# [Godot 4.3 - Cinematic Camera Rig & GPUParticles3D Burst]
+camera_rig.transition_to_cinematic_duel(attacker_node, defender_node)
+$ManifestationParticles.restart()
+$SFXClash.play()
+emit_signal("manifestation_resolved", "${attacker}", "${defender}")`;
+        } else if (lang === 'python') {
+          return `# [MCTS Engine - Tactical Elimination & Advantage Re-weighting]
+material_delta = piece_values["${data.movingPiece || 'Q'}"] - piece_values["${data.targetPiece || 'p'}"]
+mcts_simulator.update_material_advantage(delta=material_delta)
+print(f"[Manifestation] ${attacker} executed ${defender} at [${coord}]. Material Delta: {material_delta:+d}")`;
+        } else if (lang === 'rust') {
+          return `// [Bevy Engine 0.14 - Despawn Entity & Spawn Niagara VFX]
+commands.entity(target_entity).despawn_recursive();
+combat_events.send(ManifestationClashEvent { coord: "${coord}", faction: "${faction}" });
+info!("[Bevy] Manifestation clash executed at [${coord}]. Target despawned.");`;
+        } else {
+          return `// [WebGL / Three.js - Screen Shake & Shader Bloom Burst]
+triggerManifestationOverlay('${data.movingPiece || 'Q'}', '${data.targetPiece || 'p'}', '${coord}', '${faction}');
+playSoundBuffer('clash');`;
+        }
+      }
+
+      if (actionType === 'ai_think') {
+        const moves = data.moveCount || 12;
+        const target = data.targetCoord || 'e5';
+        const score = data.score || '+2.4';
+
+        if (lang === 'cpp') {
+          return `// [Unreal Engine 5.4 - AI Behavior Tree & Minimax Evaluator]
+FNavPathQuery Query = UTacticalAIEngine::EvaluateOpponentOptions(EFaction::VerdantCourt);
+TArray<FTacticalMove> LegalMoves = Query.GetCandidateMoves(); // Evaluated: ${moves} branches
+FTacticalMove BestMove = UTacticalAIEngine::AlphaBetaPrune(LegalMoves, Depth=4);
+UE_LOG(LogMythicAI, Display, TEXT("Verdant AI chosen destination: [${target}] with heuristic score: ${score}"));`;
+        } else if (lang === 'csharp') {
+          return `// [Unity 2023.2 - C# Burst-Compiled AI Minimax Job]
+[BurstCompile]
+struct EvaluateAIMovesJob : IJobParallelFor {
+    public void Execute(int index) {
+        // Parallel tree evaluation across ${moves} legal moves
+        // Selected move target: [${target}] | Evaluated Score: ${score}
+    }
+}`;
+        } else if (lang === 'gdscript') {
+          return `# [Godot 4.3 - AI Agent Decision Tree]
+func evaluate_opponent_turn() -> void:
+    var candidates = get_all_valid_moves(FACTION_VERDANT) # Evaluated ${moves} paths
+    var chosen = select_highest_heuristic(candidates)
+    print_rich("[color=green][Godot AI][/color] Verdant Court dispatched counter-attack to [${target}] (Score: ${score})")`;
+        } else if (lang === 'python') {
+          return `# [Python MCTS Simulation - Minimax Alpha-Beta Evaluation]
+best_action = mcts_simulator.search_best_counter_action(board_matrix, depth=5, candidates=${moves})
+print(f"[AI Simulation] Evaluated ${moves} opponent branches. Selected [${target}] with payoff: ${score}")`;
+        } else if (lang === 'rust') {
+          return `// [Bevy Engine 0.14 - Parallel Rayon AI Evaluator]
+let best_move = candidate_moves.par_iter().max_by_key(|m| evaluate_heuristic(m, &board_res));
+info!("[Bevy AI] Counter-move dispatched to [${target}]. Evaluated score: ${score}");`;
+        } else {
+          return `// [WebGL Client AI - Heuristic Score Evaluation]
+console.log("[Client AI] Verdant Court evaluated ${moves} tactical options. Counter-move target: [${target}]");`;
+        }
+      }
+
+      if (actionType === 'ultimate') {
+        const queen = data.queenName || 'The Ash Matriarch';
+
+        if (lang === 'cpp') {
+          return `// [Unreal Engine 5.4 - Chaos Destruction & Cataclysmic Board Fracture]
+UChaosDestructionSubsystem::Get()->FractureBoardGeometry(FVector::ZeroVector, 64000.0f);
+UCinematicSequencePlayer::PlaySequenceByName("SEQ_Queen_Ultimate_Cataclysm");
+APostProcessVolume::SetGlobalBloomIntensity(3.8f);
+UE_LOG(LogMythicCombat, Error, TEXT("CHECKMATE! %s triggers Queen Signature Ultimate."), *FString("${queen}"));`;
+        } else if (lang === 'csharp') {
+          return `// [Unity 2023.2 - Cinemachine Impulse & VFX Graph Board Decouple]
+CinemachineImpulseSource.GenerateImpulseWithForce(14.5f);
+BoardDestructionController.Instance.ShatterBoardTilesIntoAir();
+VFXGraphManager.Trigger(VFXGraphType.QueenSignatureUltimate, Vector3.zero);`;
+        } else if (lang === 'gdscript') {
+          return `# [Godot 4.3 - WorldEnvironment Bloom & GPUParticles3D Apocalyptic Eruption]
+$WorldEnvironment.environment.glow_intensity = 3.2
+$QueenUltimateExplosion.emitting = true
+camera_3d.apply_shake(18.0, 1.4)
+print_rich("[color=red][Godot][/color] QUEEN SIGNATURE ULTIMATE DISPATCHED! All 64 planar coordinates shattered.")`;
+        } else if (lang === 'python') {
+          return `# [MCTS Engine - Terminal State Verification: VICTORY CHECKMATE]
+terminal_score = +1.0  # Decisive victory for Player 1
+mcts_simulator.propagate_terminal_outcome(terminal_score)
+print(f"[Checkmate] Enemy King eradicated by ${queen}. Terminal payoff: {terminal_score}. Victory verified.")`;
+        } else if (lang === 'rust') {
+          return `// [Bevy Engine 0.14 - Board Shatter System & Game State Transition]
+next_state.set(GameState::VictoryCheckmate);
+board_tile_query.for_each_mut(|(mut transform, _)| {
+    transform.translation.z += fastrand::f32() * 65.0;
+});
+info!("[Bevy] Checkmate victory achieved! Apocalyptic shader overdrive active.");`;
+        } else {
+          return `// [WebGL / Three.js - 3D Tile Decoupling Animation & Shader Overdrive]
+triggerVictoryCheckmate();
+playSoundBuffer('ultimate');`;
+        }
+      }
+
+      return '// Engine Ready';
+    }
+
+    function dispatchEngineAction(actionType, details = {}) {
+      lastEngineAction = { type: actionType, data: details };
+      updateEngineTerminalDisplay();
+    }
+
+    function updateEngineTerminalDisplay() {
+      const term = document.getElementById('engineLiveCodeTerminal');
+      const tag = document.getElementById('engineActiveTag');
+      const fileLabel = document.getElementById('engineTerminalFilename');
+      if (!term) return;
+
+      const cfg = engineLangConfig[currentEngineLanguage] || engineLangConfig.cpp;
+      if (tag) tag.textContent = cfg.tag;
+      if (fileLabel) fileLabel.textContent = cfg.filename;
+      term.style.color = cfg.color;
+
+      const code = renderEngineSnippet(lastEngineAction.type, lastEngineAction.data, currentEngineLanguage);
+      term.textContent = code;
+    }
+
+    // Initialize Engine Runtime Language Tabs
+    function initEngineRuntimeHUD() {
+      document.querySelectorAll('.engine-lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.engine-lang-btn').forEach(b => {
+            b.classList.remove('active', 'btn-mythic-gold');
+            b.classList.add('btn-outline-secondary', 'text-light');
+          });
+          btn.classList.add('active', 'btn-mythic-gold');
+          btn.classList.remove('btn-outline-secondary', 'text-light');
+          currentEngineLanguage = btn.getAttribute('data-lang');
+          updateEngineTerminalDisplay();
+          playSound('move');
+        });
+      });
+
+      const btnCopy = document.getElementById('btnCopyEngineCode');
+      if (btnCopy) {
+        btnCopy.addEventListener('click', () => {
+          const code = document.getElementById('engineLiveCodeTerminal').textContent;
+          navigator.clipboard.writeText(code).then(() => {
+            btnCopy.innerHTML = '<i class="bi bi-check2 me-1"></i>Copied!';
+            setTimeout(() => {
+              btnCopy.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy';
+            }, 1800);
+          });
+        });
+      }
+
+      const btnClear = document.getElementById('btnClearEngineCode');
+      if (btnClear) {
+        btnClear.addEventListener('click', () => {
+          dispatchEngineAction('init', { turn: moveTurn });
+        });
+      }
+
+      updateEngineTerminalDisplay();
+    }
+
     function renderBoard() {
       const boardEl = document.getElementById('tacticalBoard');
       boardEl.innerHTML = '';
       let mutatorCount = 0;
+      const playerFaction = document.getElementById('simKingdomSelect') ? document.getElementById('simKingdomSelect').value : 'volcanic';
 
       // Check king status for visual check alerts
       const whiteKingPos = findKing('white', currentBoardState);
@@ -2753,27 +3720,50 @@
           coordLabel.textContent = `${String.fromCharCode(97 + c)}${8 - r}`;
           cell.appendChild(coordLabel);
 
-          // Layered 3D Sculpted Piece Token Architecture
+          // REALISTIC 3D TABLETOP MINIATURE SCULPTURE (GDD FIGURES C.1 & C.2)
           const piece = currentBoardState[r][c];
           if (piece) {
             const isW = isWhite(piece);
-            const container = document.createElement('div');
-            container.className = `piece-container-3d ${isW ? 'piece-gold' : 'piece-black'}`;
-            
-            const shadow = document.createElement('div');
-            shadow.className = 'piece-shadow-3d';
-            
-            const pedestal = document.createElement('div');
-            pedestal.className = 'piece-pedestal-3d';
-            
-            const symbol = document.createElement('div');
-            symbol.className = 'piece-symbol-3d';
-            symbol.textContent = pieceIcons[piece] || piece;
+            const faction = isW ? playerFaction : 'verdant';
+            const lore = getPieceLore(piece, faction);
 
-            container.appendChild(shadow);
-            container.appendChild(pedestal);
-            container.appendChild(symbol);
-            cell.appendChild(container);
+            const slot = document.createElement('div');
+            slot.className = 'miniature-slot';
+
+            // 1. Soft Floor Contact Drop Shadow
+            const shadow = document.createElement('div');
+            shadow.className = 'miniature-shadow';
+            slot.appendChild(shadow);
+
+            // 2. Arcane Selection Aether Ring (Spins on levitation)
+            const aetherRing = document.createElement('div');
+            aetherRing.className = 'miniature-aether-ring';
+            slot.appendChild(aetherRing);
+
+            // 3. Upright Sculpted Figurine Body
+            const body = document.createElement('div');
+            body.className = 'miniature-body';
+
+            // 4. Vector Figurine Sculpture (Authentic GDD Character Silhouettes)
+            const sculp = document.createElement('div');
+            sculp.className = 'miniature-sculpture';
+            sculp.innerHTML = getPieceMiniatureSVG(piece, faction, isW);
+            body.appendChild(sculp);
+
+            // 5. Sculpted Stone / Obsidian Pedestal Base with Faction Crest Shield
+            const pedestal = document.createElement('div');
+            pedestal.className = `miniature-pedestal-base ${isW ? 'pedestal-faction-obsidian' : 'pedestal-faction-verdant'}`;
+            pedestal.innerHTML = `<span class="miniature-crest">${isW ? (factionCrests[faction] || '🔥') : '🌿'}</span>`;
+            body.appendChild(pedestal);
+
+            // 6. Interactive Lore & Stats Tooltip
+            const tip = document.createElement('div');
+            tip.className = 'miniature-tooltip';
+            tip.innerHTML = `<div>${lore.name}</div><div style="color:#fde047; font-size:0.65rem; font-weight:normal;">${lore.role} • ${lore.stats}</div>`;
+            body.appendChild(tip);
+
+            slot.appendChild(body);
+            cell.appendChild(slot);
           }
 
           cell.addEventListener('click', () => handleCellClick(r, c));
@@ -2815,10 +3805,20 @@
           playSound('move');
 
           const coordStr = `${String.fromCharCode(97 + c)}${8 - r}`;
+          const lore = getPieceLore(piece, faction);
+          dispatchEngineAction('select', {
+            piece,
+            loreName: lore.name,
+            coordStr,
+            r, c,
+            legalCount: currentLegalMoves.length,
+            faction
+          });
+
           if (currentLegalMoves.length === 0) {
-            statusLog.textContent = `Selected ${pieceIcons[piece] || piece} at ${coordStr}, but it has no legal moves. Path is obstructed!`;
+            statusLog.textContent = `Selected ${lore.name} (${pieceIcons[piece] || piece}) at ${coordStr}, but it has no legal moves. Path is obstructed!`;
           } else {
-            statusLog.textContent = `Selected ${pieceIcons[piece] || piece} at ${coordStr}. ${currentLegalMoves.length} legal squares highlighted.`;
+            statusLog.textContent = `Selected ${lore.name} at ${coordStr}. ${currentLegalMoves.length} legal squares highlighted.`;
           }
           renderBoard();
         } else if (piece && !isFriendly(piece)) {
@@ -2845,7 +3845,17 @@
           selectedCell = { r, c, piece: targetPiece };
           currentLegalMoves = getLegalMoves(r, c, currentBoardState);
           playSound('move');
-          statusLog.textContent = `Switched selection to ${pieceIcons[targetPiece] || targetPiece} at ${String.fromCharCode(97 + c)}${8 - r}.`;
+          const switchLore = getPieceLore(targetPiece, faction);
+          const switchCoord = `${String.fromCharCode(97 + c)}${8 - r}`;
+          dispatchEngineAction('select', {
+            piece: targetPiece,
+            loreName: switchLore.name,
+            coordStr: switchCoord,
+            r, c,
+            legalCount: currentLegalMoves.length,
+            faction
+          });
+          statusLog.textContent = `Switched selection to ${switchLore.name} at ${switchCoord}.`;
           renderBoard();
           return;
         }
@@ -2853,44 +3863,68 @@
         // Validate move according to GDD standard chess rules
         const validMove = currentLegalMoves.find(m => m.r === r && m.c === c);
         if (!validMove) {
-          statusLog.textContent = `Illegal move for ${pieceIcons[movingPiece] || movingPiece}! Enforcing classical chess movement rules strictly.`;
+          const movingLore = getPieceLore(movingPiece, faction);
+          statusLog.textContent = `Illegal move for ${movingLore.name}! Enforcing classical chess movement rules strictly.`;
           return;
         }
 
         const coordStr = `${String.fromCharCode(97 + c)}${8 - r}`;
+        const fromCoordStr = `${String.fromCharCode(97 + oldC)}${8 - oldR}`;
         const isCapture = validMove.isCapture;
         const capturedKing = targetPiece && targetPiece.toLowerCase() === 'k';
+        const movingLore = getPieceLore(movingPiece, faction);
 
         // Execute 3D Move
         currentBoardState[oldR][oldC] = '';
         currentBoardState[r][c] = movingPiece;
         cellTerrains[r][c] = faction; // GDD: Tiles permanently absorb kingdom essence
 
-        // Add to Tactical Turn Log
+        // Add to Tactical Turn Log & Dispatch Engine Code
         const moveList = document.getElementById('moveLogList');
         const logEntry = document.createElement('div');
         const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
 
         if (isCapture) {
+          const defenderLore = getPieceLore(targetPiece, 'verdant');
           if (isWhite(movingPiece)) {
-            capturedBlackPieces.push(pieceIcons[targetPiece] || targetPiece);
+            capturedBlackPieces.push(`${defenderLore.name} (${pieceIcons[targetPiece] || targetPiece})`);
           }
-          logEntry.innerHTML = `<span class="text-danger font-mono">#${moveTurn}. ${movingPiece}x${coordStr}</span> <span class="badge bg-danger font-mono" style="font-size:0.65rem;">MANIFESTATION</span> <span class="text-muted">(${prof.passiveName})</span>`;
+          logEntry.innerHTML = `<span class="text-danger font-mono">#${moveTurn}. ${movingLore.name}x${coordStr}</span> <span class="badge bg-danger font-mono" style="font-size:0.65rem;">MANIFESTATION</span> <span class="text-muted">(${defenderLore.name} eradicated)</span>`;
+          dispatchEngineAction('capture', {
+            movingPiece,
+            attackerName: movingLore.name,
+            targetPiece,
+            defenderName: defenderLore.name,
+            fromCoord: fromCoordStr,
+            toCoord: coordStr,
+            fromR: oldR, fromC: oldC,
+            toR: r, toC: c,
+            faction
+          });
           triggerManifestationCombat(movingPiece, targetPiece, coordStr, faction);
         } else {
           playSound('move');
           setTimeout(() => playSound('terrain'), 90);
-          logEntry.innerHTML = `<span class="text-info font-mono">#${moveTurn}. ${movingPiece}${coordStr}</span> <span class="text-muted">(${prof.passiveName} claimed)</span>`;
+          logEntry.innerHTML = `<span class="text-info font-mono">#${moveTurn}. ${movingLore.name} &rarr; ${coordStr}</span> <span class="text-muted">(${prof.passiveName} claimed)</span>`;
+          dispatchEngineAction('move', {
+            movingPiece,
+            pieceName: movingLore.name,
+            fromCoord: fromCoordStr,
+            toCoord: coordStr,
+            fromR: oldR, fromC: oldC,
+            toR: r, toC: c,
+            faction
+          });
         }
 
         // Check Pawn Promotion to Queen (GDD Section IV)
         if (movingPiece === 'P' && r === 0) {
           currentBoardState[r][c] = 'Q';
-          logEntry.innerHTML += ` <span class="badge bg-warning text-dark font-mono" style="font-size:0.65rem;">ASCENSION (GOLD QUEEN)</span>`;
+          logEntry.innerHTML += ` <span class="badge bg-warning text-dark font-mono" style="font-size:0.65rem;">ASCENSION (${prof.attackerName})</span>`;
           playSound('ultimate');
         } else if (movingPiece === 'p' && r === 7) {
           currentBoardState[r][c] = 'q';
-          logEntry.innerHTML += ` <span class="badge bg-secondary font-mono" style="font-size:0.65rem;">ASCENSION (DARK QUEEN)</span>`;
+          logEntry.innerHTML += ` <span class="badge bg-secondary font-mono" style="font-size:0.65rem;">ASCENSION (THE FOREST MATRIARCH)</span>`;
           playSound('ultimate');
         }
 
@@ -2898,7 +3932,7 @@
         moveList.scrollTop = moveList.scrollHeight;
 
         moveTurn++;
-        statusLog.textContent = `Advanced to ${coordStr}. 3D tile mutated into ${prof.name.toUpperCase()} territory!`;
+        statusLog.textContent = `${movingLore.name} advanced to ${coordStr}. 3D tile mutated into ${prof.name.toUpperCase()} territory!`;
 
         selectedCell = null;
         currentLegalMoves = [];
@@ -2995,7 +4029,16 @@
 
       const chosen = allBlackMoves[0];
       const coordStr = `${String.fromCharCode(97 + chosen.toC)}${8 - chosen.toR}`;
+      const fromCoordStr = `${String.fromCharCode(97 + chosen.fromC)}${8 - chosen.fromR}`;
       const targetPiece = currentBoardState[chosen.toR][chosen.toC];
+      const aiLore = getPieceLore(chosen.piece, 'verdant');
+
+      dispatchEngineAction('ai_think', {
+        moveCount: allBlackMoves.length,
+        chosenPiece: chosen.piece,
+        targetCoord: coordStr,
+        score: `+${chosen.score.toFixed(1)}`
+      });
 
       currentBoardState[chosen.fromR][chosen.fromC] = '';
       currentBoardState[chosen.toR][chosen.toC] = chosen.piece;
@@ -3011,17 +4054,39 @@
 
       if (chosen.isCapture) {
         playSound('clash');
-        logEntry.innerHTML = `<span class="text-warning font-mono">#${moveTurn}. Opponent ${chosen.piece}x${coordStr}</span> <span class="badge bg-secondary font-mono" style="font-size:0.65rem;">VERDANT CLASH</span>`;
+        const playerFaction = document.getElementById('simKingdomSelect').value;
+        const targetLore = getPieceLore(targetPiece, playerFaction);
+        logEntry.innerHTML = `<span class="text-warning font-mono">#${moveTurn}. Opponent ${aiLore.name}x${coordStr}</span> <span class="badge bg-secondary font-mono" style="font-size:0.65rem;">VERDANT CLASH</span> <span class="text-muted">(${targetLore.name})</span>`;
+        dispatchEngineAction('capture', {
+          movingPiece: chosen.piece,
+          attackerName: aiLore.name,
+          targetPiece,
+          defenderName: targetLore.name,
+          fromCoord: fromCoordStr,
+          toCoord: coordStr,
+          fromR: chosen.fromR, fromC: chosen.fromC,
+          toR: chosen.toR, toC: chosen.toC,
+          faction: 'verdant'
+        });
       } else {
         playSound('move');
-        logEntry.innerHTML = `<span class="text-secondary font-mono">#${moveTurn}. Opponent ${chosen.piece}${coordStr}</span> <span class="text-muted small">(Verdant Court Root)</span>`;
+        logEntry.innerHTML = `<span class="text-secondary font-mono">#${moveTurn}. Opponent ${aiLore.name} &rarr; ${coordStr}</span> <span class="text-muted small">(Verdant Briar Root)</span>`;
+        dispatchEngineAction('move', {
+          movingPiece: chosen.piece,
+          pieceName: aiLore.name,
+          fromCoord: fromCoordStr,
+          toCoord: coordStr,
+          fromR: chosen.fromR, fromC: chosen.fromC,
+          toR: chosen.toR, toC: chosen.toC,
+          faction: 'verdant'
+        });
       }
       moveList.appendChild(logEntry);
       moveList.scrollTop = moveList.scrollHeight;
 
       moveTurn++;
       document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (Your Move - Player 1)`;
-      document.getElementById('simStatusLog').textContent = `Opponent moved ${pieceIcons[chosen.piece] || chosen.piece} to ${coordStr}. Select a unit for your turn!`;
+      document.getElementById('simStatusLog').textContent = `Opponent moved ${aiLore.name} to ${coordStr}. Select a unit for your turn!`;
 
       // Check if Player King was captured
       if (targetPiece && targetPiece.toUpperCase() === 'K') {
@@ -3042,12 +4107,24 @@
       const prof = factionCombatProfiles[faction] || factionCombatProfiles.volcanic;
       const statusLog = document.getElementById('simStatusLog');
 
+      dispatchEngineAction('ultimate', {
+        faction,
+        queenName: prof.attackerName
+      });
+
       statusLog.innerHTML = `<strong class="text-warning fs-5">👑 CHECKMATE! ENEMY KING EXECUTED!</strong><br>${prof.attackerName.toUpperCase()} UNLEASHES QUEEN SIGNATURE ULTIMATE!`;
       playSound('ultimate');
 
       const board = document.getElementById('tacticalBoard');
-      board.classList.remove('view-topdown');
-      board.classList.add('view-cinematic');
+      const wrapper = document.getElementById('boardWrapper');
+      if (board) {
+        board.classList.remove('view-topdown');
+        board.classList.add('view-cinematic');
+      }
+      if (wrapper) {
+        wrapper.classList.remove('view-topdown');
+        wrapper.classList.add('view-cinematic');
+      }
 
       // 3D Shatter & Cataclysmic Tile Decoupling
       const cells = document.querySelectorAll('.board-cell-3d');
@@ -3072,7 +4149,8 @@
         for (let r = 0; r < 8; r++) {
           for (let c = 0; c < 8; c++) {
             if (currentBoardState[r][c] && isBlack(currentBoardState[r][c])) {
-              capturedBlackPieces.push(pieceIcons[currentBoardState[r][c]]);
+              const defLore = getPieceLore(currentBoardState[r][c], 'verdant');
+              capturedBlackPieces.push(`${defLore.name} (${pieceIcons[currentBoardState[r][c]] || currentBoardState[r][c]})`);
               currentBoardState[r][c] = '';
             }
           }
@@ -3095,8 +4173,15 @@
 
         const view = btn.getAttribute('data-view');
         const board = document.getElementById('tacticalBoard');
-        board.classList.remove('view-isometric', 'view-cinematic', 'view-topdown', 'view-4d-phase');
-        board.classList.add(`view-${view}`);
+        const wrapper = document.getElementById('boardWrapper');
+        if (board) {
+          board.classList.remove('view-isometric', 'view-cinematic', 'view-topdown', 'view-4d-phase');
+          board.classList.add(`view-${view}`);
+        }
+        if (wrapper) {
+          wrapper.classList.remove('view-isometric', 'view-cinematic', 'view-topdown', 'view-4d-phase');
+          wrapper.classList.add(`view-${view}`);
+        }
         playSound('terrain');
       });
     });
@@ -3104,19 +4189,24 @@
     // 4D Spacetime Phase Shift Toggle
     document.getElementById('btnCamPhase').addEventListener('click', () => {
       const board = document.getElementById('tacticalBoard');
-      const isPhase = board.classList.contains('view-4d-phase');
-      board.classList.remove('view-isometric', 'view-cinematic', 'view-topdown', 'view-4d-phase');
-      
+      const wrapper = document.getElementById('boardWrapper');
+      const isPhase = (wrapper || board).classList.contains('view-4d-phase');
+      [board, wrapper].forEach(el => {
+        if (el) el.classList.remove('view-isometric', 'view-cinematic', 'view-topdown', 'view-4d-phase');
+      });
+
       const btn = document.getElementById('btnCamPhase');
       if (!isPhase) {
-        board.classList.add('view-4d-phase');
+        if (board) board.classList.add('view-4d-phase');
+        if (wrapper) wrapper.classList.add('view-4d-phase');
         btn.classList.remove('btn-outline-info');
         btn.classList.add('btn-info', 'text-dark', 'fw-bold');
         btn.innerHTML = '<i class="bi bi-hourglass-bottom me-1"></i>4D Phase: ACTIVE';
         playSound('ultimate');
         document.getElementById('simStatusLog').textContent = '4D Spacetime Dimensional Phase activated! Quantum aether distortions applied to tactical grid.';
       } else {
-        board.classList.add('view-isometric');
+        if (board) board.classList.add('view-isometric');
+        if (wrapper) wrapper.classList.add('view-isometric');
         btn.classList.remove('btn-info', 'text-dark', 'fw-bold');
         btn.classList.add('btn-outline-info');
         btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>4D Spacetime Phase';
@@ -3178,6 +4268,7 @@
       document.getElementById('moveLogList').innerHTML = '<div class="text-muted">• Match reset. Standard 8x8 planar grid initialized.</div>';
       document.getElementById('simStatusLog').textContent = 'Board reset to neutral coordinates. Ready for deployment.';
       playSound('move');
+      dispatchEngineAction('init', { turn: 1 });
       renderBoard();
       saveTimelineSnapshot('Initial Setup');
     });
@@ -3189,6 +4280,7 @@
       document.getElementById('simPassiveName').textContent = `Active Passive: ${prof.passiveName}`;
       document.getElementById('simPassiveDesc').textContent = prof.passiveDesc;
       playSound('terrain');
+      renderBoard();
     });
 
     // Manual Queen Signature Ultimate Trigger
@@ -3201,8 +4293,10 @@
       renderKingdoms('all');
       renderKingdoms3DCylinder('all');
       startCylinderAnimation();
+      initEngineRuntimeHUD();
       renderBoard();
       saveTimelineSnapshot('Game Initialized');
+      dispatchEngineAction('init', { turn: 1 });
     });
   </script>
 </body>
