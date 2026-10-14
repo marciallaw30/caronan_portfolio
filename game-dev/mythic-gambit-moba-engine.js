@@ -1,13 +1,19 @@
 /**
  * =====================================================================================
- * MYTHIC GAMBIT: REAL-TIME TACTICAL MOBA ACTION SIMULATOR ENGINE
+ * PROJECT TITLE: MYTHIC GAMBIT — CINEMATIC TACTICAL SIMULATOR & ARCADE LAND BATTLE ENGINE
  * =====================================================================================
- * Inspired by Mobile Legends: Bang Bang (MLBB) mechanics adapted for the official GDD.
- * Replaces turn-based 8x8 chess snapping with real-time vector locomotion, smart lock-ons,
- * kinetic basic attacks, active terrain hazard zones, and charging Queen Ultimates.
+ * Target Architecture: Unreal Engine 5.4 / Unity HDRP (High-Definition Render Pipeline)
+ * Visual Style: 3D Stylized Fantasy, AAA hybrid aesthetics inspired by high-octane tactical combat
+ *               (vibrant stylized textures, dramatic rim lighting, dynamic particle systems,
+ *               cinematic camera blending, and crisp character silhouettes).
+ *
+ * Core Objective:
+ * Fully functional 3D tactical chess simulation engine on floating 8x8 planar board & arcade
+ * land battlefield where classical chess logic merges with real-time combat, procedural elemental
+ * terrain transformations, unit manifestation executions, 15 kingdom passives, and apocalyptic Queen Ultimates.
  *
  * Architecture: Entity-Component Framework + Hierarchical Finite State Machine (HFSM)
- * Authors: Lead Gameplay Engineer & AI Game Architect (for Marcial Lawrence Caronan Portfolio)
+ * Authors: Marcial Lawrence Jr V. Caronan (Lead Author / Systems Architect) & Game Dev Cohort
  * =====================================================================================
  */
 
@@ -1094,3 +1100,7 @@ export class MythicGambitArenaEngine {
   }
 }
 
+// Arcade Mode Kingdom Land Battle & Cinematic Tactical Simulator Aliases
+export const ArcadeKingdomUnit = MobaHeroUnit;
+export const KingdomBattleUnit = MobaHeroUnit;
+export const CinematicTacticalEngine = RealtimeMobaEngine;

@@ -1,0 +1,3035 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mythic Gambit &mdash; Real Character 3D Board Simulator & Arcade Land Battle Engine</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5.3 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --bg-darkest: #04060d;
+      --bg-card: rgba(10, 14, 28, 0.94);
+      --border-obsidian: rgba(245, 158, 11, 0.45);
+      --border-verdant: rgba(34, 197, 94, 0.45);
+      --gold-neon: #f59e0b;
+      --cyan-neon: #00d2ff;
+      --purple-neon: #c084fc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-darkest);
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 10%, rgba(139, 92, 246, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 10% 90%, rgba(245, 158, 11, 0.14) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(34, 197, 94, 0.14) 0%, transparent 50%);
+    }
+
+    .font-title { font-family: 'Cinzel', serif; letter-spacing: 0.05em; }
+    .font-mono { font-family: 'Fira Code', monospace; }
+
+    /* Top Navigation Header */
+    .sim-navbar {
+      background: rgba(6, 9, 20, 0.96);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 10px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    /* Tactical Cards & HUD */
+    .sim-panel {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    /* 3D Chessboard Stage */
+    .board-stage {
+      perspective: 1200px;
+      perspective-origin: 50% 75%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 10px;
+      position: relative;
+    }
+
+    .planar-board-wrapper {
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+    }
+
+    .view-perspective {
+      transform: rotateX(38deg) rotateZ(0deg) scale(0.96);
+    }
+    .view-topdown {
+      transform: rotateX(0deg) rotateZ(0deg) scale(0.94);
+    }
+    .view-isometric {
+      transform: rotateX(48deg) rotateZ(-24deg) scale(0.92);
+    }
+
+    .chessboard-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 72px);
+      grid-template-rows: repeat(8, 72px);
+      border: 12px solid #1a1528;
+      border-radius: 8px;
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.95),
+        0 0 35px rgba(245, 158, 11, 0.3),
+        inset 0 0 25px rgba(0, 0, 0, 0.8);
+      position: relative;
+      background: #0d0818;
+      transition: filter 0.3s ease;
+    }
+
+    .cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      transform-style: preserve-3d;
+    }
+
+    .cell-light {
+      background: linear-gradient(135deg, #2a2046 0%, #1c1533 100%);
+      box-shadow: inset 0 0 10px rgba(192, 132, 252, 0.15);
+    }
+
+    .cell-dark {
+      background: linear-gradient(135deg, #110920 0%, #07030e 100%);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .cell-light:hover, .cell-dark:hover {
+      filter: brightness(1.3);
+      box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.5);
+    }
+
+    /* Terrain Mutators */
+    .cell-volcanic {
+      background: radial-gradient(circle, #7f1d1d 0%, #450a0a 70%, #1a0303 100%) !important;
+      box-shadow: inset 0 0 14px #ef4444, 0 0 10px rgba(239, 68, 68, 0.6) !important;
+      animation: magmaPulse 3s infinite alternate;
+    }
+
+    .cell-verdant {
+      background: radial-gradient(circle, #14532d 0%, #052e16 70%, #021a0b 100%) !important;
+      box-shadow: inset 0 0 14px #22c55e, 0 0 10px rgba(34, 197, 94, 0.6) !important;
+      animation: briarPulse 3s infinite alternate;
+    }
+
+    .cell-abyssal {
+      background: radial-gradient(circle, #0e7490 0%, #164e63 60%, #082f49 100%) !important;
+      box-shadow: inset 0 0 14px #06b6d4, 0 0 12px rgba(6, 182, 212, 0.6) !important;
+      animation: abyssalSurge 3s infinite alternate;
+    }
+
+    .cell-frost {
+      background: radial-gradient(circle, #1e3a8a 0%, #172554 60%, #030712 100%) !important;
+      box-shadow: inset 0 0 14px #60a5fa, 0 0 12px rgba(96, 165, 250, 0.6) !important;
+      animation: frostGlaze 3s infinite alternate;
+    }
+
+    .cell-void {
+      background: radial-gradient(circle, #581c87 0%, #3b0764 65%, #05010d 100%) !important;
+      box-shadow: inset 0 0 16px #a855f7, 0 0 12px rgba(168, 85, 247, 0.7) !important;
+      animation: voidVortex 2.5s infinite alternate;
+    }
+
+    @keyframes magmaPulse {
+      0% { box-shadow: inset 0 0 10px #ef4444; }
+      100% { box-shadow: inset 0 0 20px #f97316, 0 0 14px #ef4444; }
+    }
+
+    @keyframes briarPulse {
+      0% { box-shadow: inset 0 0 10px #22c55e; }
+      100% { box-shadow: inset 0 0 20px #4ade80, 0 0 14px #22c55e; }
+    }
+
+    @keyframes abyssalSurge {
+      0% { box-shadow: inset 0 0 10px #06b6d4; }
+      100% { box-shadow: inset 0 0 20px #38bdf8, 0 0 16px #06b6d4; }
+    }
+
+    @keyframes frostGlaze {
+      0% { box-shadow: inset 0 0 10px #60a5fa; }
+      100% { box-shadow: inset 0 0 22px #93c5fd, 0 0 16px #3b82f6; }
+    }
+
+    @keyframes voidVortex {
+      0% { box-shadow: inset 0 0 10px #a855f7; }
+      100% { box-shadow: inset 0 0 22px #c084fc, 0 0 18px #9333ea; }
+    }
+
+    /* Screen Shake & Chromatic Aberration */
+    .board-shake {
+      animation: boardShakeEffect 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    @keyframes boardShakeEffect {
+      10%, 90% { transform: translate3d(-5px, 2px, 0) rotateZ(-0.6deg); }
+      20%, 80% { transform: translate3d(5px, -4px, 0) rotateZ(0.6deg); }
+      30%, 50%, 70% { transform: translate3d(-7px, 5px, 0) rotateZ(-1.2deg); }
+      40%, 60% { transform: translate3d(7px, -5px, 0) rotateZ(1.2deg); }
+    }
+
+    .chromatic-flash {
+      filter: drop-shadow(-5px 0 0 rgba(239, 68, 68, 0.9)) drop-shadow(5px 0 0 rgba(56, 189, 248, 0.9)) brightness(1.3) !important;
+      transition: filter 0.3s ease;
+    }
+
+    /* Cell States */
+    .cell-selected {
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.45) 0%, rgba(180, 83, 9, 0.25) 100%) !important;
+      box-shadow: inset 0 0 18px var(--gold-neon), 0 0 20px rgba(245, 158, 11, 0.8) !important;
+    }
+
+    .cell-valid-move::after {
+      content: '\2694\FE0F';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.7);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 12px #22c55e;
+      z-index: 10;
+      pointer-events: none !important;
+      animation: validMovePulse 1.2s infinite ease-in-out;
+    }
+
+    @keyframes validMovePulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.25); opacity: 1; }
+    }
+
+    .cell-valid-capture::after {
+      content: '\2694\FE0F';
+      font-size: 1.4rem;
+      position: absolute;
+      z-index: 10;
+      pointer-events: none !important;
+      filter: drop-shadow(0 0 10px #ef4444);
+      animation: capturePulse 0.9s infinite alternate;
+    }
+
+    @keyframes capturePulse {
+      0% { transform: scale(1) rotate(-10deg); }
+      100% { transform: scale(1.25) rotate(10deg); }
+    }
+
+    .cell-in-check {
+      background: radial-gradient(circle, #dc2626 0%, #7f1d1d 80%) !important;
+      animation: checkAlert 0.8s infinite alternate;
+    }
+
+    @keyframes checkAlert {
+      0% { box-shadow: inset 0 0 10px #ffffff; }
+      100% { box-shadow: inset 0 0 25px #ff0000, 0 0 25px #ff0000; }
+    }
+
+    /* Miniature Real-Character Figurine */
+    .miniature-slot,
+    .miniature-body,
+    .miniature-img,
+    .pedestal-ring {
+      pointer-events: none !important;
+    }
+
+    .miniature-slot {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      transform-style: preserve-3d;
+    }
+
+    .miniature-body {
+      position: absolute;
+      bottom: 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateZ(24px) rotateX(-35deg);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.85));
+    }
+
+    .view-topdown .miniature-body {
+      transform: translateZ(10px) rotateX(0deg);
+    }
+    .view-isometric .miniature-body {
+      transform: translateZ(28px) rotateX(-45deg) rotateZ(20deg);
+    }
+
+    .cell:hover .miniature-body {
+      transform: translateZ(38px) rotateX(-35deg) scale(1.12);
+      filter: drop-shadow(0 14px 20px rgba(245, 158, 11, 0.5));
+    }
+
+    .miniature-img {
+      width: 58px;
+      height: 70px;
+      object-fit: contain;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px rgba(0,0,0,0.9));
+    }
+
+    .pedestal-ring {
+      width: 44px;
+      height: 12px;
+      border-radius: 50%;
+      margin-top: -8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.9);
+      border: 2px solid;
+    }
+
+    .pedestal-obsidian {
+      background: radial-gradient(circle, #f59e0b 0%, #b45309 60%, #451a03 100%);
+      border-color: #fbbf24;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.8);
+    }
+
+    .pedestal-verdant {
+      background: radial-gradient(circle, #22c55e 0%, #15803d 60%, #052e16 100%);
+      border-color: #86efac;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    /* Enhanced Manifestation Cut-in Banner */
+    #manifestationOverlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.7);
+      background: rgba(8, 5, 20, 0.96);
+      border: 2px solid var(--gold-neon);
+      border-radius: 18px;
+      padding: 24px 38px;
+      text-align: center;
+      z-index: 1000;
+      box-shadow: 0 0 60px rgba(245, 158, 11, 0.9), inset 0 0 30px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      min-width: 320px;
+    }
+
+    #manifestationOverlay.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Sound Visualizer */
+    #oscilloscopeCanvas {
+      width: 100%;
+      height: 60px;
+      background: rgba(3, 5, 12, 0.8);
+      border-radius: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      display: block;
+    }
+
+    /* Soundscape Faction Grid */
+    .soundscape-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 6px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .soundscape-btn {
+      background: rgba(18, 22, 38, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 0.72rem;
+      color: #e2e8f0;
+      text-align: left;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .soundscape-btn:hover {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #f59e0b;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .soundscape-btn.playing {
+      background: rgba(245, 158, 11, 0.35);
+      border-color: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+
+    .btn-mythic-gold {
+      background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+      color: #03060f !important;
+      font-weight: 700;
+      border: none;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+      transition: all 0.2s ease;
+    }
+    .btn-mythic-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(245, 158, 11, 0.65);
+    }
+
+    /* ================= ARCADE MODE STYLES ================= */
+    .arena-viewport-card {
+      background: radial-gradient(circle at 50% 20%, rgba(30, 20, 60, 0.95) 0%, rgba(8, 11, 24, 0.98) 70%, #03060f 100%);
+      border: 2px solid rgba(245, 158, 11, 0.45);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(245, 158, 11, 0.2);
+    }
+
+    .ult-ready-pulse {
+      animation: ultPulseGlow 1.2s infinite alternate !important;
+    }
+    @keyframes ultPulseGlow {
+      from { box-shadow: 0 0 15px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(254, 240, 138, 0.5); border-color: #fbbf24; }
+      to { box-shadow: 0 0 40px rgba(245, 158, 11, 1), 0 0 60px rgba(239, 68, 68, 0.8), inset 0 0 20px #fbbf24; border-color: #ffffff; }
+    }
+
+    #btnBasicAttack:active,
+    #btnSkillDash:active,
+    #btnSkillHazard:active,
+    #btnQueenUltimateArena:active {
+      transform: scale(0.92);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation with Dual-Mode Switcher -->
+  <header class="sim-navbar d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div class="d-flex align-items-center gap-3">
+      <div class="fs-4 text-warning"><i class="bi bi-shield-shaded"></i></div>
+      <div>
+        <h5 class="mb-0 font-title fw-bold text-white">MYTHIC GAMBIT</h5>
+        <div class="small font-mono text-warning">Real Character Board Game Simulator & Arcade Land Battle Engine</div>
+      </div>
+    </div>
+
+    <!-- Dual-Mode Switcher -->
+    <div class="btn-group p-1 rounded-pill" style="background: rgba(15, 23, 42, 0.95); border: 2px solid rgba(245, 158, 11, 0.5); box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);">
+      <button id="btnSwitchTacticalGrid" class="btn btn-sm btn-mythic-gold active rounded-pill px-4 py-1 font-mono fw-bold">
+        <i class="bi bi-grid-3x3 me-1"></i> 3D Tactical Chess
+      </button>
+      <button id="btnSwitchRealtimeArena" class="btn btn-sm btn-outline-secondary rounded-pill px-4 py-1 font-mono text-light fw-bold">
+        <i class="bi bi-controller me-1 text-warning"></i> Arcade Mode (Kingdom Land Battle)
+      </button>
+    </div>
+
+    <!-- Audio & AI Controls -->
+    <div class="d-flex align-items-center gap-2">
+      <button id="btnToggleAudio" class="btn btn-sm btn-outline-warning rounded-pill px-3 font-mono">
+        <i class="bi bi-volume-up-fill me-1" id="audioIcon"></i> Audio: <span id="audioStateText">ON</span>
+      </button>
+      <button id="btnToggleAI" class="btn btn-sm btn-outline-info rounded-pill px-3 font-mono">
+        <i class="bi bi-robot me-1"></i> Opponent AI: <span class="text-success" id="aiStatusText">ON</span>
+      </button>
+      <button id="btnResetGame" class="btn btn-sm btn-outline-secondary rounded-pill px-3 font-mono text-light">
+        <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Board
+      </button>
+      <a href="index.html" class="btn btn-sm btn-outline-secondary rounded-pill px-3 font-mono text-light" title="Return to GDD Document">
+        <i class="bi bi-book me-1"></i> GDD Hub
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= MODE 1: 3D TACTICAL CHESSBOARD GRID ================= -->
+  <main id="simModeTacticalGrid" class="container-fluid py-4">
+    <div class="row g-4">
+      
+      <!-- Left Panel: Faction Matchup & Character Dossier -->
+      <div class="col-lg-4 col-xl-3">
+        <div class="sim-panel mb-3">
+          <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary border-opacity-25 pb-2">
+            <span class="badge bg-warning text-dark font-mono fw-bold">ACTIVE MATCH</span>
+            <span class="small font-mono text-info fw-bold" id="turnIndicator">TURN: 1 (WHITE)</span>
+          </div>
+
+          <!-- Interactive Faction Selector -->
+          <div class="mb-3">
+            <label class="small font-mono text-warning fw-bold mb-1 d-block"><i class="bi bi-flag-fill me-1"></i> PLAYER 1 FACTION:</label>
+            <select id="simFactionSelect" class="form-select form-select-sm bg-dark text-white border-warning font-mono mb-2">
+              <option value="volcanic">&#128293; The Obsidian Roost (Magma / Heat Haze)</option>
+              <option value="verdant">&#127794; Verdant Court (Nature / Root-Bound)</option>
+              <option value="abyssal">&#127754; Abyssal Tides (Ocean / Tidal Floods)</option>
+              <option value="frost">&#10052; Frostbound Reach (Ice / Glacial Rime)</option>
+              <option value="void">&#127756; The Abyssal Veil (Shadow / Void Rifts)</option>
+              <option value="gearwork">&#9881; The Gearwork Citadel (Steam / Clockwork)</option>
+              <option value="grave">&#128128; The Grave-Bound Dynasty (Necromancy / Souls)</option>
+            </select>
+
+            <!-- Active Faction Passive Badge -->
+            <div class="p-2 rounded bg-black bg-opacity-60 border border-warning border-opacity-50 mb-2">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-white small" id="simFactionName">The Obsidian Roost</strong>
+                <span class="badge bg-warning text-dark font-mono" style="font-size: 0.65rem;" id="simPassiveName">Heat Haze</span>
+              </div>
+              <div class="text-warning small" style="font-size: 0.72rem; line-height: 1.4;" id="simPassiveDesc">
+                Volcanic terrain emits thermal distortions reducing enemy ranged attack accuracy by 25% on claimed tiles.
+              </div>
+            </div>
+
+            <div class="small font-mono text-muted mb-1">OPPONENT FACTION:</div>
+            <div class="p-2 rounded bg-black bg-opacity-60 border border-success border-opacity-50 d-flex align-items-center gap-2">
+              <span class="fs-5">&#127807;</span>
+              <div>
+                <strong class="text-white d-block small">The Verdant Court</strong>
+                <span class="text-success" style="font-size: 0.72rem;">Primeval Briars &bull; Root-Bound Passive</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Character Inspector -->
+          <div class="p-3 rounded mb-3" style="background: rgba(18, 12, 34, 0.95); border: 1px solid rgba(245, 158, 11, 0.4);" id="characterInspector">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <img id="inspImg" src="pieces/obsidian_queen.png" alt="Hero" style="width: 48px; height: 58px; object-fit: contain; border-radius: 6px; background: rgba(0,0,0,0.5); border: 1px solid #f59e0b;">
+              <div>
+                <span class="badge bg-warning text-dark font-mono" id="inspRole">QUEEN</span>
+                <h6 class="mb-0 text-white font-title" id="inspName">The Ash Matriarch</h6>
+                <span class="text-info font-mono" style="font-size: 0.72rem;" id="inspTitle">Obsidian Sovereign</span>
+              </div>
+            </div>
+            <div class="small text-muted" id="inspLore" style="font-size: 0.76rem; line-height: 1.5;">
+              Select any piece on the chessboard to inspect its real character model, abilities, and movement telemetry.
+            </div>
+          </div>
+
+          <!-- Queen Ultimate Trigger -->
+          <button id="btnQueenUltimate" class="btn btn-mythic-gold w-100 py-2 mb-3 font-mono">
+            <i class="bi bi-stars me-1"></i> Trigger Queen Ultimate: Lava Torrent
+          </button>
+
+          <!-- Captured Pieces Graveyard -->
+          <div class="p-2 px-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25 mb-3">
+            <div class="small font-mono text-warning fw-bold mb-1"><i class="bi bi-trophy-fill me-1"></i> Captured Pieces:</div>
+            <div id="capturedGraveyard" class="small text-muted font-mono" style="font-size: 0.75rem;">None captured yet.</div>
+          </div>
+
+          <!-- Move Log -->
+          <div class="p-2 px-3 rounded bg-black bg-opacity-50 border border-secondary border-opacity-25">
+            <div class="small font-mono text-info fw-bold mb-1"><i class="bi bi-journal-text me-1"></i> Combat Action Log:</div>
+            <div id="moveLogList" class="font-mono text-light" style="font-size: 0.72rem; max-height: 110px; overflow-y: auto;">
+              <div>[00:00] Match initiated. Board synchronized.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: 3D Chessboard Stage -->
+      <div class="col-lg-8 col-xl-6">
+        <div class="sim-panel text-center">
+          
+          <!-- Camera Perspective Controls -->
+          <div class="d-flex justify-content-center align-items-center gap-2 mb-3 flex-wrap">
+            <span class="small font-mono text-muted me-2"><i class="bi bi-camera-video me-1"></i> VIEW:</span>
+            <button class="btn btn-xs btn-sm btn-outline-warning active rounded-pill px-3 font-mono cam-btn" data-view="perspective">
+              3D Cinematic
+            </button>
+            <button class="btn btn-xs btn-sm btn-outline-secondary text-light rounded-pill px-3 font-mono cam-btn" data-view="topdown">
+              2D Tactical
+            </button>
+            <button class="btn btn-xs btn-sm btn-outline-secondary text-light rounded-pill px-3 font-mono cam-btn" data-view="isometric">
+              Isometric 45&deg;</button>
+          </div>
+
+          <!-- Board Stage with 3D wrapper -->
+          <div class="board-stage">
+            
+            <!-- Enhanced Manifestation Cut-in Showdown Popup -->
+            <div id="manifestationOverlay">
+              <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+                <div class="text-center">
+                  <img id="manifAttackerImg" src="pieces/obsidian_queen.png" alt="Attacker" style="width: 58px; height: 70px; object-fit: contain; filter: drop-shadow(0 0 10px #f59e0b);">
+                  <div id="manifAttackerName" class="badge bg-warning text-dark font-mono mt-1" style="font-size:0.68rem;">THE ASH MATRIARCH</div>
+                </div>
+                <div class="fs-2 text-warning fw-bold">&#9876; VS &#9876;</div>
+                <div class="text-center">
+                  <img id="manifVictimImg" src="pieces/verdant_pawn.png" alt="Victim" style="width: 58px; height: 70px; object-fit: contain; filter: drop-shadow(0 0 10px #ef4444); opacity: 0.85;">
+                  <div id="manifVictimName" class="badge bg-danger text-white font-mono mt-1" style="font-size:0.68rem;">SEEDLING SPROUT</div>
+                </div>
+              </div>
+              <h4 class="font-title text-white mb-1" id="manifTitle">MANIFESTATION COMBAT EXECUTION!</h4>
+              <p class="text-warning small font-mono mb-2" id="manifDesc">Victim vanquished. Board tile transmuted to kingdom substrate.</p>
+              <div class="badge bg-warning text-dark font-mono px-3 py-1" id="manifBadge">TERRAIN MUTATION APPLIED</div>
+            </div>
+
+            <!-- Rotating Board Container -->
+            <div id="boardWrapper" class="planar-board-wrapper view-perspective">
+              <div id="chessboard" class="chessboard-grid"></div>
+            </div>
+          </div>
+
+          <div class="mt-3 text-muted small font-mono">
+            <i class="bi bi-info-circle me-1"></i> Click any real-character figurine to view legal moves &bull; Capture an enemy to trigger <strong>Manifestation</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Audio Synthesis Engine & 15 Kingdom Soundscapes -->
+      <div class="col-lg-12 col-xl-3">
+        <div class="sim-panel">
+          <div class="d-flex align-items-center justify-content-between mb-2 border-bottom border-secondary border-opacity-25 pb-2">
+            <span class="badge bg-info text-dark font-mono fw-bold">AUDIO ENGINE</span>
+            <span class="small font-mono text-warning" id="activeAudioLabel">SYNTH: READY</span>
+          </div>
+
+          <!-- Real-Time Frequency Waveform Canvas -->
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="small font-mono text-muted" style="font-size: 0.72rem;">LIVE OSCILLOSCOPE:</span>
+              <span class="small font-mono text-info" id="audioFreqBadge">440 Hz</span>
+            </div>
+            <canvas id="oscilloscopeCanvas" width="280" height="60"></canvas>
+          </div>
+
+          <!-- Dynamic Music Tension Controls -->
+          <div class="mb-3 p-2 rounded bg-black bg-opacity-60 border border-secondary border-opacity-25">
+            <div class="small font-mono text-warning fw-bold mb-2"><i class="bi bi-music-note-beamed me-1"></i> Dynamic Orchestral Score:</div>
+            <div class="d-grid gap-1">
+              <button class="btn btn-sm btn-outline-info text-start font-mono py-1" id="btnMusicContemplative" style="font-size: 0.75rem;">
+                <i class="bi bi-play-circle me-1"></i> Stage 1: Contemplative (Chords)
+              </button>
+              <button class="btn btn-sm btn-outline-warning text-start font-mono py-1" id="btnMusicBattle" style="font-size: 0.75rem;">
+                <i class="bi bi-play-circle me-1"></i> Stage 2: Battle Cadence (Pulsing)
+              </button>
+              <button class="btn btn-sm btn-outline-danger text-start font-mono py-1" id="btnMusicClimax" style="font-size: 0.75rem;">
+                <i class="bi bi-play-circle me-1"></i> Stage 3: Apocalyptic Climax (Choir)
+              </button>
+              <button class="btn btn-sm btn-outline-secondary text-start font-mono py-1 text-light" id="btnMusicStop" style="font-size: 0.75rem;">
+                <i class="bi bi-stop-circle me-1"></i> Stop Background Score
+              </button>
+            </div>
+          </div>
+
+          <!-- Tactical SFX Quick Test -->
+          <div class="mb-3">
+            <div class="small font-mono text-info fw-bold mb-1"><i class="bi bi-soundwave me-1"></i> Tactical SFX Preview:</div>
+            <div class="d-flex gap-1 flex-wrap">
+              <button class="btn btn-xs btn-outline-secondary text-light font-mono" style="font-size: 0.7rem;" onclick="playSound('select')">Select</button>
+              <button class="btn btn-xs btn-outline-secondary text-light font-mono" style="font-size: 0.7rem;" onclick="playSound('move')">Move</button>
+              <button class="btn btn-xs btn-outline-secondary text-light font-mono" style="font-size: 0.7rem;" onclick="playSound('capture')">Clash</button>
+              <button class="btn btn-xs btn-outline-warning text-warning font-mono" style="font-size: 0.7rem;" onclick="playSound('manifestation')">Manifest</button>
+              <button class="btn btn-xs btn-outline-danger text-danger font-mono" style="font-size: 0.7rem;" onclick="playSound('check')">Check</button>
+              <button class="btn btn-xs btn-outline-info text-info font-mono" style="font-size: 0.7rem;" onclick="playSound('ultimate')">Ultimate</button>
+            </div>
+          </div>
+
+          <!-- 15 Kingdom Bespoke Soundscapes -->
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="small font-mono text-warning fw-bold"><i class="bi bi-disc-fill me-1"></i> 15 Kingdom Soundscapes:</span>
+              <span class="small text-muted font-mono" style="font-size: 0.68rem;">(GDD Section X)</span>
+            </div>
+            <div class="soundscape-grid" id="soundscapeContainer">
+              <!-- Dynamically populated 15 kingdoms -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= MODE 2: ARCADE MODE &mdash; KINGDOM ACTUAL BATTLE IN LAND ================= -->
+  <section id="simModeRealtimeArena" class="container-fluid py-4 d-none">
+    <div class="arena-viewport-card">
+      
+      <!-- Arena Top Control Bar -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <span class="badge bg-warning text-dark font-mono fw-bold px-3 py-2 fs-6">
+            <i class="bi bi-controller me-1"></i> ARCADE MODE: KINGDOM LAND BATTLE
+          </span>
+
+          <!-- Land Territory Environment Selector -->
+          <div class="d-flex align-items-center gap-2">
+            <span class="small font-mono text-warning fw-bold">TERRITORY LAND:</span>
+            <select id="arenaLandSelect" class="form-select form-select-sm bg-dark text-white border-warning font-mono" style="width: auto;">
+              <option value="obsidian">&#127755; Obsidian Roost (Volcanic Magma Land)</option>
+              <option value="verdant">&#127794; Verdant Court (Ancient Forest Land)</option>
+              <option value="frost">&#10052; Frostbound Reach (Permafrost Glacial Land)</option>
+              <option value="abyssal">&#127754; Abyssal Tides (Sunken Coastal Reefs)</option>
+            </select>
+          </div>
+          
+          <!-- Hero Selection with Transparent Figurine Pieces -->
+          <div class="d-flex align-items-center gap-2">
+            <span class="small font-mono text-white fw-bold">CHAMPION:</span>
+            <select id="arenaHeroSelect" class="form-select form-select-sm bg-dark text-white border-warning font-mono" style="width: auto;">
+              <option value="ash-matriarch">&#128081; The Ash Matriarch (Queen â€¢ Volcanic Burst Mage)</option>
+              <option value="flame-vanguard">&#9876; Flame-Winged Vanguard (Knight â€¢ Swift Assassin)</option>
+              <option value="eternal-drake">&#128009; The Eternal Drake (King â€¢ Dragon Sovereign)</option>
+              <option value="forest-matriarch">&#127807; The Forest Matriarch (Queen â€¢ Thorn Control Mage)</option>
+              <option value="stag-rider">&#129420; The Stag-Rider (Knight â€¢ Celestial Cavalier)</option>
+            </select>
+          </div>
+
+          <!-- Opponent Champion Selection -->
+          <div class="d-flex align-items-center gap-2">
+            <span class="small font-mono text-muted">RIVAL:</span>
+            <select id="arenaBossSelect" class="form-select form-select-sm bg-dark text-white border-secondary font-mono" style="width: auto;">
+              <option value="elder-dryad">&#127794; The Elder Dryad (Verdant Sovereign Boss)</option>
+              <option value="leviathan">&#127754; Leviathan Matriarch (Abyssal Empress Boss)</option>
+              <option value="frost-king">&#10052; Glacial Sovereign (Permafrost King Boss)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Match Telemetry -->
+        <div class="d-flex align-items-center gap-3 font-mono">
+          <div class="text-center px-3 py-1 rounded bg-black bg-opacity-60 border border-secondary border-opacity-40">
+            <div class="text-muted" style="font-size: 0.65rem;">WARFARE SLAYS</div>
+            <div class="fw-bold text-warning fs-5" id="arenaKillsCount">0</div>
+          </div>
+          <div class="text-center px-3 py-1 rounded bg-black bg-opacity-60 border border-secondary border-opacity-40">
+            <div class="text-muted" style="font-size: 0.65rem;">TERRITORY BOUNTY</div>
+            <div class="fw-bold text-info fs-5" id="arenaGoldCount">300 G</div>
+          </div>
+          <button id="btnArenaRestart" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2 font-mono">
+            <i class="bi bi-arrow-counterclockwise me-1"></i> Respawn
+          </button>
+        </div>
+      </div>
+
+      <!-- Canvas Viewport with Overlay HUD -->
+      <div class="position-relative arena-viewport-wrapper rounded-4 overflow-hidden" id="arenaViewportWrapper" style="border: 2px solid rgba(168, 85, 247, 0.4); box-shadow: inset 0 0 50px rgba(0,0,0,0.95); min-height: 540px;">
+        
+        <!-- HTML5 60FPS Game Canvas -->
+        <canvas id="arenaCanvas" width="1000" height="540" class="w-100 d-block" style="background: #060914; cursor: crosshair; touch-action: none;"></canvas>
+
+        <!-- Minimap Radar (Top-Right) -->
+        <div class="position-absolute top-0 end-0 m-3 p-1 rounded-3 bg-black bg-opacity-80 border border-warning border-opacity-50 shadow-lg pointer-events-none d-none d-md-block" style="width: 140px; height: 80px; z-index: 10;">
+          <canvas id="arenaMinimap" width="140" height="80" class="w-100 h-100 rounded"></canvas>
+          <div class="position-absolute top-0 start-0 m-1 font-mono text-warning" style="font-size: 0.58rem; letter-spacing: 0.05em;">TACTICAL LAND RADAR</div>
+        </div>
+
+        <!-- Real-Time Passive Hazard Notification (Top-Left) -->
+        <div class="position-absolute top-0 start-0 m-3 z-3 d-flex flex-column gap-2 pointer-events-none">
+          <div id="arenaPassiveBanner" class="badge bg-dark bg-opacity-80 border border-info text-info font-mono px-3 py-2 d-flex align-items-center gap-2 shadow-lg" style="font-size: 0.78rem;">
+            <span class="spinner-grow spinner-grow-sm text-warning"></span>
+            <span id="arenaPassiveText">Active Battleground: The Obsidian Crags (Magma Land â€¢ -25% Enemy Accuracy)</span>
+          </div>
+          <div class="badge bg-dark bg-opacity-80 border border-secondary text-light font-mono px-2 py-1 small" style="font-size: 0.68rem;">
+            Controls: [W][A][S][D] / Drag Joystick to Move â€¢ [Space]/Tap to Strike â€¢ [Q] Blink â€¢ [E] Land Hazard â€¢ [R] KINGDOM ULTIMATE
+          </div>
+        </div>
+
+        <!-- Cinematic Manifestation Execution Cut-in Banner -->
+        <div id="arenaManifestationBanner" class="position-absolute top-50 start-50 translate-middle w-100 text-center pointer-events-none d-none" style="z-index: 50; transition: all 0.35s ease;">
+          <div class="py-3 px-4 d-inline-block rounded-4 shadow-lg border border-warning" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(185, 28, 28, 0.95) 100%); box-shadow: 0 0 50px rgba(245, 158, 11, 0.9);">
+            <div class="d-flex align-items-center justify-content-center gap-3">
+              <img id="manifestationCutinImg" src="pieces/obsidian_queen.png" alt="Manifestation" class="rounded-circle border border-white shadow bg-black" style="width: 70px; height: 70px; object-fit: contain;">
+              <div class="text-start">
+                <div class="badge bg-black text-warning font-mono fw-bold mb-1">ARCADE MODE EXECUTION</div>
+                <h3 class="h4 fw-bold text-white mb-0 font-title" id="manifestationCutinTitle">KINGDOM MANIFESTATION COMBAT EXECUTION!</h3>
+                <div class="small font-mono text-light" id="manifestationCutinSubtitle">Enemy Rival Vanquished! Kingdom Territory Conquered!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Virtual Touch / Mouse Joystick (Bottom-Left) -->
+        <div class="position-absolute bottom-0 start-0 m-3 z-3" id="virtualJoystickZone" style="width: 140px; height: 140px; touch-action: none;">
+          <div id="joystickBase" class="position-relative w-100 h-100 rounded-circle border border-warning border-opacity-50" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, rgba(0, 0, 0, 0.65) 100%); box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(245,158,11,0.2);">
+            <div id="joystickKnob" class="position-absolute top-50 start-50 translate-middle rounded-circle shadow-lg" style="width: 50px; height: 50px; background: radial-gradient(circle, #fbbf24 0%, #d97706 100%); border: 2px solid #ffffff; box-shadow: 0 0 15px #f59e0b;">
+              <i class="bi bi-arrows-move position-absolute top-50 start-50 translate-middle text-dark fw-bold" style="font-size: 1.1rem;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom-Center Hero Health / Energy HUD -->
+        <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3 z-3 text-center pointer-events-none" style="min-width: 240px; max-width: 320px;">
+          <div class="p-2 rounded-4 bg-black bg-opacity-80 border border-warning border-opacity-50 shadow-lg d-flex align-items-center gap-2">
+            <img id="arenaHeroPortrait" src="pieces/obsidian_queen.png" alt="Hero" class="rounded-circle border border-warning shadow" style="width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; background: #1a0808;">
+            <div class="flex-grow-1 text-start">
+              <div class="d-flex justify-content-between align-items-center font-mono small mb-1">
+                <strong class="text-white" id="arenaHeroName">The Ash Matriarch</strong>
+                <span class="badge bg-warning text-dark fw-bold" id="arenaHeroLevel">LV 4</span>
+              </div>
+              <!-- HP Bar -->
+              <div class="progress mb-1" style="height: 10px; background: rgba(255,255,255,0.15); border-radius: 5px;">
+                <div id="arenaHeroHpBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"></div>
+              </div>
+              <!-- Mana / Energy Bar -->
+              <div class="progress" style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                <div id="arenaHeroMpBar" class="progress-bar bg-info" role="progressbar" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arcade Mode Combat Skill Action Buttons (Bottom-Right) -->
+        <div class="position-absolute bottom-0 end-0 m-3 z-3 d-flex align-items-end gap-2" id="arenaSkillCluster">
+          
+          <!-- Skill 1: Dash / Flank -->
+          <div class="position-relative text-center">
+            <button id="btnSkillDash" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 2px solid #38bdf8;">
+              <i class="bi bi-wind fs-4"></i>
+            </button>
+            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-info border border-info" style="font-size: 0.6rem; margin-bottom: -6px;">[Q] BLINK</span>
+            <div id="cdOverlayDash" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-75 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.8rem;">3</div>
+          </div>
+
+          <!-- Skill 2: Kingdom Hazard AoE -->
+          <div class="position-relative text-center">
+            <button id="btnSkillHazard" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border: 2px solid #f87171;">
+              <i class="bi bi-fire fs-4"></i>
+            </button>
+            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-danger border border-danger" style="font-size: 0.6rem; margin-bottom: -6px;">[E] HAZARD</span>
+            <div id="cdOverlayHazard" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-75 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.8rem;">5</div>
+          </div>
+
+          <!-- Basic Attack Button -->
+          <div class="position-relative text-center">
+            <button id="btnBasicAttack" class="btn rounded-circle text-dark shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 72px; height: 72px; background: radial-gradient(circle, #fef08a 0%, #f59e0b 60%, #b45309 100%); border: 3px solid #ffffff; box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);">
+              <i class="bi bi-lightning-charge-fill fs-2"></i>
+            </button>
+            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.62rem; margin-bottom: -6px;">[SPACE] STRIKE</span>
+          </div>
+
+          <!-- Ultimate Charging Button -->
+          <div class="position-relative text-center">
+            <button id="btnQueenUltimateArena" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 65px; height: 65px; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); border: 2.5px solid #c084fc;">
+              <i class="bi bi-stars fs-3"></i>
+            </button>
+            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.6rem; margin-bottom: -6px;">[R] ULTIMATE</span>
+            <div id="ultChargeOverlay" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-60 d-flex align-items-center justify-content-center font-mono text-warning fw-bold" style="font-size: 0.75rem;">
+              0%
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Bottom Arena Status -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3 mt-3 border-top border-secondary border-opacity-25 font-mono small text-muted">
+        <span><i class="bi bi-file-earmark-check-fill text-warning me-1"></i> GDD Mechanics: Real-Time Kingdom Land Battle, Vector Locomotion, Territory Passives &amp; Charging Ultimates</span>
+        <span class="text-info"><i class="bi bi-cpu-fill me-1"></i> Running at 60 FPS HTML5 Canvas Physics Engine</span>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    // ================= REAL CHARACTER MAPPINGS =================
+    // Authentic figurines extracted from Picture1-7
+    const PIECE_PROFILES = {
+      // White: The Obsidian Roost
+      'K': { role: 'King', kingdom: 'Obsidian Roost', name: 'The Eternal Drake', title: 'Dragon Sovereign', img: 'pieces/obsidian_king.png', lore: 'Supreme dragon monarch commanding molten magma and subterranean volcanic currents.' },
+      'Q': { role: 'Queen', kingdom: 'Obsidian Roost', name: 'The Ash Matriarch', title: 'Empress of Cinders', img: 'pieces/obsidian_queen.png', lore: 'Unleashes the Lava Torrent ultimate, incinerating entire rows of the tactical grid.' },
+      'B': { role: 'Bishop', kingdom: 'Obsidian Roost', name: 'The Magma Pyromancer', title: 'High Cinder Priest', img: 'pieces/obsidian_bishop.png', lore: 'Channels molten diagonal firepaths across long-range tactical corridors.' },
+      'N': { role: 'Knight', kingdom: 'Obsidian Roost', name: 'The Flame-Winged Vanguard', title: 'Draconic Cavalry', img: 'pieces/obsidian_knight.png', lore: 'Leaps gracefully over obstructed terrain with swift flanking draconic velocity.' },
+      'R': { role: 'Rook', kingdom: 'Obsidian Roost', name: 'The Basalt Bastion', title: 'Molten Citadel', img: 'pieces/obsidian_rook.png', lore: 'Heavy defensive stone-golem anchoring the flank ranks with obsidian armor.' },
+      'P': { role: 'Pawn', kingdom: 'Obsidian Roost', name: 'The Ember Initiate', title: 'Frontline Pyrefighter', img: 'pieces/obsidian_pawn.png', lore: 'Forward infantry armed with volcanic blades and hardened obsidian bucklers.' },
+
+      // Black: The Verdant Court
+      'k': { role: 'King', kingdom: 'Verdant Court', name: 'The Elder Dryad', title: 'Heartwood Sovereign', img: 'pieces/verdant_king.png', lore: 'Ancient arbor archon rooted deeply in primeval forest ley-lines.' },
+      'q': { role: 'Queen', kingdom: 'Verdant Court', name: 'The Forest Matriarch', title: 'Briar Queen', img: 'pieces/verdant_queen.png', lore: 'Wields the Thorn Surge ultimate, constricting enemy flanks and converting terrain to briars.' },
+      'b': { role: 'Bishop', kingdom: 'Verdant Court', name: 'The Bramble Seer', title: 'Druidic Oracle', img: 'pieces/verdant_bishop.png', lore: 'Diagonal pathfinder guided by whispering starlight and luminous flora spores.' },
+      'n': { role: 'Knight', kingdom: 'Verdant Court', name: 'The Stag-Rider', title: 'Verdant Cavalier', img: 'pieces/verdant_knight.png', lore: 'Prances through dense foliage to bypass defensive barriers and strike isolated foes.' },
+      'r': { role: 'Rook', kingdom: 'Verdant Court', name: 'The Ironwood Treant', title: 'Ancient Guardian', img: 'pieces/verdant_rook.png', lore: 'Living fortress of reinforced ironwood, nearly impervious to standard bludgeoning.' },
+      'p': { role: 'Pawn', kingdom: 'Verdant Court', name: 'The Seedling Sprout', title: 'Briar Guard', img: 'pieces/verdant_pawn.png', lore: 'Persistent sprout soldiers ready to sacrifice themselves for the realm.' }
+    };
+
+    // Faction Profiles Database
+    const FACTION_DATA = {
+      volcanic: {
+        name: 'The Obsidian Roost', icon: '&#128293;',
+        passiveName: 'Heat Haze',
+        passiveDesc: 'Volcanic terrain emits thermal distortions reducing enemy ranged attack accuracy by 25% on claimed tiles.',
+        cellClass: 'cell-volcanic',
+        terrainName: 'Volcanic Magma',
+        queenUlt: 'Lava Torrent'
+      },
+      verdant: {
+        name: 'The Verdant Court', icon: '&#127807;',
+        passiveName: 'Root-Bound',
+        passiveDesc: 'Primeval briars entangle enemies entering the zone, reducing movement speed by 35%.',
+        cellClass: 'cell-verdant',
+        terrainName: 'Primeval Briars',
+        queenUlt: 'Thorn Surge'
+      },
+      abyssal: {
+        name: 'The Abyssal Tides', icon: '&#127754;',
+        passiveName: 'Tidal Drag',
+        passiveDesc: 'Submerged oceanic currents pull adjacent enemy units 1 tile toward water hazards.',
+        cellClass: 'cell-abyssal',
+        terrainName: 'Sunken Reef',
+        queenUlt: 'Tidal Cataclysm'
+      },
+      frost: {
+        name: 'The Frostbound Reach', icon: '&#10052;',
+        passiveName: 'Glacial Rime',
+        passiveDesc: 'Sub-zero frost crystallizes enemy movement, increasing stamina costs by 50%.',
+        cellClass: 'cell-frost',
+        terrainName: 'Permafrost Glaze',
+        queenUlt: 'Absolute Zero'
+      },
+      void: {
+        name: 'The Abyssal Veil', icon: '&#127756;',
+        passiveName: 'Event Horizon',
+        passiveDesc: 'Gravitational singularity pulls distant units inward and silences ultimate casts.',
+        cellClass: 'cell-void',
+        terrainName: 'Void Vortex',
+        queenUlt: 'Singularity Collapse'
+      },
+      gearwork: {
+        name: 'The Gearwork Citadel', icon: '&#9881;',
+        passiveName: 'Clockwork Drive',
+        passiveDesc: 'Mechanical escapement grants allied units +1 movement speed every second turn.',
+        cellClass: 'cell-volcanic',
+        terrainName: 'Clockwork Slag',
+        queenUlt: 'Overclock Blitz'
+      },
+      grave: {
+        name: 'The Grave-Bound Dynasty', icon: '&#128128;',
+        passiveName: 'Soul Harvest',
+        passiveDesc: 'Defeated units spawn soul beacons that heal the allied King upon capture.',
+        cellClass: 'cell-void',
+        terrainName: 'Soul Well',
+        queenUlt: 'Danse Macabre'
+      }
+    };
+
+    // 15 Kingdom Auditory Signatures from GDD Section X
+    const KINGDOM_SOUNDSCAPES = [
+      { id: 'obsidian', name: 'The Obsidian Roost', icon: '&#128293;', desc: 'Volcanic bass rumbles, magmatic heat crackle, dragon screech' },
+      { id: 'verdant', name: 'The Verdant Court', icon: '&#127807;', desc: 'Forest whispering, rustling ancient leaves, starlight chimes' },
+      { id: 'ironanvil', name: 'Iron-Anvil Forge', icon: '&#128296;', desc: 'Industrial metallic clangs, rhythmic anvil strikes, roaring furnace' },
+      { id: 'abyssal', name: 'The Abyssal Tides', icon: '&#127754;', desc: 'Deep underwater pressure groans, whale sub-bass pulses' },
+      { id: 'frostbound', name: 'Frostbound Reach', icon: '&#10052;', desc: 'Chilling glacial crackles, howling wind gusts, crystalline tinks' },
+      { id: 'fulminating', name: 'Fulminating Spire', icon: '&#9889;', desc: 'High-voltage electric crackles, ozone hum, static discharge snaps' },
+      { id: 'gossamer', name: 'The Gossamer Glade', icon: '&#129498;', desc: 'Fairy wing hum, whimsical music-box melodies, pollen chimes' },
+      { id: 'titans', name: "Titan's Foothold", icon: '&#9935;', desc: 'Seismic sub-frequencies, tectonic grinding, earth-shaking thuds' },
+      { id: 'irontusk', name: 'Iron-Tusk Horde', icon: '&#128023;', desc: 'Tribal war drums, blaring brass horns, guttural battle cries' },
+      { id: 'sanguine', name: 'The Sanguine Court', icon: '&#129415;', desc: 'Atmospheric gothic pipe organ, bat-wing rustles, chilling drips' },
+      { id: 'howling', name: 'The Howling Pack', icon: '&#128058;', desc: 'Haunting lunar wolf howls, snapping brushwood, primal forest calls' },
+      { id: 'abyssalveil', name: 'The Abyssal Veil', icon: '&#127756;', desc: 'Eerie void drones, reversed echoes, sudden dead silence drops' },
+      { id: 'gearwork', name: 'Gearwork Citadel', icon: '&#9881;', desc: 'Clockwork gears ticking, steam-piston releases, mechanical whirs' },
+      { id: 'sunsand', name: 'Sun-Scorched Sands', icon: '&#127964;', desc: 'Whistling desert sandstorms, dry wind whispers, terracotta echoes' },
+      { id: 'gravebound', name: 'Grave-Bound Dynasty', icon: '&#128128;', desc: 'Hollow skeletal rattles, ghostly wails, churchyard bell tolls' }
+    ];
+
+    // Initial Board State
+    let initialBoard = [
+      ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+      ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null, null],
+      ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+      ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R']
+    ];
+
+    let boardState = JSON.parse(JSON.stringify(initialBoard));
+    let cellTerrains = Array(8).fill(null).map(() => Array(8).fill(null));
+    let selectedSquare = null;
+    let currentLegalMoves = [];
+    let currentTurn = 'white';
+    let moveCount = 1;
+    let opponentAI = true;
+    let capturedPieces = [];
+    let audioEnabled = true;
+    let activePlayerFaction = 'volcanic';
+    let isGameOver = false;
+
+    // ================= PROCEDURAL WEB AUDIO API SYNTHESIZER =================
+    let audioCtx = null;
+    let analyserNode = null;
+    let activeMusicOscs = [];
+    let isMusicPlaying = false;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+        analyserNode = audioCtx.createAnalyser();
+        analyserNode.fftSize = 64;
+        analyserNode.connect(audioCtx.destination);
+        startOscilloscope();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function startOscilloscope() {
+      const canvas = document.getElementById('oscilloscopeCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const bufferLength = analyserNode.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        requestAnimationFrame(draw);
+        analyserNode.getByteTimeDomainData(dataArray);
+
+        ctx.fillStyle = 'rgba(6, 9, 20, 0.25)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#f59e0b';
+        ctx.beginPath();
+
+        const sliceWidth = canvas.width / bufferLength;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 128.0;
+          const y = (v * canvas.height) / 2;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+      }
+      draw();
+    }
+
+    function playSound(type) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const audioLabel = document.getElementById('activeAudioLabel');
+        if (audioLabel) audioLabel.textContent = `PLAYING: ${type.toUpperCase()}`;
+
+        if (type === 'select') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(780, now + 0.1);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          osc.connect(gain);
+          gain.connect(analyserNode);
+          osc.start(now);
+          osc.stop(now + 0.14);
+        } else if (type === 'move') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.exponentialRampToValueAtTime(110, now + 0.16);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(gain);
+          gain.connect(analyserNode);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } else if (type === 'capture' || type === 'clash') {
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc1.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(880, now);
+          osc1.frequency.exponentialRampToValueAtTime(220, now + 0.28);
+          osc2.type = 'square';
+          osc2.frequency.setValueAtTime(90, now);
+          osc2.frequency.exponentialRampToValueAtTime(45, now + 0.35);
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(analyserNode);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.35);
+          osc2.stop(now + 0.35);
+        } else if (type === 'manifestation') {
+          [65, 130, 260, 520].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = idx % 2 === 0 ? 'sawtooth' : 'triangle';
+            osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+            osc.frequency.exponentialRampToValueAtTime(freq * 1.8, now + 0.8);
+            gain.gain.setValueAtTime(0.16, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now);
+            osc.stop(now + 1.2);
+          });
+        } else if (type === 'ultimate') {
+          [110, 220, 330, 440, 660].forEach((freq) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now);
+            osc.frequency.linearRampToValueAtTime(freq * 1.4, now + 1.5);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now);
+            osc.stop(now + 1.8);
+          });
+        } else if (type === 'check') {
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc1.type = 'square';
+          osc2.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(440, now);
+          osc2.frequency.setValueAtTime(554, now);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(analyserNode);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.4);
+          osc2.stop(now + 0.4);
+        } else if (type === 'terrain') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.linearRampToValueAtTime(320, now + 0.2);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.connect(gain);
+          gain.connect(analyserNode);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        }
+      } catch (e) {
+        console.warn('Audio synthesis note:', e);
+      }
+    }
+
+    function playKingdomSoundscape(kingdomId) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const kingdom = KINGDOM_SOUNDSCAPES.find(k => k.id === kingdomId);
+        if (kingdom) document.getElementById('activeAudioLabel').textContent = `SOUNDSCAPE: ${kingdom.name}`;
+
+        if (kingdomId === 'obsidian') {
+          const oscBass = ctx.createOscillator();
+          const gainBass = ctx.createGain();
+          oscBass.type = 'sawtooth';
+          oscBass.frequency.setValueAtTime(55, now);
+          oscBass.frequency.linearRampToValueAtTime(45, now + 1.5);
+          gainBass.gain.setValueAtTime(0.35, now);
+          gainBass.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+          oscBass.connect(gainBass);
+          gainBass.connect(analyserNode);
+          oscBass.start(now);
+          oscBass.stop(now + 1.6);
+        } else if (kingdomId === 'verdant') {
+          [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + (idx * 0.12));
+            gain.gain.setValueAtTime(0.18, now + (idx * 0.12));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.12) + 0.6);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now + (idx * 0.12));
+            osc.stop(now + (idx * 0.12) + 0.65);
+          });
+        } else {
+          // General ambient soundscape chord
+          [180, 240, 360, 480].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + (idx * 0.1));
+            gain.gain.setValueAtTime(0.2, now + (idx * 0.1));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now + (idx * 0.1));
+            osc.stop(now + 1.25);
+          });
+        }
+      } catch (err) {
+        console.warn('Soundscape err:', err);
+      }
+    }
+
+    function stopDynamicMusic() {
+      activeMusicOscs.forEach(o => {
+        try { o.stop(); } catch (e) {}
+      });
+      activeMusicOscs = [];
+      isMusicPlaying = false;
+      document.getElementById('activeAudioLabel').textContent = 'SCORE: STOPPED';
+    }
+
+    function playDynamicScore(stage) {
+      stopDynamicMusic();
+      if (!audioEnabled) return;
+      const ctx = getAudioCtx();
+      const now = ctx.currentTime;
+      isMusicPlaying = true;
+
+      if (stage === 'contemplative') {
+        document.getElementById('activeAudioLabel').textContent = 'SCORE: STAGE 1 (TACTICAL)';
+        const chords = [[220, 261.63, 329.63], [174.61, 220, 261.63], [130.81, 164.81, 196.00]];
+        chords.forEach((chord, cIdx) => {
+          chord.forEach(freq => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + (cIdx * 2.5));
+            gain.gain.setValueAtTime(0.08, now + (cIdx * 2.5));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + (cIdx * 2.5) + 2.4);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now + (cIdx * 2.5));
+            osc.stop(now + (cIdx * 2.5) + 2.45);
+            activeMusicOscs.push(osc);
+          });
+        });
+      } else if (stage === 'battle') {
+        document.getElementById('activeAudioLabel').textContent = 'SCORE: STAGE 2 (BATTLE CADENCE)';
+        for (let i = 0; i < 8; i++) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(110, now + (i * 0.4));
+          gain.gain.setValueAtTime(0.12, now + (i * 0.4));
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.4) + 0.35);
+          osc.connect(gain);
+          gain.connect(analyserNode);
+          osc.start(now + (i * 0.4));
+          osc.stop(now + (i * 0.4) + 0.35);
+          activeMusicOscs.push(osc);
+        }
+      } else if (stage === 'climax') {
+        document.getElementById('activeAudioLabel').textContent = 'SCORE: STAGE 3 (CLIMAX CHOIR)';
+        [110, 164.81, 220, 329.63, 440].forEach(freq => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 3.0);
+          osc.connect(gain);
+          gain.connect(analyserNode);
+          osc.start(now);
+          osc.stop(now + 3.0);
+          activeMusicOscs.push(osc);
+        });
+      }
+    }
+
+    // Populate Soundscape Buttons
+    const soundscapeContainer = document.getElementById('soundscapeContainer');
+    if (soundscapeContainer) {
+      KINGDOM_SOUNDSCAPES.forEach(k => {
+        const btn = document.createElement('div');
+        btn.className = 'soundscape-btn';
+        btn.innerHTML = `<span>${k.icon}</span><span class="text-truncate">${k.name}</span>`;
+        btn.title = k.desc;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.soundscape-btn').forEach(b => b.classList.remove('playing'));
+          btn.classList.add('playing');
+          playKingdomSoundscape(k.id);
+          setTimeout(() => btn.classList.remove('playing'), 1800);
+        });
+        soundscapeContainer.appendChild(btn);
+      });
+    }
+
+    document.getElementById('btnMusicContemplative').addEventListener('click', () => playDynamicScore('contemplative'));
+    document.getElementById('btnMusicBattle').addEventListener('click', () => playDynamicScore('battle'));
+    document.getElementById('btnMusicClimax').addEventListener('click', () => playDynamicScore('climax'));
+    document.getElementById('btnMusicStop').addEventListener('click', stopDynamicMusic);
+
+    // ================= BOARD RENDERING & INTERACTION =================
+    const chessboard = document.getElementById('chessboard');
+
+    function renderBoard() {
+      if (!chessboard) return;
+      chessboard.innerHTML = '';
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const cell = document.createElement('div');
+          cell.className = `cell ${(r + c) % 2 === 0 ? 'cell-light' : 'cell-dark'}`;
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+
+          // Terrain styling
+          if (cellTerrains[r][c]) {
+            cell.classList.add(`cell-${cellTerrains[r][c]}`);
+          }
+
+          // Selection styling
+          if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
+            cell.classList.add('cell-selected');
+          }
+
+          // Legal move highlights
+          const isLegalMove = currentLegalMoves.some(m => m.r === r && m.c === c);
+          if (isLegalMove) {
+            const hasOpponent = boardState[r][c] !== null;
+            if (hasOpponent) cell.classList.add('cell-valid-capture');
+            else cell.classList.add('cell-valid-move');
+          }
+
+          // Check alert highlight on King
+          const piece = boardState[r][c];
+          if (piece === 'K' && currentTurn === 'white' && isKingInCheck('white')) {
+            cell.classList.add('cell-in-check');
+          } else if (piece === 'k' && currentTurn === 'black' && isKingInCheck('black')) {
+            cell.classList.add('cell-in-check');
+          }
+
+          // Real character miniature figurine
+          if (piece) {
+            const profile = PIECE_PROFILES[piece];
+            const isWhite = piece === piece.toUpperCase();
+            
+            const miniatureSlot = document.createElement('div');
+            miniatureSlot.className = 'miniature-slot';
+
+            const miniatureBody = document.createElement('div');
+            miniatureBody.className = 'miniature-body';
+
+            const img = document.createElement('img');
+            img.src = profile.img;
+            img.alt = profile.name;
+            img.className = 'miniature-img';
+
+            const pedestal = document.createElement('div');
+            pedestal.className = `pedestal-ring ${isWhite ? 'pedestal-obsidian' : 'pedestal-verdant'}`;
+
+            miniatureBody.appendChild(img);
+            miniatureBody.appendChild(pedestal);
+            miniatureSlot.appendChild(miniatureBody);
+            cell.appendChild(miniatureSlot);
+          }
+
+          cell.addEventListener('click', () => handleCellClick(r, c));
+          chessboard.appendChild(cell);
+        }
+      }
+    }
+
+    function handleCellClick(r, c) {
+      if (isGameOver) {
+        addLogEntry('Match concluded. Click "Reset Board" to start a new match.');
+        return;
+      }
+
+      const piece = boardState[r][c];
+      const isLegalMove = currentLegalMoves.some(m => m.r === r && m.c === c);
+
+      // Execute move if clicking valid target square
+      if (selectedSquare && isLegalMove) {
+        executeMove(selectedSquare.r, selectedSquare.c, r, c);
+        return;
+      }
+
+      // Select own piece
+      if (piece) {
+        const isWhitePiece = piece === piece.toUpperCase();
+        if ((currentTurn === 'white' && isWhitePiece) || (currentTurn === 'black' && !isWhitePiece)) {
+          selectedSquare = { r, c };
+          currentLegalMoves = getLegalMoves(r, c, piece);
+          updateCharacterInspector(piece);
+          playSound('select');
+          renderBoard();
+          return;
+        }
+      }
+
+      // Deselect
+      selectedSquare = null;
+      currentLegalMoves = [];
+      renderBoard();
+    }
+
+    function executeMove(fromR, fromC, toR, toC) {
+      const movingPiece = boardState[fromR][fromC];
+      const targetPiece = boardState[toR][toC];
+      const profile = PIECE_PROFILES[movingPiece];
+
+      // Handle Capture & Manifestation
+      if (targetPiece) {
+        const victimProfile = PIECE_PROFILES[targetPiece];
+        capturedPieces.push(targetPiece);
+        updateGraveyard();
+        triggerManifestation(profile, victimProfile, toR, toC);
+        playSound('capture');
+      } else {
+        playSound('move');
+      }
+
+      // Apply Terrain Mutation on arrival
+      if (movingPiece === movingPiece.toUpperCase()) {
+        cellTerrains[toR][toC] = activePlayerFaction;
+      } else {
+        cellTerrains[toR][toC] = 'verdant';
+      }
+
+      // Move piece
+      boardState[toR][toC] = movingPiece;
+      boardState[fromR][fromC] = null;
+      selectedSquare = null;
+      currentLegalMoves = [];
+
+      // Log move
+      const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+      const moveStr = `${profile.name} (${profile.role}) -> ${cols[toC]}${8 - toR}${targetPiece ? ' [CAPTURE]' : ''}`;
+      addLogEntry(moveStr);
+
+      // Check if enemy King was captured
+      if (targetPiece && targetPiece.toLowerCase() === 'k') {
+        const winner = targetPiece === 'k' ? 'white' : 'black';
+        triggerCheckmateSpectacle(winner);
+        return;
+      }
+
+      // Switch turn
+      currentTurn = currentTurn === 'white' ? 'black' : 'white';
+      moveCount++;
+      document.getElementById('turnIndicator').textContent = `TURN: ${moveCount} (${currentTurn.toUpperCase()})`;
+
+      // Check for check condition
+      if (isKingInCheck(currentTurn)) {
+        playSound('check');
+        addLogEntry(`âš ï¸ ${currentTurn.toUpperCase()} KING IN CHECK!`);
+      }
+
+      renderBoard();
+
+      // Trigger AI move if enabled and black's turn
+      if (opponentAI && currentTurn === 'black' && !isGameOver) {
+        setTimeout(executeAIMove, 700);
+      }
+    }
+
+    function executeAIMove() {
+      if (isGameOver) return;
+      let blackPieces = [];
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = boardState[r][c];
+          if (p && p === p.toLowerCase()) {
+            const moves = getLegalMoves(r, c, p);
+            if (moves.length > 0) {
+              blackPieces.push({ r, c, piece: p, moves });
+            }
+          }
+        }
+      }
+
+      if (blackPieces.length === 0) {
+        triggerCheckmateSpectacle('white');
+        return;
+      }
+
+      // Prioritize capture moves, otherwise pick random
+      let chosenMove = null;
+      for (let item of blackPieces) {
+        const capture = item.moves.find(m => boardState[m.r][m.c] !== null);
+        if (capture) {
+          chosenMove = { fromR: item.r, fromC: item.c, toR: capture.r, toC: capture.c };
+          break;
+        }
+      }
+
+      if (!chosenMove) {
+        const randomItem = blackPieces[Math.floor(Math.random() * blackPieces.length)];
+        const randomMove = randomItem.moves[Math.floor(Math.random() * randomItem.moves.length)];
+        chosenMove = { fromR: randomItem.r, fromC: randomItem.c, toR: randomMove.r, toC: randomMove.c };
+      }
+
+      executeMove(chosenMove.fromR, chosenMove.fromC, chosenMove.toR, chosenMove.toC);
+    }
+
+    function triggerManifestation(attacker, victim, r, c) {
+      const overlay = document.getElementById('manifestationOverlay');
+      const title = document.getElementById('manifTitle');
+      const desc = document.getElementById('manifDesc');
+      const boardWrapper = document.getElementById('boardWrapper');
+
+      // Update cut-in images & names
+      const atkImg = document.getElementById('manifAttackerImg');
+      const vicImg = document.getElementById('manifVictimImg');
+      const atkName = document.getElementById('manifAttackerName');
+      const vicName = document.getElementById('manifVictimName');
+
+      if (atkImg) atkImg.src = attacker.img;
+      if (vicImg) vicImg.src = victim.img;
+      if (atkName) atkName.textContent = attacker.name.toUpperCase();
+      if (vicName) vicName.textContent = victim.name.toUpperCase();
+
+      const fData = FACTION_DATA[activePlayerFaction] || FACTION_DATA.volcanic;
+      title.textContent = `${attacker.name} MANIFESTS!`;
+      desc.textContent = `${victim.name} vanquished. Tile converted to ${attacker.kingdom === 'Obsidian Roost' ? fData.terrainName : 'Primeval Briars'}.`;
+      
+      // Board shake & chromatic flash
+      if (boardWrapper) {
+        boardWrapper.classList.add('board-shake');
+        boardWrapper.classList.add('chromatic-flash');
+        setTimeout(() => {
+          boardWrapper.classList.remove('board-shake');
+          boardWrapper.classList.remove('chromatic-flash');
+        }, 500);
+      }
+
+      overlay.classList.add('active');
+      setTimeout(() => playSound('manifestation'), 150);
+
+      setTimeout(() => {
+        overlay.classList.remove('active');
+      }, 2200);
+    }
+
+    function triggerCheckmateSpectacle(victoriousSide) {
+      isGameOver = true;
+      playSound('ultimate');
+
+      const isWhiteVictory = victoriousSide === 'white';
+      const fData = FACTION_DATA[activePlayerFaction] || FACTION_DATA.volcanic;
+      const winnerName = isWhiteVictory ? fData.name : 'The Verdant Court';
+      const ultName = isWhiteVictory ? fData.queenUlt : 'Thorn Surge';
+
+      const overlay = document.getElementById('manifestationOverlay');
+      const title = document.getElementById('manifTitle');
+      const desc = document.getElementById('manifDesc');
+      const badge = document.getElementById('manifBadge');
+
+      if (title) title.textContent = `ðŸ‘‘ CHECKMATE! ${winnerName.toUpperCase()} VICTORIOUS!`;
+      if (desc) desc.textContent = `Queen unleashes signature ultimate: ${ultName}! All opposing tiles engulfed in kingdom cataclysm!`;
+      if (badge) badge.textContent = 'APOCALYPTIC VICTORY CONQUEST';
+
+      // Cinematic perspective tilt & board shake
+      const wrapper = document.getElementById('boardWrapper');
+      if (wrapper) {
+        wrapper.className = 'planar-board-wrapper view-perspective board-shake chromatic-flash';
+        setTimeout(() => wrapper.classList.remove('board-shake'), 600);
+      }
+
+      // Cascading terrain transmutation across enemy ranks
+      const targetTerrain = isWhiteVictory ? activePlayerFaction : 'verdant';
+      const rowsToTransmute = isWhiteVictory ? [0, 1, 2, 3] : [4, 5, 6, 7];
+
+      rowsToTransmute.forEach((r, rIdx) => {
+        setTimeout(() => {
+          for (let c = 0; c < 8; c++) {
+            cellTerrains[r][c] = targetTerrain;
+          }
+          playSound('terrain');
+          renderBoard();
+        }, rIdx * 250);
+      });
+
+      overlay.classList.add('active');
+      addLogEntry(`ðŸ‘‘ CHECKMATE! ${winnerName} unleashed ${ultName} achieving absolute victory!`);
+
+      setTimeout(() => {
+        overlay.classList.remove('active');
+      }, 4000);
+    }
+
+    function getLegalMoves(r, c, piece) {
+      const moves = [];
+      const isWhite = piece === piece.toUpperCase();
+      const type = piece.toLowerCase();
+
+      function addIfValid(targetR, targetC) {
+        if (targetR < 0 || targetR >= 8 || targetC < 0 || targetC >= 8) return false;
+        const targetPiece = boardState[targetR][targetC];
+        if (targetPiece === null) {
+          moves.push({ r: targetR, c: targetC });
+          return true;
+        }
+        const isTargetWhite = targetPiece === targetPiece.toUpperCase();
+        if (isWhite !== isTargetWhite) {
+          moves.push({ r: targetR, c: targetC });
+        }
+        return false;
+      }
+
+      // Pawns
+      if (type === 'p') {
+        const dir = isWhite ? -1 : 1;
+        const startRow = isWhite ? 6 : 1;
+        if (boardState[r + dir] && boardState[r + dir][c] === null) {
+          moves.push({ r: r + dir, c });
+          if (r === startRow && boardState[r + 2 * dir] && boardState[r + 2 * dir][c] === null) {
+            moves.push({ r: r + 2 * dir, c });
+          }
+        }
+        [-1, 1].forEach(dc => {
+          const tr = r + dir;
+          const tc = c + dc;
+          if (tr >= 0 && tr < 8 && tc >= 0 && tc < 8) {
+            const tp = boardState[tr][tc];
+            if (tp && (isWhite !== (tp === tp.toUpperCase()))) {
+              moves.push({ r: tr, c: tc });
+            }
+          }
+        });
+      }
+
+      // Knights
+      if (type === 'n') {
+        const jumps = [
+          [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+          [1, -2], [1, 2], [2, -1], [2, 1]
+        ];
+        jumps.forEach(([dr, dc]) => addIfValid(r + dr, c + dc));
+      }
+
+      // Bishops & Queens (diagonals)
+      if (type === 'b' || type === 'q') {
+        const dirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+        dirs.forEach(([dr, dc]) => {
+          let tr = r + dr, tc = c + dc;
+          while (addIfValid(tr, tc)) {
+            tr += dr; tc += dc;
+          }
+        });
+      }
+
+      // Rooks & Queens (orthogonals)
+      if (type === 'r' || type === 'q') {
+        const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+        dirs.forEach(([dr, dc]) => {
+          let tr = r + dr, tc = c + dc;
+          while (addIfValid(tr, tc)) {
+            tr += dr; tc += dc;
+          }
+        });
+      }
+
+      // Kings
+      if (type === 'k') {
+        for (let dr = -1; dr <= 1; dr++) {
+          for (let dc = -1; dc <= 1; dc++) {
+            if (dr !== 0 || dc !== 0) addIfValid(r + dr, c + dc);
+          }
+        }
+      }
+
+      return moves;
+    }
+
+    function isKingInCheck(side) {
+      const kingChar = side === 'white' ? 'K' : 'k';
+      let kingPos = null;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (boardState[r][c] === kingChar) {
+            kingPos = { r, c };
+            break;
+          }
+        }
+      }
+      if (!kingPos) return false;
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = boardState[r][c];
+          if (p && ((side === 'white' && p === p.toLowerCase()) || (side === 'black' && p === p.toUpperCase()))) {
+            const moves = getLegalMoves(r, c, p);
+            if (moves.some(m => m.r === kingPos.r && m.c === kingPos.c)) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function updateCharacterInspector(piece) {
+      const p = PIECE_PROFILES[piece];
+      document.getElementById('inspImg').src = p.img;
+      document.getElementById('inspRole').textContent = p.role.toUpperCase();
+      document.getElementById('inspName').textContent = p.name;
+      document.getElementById('inspTitle').textContent = p.title;
+      document.getElementById('inspLore').textContent = p.lore;
+    }
+
+    function updateGraveyard() {
+      const container = document.getElementById('capturedGraveyard');
+      if (capturedPieces.length === 0) {
+        container.textContent = 'None captured yet.';
+        return;
+      }
+      container.innerHTML = capturedPieces.map(p => {
+        const prof = PIECE_PROFILES[p];
+        return `<span class="badge ${p === p.toUpperCase() ? 'bg-warning text-dark' : 'bg-success'} me-1 mb-1">${prof.name}</span>`;
+      }).join('');
+    }
+
+    function addLogEntry(text) {
+      const log = document.getElementById('moveLogList');
+      const time = new Date().toTimeString().split(' ')[0];
+      const entry = document.createElement('div');
+      entry.textContent = `[${time}] ${text}`;
+      log.prepend(entry);
+    }
+
+    // Faction Selector Event Listener
+    const factionSelect = document.getElementById('simFactionSelect');
+    if (factionSelect) {
+      factionSelect.addEventListener('change', (e) => {
+        activePlayerFaction = e.target.value;
+        const fData = FACTION_DATA[activePlayerFaction] || FACTION_DATA.volcanic;
+        document.getElementById('simFactionName').textContent = fData.name;
+        document.getElementById('simPassiveName').textContent = fData.passiveName;
+        document.getElementById('simPassiveDesc').textContent = fData.passiveDesc;
+        playSound('terrain');
+        addLogEntry(`Faction allegiance shifted to ${fData.name}.`);
+      });
+    }
+
+    // Queen Ultimate button
+    document.getElementById('btnQueenUltimate').addEventListener('click', () => {
+      triggerCheckmateSpectacle('white');
+    });
+
+    // Toggle Audio
+    document.getElementById('btnToggleAudio').addEventListener('click', () => {
+      audioEnabled = !audioEnabled;
+      document.getElementById('audioStateText').textContent = audioEnabled ? 'ON' : 'OFF';
+      document.getElementById('audioIcon').className = audioEnabled ? 'bi bi-volume-up-fill me-1' : 'bi bi-volume-mute-fill me-1';
+      if (!audioEnabled) stopDynamicMusic();
+    });
+
+    // Reset Game
+    document.getElementById('btnResetGame').addEventListener('click', () => {
+      boardState = JSON.parse(JSON.stringify(initialBoard));
+      cellTerrains = Array(8).fill(null).map(() => Array(8).fill(null));
+      selectedSquare = null;
+      currentLegalMoves = [];
+      currentTurn = 'white';
+      moveCount = 1;
+      capturedPieces = [];
+      isGameOver = false;
+      updateGraveyard();
+      document.getElementById('turnIndicator').textContent = 'TURN: 1 (WHITE)';
+      const wrapper = document.getElementById('boardWrapper');
+      if (wrapper) wrapper.className = 'planar-board-wrapper view-perspective';
+      playSound('select');
+      renderBoard();
+      addLogEntry('Board reset to starting layout.');
+    });
+
+    // Toggle AI
+    document.getElementById('btnToggleAI').addEventListener('click', () => {
+      opponentAI = !opponentAI;
+      document.getElementById('aiStatusText').textContent = opponentAI ? 'ON' : 'OFF';
+      document.getElementById('aiStatusText').className = opponentAI ? 'text-success' : 'text-danger';
+      playSound('select');
+    });
+
+    // 3D Camera Switching
+    document.querySelectorAll('.cam-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cam-btn').forEach(b => {
+          b.classList.remove('active', 'btn-outline-warning');
+          b.classList.add('btn-outline-secondary', 'text-light');
+        });
+        btn.classList.add('active', 'btn-outline-warning');
+        btn.classList.remove('btn-outline-secondary', 'text-light');
+        const view = btn.getAttribute('data-view');
+        const wrapper = document.getElementById('boardWrapper');
+        wrapper.className = `planar-board-wrapper view-${view}`;
+        playSound('select');
+      });
+    });
+
+    // ================= DUAL-MODE SIMULATOR SWITCHER =================
+    const btnSwitchTactical = document.getElementById('btnSwitchTacticalGrid');
+    const btnSwitchArena = document.getElementById('btnSwitchRealtimeArena');
+    const simGridWrap = document.getElementById('simModeTacticalGrid');
+    const simArenaWrap = document.getElementById('simModeRealtimeArena');
+
+    if (btnSwitchTactical && btnSwitchArena && simGridWrap && simArenaWrap) {
+      btnSwitchTactical.addEventListener('click', () => {
+        btnSwitchTactical.classList.add('active', 'btn-mythic-gold');
+        btnSwitchTactical.classList.remove('btn-outline-secondary', 'text-light');
+        btnSwitchArena.classList.remove('active', 'btn-mythic-gold');
+        btnSwitchArena.classList.add('btn-outline-secondary', 'text-light');
+        simGridWrap.classList.remove('d-none');
+        simArenaWrap.classList.add('d-none');
+        isArenaRunning = false;
+        playSound('select');
+      });
+
+      btnSwitchArena.addEventListener('click', () => {
+        btnSwitchArena.classList.add('active', 'btn-mythic-gold');
+        btnSwitchArena.classList.remove('btn-outline-secondary', 'text-light');
+        btnSwitchTactical.classList.remove('active', 'btn-mythic-gold');
+        btnSwitchTactical.classList.add('btn-outline-secondary', 'text-light');
+        simArenaWrap.classList.remove('d-none');
+        simGridWrap.classList.add('d-none');
+        startActionArena();
+        playSound('select');
+      });
+    }
+
+    // ================= REAL-TIME ARCADE MODE ENGINE =================
+    let isArenaRunning = false;
+    let arenaAnimId = null;
+    let arenaCanvas = null;
+    let arenaCtx = null;
+    let minimapCanvas = null;
+    let minimapCtx = null;
+
+    const arenaHeroesData = {
+      'ash-matriarch': {
+        name: 'The Ash Matriarch',
+        title: 'Queen â€¢ Fire Burst Mage',
+        img: 'pieces/obsidian_queen.png',
+        maxHp: 480,
+        speed: 3.8,
+        atk: 65,
+        range: 220,
+        atkType: 'firebolt',
+        dashSkill: 'Cinder Dash',
+        hazardSkill: 'Heat Haze Magma Zone',
+        ultName: 'Lava Torrent',
+        passiveDesc: 'Heat Haze: Volcanic magma tiles tick burning damage to enemies.'
+      },
+      'flame-vanguard': {
+        name: 'Flame-Winged Vanguard',
+        title: 'Knight â€¢ Swift Assassin',
+        img: 'pieces/obsidian_knight.png',
+        maxHp: 440,
+        speed: 4.8,
+        atk: 85,
+        range: 80,
+        atkType: 'slash',
+        dashSkill: 'Flank Leap',
+        hazardSkill: 'Dragon Claws Bleed Zone',
+        ultName: 'Meteor Impact',
+        passiveDesc: 'Rapid Flank: High mobility with L-shape blink leaps.'
+      },
+      'eternal-drake': {
+        name: 'The Eternal Drake',
+        title: 'King â€¢ Dragon Sovereign',
+        img: 'pieces/obsidian_king.png',
+        maxHp: 650,
+        speed: 3.2,
+        atk: 75,
+        range: 130,
+        atkType: 'breath',
+        dashSkill: 'Draconic Surge',
+        hazardSkill: 'Obsidian Spire',
+        ultName: 'Cataclysmic Inferno',
+        passiveDesc: 'Magma Scales: Reinforced draconic armor absorbs 25% damage.'
+      },
+      'forest-matriarch': {
+        name: 'The Forest Matriarch',
+        title: 'Queen â€¢ Thorn Mage',
+        img: 'pieces/verdant_queen.png',
+        maxHp: 500,
+        speed: 3.6,
+        atk: 58,
+        range: 240,
+        atkType: 'thornray',
+        dashSkill: 'Floral Shift',
+        hazardSkill: 'Root-Bound Briar Trap',
+        ultName: 'Thorn Surge',
+        passiveDesc: 'Root-Bound: Thorny briars ensnare and slow enemy units.'
+      },
+      'stag-rider': {
+        name: 'The Stag-Rider',
+        title: 'Knight â€¢ Celestial Cavalier',
+        img: 'pieces/verdant_knight.png',
+        maxHp: 540,
+        speed: 4.4,
+        atk: 78,
+        range: 95,
+        atkType: 'spear',
+        dashSkill: 'Cavalier Charge',
+        hazardSkill: 'Verdant Aegis',
+        ultName: 'Celestial Stampede',
+        passiveDesc: 'Celestial Gallop: Tramples over enemy ranks with ease.'
+      }
+    };
+
+    const arenaBossesData = {
+      'elder-dryad': {
+        name: 'The Elder Dryad',
+        title: 'Verdant Sovereign (Boss)',
+        img: 'pieces/verdant_king.png',
+        hp: 950,
+        maxHp: 950,
+        speed: 1.8,
+        atk: 55,
+        range: 180,
+        atkType: 'seedpod'
+      },
+      'leviathan': {
+        name: 'Leviathan Matriarch',
+        title: 'Abyssal Empress (Boss)',
+        img: 'pieces/obsidian_bishop.png',
+        hp: 880,
+        maxHp: 880,
+        speed: 2.1,
+        atk: 60,
+        range: 200,
+        atkType: 'waterblast'
+      },
+      'frost-king': {
+        name: 'Glacial Sovereign',
+        title: 'Permafrost King (Boss)',
+        img: 'pieces/verdant_rook.png',
+        hp: 1000,
+        maxHp: 1000,
+        speed: 1.6,
+        atk: 50,
+        range: 160,
+        atkType: 'icicle'
+      }
+    };
+
+    let arenaPlayer = {
+      x: 160,
+      y: 270,
+      vx: 0,
+      vy: 0,
+      angle: 0,
+      hp: 480,
+      maxHp: 480,
+      mp: 100,
+      maxMp: 100,
+      level: 4,
+      ultCharge: 20,
+      gold: 300,
+      kills: 0,
+      heroKey: 'ash-matriarch',
+      attackCooldown: 0,
+      dashCooldown: 0,
+      hazardCooldown: 0,
+      isDashing: false,
+      dashTime: 0
+    };
+
+    let arenaEnemies = [];
+    let arenaProjectiles = [];
+    let arenaHazards = [];
+    let arenaParticles = [];
+    let arenaDamageTexts = [];
+    let arenaMinionTimer = 0;
+    let arenaKeys = { w: false, a: false, s: false, d: false, space: false, q: false, e: false, r: false };
+    let joystickState = { active: false, startX: 0, startY: 0, curX: 0, curY: 0, dx: 0, dy: 0, dist: 0 };
+    let screenShakeTime = 0;
+
+    const preloadedArenaImages = {};
+    function preloadArenaImages() {
+      Object.keys(arenaHeroesData).forEach(k => {
+        const img = new Image();
+        img.src = arenaHeroesData[k].img;
+        preloadedArenaImages[k] = img;
+      });
+      Object.keys(arenaBossesData).forEach(k => {
+        const img = new Image();
+        img.src = arenaBossesData[k].img;
+        preloadedArenaImages[k] = img;
+      });
+      const minion1 = new Image(); minion1.src = 'pieces/verdant_pawn.png'; preloadedArenaImages['sapling'] = minion1;
+      const minion2 = new Image(); minion2.src = 'pieces/obsidian_pawn.png'; preloadedArenaImages['roostling'] = minion2;
+    }
+
+    function initActionArena() {
+      arenaCanvas = document.getElementById('arenaCanvas');
+      if (!arenaCanvas) return;
+      arenaCtx = arenaCanvas.getContext('2d');
+      minimapCanvas = document.getElementById('arenaMinimap');
+      if (minimapCanvas) minimapCtx = minimapCanvas.getContext('2d');
+
+      preloadArenaImages();
+      setupJoystickHandlers();
+      setupKeyboardHandlers();
+      setupActionButtons();
+
+      const heroSelect = document.getElementById('arenaHeroSelect');
+      if (heroSelect) {
+        heroSelect.addEventListener('change', (e) => {
+          switchArenaHero(e.target.value);
+        });
+      }
+
+      const bossSelect = document.getElementById('arenaBossSelect');
+      if (bossSelect) {
+        bossSelect.addEventListener('change', (e) => {
+          spawnArenaBoss(e.target.value);
+        });
+      }
+
+      const btnRestart = document.getElementById('btnArenaRestart');
+      if (btnRestart) {
+        btnRestart.addEventListener('click', () => {
+          resetArenaMatch();
+        });
+      }
+
+      resetArenaMatch();
+    }
+
+    function switchArenaHero(heroKey) {
+      const data = arenaHeroesData[heroKey];
+      if (!data) return;
+      arenaPlayer.heroKey = heroKey;
+      arenaPlayer.hp = data.maxHp;
+      arenaPlayer.maxHp = data.maxHp;
+      arenaPlayer.ultCharge = 0;
+
+      document.getElementById('arenaHeroPortrait').src = data.img;
+      document.getElementById('arenaHeroName').textContent = data.name;
+      document.getElementById('arenaPassiveText').textContent = `Active Territory: ${data.passiveDesc}`;
+
+      playSound('terrain');
+      updateArenaHUD();
+    }
+
+    function spawnArenaBoss(bossKey) {
+      const bData = arenaBossesData[bossKey] || arenaBossesData['elder-dryad'];
+      arenaEnemies = arenaEnemies.filter(e => !e.isBoss);
+      arenaEnemies.push({
+        x: 820,
+        y: 270,
+        vx: 0,
+        vy: 0,
+        hp: bData.hp,
+        maxHp: bData.maxHp,
+        speed: bData.speed,
+        atk: bData.atk,
+        range: bData.range,
+        atkType: bData.atkType,
+        isBoss: true,
+        name: bData.name,
+        bossKey,
+        shootCooldown: 60,
+        radius: 34
+      });
+    }
+
+    function resetArenaMatch() {
+      const heroKey = document.getElementById('arenaHeroSelect') ? document.getElementById('arenaHeroSelect').value : 'ash-matriarch';
+      const bossKey = document.getElementById('arenaBossSelect') ? document.getElementById('arenaBossSelect').value : 'elder-dryad';
+      const hData = arenaHeroesData[heroKey] || arenaHeroesData['ash-matriarch'];
+
+      arenaPlayer = {
+        x: 160,
+        y: 270,
+        vx: 0,
+        vy: 0,
+        angle: 0,
+        hp: hData.maxHp,
+        maxHp: hData.maxHp,
+        mp: 100,
+        maxMp: 100,
+        level: 4,
+        ultCharge: 20,
+        gold: 300,
+        kills: 0,
+        heroKey,
+        attackCooldown: 0,
+        dashCooldown: 0,
+        hazardCooldown: 0,
+        isDashing: false,
+        dashTime: 0
+      };
+
+      arenaEnemies = [];
+      arenaProjectiles = [];
+      arenaHazards = [];
+      arenaParticles = [];
+      arenaDamageTexts = [];
+      arenaMinionTimer = 0;
+
+      spawnArenaBoss(bossKey);
+      spawnMinionWave();
+
+      arenaHazards.push({ x: 420, y: 160, radius: 65, type: 'volcanic', duration: 9999 });
+      arenaHazards.push({ x: 580, y: 380, radius: 65, type: 'verdant', duration: 9999 });
+
+      document.getElementById('arenaKillsCount').textContent = '0';
+      document.getElementById('arenaGoldCount').textContent = '300 G';
+      updateArenaHUD();
+      playSound('move');
+    }
+
+    function spawnMinionWave() {
+      for (let i = 0; i < 3; i++) {
+        arenaEnemies.push({
+          x: 880 + (Math.random() * 40 - 20),
+          y: 180 + i * 90,
+          vx: 0,
+          vy: 0,
+          hp: 140,
+          maxHp: 140,
+          speed: 2.2,
+          atk: 18,
+          range: 50,
+          atkType: 'melee',
+          isBoss: false,
+          name: 'Verdant Sapling',
+          minionKey: 'sapling',
+          shootCooldown: Math.floor(Math.random() * 40),
+          radius: 18
+        });
+      }
+    }
+
+    function setupJoystickHandlers() {
+      const zone = document.getElementById('virtualJoystickZone');
+      const knob = document.getElementById('joystickKnob');
+      if (!zone || !knob) return;
+
+      const maxRadius = 45;
+
+      function handleStart(clientX, clientY) {
+        const rect = zone.getBoundingClientRect();
+        joystickState.active = true;
+        joystickState.startX = rect.left + rect.width / 2;
+        joystickState.startY = rect.top + rect.height / 2;
+        handleMove(clientX, clientY);
+      }
+
+      function handleMove(clientX, clientY) {
+        if (!joystickState.active) return;
+        const dx = clientX - joystickState.startX;
+        const dy = clientY - joystickState.startY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const clampedDist = Math.min(dist, maxRadius);
+        const angle = Math.atan2(dy, dx);
+
+        const knobX = Math.cos(angle) * clampedDist;
+        const knobY = Math.sin(angle) * clampedDist;
+        knob.style.transform = `translate(calc(-50% + ${knobX}px), calc(-50% + ${knobY}px))`;
+
+        joystickState.dx = dist > 4 ? Math.cos(angle) * (clampedDist / maxRadius) : 0;
+        joystickState.dy = dist > 4 ? Math.sin(angle) * (clampedDist / maxRadius) : 0;
+        joystickState.dist = clampedDist;
+      }
+
+      function handleEnd() {
+        joystickState.active = false;
+        joystickState.dx = 0;
+        joystickState.dy = 0;
+        knob.style.transform = 'translate(-50%, -50%)';
+      }
+
+      zone.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
+      window.addEventListener('mousemove', (e) => {
+        if (joystickState.active) handleMove(e.clientX, e.clientY);
+      });
+      window.addEventListener('mouseup', handleEnd);
+
+      zone.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0) handleStart(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (joystickState.active && e.touches.length > 0) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchend', handleEnd);
+    }
+
+    function setupKeyboardHandlers() {
+      window.addEventListener('keydown', (e) => {
+        if (!isArenaRunning) return;
+        const key = e.key.toLowerCase();
+        if (key === 'w' || key === 'arrowup') arenaKeys.w = true;
+        if (key === 'a' || key === 'arrowleft') arenaKeys.a = true;
+        if (key === 's' || key === 'arrowdown') arenaKeys.s = true;
+        if (key === 'd' || key === 'arrowright') arenaKeys.d = true;
+
+        if (key === ' ' || key === 'j') {
+          e.preventDefault();
+          arenaAttack();
+        }
+        if (key === 'q' || key === 'k') {
+          arenaSkillDash();
+        }
+        if (key === 'e' || key === 'l') {
+          arenaSkillHazard();
+        }
+        if (key === 'r' || key === 'u') {
+          arenaTriggerUltimate();
+        }
+      });
+
+      window.addEventListener('keyup', (e) => {
+        const key = e.key.toLowerCase();
+        if (key === 'w' || key === 'arrowup') arenaKeys.w = false;
+        if (key === 'a' || key === 'arrowleft') arenaKeys.a = false;
+        if (key === 's' || key === 'arrowdown') arenaKeys.s = false;
+        if (key === 'd' || key === 'arrowright') arenaKeys.d = false;
+      });
+    }
+
+    function setupActionButtons() {
+      const btnAtk = document.getElementById('btnBasicAttack');
+      if (btnAtk) btnAtk.addEventListener('click', () => arenaAttack());
+
+      const btnDash = document.getElementById('btnSkillDash');
+      if (btnDash) btnDash.addEventListener('click', () => arenaSkillDash());
+
+      const btnHazard = document.getElementById('btnSkillHazard');
+      if (btnHazard) btnHazard.addEventListener('click', () => arenaSkillHazard());
+
+      const btnUlt = document.getElementById('btnQueenUltimateArena');
+      if (btnUlt) btnUlt.addEventListener('click', () => arenaTriggerUltimate());
+    }
+
+    function arenaAttack() {
+      if (arenaPlayer.attackCooldown > 0) return;
+      arenaPlayer.attackCooldown = 18;
+
+      let closest = null;
+      let minDist = 9999;
+      arenaEnemies.forEach(e => {
+        if (e.hp > 0) {
+          const d = Math.hypot(e.x - arenaPlayer.x, e.y - arenaPlayer.y);
+          if (d < minDist) {
+            minDist = d;
+            closest = e;
+          }
+        }
+      });
+
+      let targetAngle = arenaPlayer.angle;
+      if (closest && minDist < 380) {
+        targetAngle = Math.atan2(closest.y - arenaPlayer.y, closest.x - arenaPlayer.x);
+        arenaPlayer.angle = targetAngle;
+      }
+
+      const hData = arenaHeroesData[arenaPlayer.heroKey] || arenaHeroesData['ash-matriarch'];
+      playSound('clash');
+
+      if (hData.atkType === 'slash') {
+        arenaProjectiles.push({
+          x: arenaPlayer.x + Math.cos(targetAngle) * 35,
+          y: arenaPlayer.y + Math.sin(targetAngle) * 35,
+          vx: Math.cos(targetAngle) * 7,
+          vy: Math.sin(targetAngle) * 7,
+          radius: 28,
+          dmg: hData.atk,
+          color: '#f59e0b',
+          life: 12,
+          isMelee: true,
+          fromPlayer: true
+        });
+      } else {
+        arenaProjectiles.push({
+          x: arenaPlayer.x + Math.cos(targetAngle) * 20,
+          y: arenaPlayer.y + Math.sin(targetAngle) * 20,
+          vx: Math.cos(targetAngle) * 11,
+          vy: Math.sin(targetAngle) * 11,
+          radius: 9,
+          dmg: hData.atk,
+          color: arenaPlayer.heroKey === 'forest-matriarch' ? '#22c55e' : '#f97316',
+          life: 45,
+          isMelee: false,
+          fromPlayer: true
+        });
+      }
+
+      for (let i = 0; i < 5; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x + Math.cos(targetAngle) * 22,
+          y: arenaPlayer.y + Math.sin(targetAngle) * 22,
+          vx: (Math.random() - 0.5) * 5 + Math.cos(targetAngle) * 4,
+          vy: (Math.random() - 0.5) * 5 + Math.sin(targetAngle) * 4,
+          radius: Math.random() * 3 + 2,
+          color: '#fbbf24',
+          alpha: 1,
+          decay: 0.05
+        });
+      }
+    }
+
+    function arenaSkillDash() {
+      if (arenaPlayer.dashCooldown > 0) return;
+      arenaPlayer.dashCooldown = 180;
+      arenaPlayer.isDashing = true;
+      arenaPlayer.dashTime = 12;
+
+      playSound('move');
+      const dashDist = 135;
+      arenaPlayer.x += Math.cos(arenaPlayer.angle) * dashDist;
+      arenaPlayer.y += Math.sin(arenaPlayer.angle) * dashDist;
+
+      arenaPlayer.x = Math.max(40, Math.min(960, arenaPlayer.x));
+      arenaPlayer.y = Math.max(40, Math.min(500, arenaPlayer.y));
+
+      for (let i = 0; i < 12; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x + (Math.random() - 0.5) * 40,
+          y: arenaPlayer.y + (Math.random() - 0.5) * 40,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          radius: Math.random() * 5 + 3,
+          color: '#38bdf8',
+          alpha: 0.9,
+          decay: 0.04
+        });
+      }
+    }
+
+    function arenaSkillHazard() {
+      if (arenaPlayer.hazardCooldown > 0) return;
+      arenaPlayer.hazardCooldown = 300;
+
+      playSound('terrain');
+      const type = arenaPlayer.heroKey === 'forest-matriarch' || arenaPlayer.heroKey === 'stag-rider' ? 'verdant' : 'volcanic';
+      arenaHazards.push({
+        x: arenaPlayer.x,
+        y: arenaPlayer.y,
+        radius: 75,
+        type,
+        duration: 360,
+        tickTimer: 0
+      });
+
+      for (let i = 0; i < 16; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x,
+          y: arenaPlayer.y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          radius: Math.random() * 4 + 2,
+          color: type === 'verdant' ? '#4ade80' : '#ef4444',
+          alpha: 1,
+          decay: 0.03
+        });
+      }
+    }
+
+    function arenaTriggerUltimate() {
+      if (arenaPlayer.ultCharge < 100) return;
+      arenaPlayer.ultCharge = 0;
+      screenShakeTime = 25;
+
+      const hData = arenaHeroesData[arenaPlayer.heroKey] || arenaHeroesData['ash-matriarch'];
+      playSound('ultimate');
+
+      for (let a = -0.6; a <= 0.6; a += 0.15) {
+        const uAngle = arenaPlayer.angle + a;
+        arenaProjectiles.push({
+          x: arenaPlayer.x,
+          y: arenaPlayer.y,
+          vx: Math.cos(uAngle) * 14,
+          vy: Math.sin(uAngle) * 14,
+          radius: 24,
+          dmg: 280,
+          color: '#fbbf24',
+          life: 60,
+          isUlt: true,
+          fromPlayer: true
+        });
+      }
+
+      for (let i = 0; i < 40; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x,
+          y: arenaPlayer.y,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.5) * 16,
+          radius: Math.random() * 8 + 3,
+          color: '#f59e0b',
+          alpha: 1,
+          decay: 0.02
+        });
+      }
+
+      showManifestationBanner(hData.name, hData.ultName);
+    }
+
+    function showManifestationBanner(heroName, ultName) {
+      const banner = document.getElementById('arenaManifestationBanner');
+      if (!banner) return;
+      document.getElementById('manifestationCutinTitle').textContent = `MANIFESTATION: ${ultName.toUpperCase()}!`;
+      document.getElementById('manifestationCutinSubtitle').textContent = `${heroName} triggers board-altering combat execution!`;
+      banner.classList.remove('d-none');
+      setTimeout(() => {
+        banner.classList.add('d-none');
+      }, 2600);
+    }
+
+    function startActionArena() {
+      if (isArenaRunning) return;
+      isArenaRunning = true;
+      if (!arenaCanvas) initActionArena();
+
+      function loop() {
+        if (!isArenaRunning) return;
+        updateArena();
+        drawArena();
+        arenaAnimId = requestAnimationFrame(loop);
+      }
+      arenaAnimId = requestAnimationFrame(loop);
+    }
+
+    function updateArena() {
+      const hData = arenaHeroesData[arenaPlayer.heroKey] || arenaHeroesData['ash-matriarch'];
+
+      let moveX = 0, moveY = 0;
+      if (arenaKeys.w) moveY -= 1;
+      if (arenaKeys.s) moveY += 1;
+      if (arenaKeys.a) moveX -= 1;
+      if (arenaKeys.d) moveX += 1;
+
+      if (joystickState.active && (joystickState.dx !== 0 || joystickState.dy !== 0)) {
+        moveX = joystickState.dx;
+        moveY = joystickState.dy;
+      }
+
+      const len = Math.hypot(moveX, moveY);
+      if (len > 0) {
+        const normX = moveX / (len > 1 ? len : 1);
+        const normY = moveY / (len > 1 ? len : 1);
+        arenaPlayer.vx = normX * hData.speed;
+        arenaPlayer.vy = normY * hData.speed;
+        arenaPlayer.angle = Math.atan2(normY, normX);
+      } else {
+        arenaPlayer.vx *= 0.7;
+        arenaPlayer.vy *= 0.7;
+      }
+
+      arenaPlayer.x += arenaPlayer.vx;
+      arenaPlayer.y += arenaPlayer.vy;
+
+      arenaPlayer.x = Math.max(35, Math.min(965, arenaPlayer.x));
+      arenaPlayer.y = Math.max(35, Math.min(505, arenaPlayer.y));
+
+      if (arenaPlayer.attackCooldown > 0) arenaPlayer.attackCooldown--;
+      if (arenaPlayer.dashCooldown > 0) arenaPlayer.dashCooldown--;
+      if (arenaPlayer.hazardCooldown > 0) arenaPlayer.hazardCooldown--;
+      if (screenShakeTime > 0) screenShakeTime--;
+
+      if (arenaPlayer.ultCharge < 100) {
+        arenaPlayer.ultCharge = Math.min(100, arenaPlayer.ultCharge + 0.05);
+      }
+
+      arenaMinionTimer++;
+      if (arenaMinionTimer > 360) {
+        arenaMinionTimer = 0;
+        if (arenaEnemies.filter(e => !e.isBoss).length < 5) {
+          spawnMinionWave();
+        }
+      }
+
+      arenaEnemies.forEach((e) => {
+        if (e.hp <= 0) return;
+        const distToPlayer = Math.hypot(arenaPlayer.x - e.x, arenaPlayer.y - e.y);
+
+        if (distToPlayer > e.range) {
+          const ang = Math.atan2(arenaPlayer.y - e.y, arenaPlayer.x - e.x);
+          e.x += Math.cos(ang) * e.speed;
+          e.y += Math.sin(ang) * e.speed;
+        }
+
+        if (e.shootCooldown > 0) {
+          e.shootCooldown--;
+        } else if (distToPlayer < e.range + 80) {
+          e.shootCooldown = e.isBoss ? 55 : 85;
+          const ang = Math.atan2(arenaPlayer.y - e.y, arenaPlayer.x - e.x);
+          arenaProjectiles.push({
+            x: e.x + Math.cos(ang) * 20,
+            y: e.y + Math.sin(ang) * 20,
+            vx: Math.cos(ang) * (e.isBoss ? 7 : 5),
+            vy: Math.sin(ang) * (e.isBoss ? 7 : 5),
+            radius: e.isBoss ? 11 : 6,
+            dmg: e.atk,
+            color: '#dc2626',
+            life: 60,
+            fromPlayer: false
+          });
+        }
+      });
+
+      for (let i = arenaHazards.length - 1; i >= 0; i--) {
+        const hz = arenaHazards[i];
+        if (hz.duration < 9999) {
+          hz.duration--;
+          if (hz.duration <= 0) {
+            arenaHazards.splice(i, 1);
+            continue;
+          }
+        }
+        hz.tickTimer = (hz.tickTimer || 0) + 1;
+        if (hz.tickTimer >= 20) {
+          hz.tickTimer = 0;
+          arenaEnemies.forEach(e => {
+            if (e.hp > 0 && Math.hypot(e.x - hz.x, e.y - hz.y) < hz.radius) {
+              const tickDmg = 14;
+              e.hp -= tickDmg;
+              arenaDamageTexts.push({ x: e.x, y: e.y - 20, text: `-${tickDmg}`, color: '#f87171', alpha: 1, vy: -1.2 });
+              if (e.hp <= 0) handleEnemyDefeat(e);
+            }
+          });
+        }
+      }
+
+      for (let i = arenaProjectiles.length - 1; i >= 0; i--) {
+        const p = arenaProjectiles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+
+        if (p.fromPlayer) {
+          arenaEnemies.forEach(e => {
+            if (e.hp > 0 && Math.hypot(e.x - p.x, e.y - p.y) < (e.radius + p.radius)) {
+              p.life = 0;
+              const isCrit = Math.random() < 0.25;
+              const finalDmg = isCrit ? Math.round(p.dmg * 1.5) : p.dmg;
+              e.hp -= finalDmg;
+
+              arenaPlayer.ultCharge = Math.min(100, arenaPlayer.ultCharge + 7);
+
+              arenaDamageTexts.push({
+                x: e.x,
+                y: e.y - 25,
+                text: isCrit ? `-${finalDmg} CRIT!` : `-${finalDmg}`,
+                color: isCrit ? '#fde047' : (p.isUlt ? '#fbbf24' : '#ffffff'),
+                alpha: 1,
+                vy: -1.5
+              });
+
+              for (let k = 0; k < 6; k++) {
+                arenaParticles.push({
+                  x: p.x,
+                  y: p.y,
+                  vx: (Math.random() - 0.5) * 6,
+                  vy: (Math.random() - 0.5) * 6,
+                  radius: Math.random() * 3 + 2,
+                  color: p.color,
+                  alpha: 1,
+                  decay: 0.06
+                });
+              }
+
+              if (e.hp <= 0) handleEnemyDefeat(e);
+            }
+          });
+        } else {
+          if (Math.hypot(arenaPlayer.x - p.x, arenaPlayer.y - p.y) < (22 + p.radius)) {
+            p.life = 0;
+            arenaPlayer.hp = Math.max(0, arenaPlayer.hp - p.dmg);
+            screenShakeTime = 6;
+            arenaDamageTexts.push({
+              x: arenaPlayer.x,
+              y: arenaPlayer.y - 30,
+              text: `-${p.dmg}`,
+              color: '#ef4444',
+              alpha: 1,
+              vy: -1.2
+            });
+
+            if (arenaPlayer.hp <= 0) {
+              arenaPlayer.hp = 1;
+              playSound('terrain');
+              arenaDamageTexts.push({ x: arenaPlayer.x, y: arenaPlayer.y - 45, text: `SURVIVED!`, color: '#f59e0b', alpha: 1, vy: -1.5 });
+            }
+          }
+        }
+
+        if (p.life <= 0 || p.x < 10 || p.x > 990 || p.y < 10 || p.y > 530) {
+          arenaProjectiles.splice(i, 1);
+        }
+      }
+
+      for (let i = arenaParticles.length - 1; i >= 0; i--) {
+        const pt = arenaParticles[i];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.alpha -= pt.decay;
+        if (pt.alpha <= 0) arenaParticles.splice(i, 1);
+      }
+
+      for (let i = arenaDamageTexts.length - 1; i >= 0; i--) {
+        const dt = arenaDamageTexts[i];
+        dt.y += dt.vy;
+        dt.alpha -= 0.025;
+        if (dt.alpha <= 0) arenaDamageTexts.splice(i, 1);
+      }
+
+      updateArenaHUD();
+    }
+
+    function handleEnemyDefeat(e) {
+      playSound('clash');
+      arenaPlayer.kills++;
+      arenaPlayer.gold += e.isBoss ? 250 : 45;
+      document.getElementById('arenaKillsCount').textContent = arenaPlayer.kills;
+      document.getElementById('arenaGoldCount').textContent = `${arenaPlayer.gold} G`;
+
+      for (let k = 0; k < 20; k++) {
+        arenaParticles.push({
+          x: e.x,
+          y: e.y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          radius: Math.random() * 5 + 2,
+          color: e.isBoss ? '#fbbf24' : '#22c55e',
+          alpha: 1,
+          decay: 0.03
+        });
+      }
+
+      if (e.isBoss) {
+        showManifestationBanner(arenaHeroesData[arenaPlayer.heroKey].name, 'VICTORY CONQUEST');
+        setTimeout(() => {
+          spawnArenaBoss(document.getElementById('arenaBossSelect').value);
+        }, 4000);
+      }
+    }
+
+    function updateArenaHUD() {
+      const hpPct = Math.max(0, Math.min(100, (arenaPlayer.hp / arenaPlayer.maxHp) * 100));
+      const hpBar = document.getElementById('arenaHeroHpBar');
+      if (hpBar) {
+        hpBar.style.width = `${hpPct}%`;
+        hpBar.className = hpPct < 30 ? 'progress-bar bg-danger' : (hpPct < 60 ? 'progress-bar bg-warning' : 'progress-bar bg-success');
+      }
+
+      const ultPct = Math.floor(arenaPlayer.ultCharge);
+      const ultOverlay = document.getElementById('ultChargeOverlay');
+      const btnUlt = document.getElementById('btnQueenUltimateArena');
+      if (ultOverlay && btnUlt) {
+        if (ultPct >= 100) {
+          ultOverlay.textContent = 'READY!';
+          btnUlt.classList.add('ult-ready-pulse');
+        } else {
+          ultOverlay.textContent = `${ultPct}%`;
+          btnUlt.classList.remove('ult-ready-pulse');
+        }
+      }
+
+      const cdDash = document.getElementById('cdOverlayDash');
+      if (cdDash) {
+        if (arenaPlayer.dashCooldown > 0) {
+          cdDash.classList.remove('d-none');
+          cdDash.textContent = Math.ceil(arenaPlayer.dashCooldown / 60);
+        } else {
+          cdDash.classList.add('d-none');
+        }
+      }
+
+      const cdHazard = document.getElementById('cdOverlayHazard');
+      if (cdHazard) {
+        if (arenaPlayer.hazardCooldown > 0) {
+          cdHazard.classList.remove('d-none');
+          cdHazard.textContent = Math.ceil(arenaPlayer.hazardCooldown / 60);
+        } else {
+          cdHazard.classList.add('d-none');
+        }
+      }
+    }
+
+    function drawArena() {
+      if (!arenaCtx || !arenaCanvas) return;
+      const ctx = arenaCtx;
+      const w = arenaCanvas.width;
+      const h = arenaCanvas.height;
+      const animTime = Date.now() * 0.0025;
+
+      let offsetX = 0, offsetY = 0;
+      if (screenShakeTime > 0) {
+        offsetX = (Math.random() - 0.5) * 8;
+        offsetY = (Math.random() - 0.5) * 8;
+      }
+
+      ctx.save();
+      ctx.translate(offsetX, offsetY);
+
+      // 1. TERRITORY LAND RENDERING
+      const selectedLand = document.getElementById('arenaLandSelect')?.value || 'obsidian';
+      
+      if (selectedLand === 'obsidian') {
+        // Volcanic Magma Territory
+        ctx.fillStyle = '#0b0612';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.12)';
+        ctx.lineWidth = 1.5;
+        for (let x = 0; x <= w; x += 60) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y <= h; y += 60) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Animated Molten Magma River
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.75);
+        for (let x = 0; x <= w; x += 30) {
+          const waveY = h * 0.75 + Math.sin(x * 0.015 + animTime) * 35 + Math.cos(x * 0.03 + animTime * 1.5) * 15;
+          ctx.lineTo(x, waveY);
+        }
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+
+        const magmaGrad = ctx.createLinearGradient(0, h * 0.65, 0, h);
+        magmaGrad.addColorStop(0, 'rgba(239, 68, 68, 0.25)');
+        magmaGrad.addColorStop(0.3, 'rgba(249, 115, 22, 0.85)');
+        magmaGrad.addColorStop(0.6, 'rgba(245, 158, 11, 0.95)');
+        magmaGrad.addColorStop(1, 'rgba(185, 28, 28, 0.9)');
+        ctx.fillStyle = magmaGrad;
+        ctx.shadowColor = '#f97316';
+        ctx.shadowBlur = 25;
+        ctx.fill();
+        ctx.restore();
+
+        // Magma River glowing border
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 30) {
+          const waveY = h * 0.75 + Math.sin(x * 0.015 + animTime) * 35 + Math.cos(x * 0.03 + animTime * 1.5) * 15;
+          if (x === 0) ctx.moveTo(x, waveY);
+          else ctx.lineTo(x, waveY);
+        }
+        ctx.stroke();
+
+        // Floating Volcanic Embers
+        for (let i = 0; i < 18; i++) {
+          const ex = (Math.sin(animTime * 0.8 + i * 99) * 0.5 + 0.5) * w;
+          const ey = ((animTime * 45 + i * 55) % h);
+          ctx.fillStyle = i % 2 === 0 ? 'rgba(251, 191, 36, 0.8)' : 'rgba(239, 68, 68, 0.8)';
+          ctx.beginPath();
+          ctx.arc(ex, h - ey, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else if (selectedLand === 'verdant') {
+        // Primeval Forest Land
+        ctx.fillStyle = '#06130b';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = 'rgba(34, 197, 94, 0.12)';
+        ctx.lineWidth = 1.5;
+        for (let x = 0; x <= w; x += 60) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y <= h; y += 60) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Sylvan Leyline Stream
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.7);
+        for (let x = 0; x <= w; x += 30) {
+          const waveY = h * 0.7 + Math.sin(x * 0.012 + animTime) * 30;
+          ctx.lineTo(x, waveY);
+        }
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+
+        const sylvanGrad = ctx.createLinearGradient(0, h * 0.6, 0, h);
+        sylvanGrad.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
+        sylvanGrad.addColorStop(0.4, 'rgba(34, 197, 94, 0.75)');
+        sylvanGrad.addColorStop(1, 'rgba(5, 46, 22, 0.95)');
+        ctx.fillStyle = sylvanGrad;
+        ctx.shadowColor = '#22c55e';
+        ctx.shadowBlur = 20;
+        ctx.fill();
+        ctx.restore();
+
+        for (let i = 0; i < 18; i++) {
+          const sx = (Math.cos(animTime * 0.6 + i * 87) * 0.5 + 0.5) * w;
+          const sy = ((animTime * 35 + i * 60) % h);
+          ctx.fillStyle = 'rgba(110, 231, 183, 0.85)';
+          ctx.beginPath();
+          ctx.arc(sx, h - sy, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else if (selectedLand === 'frost') {
+        // Glacial Permafrost Land
+        ctx.fillStyle = '#06101e';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.15)';
+        ctx.lineWidth = 1.5;
+        for (let x = 0; x <= w; x += 60) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y <= h; y += 60) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        for (let i = 0; i < 24; i++) {
+          const fx = ((animTime * 50 + i * 45) % w);
+          const fy = ((animTime * 30 + i * 70) % h);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+          ctx.beginPath();
+          ctx.arc(fx, fy, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      } else {
+        // Abyssal Coastal Reefs
+        ctx.fillStyle = '#020b18';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = 'rgba(6, 182, 212, 0.15)';
+        ctx.lineWidth = 1.5;
+        for (let x = 0; x <= w; x += 60) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y <= h; y += 60) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+      }
+
+      // Perimeter Borders
+      ctx.strokeStyle = selectedLand === 'obsidian' ? 'rgba(245, 158, 11, 0.6)' : 'rgba(168, 85, 247, 0.5)';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(15, 15, w - 30, h - 30);
+
+      // Active Hazard Zones
+      arenaHazards.forEach(hz => {
+        ctx.save();
+        const grad = ctx.createRadialGradient(hz.x, hz.y, 10, hz.x, hz.y, hz.radius);
+        if (hz.type === 'verdant') {
+          grad.addColorStop(0, 'rgba(34, 197, 94, 0.45)');
+          grad.addColorStop(0.7, 'rgba(21, 128, 61, 0.25)');
+          grad.addColorStop(1, 'rgba(5, 46, 22, 0)');
+          ctx.strokeStyle = 'rgba(74, 222, 128, 0.7)';
+        } else {
+          grad.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+          grad.addColorStop(0.7, 'rgba(185, 28, 28, 0.25)');
+          grad.addColorStop(1, 'rgba(69, 10, 10, 0)');
+          ctx.strokeStyle = 'rgba(248, 113, 113, 0.7)';
+        }
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(hz.x, hz.y, hz.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // 2. ENEMIES RENDERING
+      arenaEnemies.forEach(e => {
+        if (e.hp <= 0) return;
+
+        ctx.save();
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+        ctx.beginPath();
+        ctx.ellipse(e.x, e.y + 16, e.radius + 6, 8, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = e.isBoss ? '#f59e0b' : '#ef4444';
+        ctx.lineWidth = e.isBoss ? 2.5 : 1.8;
+        ctx.shadowColor = e.isBoss ? '#f59e0b' : '#ef4444';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.ellipse(e.x, e.y + 15, e.radius + 4, 7, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        const imgKey = e.isBoss ? e.bossKey : e.minionKey;
+        const figImg = preloadedArenaImages[imgKey];
+        const facingLeft = (arenaPlayer.x - e.x) < 0;
+
+        ctx.translate(e.x, e.y);
+        if (facingLeft) ctx.scale(-1, 1);
+
+        const figW = e.isBoss ? 68 : 46;
+        const figH = e.isBoss ? 82 : 56;
+
+        if (figImg && figImg.complete) {
+          ctx.drawImage(figImg, -figW / 2, -figH + 16, figW, figH);
+        } else {
+          ctx.fillStyle = e.isBoss ? '#7c2d12' : '#14532d';
+          ctx.beginPath();
+          ctx.arc(0, 0, e.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        const barW = e.radius * 2 + 14;
+        const barH = 5;
+        const hpPct = Math.max(0, e.hp / e.maxHp);
+        const headTop = e.y - (e.isBoss ? 70 : 45);
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+        ctx.fillRect(e.x - barW / 2, headTop - 8, barW, barH);
+        ctx.fillStyle = e.isBoss ? '#f59e0b' : '#ef4444';
+        ctx.fillRect(e.x - barW / 2, headTop - 8, barW * hpPct, barH);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(e.name, e.x, headTop - 12);
+      });
+
+      // 3. PLAYER RENDERING
+      ctx.save();
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.beginPath();
+      ctx.ellipse(arenaPlayer.x, arenaPlayer.y + 18, 28, 9, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.ellipse(arenaPlayer.x, arenaPlayer.y + 17, 24, 8, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Aim Vector Arc
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.12)';
+      ctx.beginPath();
+      ctx.moveTo(arenaPlayer.x, arenaPlayer.y + 8);
+      ctx.arc(arenaPlayer.x, arenaPlayer.y + 8, 55, arenaPlayer.angle - 0.45, arenaPlayer.angle + 0.45);
+      ctx.closePath();
+      ctx.fill();
+
+      const pFacingLeft = Math.cos(arenaPlayer.angle) < 0;
+      ctx.save();
+      ctx.translate(arenaPlayer.x, arenaPlayer.y);
+      if (pFacingLeft) ctx.scale(-1, 1);
+
+      const pFig = preloadedArenaImages[arenaPlayer.heroKey];
+      const pFigW = 58;
+      const pFigH = 74;
+
+      if (pFig && pFig.complete) {
+        ctx.drawImage(pFig, -pFigW / 2, -pFigH + 18, pFigW, pFigH);
+      } else {
+        ctx.fillStyle = '#b45309';
+        ctx.beginPath();
+        ctx.arc(0, 0, 22, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // Aim Reticle Point
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(
+        arenaPlayer.x + Math.cos(arenaPlayer.angle) * 35,
+        arenaPlayer.y + 8 + Math.sin(arenaPlayer.angle) * 35,
+        4.5, 0, Math.PI * 2
+      );
+      ctx.fill();
+      ctx.restore();
+
+      // Projectiles
+      arenaProjectiles.forEach(p => {
+        ctx.save();
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      });
+
+      // Particles
+      arenaParticles.forEach(pt => {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, pt.alpha);
+        ctx.fillStyle = pt.color;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      // Damage Text
+      arenaDamageTexts.forEach(dt => {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, dt.alpha);
+        ctx.font = 'bold 13px monospace';
+        ctx.fillStyle = dt.color;
+        ctx.textAlign = 'center';
+        ctx.fillText(dt.text, dt.x, dt.y);
+        ctx.restore();
+      });
+
+      ctx.restore();
+
+      // Minimap Radar
+      if (minimapCtx && minimapCanvas) {
+        const mctx = minimapCtx;
+        const mw = minimapCanvas.width;
+        const mh = minimapCanvas.height;
+        mctx.fillStyle = '#060914';
+        mctx.fillRect(0, 0, mw, mh);
+
+        mctx.fillStyle = '#38bdf8';
+        mctx.beginPath();
+        mctx.arc((arenaPlayer.x / w) * mw, (arenaPlayer.y / h) * mh, 3.5, 0, Math.PI * 2);
+        mctx.fill();
+
+        arenaEnemies.forEach(e => {
+          if (e.hp <= 0) return;
+          mctx.fillStyle = e.isBoss ? '#fbbf24' : '#ef4444';
+          mctx.beginPath();
+          mctx.arc((e.x / w) * mw, (e.y / h) * mh, e.isBoss ? 4 : 2, 0, Math.PI * 2);
+          mctx.fill();
+        });
+      }
+    }
+
+    // Initial render
+    renderBoard();
+  </script>
+</body>
+</html>

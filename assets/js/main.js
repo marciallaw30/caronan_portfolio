@@ -1297,6 +1297,8 @@ exportWebPAssets();`,
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       calculateNodePositions();
+      generateLandDots();
+      generateStarfield();
     });
 
     // Equirectangular projection mapping geographic coords to canvas screen
@@ -1523,6 +1525,65 @@ exportWebPAssets();`,
     }
     generateLandDots();
 
+    // ================= CELESTIAL STARFIELD & CONSTELLATION LAYER =================
+    const stars = [];
+    const constellationStars = [];
+    const constellationEdges = [];
+    const numBackgroundStars = 140;
+    const numConstellationAnchors = 28;
+
+    function generateStarfield() {
+      stars.length = 0;
+      constellationStars.length = 0;
+      constellationEdges.length = 0;
+
+      // 1. Multi-layered background stars (Distant micro-stars & mid-depth stars)
+      for (let i = 0; i < numBackgroundStars; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() < 0.75 ? 0.5 + Math.random() * 0.7 : 1.2 + Math.random() * 1.0,
+          baseAlpha: 0.15 + Math.random() * 0.45,
+          twinklePhase: Math.random() * Math.PI * 2,
+          twinkleSpeed: 0.015 + Math.random() * 0.035,
+          color: Math.random() > 0.6 ? '#00d2ff' : (Math.random() > 0.5 ? '#c084fc' : '#ffffff')
+        });
+      }
+
+      // 2. Major Constellation Anchor Stars (pulsing celestial nodes)
+      for (let i = 0; i < numConstellationAnchors; i++) {
+        const star = {
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: 1.8 + Math.random() * 1.4,
+          pulsePhase: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.012 + Math.random() * 0.02,
+          color: Math.random() > 0.5 ? '#00e5ff' : '#d8b4fe'
+        };
+        constellationStars.push(star);
+      }
+
+      // 3. Constellation Connections (connect nearby stars to form celestial network)
+      const maxDist = Math.min(width, height) * 0.22;
+      for (let i = 0; i < constellationStars.length; i++) {
+        let connections = 0;
+        for (let j = i + 1; j < constellationStars.length; j++) {
+          const d = Math.hypot(constellationStars[i].x - constellationStars[j].x, constellationStars[i].y - constellationStars[j].y);
+          if (d < maxDist && connections < 3) {
+            constellationEdges.push({
+              a: constellationStars[i],
+              b: constellationStars[j],
+              dist: d,
+              maxDist: maxDist,
+              energyPhase: Math.random() * Math.PI * 2
+            });
+            connections++;
+          }
+        }
+      }
+    }
+    generateStarfield();
+
     // Quadratic Bezier evaluation point
     function getBezierPoint(p0, p1, p2, t) {
       const inv = 1 - t;
@@ -1555,6 +1616,77 @@ exportWebPAssets();`,
         mouse.x = null;
         mouse.y = null;
       }
+
+      // ================= 0. CELESTIAL CONSTELLATION & NIGHT SKY LAYER =================
+      // 0A. Faint Glowing Cyber-Constellation Network Lines
+      ctx.save();
+      constellationEdges.forEach(edge => {
+        edge.energyPhase += 0.018;
+        const breathAlpha = 0.06 + ((Math.sin(edge.energyPhase) + 1) * 0.5) * 0.16; // 0.06 - 0.22 opacity
+        const grad = ctx.createLinearGradient(edge.a.x, edge.a.y, edge.b.x, edge.b.y);
+        grad.addColorStop(0, `rgba(0, 210, 255, ${breathAlpha})`);
+        grad.addColorStop(0.5, `rgba(192, 132, 252, ${breathAlpha * 1.25})`);
+        grad.addColorStop(1, `rgba(0, 210, 255, ${breathAlpha})`);
+
+        ctx.beginPath();
+        ctx.moveTo(edge.a.x, edge.a.y);
+        ctx.lineTo(edge.b.x, edge.b.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      });
+      ctx.restore();
+
+      // 0B. Multi-Layered Particle Starfield
+      stars.forEach(star => {
+        star.twinklePhase += star.twinkleSpeed;
+        const alpha = Math.max(0.08, star.baseAlpha + Math.sin(star.twinklePhase) * 0.25);
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = star.color === '#ffffff'
+          ? `rgba(255, 255, 255, ${alpha})`
+          : (star.color === '#00d2ff' ? `rgba(0, 210, 255, ${alpha})` : `rgba(192, 132, 252, ${alpha})`);
+        ctx.fill();
+      });
+
+      // 0C. Constellation Anchor Stars with Ambient Breathing Pulse
+      constellationStars.forEach(cStar => {
+        cStar.pulsePhase += cStar.pulseSpeed;
+        const pulse = (Math.sin(cStar.pulsePhase) + 1) * 0.5;
+        const currentR = cStar.radius * (0.85 + pulse * 0.35);
+        const alpha = 0.45 + pulse * 0.45;
+
+        // Soft breathing ambient halo
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cStar.x, cStar.y, currentR * 3.6, 0, Math.PI * 2);
+        ctx.fillStyle = cStar.color === '#00e5ff'
+          ? `rgba(0, 229, 255, ${alpha * 0.16})`
+          : `rgba(216, 180, 254, ${alpha * 0.16})`;
+        ctx.fill();
+
+        // Core star
+        ctx.beginPath();
+        ctx.arc(cStar.x, cStar.y, currentR, 0, Math.PI * 2);
+        ctx.fillStyle = cStar.color;
+        ctx.shadowColor = cStar.color;
+        ctx.shadowBlur = 8 + pulse * 6;
+        ctx.fill();
+
+        // Delicate 4-point micro cross-flare for brightest stars
+        if (cStar.radius > 2.4 && pulse > 0.4) {
+          ctx.strokeStyle = `rgba(255, 255, 255, ${pulse * 0.4})`;
+          ctx.lineWidth = 0.6;
+          const flareLen = currentR * 3.2;
+          ctx.beginPath();
+          ctx.moveTo(cStar.x - flareLen, cStar.y);
+          ctx.lineTo(cStar.x + flareLen, cStar.y);
+          ctx.moveTo(cStar.x, cStar.y - flareLen);
+          ctx.lineTo(cStar.x, cStar.y + flareLen);
+          ctx.stroke();
+        }
+        ctx.restore();
+      });
 
       // 1. Draw Lat/Long Geodetic Telemetry Grid
       ctx.save();
