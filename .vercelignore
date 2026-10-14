@@ -1,0 +1,4 @@
+scratch/
+*.ps1
+node_modules/
+.git
