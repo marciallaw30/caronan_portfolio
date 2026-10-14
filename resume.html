@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -39,6 +39,9 @@
       line-height: 1.6;
       padding-top: 80px;
       padding-bottom: 60px;
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
     }
 
     /* Fixed Action Header */
@@ -107,9 +110,13 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(139, 92, 246, 0.15);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(139, 92, 246, 0.16);
       padding: 45px 50px;
       margin: 0 auto;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
     .resume-header-title {
@@ -183,6 +190,344 @@
       line-height: 1.7;
     }
 
+        /* ===================================================================
+       CYBERNETIC BACKGROUND SYSTEM: GRID, NEBULAS, VECTOR MAP & TELEMETRY
+       =================================================================== */
+    .cyber-bg-system {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+    }
+
+    /* Ambient Glowing Nebulas */
+    .cyber-nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(95px);
+      pointer-events: none;
+      opacity: 0.42;
+      animation: nebulaPulse 16s ease-in-out infinite alternate;
+    }
+
+    .nebula-cyan {
+      width: 560px;
+      height: 560px;
+      top: 15%;
+      right: 6%;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.20) 0%, rgba(0, 210, 255, 0.04) 50%, transparent 75%);
+    }
+
+    .nebula-violet {
+      width: 640px;
+      height: 640px;
+      bottom: 5%;
+      left: 5%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, rgba(139, 92, 246, 0.05) 50%, transparent 75%);
+      animation-duration: 20s;
+      animation-delay: -6s;
+    }
+
+    @keyframes nebulaPulse {
+      0% { transform: scale(0.92) translate(0, 0); opacity: 0.32; }
+      50% { transform: scale(1.08) translate(18px, -15px); opacity: 0.52; }
+      100% { transform: scale(0.96) translate(-12px, 12px); opacity: 0.38; }
+    }
+
+    /* Precision Cyber-Grid Matrix Layer */
+    .cyber-grid-layer {
+      position: absolute;
+      inset: 0;
+      background-size: 50px 50px;
+      background-image:
+        linear-gradient(to right, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 210, 255, 0.05) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse 85% 75% at 50% 50%, black 30%, transparent 92%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 50%, black 30%, transparent 92%);
+    }
+
+    /* ===================================================================
+       1. SUBTLE HEX-MATRIX DATA STREAM LAYER
+       =================================================================== */
+    .hex-matrix-layer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      opacity: 0.045;
+      pointer-events: none;
+      z-index: 1;
+      mask-image: radial-gradient(ellipse 90% 85% at 50% 50%, black 35%, transparent 95%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 50%, black 35%, transparent 95%);
+    }
+
+    .hex-matrix-col {
+      position: absolute;
+      top: 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      line-height: 1.85;
+      color: var(--primary-blue);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .hex-stream-track {
+      display: flex;
+      flex-direction: column;
+      animation: hexScroll linear infinite;
+    }
+
+    .hex-col-1 { left: 2.2%; animation: hexScroll 38s linear infinite; }
+    .hex-col-2 { left: 8.8%; animation: hexScroll 48s linear infinite -14s; }
+    .hex-col-3 { left: 17.5%; animation: hexScroll 42s linear infinite -6s; color: var(--primary-violet); }
+    .hex-col-4 { right: 17.5%; animation: hexScroll 46s linear infinite -18s; color: var(--primary-violet); }
+    .hex-col-5 { right: 8.8%; animation: hexScroll 36s linear infinite -8s; }
+    .hex-col-6 { right: 2.2%; animation: hexScroll 44s linear infinite -3s; }
+
+    @keyframes hexScroll {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-50%); }
+    }
+
+    /* ===================================================================
+       2. GLOWING GLOBAL VECTOR MAP & OPTIC ROUTING DATA NODES
+       =================================================================== */
+    .vector-map-container {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .vector-map-svg {
+      width: 100vw;
+      height: 100vh;
+      max-width: 1920px;
+      max-height: 1080px;
+      object-fit: contain;
+    }
+
+    .map-continent-path {
+      fill: rgba(13, 18, 36, 0.32);
+      stroke: rgba(0, 210, 255, 0.22);
+      stroke-width: 0.85;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.16));
+    }
+
+    .map-route-line {
+      fill: none;
+      stroke: rgba(139, 92, 246, 0.26);
+      stroke-width: 1.1;
+      stroke-dasharray: 4 4;
+    }
+
+    .map-photon-pulse {
+      fill: none;
+      stroke: #00d2ff;
+      stroke-width: 1.6;
+      stroke-dasharray: 10 180;
+      animation: opticFlow 4.5s linear infinite;
+      filter: drop-shadow(0 0 4px #00d2ff);
+    }
+
+    .pulse-2 { animation-duration: 3.8s; animation-delay: -1.2s; }
+    .pulse-3 { animation-duration: 5.2s; animation-delay: -2.4s; }
+    .pulse-4 { animation-duration: 4.8s; animation-delay: -3.1s; }
+
+    @keyframes opticFlow {
+      0% { stroke-dashoffset: 190; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .map-node-dot {
+      fill: #00d2ff;
+      filter: drop-shadow(0 0 6px rgba(0, 210, 255, 0.95));
+    }
+
+    .map-node-ring {
+      fill: none;
+      stroke: rgba(0, 210, 255, 0.65);
+      stroke-width: 0.75;
+      animation: nodePing 3.5s ease-out infinite;
+    }
+
+    @keyframes nodePing {
+      0% { r: 3px; opacity: 0.9; }
+      80% { r: 12px; opacity: 0; }
+      100% { r: 12px; opacity: 0; }
+    }
+
+    /* ===================================================================
+       3. DYNAMIC RADAR/SONAR PULSE AURA (MANILA HQ :: MNL-PH)
+       =================================================================== */
+    .sonar-wave {
+      fill: none;
+      stroke: #00d2ff;
+      transform-origin: 836px 207px;
+      animation: sonarPulse 3.4s cubic-bezier(0.2, 0.75, 0.4, 1) infinite;
+    }
+
+    .wave-1 { animation-delay: 0s; }
+    .wave-2 { animation-delay: 1.13s; }
+    .wave-3 { animation-delay: 2.26s; }
+
+    @keyframes sonarPulse {
+      0% {
+        r: 6px;
+        opacity: 0.85;
+        stroke-width: 2px;
+      }
+      50% {
+        opacity: 0.45;
+      }
+      100% {
+        r: 88px;
+        opacity: 0;
+        stroke-width: 0.4px;
+      }
+    }
+
+    .sonar-sweep-arm {
+      animation: sonarRotate 8.5s linear infinite;
+      transform-origin: 836px 207px;
+    }
+
+    @keyframes sonarRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ===================================================================
+       4. TELEMETRY HUD TAGS (MINIMALIST PERIMETER READOUTS)
+       =================================================================== */
+    .telemetry-hud-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1040;
+    }
+
+    .telemetry-hud-tag {
+      position: absolute;
+      pointer-events: auto;
+      background: rgba(7, 10, 22, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 210, 255, 0.22);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.69rem;
+      letter-spacing: 0.06em;
+      line-height: 1.45;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.55), 0 0 12px rgba(0, 210, 255, 0.08);
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+
+    .telemetry-hud-tag:hover {
+      border-color: rgba(0, 210, 255, 0.6);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 210, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    .hud-top-left {
+      top: 76px;
+      left: 24px;
+    }
+
+    .hud-top-right {
+      top: 76px;
+      right: 24px;
+      text-align: right;
+    }
+
+    .hud-bottom-left {
+      bottom: 22px;
+      left: 24px;
+    }
+
+    .hud-bottom-right {
+      bottom: 22px;
+      right: 24px;
+      text-align: right;
+    }
+
+    .hud-tag-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.63rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    .hud-top-right .hud-tag-header,
+    .hud-bottom-right .hud-tag-header {
+      justify-content: flex-end;
+    }
+
+    .hud-status-pip {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pipPulse 2s infinite ease-in-out;
+    }
+
+    .pip-green {
+      background-color: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .pip-cyan {
+      background-color: #00d2ff;
+      box-shadow: 0 0 8px #00d2ff;
+    }
+
+    @keyframes pipPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+
+    .hud-data-line {
+      color: #94a3b8;
+    }
+
+    .hud-key {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .hud-val {
+      font-weight: 600;
+    }
+
+    .text-cyan {
+      color: #00d2ff !important;
+    }
+
+    .text-green {
+      color: #4ade80 !important;
+    }
+
+    /* Hide HUD tags on screens below 1200px to ensure mobile/tablet comfort */
+    @media (max-width: 1200px) {
+      .telemetry-hud-tag {
+        display: none !important;
+      }
+    }
+
     /* Print Styles */
     @media print {
       body {
@@ -251,6 +596,347 @@
 
 <body>
 
+  <!-- ===================================================================
+       TELEMETRY HUD TAGS: MINIMALIST PERIMETER READOUTS (BORDER MARGINS)
+       =================================================================== -->
+  <aside class="telemetry-hud-container no-print" aria-label="System Telemetry HUD">
+    <!-- Top Left Margin HUD Tag -->
+    <div class="telemetry-hud-tag hud-top-left" title="Network Channel Latency & Security Protocol">
+      <div class="hud-tag-header">
+        <span class="hud-status-pip pip-green"></span>
+        <span>NET_LINK :: ESTABLISHED</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">LATENCY:</span> <span class="hud-val text-cyan">12ms [OPTIMAL]</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">PROTOCOL:</span> <span class="hud-val">TLS 1.3 / HTTP/2</span>
+      </div>
+    </div>
+
+    <!-- Top Right Margin HUD Tag -->
+    <div class="telemetry-hud-tag hud-top-right" title="Data Stream Encryption & Routing Gateway">
+      <div class="hud-tag-header">
+        <span class="hud-status-pip pip-cyan"></span>
+        <span>SEC_STREAM :: ACTIVE</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">CIPHER:</span> <span class="hud-val text-cyan">AES-256-GCM</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">PKT_LOSS:</span> <span class="hud-val text-green">0.00%</span>
+      </div>
+    </div>
+
+    <!-- Bottom Left Margin HUD Tag -->
+    <div class="telemetry-hud-tag hud-bottom-left" title="Primary Node Coordinate & Carrier Telemetry">
+      <div class="hud-tag-header">
+        <span class="hud-status-pip pip-cyan"></span>
+        <span>BEACON :: MNL-PH-01</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">COORDS:</span> <span class="hud-val text-cyan">14.5995Â° N, 120.9842Â° E</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">CARRIER:</span> <span class="hud-val">DUAL_FIBER_MESH</span>
+      </div>
+    </div>
+
+    <!-- Bottom Right Margin HUD Tag -->
+    <div class="telemetry-hud-tag hud-bottom-right" title="System Diagnostic & Telemetry Status">
+      <div class="hud-tag-header">
+        <span class="hud-status-pip pip-green"></span>
+        <span>DIAGNOSTICS :: NOMINAL</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">SYS_LOAD:</span> <span class="hud-val text-cyan">14% [60 FPS]</span>
+      </div>
+      <div class="hud-data-line">
+        <span class="hud-key">INTEGRITY:</span> <span class="hud-val text-green">SHA-256 VERIFIED</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================================================================
+       CYBERNETIC BACKGROUND SYSTEM: GRID, NEBULAS, VECTOR MAP & SONAR
+       =================================================================== -->
+  <div class="cyber-bg-system no-print" aria-hidden="true">
+    <!-- Ambient Radial Glowing Nebulas -->
+    <div class="cyber-nebula nebula-cyan"></div>
+    <div class="cyber-nebula nebula-violet"></div>
+
+    <!-- Precision IT Cyber-Grid Overlay -->
+    <div class="cyber-grid-layer"></div>
+
+    <!-- 1. Subtle Hex-Matrix Data Stream Layer -->
+    <div class="hex-matrix-layer">
+      <div class="hex-matrix-col hex-col-1">
+        <div class="hex-stream-track">
+          <span>0x4D 0x41 0x52 0x43 0x49 0x41 0x4C</span>
+          <span>0x4C 0x41 0x57 0x52 0x45 0x4E 0x43 0x45</span>
+          <span>0x43 0x41 0x52 0x4F 0x4E 0x41 0x4E</span>
+          <span>0x42 0x53 0x49 0x54 0x20 0x32 0x30 0x32 0x36</span>
+          <span>0x4D 0x4E 0x4C 0x2D 0x50 0x48 0x30 0x31</span>
+          <span>0x00 0xD2 0xFF 0x8B 0x5C 0xF6</span>
+          <span>0x33 0x4E 0x46 0x20 0x53 0x51 0x4C</span>
+          <span>0x41 0x45 0x53 0x2D 0x32 0x35 0x36</span>
+          <span>0x53 0x48 0x41 0x2D 0x35 0x31 0x32</span>
+          <span>0x50 0x59 0x54 0x48 0x4F 0x4E 0x33</span>
+          <span>0x54 0x4C 0x53 0x31 0x2E 0x33</span>
+          <span>0x31 0x34 0x2E 0x36 0x30 0x4E</span>
+          <span>0x31 0x32 0x30 0x2E 0x39 0x38 0x45</span>
+          <span>0x53 0x59 0x53 0x5F 0x4F 0x4B</span>
+          <!-- Duplicate for continuous seamless drift -->
+          <span>0x4D 0x41 0x52 0x43 0x49 0x41 0x4C</span>
+          <span>0x4C 0x41 0x57 0x52 0x45 0x4E 0x43 0x45</span>
+          <span>0x43 0x41 0x52 0x4F 0x4E 0x41 0x4E</span>
+          <span>0x42 0x53 0x49 0x54 0x20 0x32 0x30 0x32 0x36</span>
+          <span>0x4D 0x4E 0x4C 0x2D 0x50 0x48 0x30 0x31</span>
+          <span>0x00 0xD2 0xFF 0x8B 0x5C 0xF6</span>
+          <span>0x33 0x4E 0x46 0x20 0x53 0x51 0x4C</span>
+          <span>0x41 0x45 0x53 0x2D 0x32 0x35 0x36</span>
+          <span>0x53 0x48 0x41 0x2D 0x35 0x31 0x32</span>
+          <span>0x50 0x59 0x54 0x48 0x4F 0x4E 0x33</span>
+          <span>0x54 0x4C 0x53 0x31 0x2E 0x33</span>
+          <span>0x31 0x34 0x2E 0x36 0x30 0x4E</span>
+          <span>0x31 0x32 0x30 0x2E 0x39 0x38 0x45</span>
+          <span>0x53 0x59 0x53 0x5F 0x4F 0x4B</span>
+        </div>
+      </div>
+
+      <div class="hex-matrix-col hex-col-2">
+        <div class="hex-stream-track">
+          <span>0x7F 0xA4 0x2E 0x8B 0x5C 0xF6 0x00 0xD2</span>
+          <span>0xFF 0x1A 0xC8 0x3B 0x90 0xAA 0x07 0x1E</span>
+          <span>0x55 0xF1 0x2A 0x84 0x9C 0xD3 0xEE 0x40</span>
+          <span>0xB8 0x12 0x66 0x39 0xFA 0x01 0xDE 0x77</span>
+          <span>0xC1 0x50 0x3B 0x89 0x4E 0x21 0x9A 0x64</span>
+          <span>0x10 0xEF 0x44 0xBC 0x7D 0x30 0x81 0x5A</span>
+          <span>0x3C 0x9F 0x15 0x88 0x2D 0xB0 0x47 0x6E</span>
+          <span>0x7F 0xA4 0x2E 0x8B 0x5C 0xF6 0x00 0xD2</span>
+          <span>0xFF 0x1A 0xC8 0x3B 0x90 0xAA 0x07 0x1E</span>
+          <span>0x55 0xF1 0x2A 0x84 0x9C 0xD3 0xEE 0x40</span>
+          <span>0xB8 0x12 0x66 0x39 0xFA 0x01 0xDE 0x77</span>
+          <span>0xC1 0x50 0x3B 0x89 0x4E 0x21 0x9A 0x64</span>
+          <span>0x10 0xEF 0x44 0xBC 0x7D 0x30 0x81 0x5A</span>
+          <span>0x3C 0x9F 0x15 0x88 0x2D 0xB0 0x47 0x6E</span>
+        </div>
+      </div>
+
+      <div class="hex-matrix-col hex-col-3">
+        <div class="hex-stream-track">
+          <span>0x01 0x23 0x45 0x67 0x89 0xAB 0xCD 0xEF</span>
+          <span>0xFE 0xDC 0xBA 0x98 0x76 0x54 0x32 0x10</span>
+          <span>0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88</span>
+          <span>0x99 0xAA 0xBB 0xCC 0xDD 0xEE 0xFF 0x00</span>
+          <span>0x0A 0x1B 0x2C 0x3D 0x4E 0x5F 0x60 0x71</span>
+          <span>0x82 0x93 0xA4 0xB5 0xC6 0xD7 0xE8 0xF9</span>
+          <span>0x01 0x23 0x45 0x67 0x89 0xAB 0xCD 0xEF</span>
+          <span>0xFE 0xDC 0xBA 0x98 0x76 0x54 0x32 0x10</span>
+          <span>0x11 0x22 0x33 0x44 0x55 0x66 0x77 0x88</span>
+          <span>0x99 0xAA 0xBB 0xCC 0xDD 0xEE 0xFF 0x00</span>
+          <span>0x0A 0x1B 0x2C 0x3D 0x4E 0x5F 0x60 0x71</span>
+          <span>0x82 0x93 0xA4 0xB5 0xC6 0xD7 0xE8 0xF9</span>
+        </div>
+      </div>
+
+      <div class="hex-matrix-col hex-col-4">
+        <div class="hex-stream-track">
+          <span>0x8B 0x5C 0xF6 0x00 0xD2 0xFF 0x07 0x09</span>
+          <span>0x13 0x0D 0x12 0x24 0xF8 0xFA 0xFC 0x94</span>
+          <span>0xA3 0xB8 0x38 0xBD 0xF8 0x22 0xC5 0x5E</span>
+          <span>0xEF 0x44 0x44 0x06 0xB6 0xD4 0x3B 0x82</span>
+          <span>0xF6 0x63 0x66 0xF1 0x8B 0x5C 0xF6 0x00</span>
+          <span>0xD2 0xFF 0x14 0x59 0x95 0x12 0x09 0x84</span>
+          <span>0x8B 0x5C 0xF6 0x00 0xD2 0xFF 0x07 0x09</span>
+          <span>0x13 0x0D 0x12 0x24 0xF8 0xFA 0xFC 0x94</span>
+          <span>0xA3 0xB8 0x38 0xBD 0xF8 0x22 0xC5 0x5E</span>
+          <span>0xEF 0x44 0x44 0x06 0xB6 0xD4 0x3B 0x82</span>
+          <span>0xF6 0x63 0x66 0xF1 0x8B 0x5C 0xF6 0x00</span>
+          <span>0xD2 0xFF 0x14 0x59 0x95 0x12 0x09 0x84</span>
+        </div>
+      </div>
+
+      <div class="hex-matrix-col hex-col-5">
+        <div class="hex-stream-track">
+          <span>0xC0 0xA8 0x01 0x01 0x7F 0x00 0x00 0x01</span>
+          <span>0xAC 0x10 0x0A 0x20 0x08 0x08 0x08 0x08</span>
+          <span>0x01 0x01 0x01 0x01 0xD8 0x3A 0xD5 0x00</span>
+          <span>0xD2 0xFF 0x1E 0x29 0x3B 0x33 0x41 0x55</span>
+          <span>0x47 0x55 0x69 0x64 0x71 0x82 0x88 0x94</span>
+          <span>0xC0 0xA8 0x01 0x01 0x7F 0x00 0x00 0x01</span>
+          <span>0xAC 0x10 0x0A 0x20 0x08 0x08 0x08 0x08</span>
+          <span>0x01 0x01 0x01 0x01 0xD8 0x3A 0xD5 0x00</span>
+          <span>0xD2 0xFF 0x1E 0x29 0x3B 0x33 0x41 0x55</span>
+          <span>0x47 0x55 0x69 0x64 0x71 0x82 0x88 0x94</span>
+        </div>
+      </div>
+
+      <div class="hex-matrix-col hex-col-6">
+        <div class="hex-stream-track">
+          <span>0x4D 0x4E 0x4C 0x2D 0x50 0x48 0x2D 0x30</span>
+          <span>0x31 0x20 0x50 0x52 0x49 0x4D 0x41 0x52</span>
+          <span>0x59 0x20 0x48 0x51 0x20 0x4E 0x4F 0x44</span>
+          <span>0x45 0x20 0x4F 0x4E 0x4C 0x49 0x4E 0x45</span>
+          <span>0x53 0x59 0x53 0x54 0x45 0x4D 0x5F 0x4F</span>
+          <span>0x4B 0x20 0x52 0x45 0x53 0x55 0x4D 0x45</span>
+          <span>0x4D 0x4E 0x4C 0x2D 0x50 0x48 0x2D 0x30</span>
+          <span>0x31 0x20 0x50 0x52 0x49 0x4D 0x41 0x52</span>
+          <span>0x59 0x20 0x48 0x51 0x20 0x4E 0x4F 0x44</span>
+          <span>0x45 0x20 0x4F 0x4E 0x4C 0x49 0x4E 0x45</span>
+          <span>0x53 0x59 0x53 0x54 0x45 0x4D 0x5F 0x4F</span>
+          <span>0x4B 0x20 0x52 0x45 0x53 0x55 0x4D 0x45</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Glowing Global Vector Map & Optic Routing Data Nodes -->
+    <div class="vector-map-container">
+      <svg class="vector-map-svg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Neon Continent Outline Glow -->
+          <filter id="neonContinentGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2.2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          <!-- Core Node Beacon Glow -->
+          <filter id="beaconCoreGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="4.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+
+          <!-- Dynamic Radar / Sonar Pulse Sweep Gradient -->
+          <radialGradient id="sonarSweepGradient" cx="836" cy="207" r="70" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00d2ff" stop-opacity="0.32" />
+            <stop offset="60%" stop-color="#00d2ff" stop-opacity="0.12" />
+            <stop offset="100%" stop-color="#00d2ff" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+
+        <!-- World Continents High-Tech Polygons -->
+        <g class="map-continents" filter="url(#neonContinentGlow)">
+          <path class="map-continent-path" d="M 33.3 58.8 L 50 44.1 L 111.1 44.1 L 152.8 44.1 L 222.2 44.1 L 277.8 50 L 319.4 73.5 L 333.3 102.9 L 322.2 117.6 L 305.6 126.5 L 288.9 147.1 L 277.8 173.5 L 272.2 182.4 L 255.6 161.8 L 230.6 173.5 L 230.6 191.2 L 250 191.2 L 258.3 202.9 L 269.4 223.5 L 286.1 226.5 L 277.8 226.5 L 263.9 214.7 L 244.4 205.9 L 208.3 191.2 L 194.4 179.4 L 180.6 161.8 L 161.1 141.2 L 155.6 108.8 L 138.9 91.2 L 111.1 73.5 L 83.3 73.5 L 55.6 79.4 L 33.3 58.8 Z M 375 73.5 L 402.8 58.8 L 444.4 44.1 L 450 23.5 L 430.6 8.8 L 388.9 5.9 L 347.2 8.8 L 333.3 23.5 L 361.1 44.1 L 375 73.5 Z M 286.1 226.5 L 300 217.6 L 333.3 220.6 L 361.1 250 L 402.8 264.7 L 402.8 276.5 L 391.7 294.1 L 383.3 314.7 L 366.7 332.4 L 352.8 347.1 L 319.4 373.5 L 316.7 411.8 L 294.4 405.9 L 291.7 382.4 L 300 358.8 L 302.8 338.2 L 288.9 294.1 L 275 264.7 L 277.8 247.1 L 286.1 226.5 Z M 475 144.1 L 475 123.5 L 497.2 114.7 L 486.1 108.8 L 505.6 100 L 522.2 91.2 L 525 82.4 L 536.1 88.2 L 527.8 73.5 L 538.9 58.8 L 552.8 44.1 L 577.8 41.2 L 588.9 47.1 L 611.1 58.8 L 625 73.5 L 611.1 88.2 L 583.3 102.9 L 583.3 117.6 L 572.2 132.4 L 563.9 138.2 L 541.7 132.4 L 533.3 120.6 L 511.1 123.5 L 508.3 126.5 L 491.7 144.1 L 475 144.1 Z M 486.1 102.9 L 497.2 100 L 502.8 97.1 L 500 91.2 L 494.4 79.4 L 486.1 79.4 L 486.1 91.2 L 486.1 102.9 Z M 483.3 144.1 L 527.8 141.2 L 569.4 155.9 L 588.9 158.8 L 594.4 170.6 L 619.4 211.8 L 641.7 214.7 L 625 235.3 L 611.1 261.8 L 608.3 282.4 L 597.2 308.8 L 588.9 332.4 L 577.8 344.1 L 555.6 352.9 L 550 350 L 541.7 332.4 L 533.3 300 L 527.8 264.7 L 525 238.2 L 505.6 232.4 L 477.8 238.2 L 458.3 217.6 L 452.8 205.9 L 452.8 188.2 L 463.9 167.6 L 483.3 144.1 Z M 622.2 288.2 L 638.9 294.1 L 636.1 308.8 L 630.6 323.5 L 622.2 323.5 L 622.2 288.2 Z M 572.2 132.4 L 597.2 141.2 L 611.1 158.8 L 638.9 161.8 L 652.8 176.5 L 666.7 176.5 L 688.9 179.4 L 700 194.1 L 722.2 211.8 L 722.2 226.5 L 736.1 200 L 750 185.3 L 772.2 202.9 L 786.1 220.6 L 788.9 247.1 L 800 205.9 L 827.8 179.4 L 838.9 161.8 L 838.9 141.2 L 858.3 126.5 L 866.7 123.5 L 888.9 108.8 L 897.2 94.1 L 933.3 100 L 950 85.3 L 972.2 73.5 L 1000 58.8 L 972.2 50 L 888.9 35.3 L 805.6 23.5 L 722.2 35.3 L 666.7 44.1 L 638.9 58.8 L 625 73.5 Z M 861.1 158.8 L 866.7 152.9 L 877.8 147.1 L 888.9 144.1 L 891.7 129.4 L 894.4 117.6 L 902.8 120.6 L 891.7 135.3 L 877.8 150 L 861.1 158.8 Z M 833.3 195.6 L 838.9 196.5 L 840.3 201.5 L 844.4 208.8 L 838.9 210.3 L 834.7 207.4 L 832.8 202.9 L 833.3 195.6 Z M 838.9 216.2 L 845.8 214.7 L 847.2 219.1 L 840.3 220.6 L 838.9 216.2 Z M 838.9 226.5 L 844.4 225 L 850 223.5 L 851.4 230.9 L 847.2 233.8 L 838.9 230.9 L 838.9 226.5 Z M 763.9 235.3 L 772.2 241.2 L 786.1 252.9 L 794.4 264.7 L 786.1 258.8 L 772.2 247.1 L 763.9 235.3 Z M 802.8 247.1 L 811.1 238.2 L 825 238.2 L 830.6 244.1 L 825 255.9 L 813.9 258.8 L 805.6 255.9 L 802.8 247.1 Z M 791.7 267.6 L 805.6 270.6 L 816.7 273.5 L 816.7 275 L 800 272.1 L 791.7 267.6 Z M 816.7 314.7 L 827.8 352.9 L 875 352.9 L 883.3 361.8 L 908.3 361.8 L 925 332.4 L 916.7 314.7 L 894.4 282.4 L 877.8 285.3 L 861.1 288.2 L 844.4 297.1 L 816.7 314.7 Z M 980.6 352.9 L 991.7 358.8 L 994.4 364.7 L 986.1 370.6 L 980.6 367.6 L 980.6 352.9 Z M 983.3 370.6 L 972.2 376.5 L 963.9 385.3 L 972.2 385.3 L 983.3 370.6 Z" />
+        </g>
+
+        <!-- Interconnecting Optic Routing Lines -->
+        <g class="map-routing-mesh">
+          <!-- Manila (836, 207) to Tokyo (888, 145) -->
+          <path d="M 836 207 Q 855 170 888 145" class="map-route-line" />
+          <path d="M 836 207 Q 855 170 888 145" class="map-photon-pulse" />
+
+          <!-- Manila (836, 207) to Singapore (788, 246) -->
+          <path d="M 836 207 Q 815 230 788 246" class="map-route-line" />
+          <path d="M 836 207 Q 815 230 788 246" class="map-photon-pulse pulse-2" />
+
+          <!-- Manila (836, 207) to Sydney (920, 350) -->
+          <path d="M 836 207 Q 870 280 920 350" class="map-route-line" />
+          <path d="M 836 207 Q 870 280 920 350" class="map-photon-pulse pulse-3" />
+
+          <!-- Manila (836, 207) to San Francisco (160, 139) Trans-Pacific Trunk -->
+          <path d="M 836 207 C 910 170, 960 140, 1000 135" class="map-route-line" />
+          <path d="M 836 207 C 910 170, 960 140, 1000 135" class="map-photon-pulse pulse-4" />
+          <path d="M 0 135 C 40 130, 100 135, 160 139" class="map-route-line" />
+          <path d="M 0 135 C 40 130, 100 135, 160 139" class="map-photon-pulse pulse-4" />
+
+          <!-- Tokyo (888, 145) to San Francisco Trans-Pacific -->
+          <path d="M 888 145 C 940 125, 980 120, 1000 125" class="map-route-line" />
+          <path d="M 0 125 C 35 125, 95 130, 160 139" class="map-route-line" />
+
+          <!-- Singapore (788, 246) to Mumbai (702, 194) -->
+          <path d="M 788 246 Q 745 220 702 194" class="map-route-line" />
+          <path d="M 788 246 Q 745 220 702 194" class="map-photon-pulse pulse-2" />
+
+          <!-- Mumbai (702, 194) to Frankfurt (524, 103) -->
+          <path d="M 702 194 Q 615 135 524 103" class="map-route-line" />
+          <path d="M 702 194 Q 615 135 524 103" class="map-photon-pulse pulse-3" />
+
+          <!-- Frankfurt (524, 103) to London (500, 98) -->
+          <path d="M 524 103 L 500 98" class="map-route-line" />
+
+          <!-- London (500, 98) to New York (294, 130) Trans-Atlantic -->
+          <path d="M 500 98 Q 390 100, 294 130" class="map-route-line" />
+          <path d="M 500 98 Q 390 100, 294 130" class="map-photon-pulse pulse-1" />
+
+          <!-- New York (294, 130) to San Francisco (160, 139) -->
+          <path d="M 294 130 Q 225 125 160 139" class="map-route-line" />
+          <path d="M 294 130 Q 225 125 160 139" class="map-photon-pulse pulse-2" />
+        </g>
+
+        <!-- Gateway Data Nodes -->
+        <g class="map-gateway-nodes">
+          <!-- Tokyo -->
+          <circle cx="888" cy="145" r="3" class="map-node-dot" />
+          <circle cx="888" cy="145" r="7" class="map-node-ring" />
+          <text x="896" y="148" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">TYO</text>
+
+          <!-- Singapore -->
+          <circle cx="788" cy="246" r="3" class="map-node-dot" />
+          <circle cx="788" cy="246" r="7" class="map-node-ring" />
+          <text x="766" y="258" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">SIN</text>
+
+          <!-- Sydney -->
+          <circle cx="920" cy="350" r="3" class="map-node-dot" />
+          <circle cx="920" cy="350" r="7" class="map-node-ring" />
+          <text x="928" y="353" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">SYD</text>
+
+          <!-- Mumbai -->
+          <circle cx="702" cy="194" r="3" class="map-node-dot" />
+          <text x="682" y="190" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">BOM</text>
+
+          <!-- Frankfurt -->
+          <circle cx="524" cy="103" r="3" class="map-node-dot" />
+          <text x="530" y="100" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">FRA</text>
+
+          <!-- London -->
+          <circle cx="500" cy="98" r="3" class="map-node-dot" />
+          <text x="475" y="94" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">LON</text>
+
+          <!-- New York -->
+          <circle cx="294" cy="130" r="3" class="map-node-dot" />
+          <text x="298" y="125" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">NYC</text>
+
+          <!-- San Francisco -->
+          <circle cx="160" cy="139" r="3" class="map-node-dot" />
+          <circle cx="160" cy="139" r="7" class="map-node-ring" />
+          <text x="125" y="142" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6.5">SFO</text>
+        </g>
+
+        <!-- 3. Dynamic Radar/Sonar Pulse: Manila Node (MNL-PH: 14.60Â°N, 120.98Â°E) -->
+        <g class="manila-sonar-pulse-system">
+          <!-- Concentric Pulsing Sonar Waves -->
+          <circle cx="836" cy="207" r="6" class="sonar-wave wave-1" />
+          <circle cx="836" cy="207" r="6" class="sonar-wave wave-2" />
+          <circle cx="836" cy="207" r="6" class="sonar-wave wave-3" />
+
+          <!-- Dynamic 360-Degree Sonar Radar Sweep Fan -->
+          <g class="sonar-sweep-arm">
+            <path d="M 836 207 L 896 207 A 60 60 0 0 0 882 165 Z" fill="url(#sonarSweepGradient)" />
+            <line x1="836" y1="207" x2="896" y2="207" stroke="#00d2ff" stroke-width="1.1" opacity="0.85" />
+          </g>
+
+          <!-- Manila Core Beacon & Targeting Reticle -->
+          <circle cx="836" cy="207" r="8.5" fill="none" stroke="#00d2ff" stroke-width="0.75" stroke-dasharray="2 3" opacity="0.75" />
+          <circle cx="836" cy="207" r="4.5" fill="#00d2ff" filter="url(#beaconCoreGlow)" />
+          <circle cx="836" cy="207" r="2" fill="#ffffff" />
+
+          <!-- Manila Tactical HUD Callout Badge -->
+          <g class="manila-map-badge" transform="translate(848, 193)">
+            <rect x="0" y="0" width="126" height="25" rx="3.5" fill="rgba(6, 11, 28, 0.90)" stroke="rgba(0, 210, 255, 0.45)" stroke-width="0.8" />
+            <text x="7" y="10.5" fill="#00d2ff" font-family="'Fira Code', monospace" font-size="7" font-weight="700">HQ BEACON :: MNL-PH</text>
+            <text x="7" y="19" fill="#94a3b8" font-family="'Fira Code', monospace" font-size="6">14.60Â°N, 120.98Â°E</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
   <!-- ================= TOP FLOATING ACTION BAR ================= -->
   <header class="resume-action-bar no-print">
     <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
@@ -289,21 +975,21 @@
     <!-- RAW PLAIN TEXT VIEW (HIDDEN BY DEFAULT) -->
     <div id="rawTextView" class="no-print d-none mb-4">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="text-info fw-bold mb-0">Plain Text Resume Without Special Characters Except ñ</h5>
+        <h5 class="text-info fw-bold mb-0">Plain Text Resume Without Special Characters Except Ã±</h5>
         <button class="btn-action-primary btn-sm" onclick="copyCleanResumeText()">
           <i class="bi bi-clipboard-check"></i> Copy Raw Text
         </button>
       </div>
       <div class="raw-text-container" id="rawResumeText">MARCIAL LAWRENCE JR V CARONAN
 Junior Web Developer Data Analyst Database Administrator
-Phone 09202720151 Email marcialcaronangmailcom Location Brgy Moonwalk Parañaque City Philippines
+Phone 09202720151 Email marcialcaronangmailcom Location Brgy Moonwalk ParaÃ±aque City Philippines
 
 PROFESSIONAL SUMMARY
 Disciplined highachieving Information Technology candidate from Datamex College of Saint Adeline specializing in FullStack Web Development Relational Database Engineering MySQL 3NF and Data Analytics Combines solid engineering fundamentals Python PHP 8 JavaScript ES6 RESTful APIs with rich operational experience in highvolume warehouse dispatching retail inventory tracking and spreadsheet modeling Deans Lister across all three consecutive academic years and recognized with the Leadership Award as NSTP Overall Cluster Leader Dedicated to architecting secure scalable and auditcompliant software solutions
 
 EDUCATION ACADEMIC HONORS
 Bachelor of Science in Information Technology BSIT Graduating Candidate 2026 2027
-Datamex College of Saint Adeline DCSA Parañaque City
+Datamex College of Saint Adeline DCSA ParaÃ±aque City
 Deans Lister Academic Achiever Awarded across all 3 consecutive academic years 1st Year Sem 1 2 2nd Year Sem 1 2 3rd Year Sem 1 2
 Leadership Award NSTP 1 2 Recognized as Overall Cluster Leader for team management civic deployment and community project execution
 
@@ -350,7 +1036,7 @@ Operated industrial barcode scanners for merchandise intake picking sorting and 
 Stock Clerk SM Appliances
 Logged highvalue appliance serials into central warehouse inventory systems produced weekly stock balance sheets using advanced MS Excel formulas for replenishment optimization
 
-Service Crew Inventory Assistant McDonalds BF Homes Parañaque
+Service Crew Inventory Assistant McDonalds BF Homes ParaÃ±aque
 Managed POS order workflows reported hardware telemetry alerts audited daily raw material levels via MS Excel and encoded shift logs into the branch store management database
 
 Security Agent National Book Store Holiday Inn Express Resorts World Manila
@@ -365,7 +1051,7 @@ Faculty Adviser Senior IT Instructor Datamex College of Saint Adeline
 Additional professional and academic references available immediately upon request</div>
     </div>
 
-    <!-- STRUCTURED PRINTABLE SHEET (NO SPECIAL CHARACTERS EXCEPT ñ) -->
+    <!-- STRUCTURED PRINTABLE SHEET (NO SPECIAL CHARACTERS EXCEPT Ã±) -->
     <article class="resume-sheet" id="printableResumeArea">
 
       <!-- HEADER & CONTACT -->
@@ -383,7 +1069,7 @@ Additional professional and academic references available immediately upon reque
           <div class="resume-contact-bar justify-content-center justify-content-sm-start mb-2">
             <span><a href="tel:09202720151">Phone 09202720151</a></span>
             <span><a href="mailto:marcialcaronan@gmail.com">Email marcialcaronangmailcom</a></span>
-            <span>Location Brgy Moonwalk Parañaque City Philippines</span>
+            <span>Location Brgy Moonwalk ParaÃ±aque City Philippines</span>
           </div>
         </div>
       </div>
@@ -401,7 +1087,7 @@ Additional professional and academic references available immediately upon reque
         <h2 class="resume-section-title">EDUCATION ACADEMIC HONORS</h2>
         <div class="mb-2">
           <strong class="text-white d-block fs-6">Bachelor of Science in Information Technology BSIT Graduating Candidate 2026 2027</strong>
-          <div class="small text-info">Datamex College of Saint Adeline DCSA Parañaque City</div>
+          <div class="small text-info">Datamex College of Saint Adeline DCSA ParaÃ±aque City</div>
         </div>
         <div class="resume-item-card">
           <div class="small text-warning fw-semibold mb-1">
@@ -504,7 +1190,7 @@ Additional professional and academic references available immediately upon reque
           <strong class="text-white d-block">6 Internet Cafe Commercial Telemetry &amp; Financial Data Analytics</strong>
           <div class="small text-info mb-1">Stack Microsoft Excel Advanced Modeling CORREL Variance ANOVA Descriptive Statistics Data Cleaning</div>
           <p class="small text-light mb-0" style="line-height: 1.55;">
-            Conducted end-to-end data processing and financial correlation modeling across 50 transaction records (₱9,690 revenue). Executed 12 analytical tasks covering data dictionary structuring, dynamic hourly station rate modeling, multi-condition nested IF categorizations, Pearson r correlation matrices (r = 0.84 between internet duration and beverage gross sales), and executive strategic recommendations.
+            Conducted end-to-end data processing and financial correlation modeling across 50 transaction records (â‚±9,690 revenue). Executed 12 analytical tasks covering data dictionary structuring, dynamic hourly station rate modeling, multi-condition nested IF categorizations, Pearson r correlation matrices (r = 0.84 between internet duration and beverage gross sales), and executive strategic recommendations.
           </p>
         </div>
 
@@ -513,7 +1199,7 @@ Additional professional and academic references available immediately upon reque
           <strong class="text-white d-block">7 IoT-Based Smart Science Laboratory Safety, Access Control &amp; Incident Prevention System</strong>
           <div class="small text-info mb-1">Stack ESP32 FreeRTOS R307 Biometrics SIM800L GSM MQ-2 MQ-135 DS18B20 MySQL ISO/IEC 25010</div>
           <p class="small text-light mb-0" style="line-height: 1.55;">
-            Researched and engineered collegiate BSIT Capstone Thesis (Chapters 1–3 Complete). Architected dual-core ESP32 FreeRTOS firmware with hardware pin segregation, multi-sensor electrochemical gas and temperature fusion, biometric fingerprint authorization, autonomous SIM800L cellular SMS failover during network outages, and a predictive least-squares linear regression trend-analysis algorithm for early hazard escalation detection evaluated under ISO/IEC 25010 software quality benchmarks.
+            Researched and engineered collegiate BSIT Capstone Thesis (Chapters 1â€“3 Complete). Architected dual-core ESP32 FreeRTOS firmware with hardware pin segregation, multi-sensor electrochemical gas and temperature fusion, biometric fingerprint authorization, autonomous SIM800L cellular SMS failover during network outages, and a predictive least-squares linear regression trend-analysis algorithm for early hazard escalation detection evaluated under ISO/IEC 25010 software quality benchmarks.
           </p>
         </div>
       </section>
@@ -537,7 +1223,7 @@ Additional professional and academic references available immediately upon reque
         </div>
 
         <div class="resume-item-card mb-2">
-          <strong class="text-white d-block">Service Crew Inventory Assistant McDonalds BF Homes Parañaque</strong>
+          <strong class="text-white d-block">Service Crew Inventory Assistant McDonalds BF Homes ParaÃ±aque</strong>
           <p class="small text-light mb-0" style="line-height: 1.55;">
             Managed POS order workflows reported hardware telemetry alerts audited daily raw material levels via MS Excel and encoded shift logs into the branch store management database
           </p>
@@ -587,7 +1273,7 @@ Additional professional and academic references available immediately upon reque
       <div class="d-flex">
         <div class="toast-body small">
           <i class="bi bi-check-circle-fill text-info me-2"></i>
-          Clean resume text copied without special characters except ñ
+          Clean resume text copied without special characters except Ã±
         </div>
       </div>
     </div>
@@ -623,3 +1309,4 @@ Additional professional and academic references available immediately upon reque
 </body>
 
 </html>
+
