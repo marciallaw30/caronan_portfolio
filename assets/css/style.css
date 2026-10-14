@@ -1092,3 +1092,12 @@ a {
   background: rgba(255, 255, 255, 0.05);
   border-left-color: #fbbf24;
 }
+
+.hover-lift {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.25);
+}

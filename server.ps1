@@ -1,12 +1,11 @@
-# Multi-Threaded PowerShell HTTP Web Server
-# Serves BSIT Portfolio on Localhost without blocking or hanging
+# Robust PowerShell HTTP Web Server
+# Serves BSIT Portfolio on Localhost without thread crashes or hanging
 
 $port = 8080
 $rootPath = $PSScriptRoot
 
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$port/")
-$listener.Prefixes.Add("http://127.0.0.1:$port/")
 
 try {
     $listener.Start()
@@ -38,74 +37,68 @@ $mimeTypes = @{
     ".docx" = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ".pdf"  = "application/pdf"
     ".zip"  = "application/zip"
+    ".woff" = "font/woff"
+    ".woff2"= "font/woff2"
+    ".ttf"  = "font/ttf"
 }
 
 while ($listener.IsListening) {
     try {
-        $context = $listener.GetContext()
-        $workerState = @($context, $mimeTypes, $rootPath)
+        $ctx = $listener.GetContext()
+        $req = $ctx.Request
+        $res = $ctx.Response
 
-        [System.Threading.ThreadPool]::QueueUserWorkItem({
-                param($state)
-                $ctx = $state[0]
-                $types = $state[1]
-                $root = $state[2]
+        try {
+            $localPath = $req.Url.LocalPath
+            if ($localPath -eq "/" -or [string]::IsNullOrWhiteSpace($localPath)) {
+                $localPath = "/index.html"
+            }
+            
+            $localPath = $localPath.TrimStart('/').Replace('/', '\')
+            $filePath = [System.IO.Path]::Combine($rootPath, $localPath)
+            
+            if ([System.IO.Directory]::Exists($filePath)) {
+                $filePath = [System.IO.Path]::Combine($filePath, "index.html")
+            }
 
-                try {
-                    $req = $ctx.Request
-                    $res = $ctx.Response
-
-                    $localPath = $req.Url.LocalPath
-                    if ($localPath -eq "/" -or [string]::IsNullOrWhiteSpace($localPath)) {
-                        $localPath = "/index.html"
-                    }
-                    
-                    $localPath = $localPath.TrimStart('/').Replace('/', '\')
-                    $filePath = [System.IO.Path]::Combine($root, $localPath)
-                    
-                    if ([System.IO.Directory]::Exists($filePath)) {
-                        $filePath = [System.IO.Path]::Combine($filePath, "index.html")
-                    }
-
-                    if ([System.IO.File]::Exists($filePath)) {
-                        $ext = [System.IO.Path]::GetExtension($filePath).ToLower()
-                        
-                        $contentType = "application/octet-stream"
-                        if ($types.ContainsKey($ext)) {
-                            $contentType = $types[$ext]
-                        }
-                        $res.ContentType = $contentType
-                        
-                        $bytes = [System.IO.File]::ReadAllBytes($filePath)
-                        $res.ContentLength64 = $bytes.Length
-                        
-                        if ($req.HttpMethod -ne "HEAD") {
-                            $res.OutputStream.Write($bytes, 0, $bytes.Length)
-                        }
-                    }
-                    else {
-                        $res.StatusCode = 404
-                        $errorBytes = [System.Text.Encoding]::UTF8.GetBytes("404 - File Not Found")
-                        $res.ContentType = "text/plain; charset=utf-8"
-                        $res.ContentLength64 = $errorBytes.Length
-                        if ($req.HttpMethod -ne "HEAD") {
-                            $res.OutputStream.Write($errorBytes, 0, $errorBytes.Length)
-                        }
-                    }
+            if ([System.IO.File]::Exists($filePath)) {
+                $ext = [System.IO.Path]::GetExtension($filePath).ToLower()
+                
+                $contentType = "application/octet-stream"
+                if ($mimeTypes.ContainsKey($ext)) {
+                    $contentType = $mimeTypes[$ext]
                 }
-                catch {
-                    # Handle error
+                $res.ContentType = $contentType
+                
+                $bytes = [System.IO.File]::ReadAllBytes($filePath)
+                $res.ContentLength64 = $bytes.Length
+                
+                if ($req.HttpMethod -ne "HEAD") {
+                    $res.OutputStream.Write($bytes, 0, $bytes.Length)
                 }
-                finally {
-                    try {
-                        $ctx.Response.OutputStream.Close()
-                        $ctx.Response.Close()
-                    }
-                    catch {}
+            }
+            else {
+                $res.StatusCode = 404
+                $errorBytes = [System.Text.Encoding]::UTF8.GetBytes("404 - File Not Found")
+                $res.ContentType = "text/plain; charset=utf-8"
+                $res.ContentLength64 = $errorBytes.Length
+                if ($req.HttpMethod -ne "HEAD") {
+                    $res.OutputStream.Write($errorBytes, 0, $errorBytes.Length)
                 }
-            }, $workerState) | Out-Null
+            }
+        }
+        catch {
+            Write-Host "Request error: $_"
+        }
+        finally {
+            try {
+                $res.OutputStream.Close()
+                $res.Close()
+            }
+            catch {}
+        }
     }
     catch {
-        # continue loop
+        # continue listener loop
     }
 }

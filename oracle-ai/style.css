@@ -7,10 +7,23 @@
   --violet-neon: #c084fc;
   --primary-accent: #7c3aed;
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --text-muted: #cbd5e1;
   
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* High Contrast Readability Overrides */
+.text-muted {
+  color: #cbd5e1 !important;
+}
+
+.text-muted.small, small.text-muted {
+  color: #94a3b8 !important;
+}
+
+.oracle-subtitle, .lead, p.lead {
+  color: #e2e8f0 !important;
 }
 
 body.oracle-body {

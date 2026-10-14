@@ -1,0 +1,287 @@
+{
+  "title": "CHAPTER 3: RESEARCH METHODOLOGY",
+  "intro": "This chapter presents the research design, system development methodology, research locale, respondents and sampling technique, research instruments, step-by-step data gathering procedures, detailed hardware and software engineering requirements, system architecture, predictive data logging algorithms, testing procedures, data analysis and statistical treatment, and ethical considerations utilized in the design, development, and implementation of the IoT-Based Smart Science Laboratory Safety, Access Control, and Incident Prevention System with Offline SMS Notification and Predictive Data Logging.",
+  "sections": [
+    {
+      "heading": "Research Design",
+      "paragraphs": [
+        "This study utilizes a quantitative research design, specifically employing a combined descriptive and developmental approach. The developmental aspect focuses on the systematic creation, circuit prototyping, firmware programming, database structuring, and physical assembly of the automated IoT-based laboratory safety and access control ecosystem. The developmental methodology guides the iterative integration of the embedded hardware modules (ESP32 microcontroller, environmental sensors, biometric scanner, cellular failover, and segregated CCTV) and the software components (backend server, MySQL relational database, and responsive web monitoring dashboard).",
+        "The descriptive component involves evaluating the operational performance, accuracy, response speed, and overall usability of the developed hardware and software modules based on standardized testing metrics. Quantitative data are gathered through structured testing trials and evaluation questionnaires administered to measure functional performance and user acceptance levels accurately in accordance with the ISO/IEC 25010 Software Quality Standard."
+      ]
+    },
+    {
+      "heading": "Research Locale / Setting",
+      "paragraphs": [
+        "The study was conducted at the Science Laboratory of Datamex College of Saint Adeline (DCSA), Parañaque Campus, situated at 8167 Dr. A. Santos Avenue, Barangay San Dionisio, Parañaque City, Metro Manila, Philippines.",
+        "The DCSA Science Laboratory is an enclosed academic facility utilized by Senior High School Science, Technology, Engineering, and Mathematics (STEM) students and collegiate departments for biology, chemistry, and general science laboratory experiments. The physical layout of the facility encompasses specialized student experiment workbenches, teacher lecture demonstration counters, chemical reagent preparation tables, and enclosed chemical storage cabinets containing volatile substances such as ethyl alcohols, dilute hydrochloric acids, and organic reagents. Furthermore, heating apparatus including Bunsen burners, alcohol lamps, and electric heating plates are regularly utilized across practical laboratory sessions. Physical entry into the room is managed via a single main doorway securing valuable laboratory machinery, including high-grade optical microscopes, digital balances, and glass apparatus.",
+        "The DCSA Science Laboratory was specifically selected as the research locale because it encapsulates the exact environmental hazards and security challenges addressed by the study: a high-hazard educational environment where accidental chemical vapor emissions, unmonitored open-flame heat spikes, or unauthorized room entry present significant risks that traditional manual inspections and standalone alarms cannot reliably prevent."
+      ]
+    },
+    {
+      "heading": "Respondents, Participants, and Users of the Study",
+      "paragraphs": [
+        "The target evaluators of the proposed system comprised a total of forty-five (45) respondents (N = 45) selected from the academic community of Datamex College of Saint Adeline. The evaluator cohort was stratified into four distinct stakeholder groups to provide comprehensive domain-specific evaluations:"
+      ],
+      "bullets": [
+        {
+          "bold": "1. School Administrators & Safety Officers (n = 5):",
+          "text": "Composed of the Campus Director, Head of Academic Affairs, Campus Safety Officer, and Facilities Custodian who evaluate institutional safety compliance, administrative oversight, and disaster mitigation capabilities."
+        },
+        {
+          "bold": "2. Science Instructors & Laboratory Custodians (n = 10):",
+          "text": "Composed of faculty members teaching Chemistry, Biology, and Physics, as well as laboratory technicians who directly supervise laboratory sessions, manage chemical storage, and respond to laboratory emergencies."
+        },
+        {
+          "bold": "3. IT & Systems Specialists (n = 5):",
+          "text": "Composed of Computer Science and Information Technology faculty members and network administrators who evaluate embedded system architecture, communication latency, offline cellular failover reliability, and ISO/IEC 25010 compliance."
+        },
+        {
+          "bold": "4. STEM & Science Students (n = 25):",
+          "text": "Composed of Senior High School STEM and collegiate science students who regularly conduct practical experiments and directly interact with the biometric door scanner, ambient status displays, and emergency alert alarms."
+        }
+      ],
+      "table": "table1",
+      "afterParagraphs": [
+        "Inclusion criteria required that all participants be bonafide administrators, instructors, staff, or enrolled students of Datamex College of Saint Adeline actively utilizing or managing the science laboratory during Academic Year 2025–2026. Exclusion criteria omitted external visitors, administrative personnel with no facility oversight, and students without scheduled laboratory courses."
+      ]
+    },
+    {
+      "heading": "Sampling Technique",
+      "paragraphs": [
+        "The study utilized Non-Probability Purposive (Judgmental) Sampling for the expert evaluator cohorts (school administrators, science instructors, and IT specialists) and Stratified Purposive Sampling for the student respondents.",
+        "Purposive sampling was deemed essential for administrative and technical evaluators because assessing embedded IoT communication stability, offline cellular failovers, ISO/IEC 25010 software compliance, and laboratory occupational safety regulations requires specialized professional knowledge and institutional authority. Stratified purposive sampling was utilized for students to select representative participants from active STEM and collegiate laboratory sections, ensuring that student evaluators possess direct experiential familiarity with laboratory safety practices and access procedures."
+      ]
+    },
+    {
+      "heading": "Research Instruments",
+      "paragraphs": [
+        "To gather objective quantitative data regarding technical system performance and user acceptability, the researchers utilized two comprehensive categories of instruments:"
+      ],
+      "bullets": [
+        {
+          "bold": "1. Technical Performance Bench-Testing Instruments:",
+          "text": "Standardized engineering checklists and automated logging scripts were formulated to measure physical performance metrics, including sensor measurement accuracy and calibration curves across smoke, combustible gas, and temperature variations; biometric fingerprint recognition response time, False Acceptance Rate (FAR), and False Rejection Rate (FRR) over 100 trials; offline GSM SMS failover latency and message delivery success rates during simulated internet dropouts; and CCTV RTSP video stream frame-rates and network isolation integrity."
+        },
+        {
+          "bold": "2. Standardized User Acceptance Evaluation Survey (ISO/IEC 25010):",
+          "text": "A structured evaluation questionnaire was formulated adhering strictly to the ISO/IEC 25010 Software Quality Standard. The instrument evaluated eight (8) essential software and system quality characteristics: Functional Suitability, Performance Efficiency, Compatibility, Usability, Reliability, Security, Maintainability, and Portability using a four-point Likert scale."
+        }
+      ],
+      "table": "table2"
+    },
+    {
+      "heading": "Data Gathering Procedure",
+      "paragraphs": [
+        "The data gathering process was executed systematically through four sequential phases:"
+      ],
+      "bullets": [
+        {
+          "bold": "Phase 1: Administrative Clearances and Ethics Protocol.",
+          "text": "The researchers drafted a formal letter of request endorsed by the thesis adviser and addressed to the Campus Director and Dean of Datamex College of Saint Adeline, requesting official authorization to utilize the science laboratory as the testbed and administer evaluation surveys. Informed consent disclosures guaranteeing respondent voluntary participation, anonymity, and data privacy were distributed to all participants."
+        },
+        {
+          "bold": "Phase 2: Hardware Bench Testing and Empirical Calibration.",
+          "text": "Prior to on-site room installation, all electronic hardware modules were subjected to controlled laboratory bench trials. The MQ-2 and MQ-135 sensors underwent a 24-hour pre-heating burn-in cycle to stabilize baseline electrical resistance. Analog voltage thresholds were mapped against safe test aerosols (clean aerosol smoke canisters and diluted isopropyl vapor) inside a sealed acrylic chamber. The DS18B20 digital temperature probe was benchmarked against a calibrated reference laboratory thermometer. The R307 fingerprint sensor was enrolled with sample biometric templates and tested across 100 trial attempts. The SIM800L module was tested for AT command execution, cellular signal reception, and SMS dispatch latency."
+        },
+        {
+          "bold": "Phase 3: In-Situ Laboratory Installation and Live Demonstration.",
+          "text": "The prototype hardware was mounted inside the DCSA Science Laboratory. The R307 optical fingerprint scanner and 12V electromagnetic lock were installed at the primary entrance door. Environmental sensors (MQ-2, MQ-135, DS18B20) were strategically positioned adjacent to the chemical storage cabinets and student experiment benches. The dedicated CCTV streaming unit was positioned for comprehensive room coverage on an independent network channel. The central Node.js web server and MySQL database were hosted on a local laboratory terminal."
+        },
+        {
+          "bold": "Phase 4: Survey Administration and Data Consolidation.",
+          "text": "The researchers conducted live demonstration sessions for the 45 evaluators. Each participant witnessed real-time sensor telemetry, biometric door unlocking, simulated hazard triggers, and offline SMS failover execution. Evaluators subsequently completed the standardized ISO/IEC 25010 questionnaire. Survey sheets and automated system logs were compiled, tabulated into statistical matrices, and subjected to statistical analysis."
+        }
+      ]
+    },
+    {
+      "heading": "System / Project Development Methodology",
+      "paragraphs": [
+        "The development of the system followed the Agile Development Methodology, an iterative and adaptive framework particularly suited for complex projects that integrate physical microcontroller circuits, telecommunications hardware, backend databases, and web graphical interfaces. The Agile lifecycle was structured into five distinct phases:"
+      ],
+      "bullets": [
+        {
+          "bold": "Phase 1: Requirement Analysis and Architectural Planning.",
+          "text": "The researchers conducted comprehensive site inspections of the science laboratory to identify environmental hazards and physical access vulnerabilities. System functional specifications were established, identifying sensor thresholds, power distribution requirements, communication failover conditions, and dashboard metrics."
+        },
+        {
+          "bold": "Phase 2: Design and Prototyping.",
+          "text": "Circuit schematics, PCB perfboard layouts, database Entity-Relationship Diagrams (ERDs), and user interface wireframes were developed. System state machines for environmental hazard detection and biometric door access were modeled."
+        },
+        {
+          "bold": "Phase 3: Implementation and Coding.",
+          "text": "Microcontroller firmware was written in C++ for the ESP32 hardware using PlatformIO and the Arduino framework. Backend RESTful APIs and WebSocket event emitters were developed using Node.js and Express. The normalized MySQL relational database was structured, and the responsive frontend web dashboard was built using HTML5, Tailwind CSS, and Chart.js."
+        },
+        {
+          "bold": "Phase 4: Integration and Testing.",
+          "text": "Individual hardware sensors, the biometric scanner, the offline GSM module, and the CCTV network were integrated into the central system and subjected to rigorous unit and stress testing."
+        },
+        {
+          "bold": "Phase 5: Evaluation and Deployment.",
+          "text": "The fully assembled prototype was deployed for final performance evaluation and user acceptance testing, gathering quantitative metrics for analysis."
+        }
+      ]
+    },
+    {
+      "heading": "System Requirements and Technical Architecture",
+      "paragraphs": [
+        "To ensure optimal operational performance, high measurement precision, and system resilience during network failures, the system is engineered upon robust hardware, software, and database architectures:"
+      ],
+      "subsections": [
+        {
+          "title": "Hardware Specifications",
+          "bullets": [
+            {
+              "bold": "Central Microcontroller Hub (ESP32 NodeMCU-32S):",
+              "text": "Powered by an Xtensa dual-core 32-bit LX6 microprocessor running at 240 MHz with 520 KB SRAM and 4 MB Flash memory. Onboard 2.4 GHz Wi-Fi (802.11 b/g/n) and Bluetooth v4.2 BR/EDR and BLE. Utilizes FreeRTOS dual-core task scheduling: Core 0 executes network polling, WebSocket broadcasting, and SIM800L AT commands; Core 1 handles time-critical sensor ADC sampling, digital filtering, and biometric UART communication."
+            },
+            {
+              "bold": "Smoke & Flammable Gas Sensor (MQ-2):",
+              "text": "Semiconductor sensor with a Tin Dioxide (SnO2) sensing layer sensitive to LPG, propane, methane, butane, alcohol, hydrogen, and dense smoke (300 to 10,000 ppm). Connected to ESP32 ADC1 (GPIO 36)."
+            },
+            {
+              "bold": "Hazardous Chemical & Air Quality Sensor (MQ-135):",
+              "text": "Semiconductor gas sensor designed to detect ammonia (NH3), nitrogen oxides (NOx), alcohol vapors, benzene, and carbon dioxide (CO2). Connected to ESP32 ADC1 (GPIO 39)."
+            },
+            {
+              "bold": "High-Precision Temperature Sensor (DS18B20):",
+              "text": "Waterproof stainless-steel digital probe with 1-Wire communication interface, operating across -55°C to +125°C with ±0.5°C accuracy between -10°C and +85°C. Features a 4.7 kΩ pull-up resistor on GPIO 4."
+            },
+            {
+              "bold": "Biometric Fingerprint Module (R307 / AS608):",
+              "text": "Optical fingerprint scanner with 500 DPI resolution, capacitive finger detection, and 1,000 template storage capacity. Operates via UART TTL at 57,600 baud connected to ESP32 HardwareSerial2 (GPIO 16 RX / GPIO 17 TX). False Acceptance Rate (FAR) < 0.001%, False Rejection Rate (FRR) < 0.1%."
+            },
+            {
+              "bold": "Access Control Actuator (12V Solenoid / Magnetic Lock):",
+              "text": "Heavy-duty 12V DC fail-secure solenoid lock driven via a 1-channel 5V optocoupler-isolated relay module connected to GPIO 23, with a 1N4007 flyback diode to suppress inductive voltage spikes."
+            },
+            {
+              "bold": "Offline Cellular Failover Module (SIM800L GSM/GPRS):",
+              "text": "Quad-band GSM/GPRS module (850/900/1800/1900 MHz) connected to ESP32 HardwareSerial1 (GPIO 26 RX / GPIO 27 TX). Powered by a dedicated LM2596 DC-DC buck converter calibrated to 4.0V DC with 2.0A burst current capability and a 1000 µF low-ESR buffer capacitor."
+            },
+            {
+              "bold": "Hardware-Segregated CCTV Camera:",
+              "text": "Dedicated ESP32-CAM (OV2640 2MP sensor) or RTSP IP camera operating on separate physical silicon and power rail. Streams video directly over the local network (MJPEG / RTSP) to the web dashboard, ensuring zero bus contention on the main ESP32 microcontroller."
+            },
+            {
+              "bold": "Local Display & Acoustic Siren:",
+              "text": "16x2 I2C Character LCD (PCF8574 backpack on GPIO 21 SDA / GPIO 22 SCL) and an 85 dB active piezo buzzer connected to GPIO 18."
+            },
+            {
+              "bold": "Power Distribution Unit:",
+              "text": "Master 12V 3.0A DC power supply with dual LM2596 buck converters providing 5.0V 3.0A for the ESP32 and relay, and 4.0V 2.0A for the SIM800L module."
+            }
+          ],
+          "table": "table3"
+        },
+        {
+          "title": "Software Specifications and Architecture",
+          "bullets": [
+            {
+              "bold": "Embedded Firmware (C++ / FreeRTOS):",
+              "text": "Programmed using the Arduino core in PlatformIO. FreeRTOS dual-core multitasking divides responsibilities: TaskCore0 executes Wi-Fi telemetry broadcasting, ping heartbeat monitoring, and SIM800L AT-command sequences; TaskCore1 handles 200 ms ADC sensor polling, digital filtering, and R307 fingerprint template matching."
+            },
+            {
+              "bold": "Backend Server & RESTful APIs:",
+              "text": "Built with Node.js (v18+) and Express.js with Socket.io WebSockets for millisecond-latency telemetry broadcasting to web clients. Features JWT authentication, bcrypt password hashing, and parameterized database queries."
+            },
+            {
+              "bold": "Relational Database Schema (MySQL):",
+              "text": "Normalized database schema with five core tables: tbl_users (user profiles and enrolled fingerprint slots), tbl_access_logs (biometric door access timestamps), tbl_sensor_telemetry (continuous room environmental metrics), tbl_incident_alerts (hazard warnings and SMS dispatch status), and tbl_cctv_sessions (camera video stream endpoints)."
+            },
+            {
+              "bold": "Centralized Web Dashboard (Frontend):",
+              "text": "Single Page Application built with HTML5, Tailwind CSS, and Chart.js featuring real-time environmental gauge panels, live access control feeds with user photos, integrated CCTV video canvas, emergency manual overrides, and CSV/PDF historical report generation."
+            }
+          ]
+        },
+        {
+          "title": "Predictive Data Logging and Early Anomaly Detection Algorithm",
+          "paragraphs": [
+            "To elevate the system from a simple reactive alarm into a proactive incident prevention platform, the firmware and backend implement a Predictive Data Logging Algorithm. The algorithm combines a Rolling Moving Average Filter with First-Order Linear Regression Trend Analysis to detect rapid hazard acceleration before values cross critical danger thresholds.",
+            "Raw analog readings are smoothed across a rolling window of k = 10 samples to eliminate transient ADC noise caused by atmospheric turbulence or dust particles: S_bar_t = (1/k) * Sum(S_{t-i}). Over an observation window of n = 30 seconds, the rate of change m (representing the slope in units/second) is computed using least-squares linear regression: m = [n * Sum(t * S_bar_t) - Sum(t) * Sum(S_bar_t)] / [n * Sum(t^2) - (Sum(t))^2].",
+            "If the ambient temperature is currently below the static fire alarm threshold (T < 45°C), but the calculated slope m_temp = dT/dt >= 0.75°C/sec sustained for 5 consecutive seconds, the system flags a Thermal Runaway Pre-Alarm. Similarly, if gas concentration is below the critical threshold (G < 400 ppm), but the gas accumulation slope m_gas = dGas/dt >= 15 ppm/sec, the system flags an Accelerating Chemical Vapor Leak. Pre-emptive notifications are immediately pushed to the dashboard, the 16x2 LCD displays an amber warning, and the predictive anomaly is archived in the database prior to catastrophic hazard escalation."
+          ]
+        },
+        {
+          "title": "Offline SMS Failover Logic and Process Flow",
+          "paragraphs": [
+            "The system implements an autonomous dual-channel communication architecture to guarantee emergency delivery during network interruptions. During normal operations, environmental telemetry and incident alerts are transmitted over local Wi-Fi to the backend server via WebSockets. The ESP32 continuously polls the network gateway with a 3-second heartbeat. If an environmental hazard is triggered (smoke/gas exceeds threshold or temperature exceeds 55°C) and the local Wi-Fi gateway does not respond within three (3) consecutive ping retries (5 seconds total elapsed), the system automatically transitions to Offline Cellular Failover Mode.",
+            "In Failover Mode, the ESP32 activates the SIM800L module via UART AT commands (AT+CMGF=1, followed by AT+CMGS with the designated safety officer phone numbers) and dispatches an emergency SMS text containing the exact sensor trigger, reading value, and timestamp. Upon restoring Wi-Fi connectivity, the microcontroller synchronizes offline incident logs with the central MySQL database."
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Testing and Evaluation Procedure",
+      "paragraphs": [
+        "The evaluation of the system was conducted through structured functional testing and user acceptability assessments across four progressive methodologies:"
+      ],
+      "bullets": [
+        {
+          "bold": "1. Unit Testing:",
+          "text": "Individual hardware and software modules were validated independently. Environmental sensors (MQ-2, MQ-135, DS18B20) were calibrated across controlled exposure trials. The R307 fingerprint scanner was tested for template enrollment, finger angle tolerance, and matching latency. The 5V relay and 12V solenoid lock were subjected to 100 consecutive cycling actuations to ensure no coil overheating or mechanical sticking. The SIM800L module was tested for AT-command execution and cellular network registration."
+        },
+        {
+          "bold": "2. Integration Testing:",
+          "text": "Evaluated data exchange between the physical ESP32 hub, Node.js server, MySQL database, and frontend dashboard. Validated FreeRTOS queue communication between Core 0 and Core 1, measured WebSocket telemetry latency from sensor sampling to screen rendering, and verified database transaction integrity under simulated concurrent write requests."
+        },
+        {
+          "bold": "3. Stress and Offline Failover Testing:",
+          "text": "The local Wi-Fi router was disconnected during active sensor hazard triggers. The system's failover detection was evaluated to confirm automatic fallback to the SIM800L module within five (5) seconds. Heavy network packets were flooded across the CCTV camera stream to confirm that the video feed did not interrupt or delay sensor ADC sampling or door unlocking on the main ESP32 microcontroller."
+        },
+        {
+          "bold": "4. User Acceptance Testing (UAT):",
+          "text": "The complete integrated system was presented to the 45 evaluators at the DCSA Science Laboratory. Participants executed guided testing scenarios (enrolling fingerprints, scanning fingers, observing real-time telemetry, simulating smoke triggers, and receiving emergency SMS text alerts), followed by completing the standardized ISO/IEC 25010 evaluation questionnaire."
+        }
+      ]
+    },
+    {
+      "heading": "Data Analysis and Statistical Treatment",
+      "paragraphs": [
+        "Quantitative data gathered from system performance logs and evaluation surveys were analyzed using appropriate statistical tools to interpret results objectively:"
+      ],
+      "bullets": [
+        {
+          "bold": "1. Percentage and Frequency Distribution:",
+          "text": "Used to summarize demographic profiles and response distributions from evaluators: P = (f / N) * 100, where P is percentage, f is frequency, and N is total sample size (N = 45)."
+        },
+        {
+          "bold": "2. Weighted Mean:",
+          "text": "Used to calculate the average scores of evaluation criteria regarding system usability, performance, and user satisfaction: Mean = Sum(f * x) / N, where f is the frequency of rating, x is the scale weight (4, 3, 2, or 1), and N is the total number of respondents."
+        },
+        {
+          "bold": "3. Sensor Relative Error Rate:",
+          "text": "Utilized to evaluate the empirical accuracy of the environmental sensors against reference meters: Relative Error (%) = [ |V_measured - V_reference| / V_reference ] * 100, and Sensor Accuracy (%) = 100% - Relative Error (%)."
+        },
+        {
+          "bold": "4. Biometric Accuracy Metrics:",
+          "text": "Quantified using False Acceptance Rate (FAR) and False Rejection Rate (FRR) over 100 trials: FAR (%) = (False Acceptances / Total Non-Enrolled Trials) * 100, and FRR (%) = (False Rejections / Total Enrolled Trials) * 100."
+        },
+        {
+          "bold": "5. Offline SMS Delivery Latency and Success Rate:",
+          "text": "Quantified to measure the dependability of the cellular failover: Latency = T_received - T_triggered, and Success Rate (%) = (Successfully Received / Total Dispatched) * 100."
+        }
+      ]
+    },
+    {
+      "heading": "Ethical Considerations and Safety Protocols",
+      "paragraphs": [
+        "Ethical standards, data privacy compliance, and laboratory physical safety protocols were rigorously maintained throughout the research:"
+      ],
+      "bullets": [
+        {
+          "bold": "1. Data Privacy Act of 2012 Compliance (RA 10173):",
+          "text": "The R307 biometric fingerprint sensor extracts mathematical minutiae feature coordinates (ridge endpoints and bifurcations) converted into irreversible cryptographic template hashes. No raw biometric fingerprint images are captured, transmitted, or stored in the database. Access logs and telemetry records stored in MySQL are protected with role-based access control (RBAC). Evaluator survey responses are anonymized, and personal mobile numbers registered for SMS alerts are strictly restricted to designated safety officers."
+        },
+        {
+          "bold": "2. Informed Consent and Voluntary Participation:",
+          "text": "Prior to system deployment and survey administration, written informed consent was obtained from all 45 participating administrators, instructors, staff, and students. Participants were informed of the purpose, potential risks, and their right to withdraw at any time without negative consequences."
+        },
+        {
+          "bold": "3. Laboratory Physical Safety and Hazard Protocols:",
+          "text": "Physical safety protocols were strictly enforced during all hardware testing. Testing of gas and smoke sensors was conducted inside a sealed, transparent acrylic enclosure with exhaust ventilation. Clean non-toxic test smoke canisters and diluted isopropyl vapor were utilized rather than open flames or toxic industrial chemicals. An ABC dry chemical fire extinguisher was positioned on standby under the direct supervision of the DCSA campus safety officer throughout all testing sessions."
+        }
+      ]
+    }
+  ]
+}
