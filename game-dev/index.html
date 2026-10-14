@@ -798,19 +798,74 @@
       transform: rotateX(-28deg) rotateZ(-16deg) translateZ(12px);
     }
 
-    /* Figurine Sculpture Artwork */
+    /* Authentic GDD Sketch Miniatures Artwork (3D Planar Grid) */
     .miniature-sculpture {
       position: relative;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.85));
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.95));
       transition: transform 0.25s ease;
     }
-    .miniature-sculpture svg {
+    .piece-sketch-card {
+      position: relative;
+      width: 48px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.95));
+    }
+    .piece-sketch-portrait-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #090d1e;
+      border: 1.8px solid rgba(251, 191, 36, 0.7);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.7);
+    }
+    .card-obsidian .piece-sketch-portrait-wrap {
+      border-color: #f59e0b;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.5), inset 0 0 10px rgba(245, 158, 11, 0.2);
+    }
+    .card-verdant .piece-sketch-portrait-wrap {
+      border-color: #22c55e;
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.5), inset 0 0 10px rgba(34, 197, 94, 0.2);
+    }
+    .piece-sketch-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 15%;
       display: block;
-      overflow: visible;
-      transition: filter 0.2s ease, transform 0.2s ease;
+      filter: contrast(1.1) brightness(1.05);
+      image-rendering: -webkit-optimize-contrast;
+      transition: transform 0.3s ease;
+    }
+    .piece-sketch-card:hover .piece-sketch-img {
+      transform: scale(1.08);
+    }
+    .piece-sketch-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 20%, transparent 45%, rgba(0, 0, 0, 0.75) 100%);
+      pointer-events: none;
+    }
+    .piece-sketch-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fbbf24;
+      font-size: 0.65rem;
+      border-radius: 4px;
+      padding: 0 3px;
+      line-height: 1.2;
+      border: 1px solid rgba(251, 191, 36, 0.5);
     }
 
     /* Sculpted Pedestal Base with Faction Shield Crest */
@@ -843,6 +898,32 @@
       font-size: 0.68rem;
       line-height: 1;
       filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.95));
+    }
+
+    /* ================= REAL-TIME MOBA / MLBB ARENA STYLES ================= */
+    .arena-viewport-wrapper {
+      position: relative;
+      background: #060914;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #arenaCanvas {
+      display: block;
+      width: 100%;
+      max-height: 540px;
+    }
+    #btnBasicAttack:active,
+    #btnSkillDash:active,
+    #btnSkillHazard:active,
+    #btnQueenUltimateArena:active {
+      transform: scale(0.92);
+    }
+    .ult-ready-pulse {
+      animation: ultPulseGlow 1.2s infinite alternate !important;
+    }
+    @keyframes ultPulseGlow {
+      from { box-shadow: 0 0 15px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(254, 240, 138, 0.5); border-color: #fbbf24; }
+      to { box-shadow: 0 0 40px rgba(245, 158, 11, 1), 0 0 60px rgba(239, 68, 68, 0.8), inset 0 0 20px #fbbf24; border-color: #ffffff; }
     }
 
     /* Selected 3D Levitation */
@@ -1395,14 +1476,20 @@
           </div>
         </div>
 
-        <div class="text-center mb-4">
-          <span class="pill-badge mb-2"><i class="bi bi-controller"></i> TACTICAL SIMULATION ENGINE</span>
-          <h2 class="display-5 font-title text-white">Interactive Tactical Combat &amp; Manifestation Simulator</h2>
-          <p class="section-subtitle mx-auto mb-4" style="max-width: 720px;">
-            Simulate actual encounters between kingdoms! Move units on the 8x8 planar grid to trigger permanent tile mutations, activate faction passives, experience cinematic <strong>Manifestation Executions</strong> upon captures, and unleash the Queen Ultimate finisher.
-          </p>
+        <!-- Dual-Mode Simulator Mode Switcher -->
+        <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
+          <div class="btn-group p-1 rounded-pill" style="background: rgba(15, 23, 42, 0.95); border: 2px solid rgba(245, 158, 11, 0.5); box-shadow: 0 0 30px rgba(245, 158, 11, 0.25);">
+            <button id="btnSwitchTacticalGrid" class="btn btn-sm btn-mythic-gold active rounded-pill px-4 py-2 font-mono fw-bold">
+              <i class="bi bi-grid-3x3 me-2"></i> 3D Tactical Planar Grid
+            </button>
+            <button id="btnSwitchRealtimeArena" class="btn btn-sm btn-outline-secondary rounded-pill px-4 py-2 font-mono text-light fw-bold">
+              <i class="bi bi-joystick me-2 text-warning"></i> Real-Time Action Arena (MLBB Mode)
+            </button>
+          </div>
         </div>
 
+        <!-- Mode 1: 3D Tactical Planar Grid (Turn-Based GDD Engine) -->
+        <div id="simModeTacticalGrid">
         <div class="row align-items-start g-4">
           <!-- Left: Tactical Controls, Matchup & Stats -->
           <div class="col-lg-5">
@@ -1606,8 +1693,180 @@
             </div>
           </div>
         </div>
-      </div>
-    </section>
+        </div>
+        <!-- End Mode 1: 3D Tactical Planar Grid -->
+
+        <!-- ================= MODE 2: REAL-TIME MOBA / MLBB ACTION ARENA SIMULATOR ================= -->
+        <div id="simModeRealtimeArena" class="d-none">
+          <div class="glass-card p-3 p-md-4 mb-4" style="background: radial-gradient(circle at 50% 20%, rgba(30, 20, 60, 0.95) 0%, rgba(8, 11, 24, 0.98) 70%, #03060f 100%); border: 2px solid rgba(245, 158, 11, 0.45); box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(245, 158, 11, 0.2);">
+            
+            <!-- Arena Top Control Bar -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+              <div class="d-flex align-items-center gap-3 flex-wrap">
+                <span class="badge bg-warning text-dark font-mono fw-bold px-3 py-2 fs-6">
+                  <i class="bi bi-joystick me-1"></i> MLBB ACTION ARENA
+                </span>
+                
+                <!-- Hero Selection with Actual Paper Sketches -->
+                <div class="d-flex align-items-center gap-2">
+                  <span class="small font-mono text-white fw-bold">HERO:</span>
+                  <select id="arenaHeroSelect" class="form-select form-select-sm bg-dark text-white border-warning font-mono" style="width: auto;">
+                    <option value="ash-matriarch">👑 The Ash Matriarch (Queen • Volcanic Burst • Fig. C.3)</option>
+                    <option value="flame-vanguard">⚔️ Flame-Winged Vanguard (Knight • Assassin • Fig. C.4)</option>
+                    <option value="eternal-drake">🐉 The Eternal Drake (King • Dragon Sovereign • Fig. C.2)</option>
+                    <option value="forest-matriarch">🌿 The Forest Matriarch (Queen • Thorn Mage • Fig. C.7)</option>
+                    <option value="stag-rider">🦌 The Stag-Rider (Knight • Celestial Cavalier • Fig. C.8)</option>
+                  </select>
+                </div>
+
+                <!-- Opponent Champion Selection -->
+                <div class="d-flex align-items-center gap-2">
+                  <span class="small font-mono text-muted">OPPONENT:</span>
+                  <select id="arenaBossSelect" class="form-select form-select-sm bg-dark text-white border-secondary font-mono" style="width: auto;">
+                    <option value="elder-dryad">🌲 The Elder Dryad (Verdant Sovereign • Fig. C.6)</option>
+                    <option value="leviathan">🌊 Leviathan Matriarch (Abyssal Empress • Fig. C.13)</option>
+                    <option value="frost-king">❄️ Glacial Sovereign (Permafrost King • Fig. C.14)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Match Telemetry -->
+              <div class="d-flex align-items-center gap-3 font-mono">
+                <div class="text-center px-3 py-1 rounded bg-black bg-opacity-60 border border-secondary border-opacity-40">
+                  <div class="text-muted" style="font-size: 0.65rem;">KILLS / TROPHIES</div>
+                  <div class="fw-bold text-warning fs-5" id="arenaKillsCount">0</div>
+                </div>
+                <div class="text-center px-3 py-1 rounded bg-black bg-opacity-60 border border-secondary border-opacity-40">
+                  <div class="text-muted" style="font-size: 0.65rem;">ARENA GOLD</div>
+                  <div class="fw-bold text-info fs-5" id="arenaGoldCount">300 G</div>
+                </div>
+                <button id="btnArenaRestart" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2 font-mono">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Respawn
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Viewport with Overlay HUD -->
+            <div class="position-relative arena-viewport-wrapper rounded-4 overflow-hidden" id="arenaViewportWrapper" style="border: 2px solid rgba(168, 85, 247, 0.4); box-shadow: inset 0 0 50px rgba(0,0,0,0.95); min-height: 540px;">
+              
+              <!-- HTML5 60FPS Game Canvas -->
+              <canvas id="arenaCanvas" width="1000" height="540" class="w-100 d-block" style="background: #060914; cursor: crosshair; touch-action: none;"></canvas>
+
+              <!-- Minimap Radar (Top-Right) -->
+              <div class="position-absolute top-0 end-0 m-3 p-1 rounded-3 bg-black bg-opacity-80 border border-warning border-opacity-50 shadow-lg pointer-events-none d-none d-md-block" style="width: 140px; height: 80px; z-index: 10;">
+                <canvas id="arenaMinimap" width="140" height="80" class="w-100 h-100 rounded"></canvas>
+                <div class="position-absolute top-0 start-0 m-1 font-mono text-warning" style="font-size: 0.58rem; letter-spacing: 0.05em;">RADAR MINIMAP</div>
+              </div>
+
+              <!-- Real-Time Passive Hazard Notification (Top-Left) -->
+              <div class="position-absolute top-0 start-0 m-3 z-3 d-flex flex-column gap-2 pointer-events-none">
+                <div id="arenaPassiveBanner" class="badge bg-dark bg-opacity-80 border border-info text-info font-mono px-3 py-2 d-flex align-items-center gap-2 shadow-lg" style="font-size: 0.78rem;">
+                  <span class="spinner-grow spinner-grow-sm text-warning"></span>
+                  <span id="arenaPassiveText">Active Territory: Magma Zone (Heat Haze • -25% Enemy Accuracy)</span>
+                </div>
+                <div class="badge bg-dark bg-opacity-80 border border-secondary text-light font-mono px-2 py-1 small" style="font-size: 0.68rem;">
+                  Controls: [W][A][S][D] / Drag Joystick to Move • [Space]/Tap to Attack • [Q] Dash • [E] AoE Hazard • [R] ULTIMATE
+                </div>
+              </div>
+
+              <!-- Cinematic Manifestation Execution Cut-in Banner -->
+              <div id="arenaManifestationBanner" class="position-absolute top-50 start-50 translate-middle w-100 text-center pointer-events-none d-none" style="z-index: 50; transition: all 0.35s ease;">
+                <div class="py-3 px-4 d-inline-block rounded-4 shadow-lg border border-warning" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(185, 28, 28, 0.95) 100%); box-shadow: 0 0 50px rgba(245, 158, 11, 0.9);">
+                  <div class="d-flex align-items-center justify-content-center gap-3">
+                    <img id="manifestationCutinImg" src="../assets/img/game-dev/image37.jpeg" alt="Manifestation" class="rounded-circle border border-white shadow" style="width: 70px; height: 70px; object-fit: cover;">
+                    <div class="text-start">
+                      <div class="badge bg-black text-warning font-mono fw-bold mb-1">GDD FIGURE C.37 • REAL-TIME EXECUTION</div>
+                      <h3 class="h4 fw-bold text-white mb-0 font-title" id="manifestationCutinTitle">MANIFESTATION COMBAT EXECUTION!</h3>
+                      <div class="small font-mono text-light" id="manifestationCutinSubtitle">Enemy Champion Obliterated! Territory Conquered!</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Virtual Touch / Mouse Joystick (Bottom-Left) -->
+              <div class="position-absolute bottom-0 start-0 m-3 z-3" id="virtualJoystickZone" style="width: 140px; height: 140px; touch-action: none;">
+                <div id="joystickBase" class="position-relative w-100 h-100 rounded-circle border border-warning border-opacity-50" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, rgba(0, 0, 0, 0.65) 100%); box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(245,158,11,0.2);">
+                  <div id="joystickKnob" class="position-absolute top-50 start-50 translate-middle rounded-circle shadow-lg" style="width: 50px; height: 50px; background: radial-gradient(circle, #fbbf24 0%, #d97706 100%); border: 2px solid #ffffff; box-shadow: 0 0 15px #f59e0b;">
+                    <i class="bi bi-arrows-move position-absolute top-50 start-50 translate-middle text-dark fw-bold" style="font-size: 1.1rem;"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- MLBB Bottom-Center Hero Health / Energy HUD -->
+              <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3 z-3 text-center pointer-events-none" style="min-width: 240px; max-width: 320px;">
+                <div class="p-2 rounded-4 bg-black bg-opacity-80 border border-warning border-opacity-50 shadow-lg d-flex align-items-center gap-2">
+                  <img id="arenaHeroPortrait" src="../assets/img/game-dev/image4.png" alt="Hero" class="rounded-circle border border-warning shadow" style="width: 48px; height: 48px; object-fit: cover; flex-shrink: 0;">
+                  <div class="flex-grow-1 text-start">
+                    <div class="d-flex justify-content-between align-items-center font-mono small mb-1">
+                      <strong class="text-white" id="arenaHeroName">The Ash Matriarch</strong>
+                      <span class="badge bg-warning text-dark fw-bold" id="arenaHeroLevel">LV 4</span>
+                    </div>
+                    <!-- HP Bar -->
+                    <div class="progress mb-1" style="height: 10px; background: rgba(255,255,255,0.15); border-radius: 5px;">
+                      <div id="arenaHeroHpBar" class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%;"></div>
+                    </div>
+                    <!-- Mana / Energy Bar -->
+                    <div class="progress" style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;">
+                      <div id="arenaHeroMpBar" class="progress-bar bg-info" role="progressbar" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- MLBB Combat Skill Action Buttons (Bottom-Right) -->
+              <div class="position-absolute bottom-0 end-0 m-3 z-3 d-flex align-items-end gap-2" id="arenaSkillCluster">
+                
+                <!-- Skill 1: Dash / Flank -->
+                <div class="position-relative text-center">
+                  <button id="btnSkillDash" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 2px solid #38bdf8;">
+                    <i class="bi bi-wind fs-4"></i>
+                  </button>
+                  <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-info border border-info" style="font-size: 0.6rem; margin-bottom: -6px;">[Q] DASH</span>
+                  <div id="cdOverlayDash" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-75 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.8rem;">3</div>
+                </div>
+
+                <!-- Skill 2: Kingdom Hazard AoE -->
+                <div class="position-relative text-center">
+                  <button id="btnSkillHazard" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border: 2px solid #f87171;">
+                    <i class="bi bi-fire fs-4"></i>
+                  </button>
+                  <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-danger border border-danger" style="font-size: 0.6rem; margin-bottom: -6px;">[E] AOE</span>
+                  <div id="cdOverlayHazard" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-75 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.8rem;">5</div>
+                </div>
+
+                <!-- Basic Attack Button -->
+                <div class="position-relative text-center">
+                  <button id="btnBasicAttack" class="btn rounded-circle text-dark shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 72px; height: 72px; background: radial-gradient(circle, #fef08a 0%, #f59e0b 60%, #b45309 100%); border: 3px solid #ffffff; box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);">
+                    <i class="bi bi-lightning-charge-fill fs-2"></i>
+                  </button>
+                  <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.62rem; margin-bottom: -6px;">[SPACE] ATK</span>
+                </div>
+
+                <!-- Ultimate Charging Button -->
+                <div class="position-relative text-center">
+                  <button id="btnQueenUltimateArena" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 65px; height: 65px; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); border: 2.5px solid #c084fc;">
+                    <i class="bi bi-stars fs-3"></i>
+                  </button>
+                  <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.6rem; margin-bottom: -6px;">[R] ULT</span>
+                  <!-- Ultimate Charge Ring / Meter -->
+                  <div id="ultChargeOverlay" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-60 d-flex align-items-center justify-content-center font-mono text-warning fw-bold" style="font-size: 0.75rem;">
+                    0%
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Bottom Arena Status & GDD Paper Citation -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3 mt-3 border-top border-secondary border-opacity-25 font-mono small text-muted">
+              <span><i class="bi bi-file-earmark-check-fill text-warning me-1"></i> GDD Mechanics: Free-Roaming Vectors, Real-Time Target Lock-On, Zone Passives &amp; Charging Ultimates</span>
+              <span class="text-info"><i class="bi bi-cpu-fill me-1"></i> Running at 60 FPS HTML5 Canvas Physics Engine</span>
+            </div>
+
+          </div>
+        </div>
+        <!-- End Mode 2: Real-Time MOBA Action Arena -->
 
     <!-- ================= CONCEPT ART & SYSTEM BLUEPRINTS GALLERY ================= -->
     <section class="py-5 border-top border-secondary border-opacity-25" id="gallery">
@@ -3780,6 +4039,42 @@ playSoundBuffer('ultimate');`;
       updateEngineTerminalDisplay();
     }
 
+    // ================= AUTHENTIC GDD SKETCH ASSET MAPPING (FIGURES C.1 TO C.9) =================
+    function getPieceSketch(piece, faction, isWhitePiece) {
+      const type = piece.toUpperCase();
+      if (isWhitePiece) {
+        // Player 1 Faction (Obsidian Roost Figures C.1 to C.4)
+        if (faction === 'volcanic' || !faction) {
+          if (type === 'K') return { img: '../assets/img/game-dev/image3.png', fig: 'Figure C.2: The Eternal Drake (King)' };
+          if (type === 'Q') return { img: '../assets/img/game-dev/image4.png', fig: 'Figure C.3: The Ash Matriarch (Queen)' };
+          if (type === 'N') return { img: '../assets/img/game-dev/image5.png', fig: 'Figure C.4: Flame-Winged Vanguard (Knight)' };
+          if (type === 'R') return { img: '../assets/img/game-dev/image11.jpeg', fig: 'Figure C.10: The Obsidian Fortress (Rook)' };
+          if (type === 'B') return { img: '../assets/img/game-dev/image2.jpeg', fig: 'Figure C.1: The Ember Seer (Bishop)' };
+          if (type === 'P') return { img: '../assets/img/game-dev/image1.png', fig: 'Figure C.1: The Roostling (Pawn)' };
+        } else if (faction === 'abyssal') {
+          return { img: '../assets/img/game-dev/image14.jpeg', fig: 'Figure C.13: The Abyssal Tides' };
+        } else if (faction === 'frost') {
+          return { img: '../assets/img/game-dev/image15.jpeg', fig: 'Figure C.14: The Frostbound Reach' };
+        } else if (faction === 'gearwork') {
+          return { img: '../assets/img/game-dev/image23.jpeg', fig: 'Figure C.22: The Gearwork Citadel' };
+        } else if (faction === 'grave') {
+          return { img: '../assets/img/game-dev/image25.jpeg', fig: 'Figure C.24: The Grave-Bound Dynasty' };
+        } else if (faction === 'void') {
+          return { img: '../assets/img/game-dev/image22.jpeg', fig: 'Figure C.21: The Abyssal Veil' };
+        }
+        return { img: '../assets/img/game-dev/image11.jpeg', fig: 'Figure C.10: The Obsidian Roost' };
+      } else {
+        // Opponent Faction (Verdant Court Figures C.5 to C.8)
+        if (type === 'K') return { img: '../assets/img/game-dev/image7.jpeg', fig: 'Figure C.6: The Elder Dryad (King)' };
+        if (type === 'Q') return { img: '../assets/img/game-dev/image8.jpeg', fig: 'Figure C.7: The Forest Matriarch (Queen)' };
+        if (type === 'N') return { img: '../assets/img/game-dev/image9.jpeg', fig: 'Figure C.8: The Stag-Rider (Knight)' };
+        if (type === 'R') return { img: '../assets/img/game-dev/image12.jpeg', fig: 'Figure C.11: The Treant Guardian (Rook)' };
+        if (type === 'B') return { img: '../assets/img/game-dev/image6.jpeg', fig: 'Figure C.5: The Sylvaris (Bishop)' };
+        if (type === 'P') return { img: '../assets/img/game-dev/image10.jpeg', fig: 'Figure C.9: The Sapling (Pawn)' };
+        return { img: '../assets/img/game-dev/image12.jpeg', fig: 'Figure C.11: The Verdant Court' };
+      }
+    }
+
     function renderBoard() {
       const boardEl = document.getElementById('tacticalBoard');
       boardEl.innerHTML = '';
@@ -3836,12 +4131,14 @@ playSoundBuffer('ultimate');`;
           coordLabel.textContent = `${String.fromCharCode(97 + c)}${8 - r}`;
           cell.appendChild(coordLabel);
 
-          // REALISTIC 3D TABLETOP MINIATURE SCULPTURE (GDD FIGURES C.1 & C.2)
+          // REALISTIC 3D TABLETOP MINIATURE SCULPTURE WITH AUTHENTIC GDD SKETCHES
           const piece = currentBoardState[r][c];
           if (piece) {
             const isW = isWhite(piece);
             const faction = isW ? playerFaction : 'verdant';
             const lore = getPieceLore(piece, faction);
+            const sketchInfo = getPieceSketch(piece, faction, isW);
+            const pieceSym = pieceIcons[piece] || piece;
 
             const slot = document.createElement('div');
             slot.className = 'miniature-slot';
@@ -3860,10 +4157,19 @@ playSoundBuffer('ultimate');`;
             const body = document.createElement('div');
             body.className = 'miniature-body';
 
-            // 4. Vector Figurine Sculpture (Authentic GDD Character Silhouettes)
+            // 4. Authentic Character Sketch Miniature (From GDD Figures C.1 to C.9)
             const sculp = document.createElement('div');
             sculp.className = 'miniature-sculpture';
-            sculp.innerHTML = getPieceMiniatureSVG(piece, faction, isW);
+
+            sculp.innerHTML = `
+              <div class="piece-sketch-card ${isW ? 'card-obsidian' : 'card-verdant'}">
+                <div class="piece-sketch-portrait-wrap">
+                  <img src="${sketchInfo.img}" alt="${lore.name}" class="piece-sketch-img" loading="lazy">
+                  <div class="piece-sketch-glow"></div>
+                  <span class="piece-sketch-badge">${pieceSym}</span>
+                </div>
+              </div>
+            `;
             body.appendChild(sculp);
 
             // 5. Sculpted Stone / Obsidian Pedestal Base with Faction Crest Shield
@@ -3872,10 +4178,20 @@ playSoundBuffer('ultimate');`;
             pedestal.innerHTML = `<span class="miniature-crest">${isW ? (factionCrests[faction] || '🔥') : '🌿'}</span>`;
             body.appendChild(pedestal);
 
-            // 6. Interactive Lore & Stats Tooltip
+            // 6. Interactive Lore & Authentic Sketch Dossier Tooltip
             const tip = document.createElement('div');
             tip.className = 'miniature-tooltip';
-            tip.innerHTML = `<div>${lore.name}</div><div style="color:#fde047; font-size:0.65rem; font-weight:normal;">${lore.role} • ${lore.stats}</div>`;
+            tip.innerHTML = `
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <img src="${sketchInfo.img}" style="width:34px; height:34px; border-radius:6px; object-fit:cover; border:1px solid #fbbf24;">
+                <div class="text-start">
+                  <div class="fw-bold text-white" style="font-size:0.75rem;">${lore.name}</div>
+                  <div class="text-warning font-mono" style="font-size:0.64rem;">${sketchInfo.fig}</div>
+                </div>
+              </div>
+              <div style="color:#7dd3fc; font-size:0.68rem; font-weight:600;">${lore.role}</div>
+              <div style="color:#cbd5e1; font-size:0.65rem; line-height:1.4;">${lore.stats}</div>
+            `;
             body.appendChild(tip);
 
             slot.appendChild(body);
@@ -4399,6 +4715,1116 @@ playSoundBuffer('ultimate');`;
       renderBoard();
     });
 
+    // ================= DUAL-MODE SIMULATOR SWITCHER =================
+    const btnSwitchTactical = document.getElementById('btnSwitchTacticalGrid');
+    const btnSwitchArena = document.getElementById('btnSwitchRealtimeArena');
+    const simGridWrap = document.getElementById('simModeTacticalGrid');
+    const simArenaWrap = document.getElementById('simModeRealtimeArena');
+
+    if (btnSwitchTactical && btnSwitchArena && simGridWrap && simArenaWrap) {
+      btnSwitchTactical.addEventListener('click', () => {
+        btnSwitchTactical.classList.add('active', 'btn-mythic-gold');
+        btnSwitchTactical.classList.remove('btn-outline-secondary', 'text-light');
+        btnSwitchArena.classList.remove('active', 'btn-mythic-gold');
+        btnSwitchArena.classList.add('btn-outline-secondary', 'text-light');
+        simGridWrap.classList.remove('d-none');
+        simArenaWrap.classList.add('d-none');
+        isArenaRunning = false;
+        dispatchEngineAction('init', { turn: moveTurn });
+      });
+
+      btnSwitchArena.addEventListener('click', () => {
+        btnSwitchArena.classList.add('active', 'btn-mythic-gold');
+        btnSwitchArena.classList.remove('btn-outline-secondary', 'text-light');
+        btnSwitchTactical.classList.remove('active', 'btn-mythic-gold');
+        btnSwitchTactical.classList.add('btn-outline-secondary', 'text-light');
+        simArenaWrap.classList.remove('d-none');
+        simGridWrap.classList.add('d-none');
+        startActionArena();
+        dispatchEngineAction('arena_start', { hero: arenaPlayer.heroKey });
+      });
+    }
+
+    // ================= REAL-TIME MOBA / MLBB ACTION ARENA ENGINE =================
+    let isArenaRunning = false;
+    let arenaAnimId = null;
+    let arenaCanvas = null;
+    let arenaCtx = null;
+    let minimapCanvas = null;
+    let minimapCtx = null;
+
+    // Authentic Hero Data with Actual Paper Sketches
+    const arenaHeroesData = {
+      'ash-matriarch': {
+        name: 'The Ash Matriarch',
+        title: 'Queen • Fire Burst Mage',
+        fig: 'Figure C.3: The Ash Matriarch',
+        img: '../assets/img/game-dev/image4.png',
+        maxHp: 480,
+        speed: 3.8,
+        atk: 65,
+        range: 220,
+        atkType: 'firebolt',
+        dashSkill: 'Cinder Dash',
+        hazardSkill: 'Heat Haze Magma Zone',
+        ultName: 'Lava Torrent',
+        passiveDesc: 'Heat Haze: Volcanic magma tiles tick burning damage to enemies.'
+      },
+      'flame-vanguard': {
+        name: 'Flame-Winged Vanguard',
+        title: 'Knight • Swift Assassin',
+        fig: 'Figure C.4: Flame-Winged Vanguard',
+        img: '../assets/img/game-dev/image5.png',
+        maxHp: 440,
+        speed: 4.8,
+        atk: 85,
+        range: 80,
+        atkType: 'slash',
+        dashSkill: 'Flank Leap',
+        hazardSkill: 'Dragon Claws Bleed Zone',
+        ultName: 'Meteor Impact',
+        passiveDesc: 'Rapid Flank: High mobility with L-shape blink leaps.'
+      },
+      'eternal-drake': {
+        name: 'The Eternal Drake',
+        title: 'King • Dragon Sovereign',
+        fig: 'Figure C.2: The Eternal Drake',
+        img: '../assets/img/game-dev/image3.png',
+        maxHp: 650,
+        speed: 3.2,
+        atk: 75,
+        range: 130,
+        atkType: 'breath',
+        dashSkill: 'Draconic Surge',
+        hazardSkill: 'Obsidian Spire',
+        ultName: 'Cataclysmic Inferno',
+        passiveDesc: 'Magma Scales: Reinforced draconic armor absorbs 25% damage.'
+      },
+      'forest-matriarch': {
+        name: 'The Forest Matriarch',
+        title: 'Queen • Thorn Mage',
+        fig: 'Figure C.7: The Forest Matriarch',
+        img: '../assets/img/game-dev/image8.jpeg',
+        maxHp: 500,
+        speed: 3.6,
+        atk: 58,
+        range: 240,
+        atkType: 'thornray',
+        dashSkill: 'Floral Shift',
+        hazardSkill: 'Root-Bound Briar Trap',
+        ultName: 'Thorn Surge',
+        passiveDesc: 'Root-Bound: Thorny briars ensnare and slow enemy units.'
+      },
+      'stag-rider': {
+        name: 'The Stag-Rider',
+        title: 'Knight • Celestial Cavalier',
+        fig: 'Figure C.8: The Stag-Rider',
+        img: '../assets/img/game-dev/image9.jpeg',
+        maxHp: 540,
+        speed: 4.4,
+        atk: 78,
+        range: 95,
+        atkType: 'spear',
+        dashSkill: 'Cavalier Charge',
+        hazardSkill: 'Verdant Aegis',
+        ultName: 'Celestial Stampede',
+        passiveDesc: 'Celestial Gallop: Tramples over enemy ranks with ease.'
+      }
+    };
+
+    const arenaBossesData = {
+      'elder-dryad': {
+        name: 'The Elder Dryad',
+        title: 'Verdant Sovereign (Boss)',
+        fig: 'Figure C.6: The Elder Dryad',
+        img: '../assets/img/game-dev/image7.jpeg',
+        hp: 950,
+        maxHp: 950,
+        speed: 1.8,
+        atk: 55,
+        range: 180,
+        atkType: 'seedpod'
+      },
+      'leviathan': {
+        name: 'Leviathan Matriarch',
+        title: 'Abyssal Empress (Boss)',
+        fig: 'Figure C.13: The Abyssal Tides',
+        img: '../assets/img/game-dev/image14.jpeg',
+        hp: 880,
+        maxHp: 880,
+        speed: 2.1,
+        atk: 60,
+        range: 200,
+        atkType: 'waterblast'
+      },
+      'frost-king': {
+        name: 'Glacial Sovereign',
+        title: 'Permafrost King (Boss)',
+        fig: 'Figure C.14: The Frostbound Reach',
+        img: '../assets/img/game-dev/image15.jpeg',
+        hp: 1000,
+        maxHp: 1000,
+        speed: 1.6,
+        atk: 50,
+        range: 160,
+        atkType: 'icicle'
+      }
+    };
+
+    let arenaPlayer = {
+      x: 160,
+      y: 270,
+      vx: 0,
+      vy: 0,
+      angle: 0,
+      hp: 480,
+      maxHp: 480,
+      mp: 100,
+      maxMp: 100,
+      level: 4,
+      ultCharge: 20,
+      gold: 300,
+      kills: 0,
+      heroKey: 'ash-matriarch',
+      attackCooldown: 0,
+      dashCooldown: 0,
+      hazardCooldown: 0,
+      isDashing: false,
+      dashTime: 0
+    };
+
+    let arenaEnemies = [];
+    let arenaProjectiles = [];
+    let arenaHazards = [];
+    let arenaParticles = [];
+    let arenaDamageTexts = [];
+    let arenaMinionTimer = 0;
+    let arenaKeys = { w: false, a: false, s: false, d: false, space: false, q: false, e: false, r: false };
+    let joystickState = { active: false, startX: 0, startY: 0, curX: 0, curY: 0, dx: 0, dy: 0, dist: 0 };
+    let screenShakeTime = 0;
+
+    const preloadedArenaImages = {};
+    function preloadArenaImages() {
+      Object.keys(arenaHeroesData).forEach(k => {
+        const img = new Image();
+        img.src = arenaHeroesData[k].img;
+        preloadedArenaImages[k] = img;
+      });
+      Object.keys(arenaBossesData).forEach(k => {
+        const img = new Image();
+        img.src = arenaBossesData[k].img;
+        preloadedArenaImages[k] = img;
+      });
+      const minion1 = new Image(); minion1.src = '../assets/img/game-dev/image10.jpeg'; preloadedArenaImages['sapling'] = minion1;
+      const minion2 = new Image(); minion2.src = '../assets/img/game-dev/image1.png'; preloadedArenaImages['roostling'] = minion2;
+    }
+
+    function initActionArena() {
+      arenaCanvas = document.getElementById('arenaCanvas');
+      if (!arenaCanvas) return;
+      arenaCtx = arenaCanvas.getContext('2d');
+      minimapCanvas = document.getElementById('arenaMinimap');
+      if (minimapCanvas) minimapCtx = minimapCanvas.getContext('2d');
+
+      preloadArenaImages();
+      setupJoystickHandlers();
+      setupKeyboardHandlers();
+      setupActionButtons();
+
+      const heroSelect = document.getElementById('arenaHeroSelect');
+      if (heroSelect) {
+        heroSelect.addEventListener('change', (e) => {
+          switchArenaHero(e.target.value);
+        });
+      }
+
+      const bossSelect = document.getElementById('arenaBossSelect');
+      if (bossSelect) {
+        bossSelect.addEventListener('change', (e) => {
+          spawnArenaBoss(e.target.value);
+        });
+      }
+
+      const btnRestart = document.getElementById('btnArenaRestart');
+      if (btnRestart) {
+        btnRestart.addEventListener('click', () => {
+          resetArenaMatch();
+        });
+      }
+
+      resetArenaMatch();
+    }
+
+    function switchArenaHero(heroKey) {
+      const data = arenaHeroesData[heroKey];
+      if (!data) return;
+      arenaPlayer.heroKey = heroKey;
+      arenaPlayer.hp = data.maxHp;
+      arenaPlayer.maxHp = data.maxHp;
+      arenaPlayer.ultCharge = 0;
+
+      document.getElementById('arenaHeroPortrait').src = data.img;
+      document.getElementById('arenaHeroName').textContent = data.name;
+      document.getElementById('arenaPassiveText').textContent = `Active Territory: ${data.passiveDesc}`;
+
+      playSound('terrain');
+      updateArenaHUD();
+    }
+
+    function spawnArenaBoss(bossKey) {
+      const bData = arenaBossesData[bossKey] || arenaBossesData['elder-dryad'];
+      arenaEnemies = arenaEnemies.filter(e => !e.isBoss);
+      arenaEnemies.push({
+        x: 820,
+        y: 270,
+        vx: 0,
+        vy: 0,
+        hp: bData.hp,
+        maxHp: bData.maxHp,
+        speed: bData.speed,
+        atk: bData.atk,
+        range: bData.range,
+        atkType: bData.atkType,
+        isBoss: true,
+        name: bData.name,
+        bossKey,
+        shootCooldown: 60,
+        radius: 34
+      });
+    }
+
+    function resetArenaMatch() {
+      const heroKey = document.getElementById('arenaHeroSelect') ? document.getElementById('arenaHeroSelect').value : 'ash-matriarch';
+      const bossKey = document.getElementById('arenaBossSelect') ? document.getElementById('arenaBossSelect').value : 'elder-dryad';
+      const hData = arenaHeroesData[heroKey] || arenaHeroesData['ash-matriarch'];
+
+      arenaPlayer = {
+        x: 160,
+        y: 270,
+        vx: 0,
+        vy: 0,
+        angle: 0,
+        hp: hData.maxHp,
+        maxHp: hData.maxHp,
+        mp: 100,
+        maxMp: 100,
+        level: 4,
+        ultCharge: 20,
+        gold: 300,
+        kills: 0,
+        heroKey,
+        attackCooldown: 0,
+        dashCooldown: 0,
+        hazardCooldown: 0,
+        isDashing: false,
+        dashTime: 0
+      };
+
+      arenaEnemies = [];
+      arenaProjectiles = [];
+      arenaHazards = [];
+      arenaParticles = [];
+      arenaDamageTexts = [];
+      arenaMinionTimer = 0;
+
+      spawnArenaBoss(bossKey);
+      spawnMinionWave();
+
+      arenaHazards.push({ x: 420, y: 160, radius: 65, type: 'volcanic', duration: 9999 });
+      arenaHazards.push({ x: 580, y: 380, radius: 65, type: 'verdant', duration: 9999 });
+
+      document.getElementById('arenaKillsCount').textContent = '0';
+      document.getElementById('arenaGoldCount').textContent = '300 G';
+      updateArenaHUD();
+      playSound('move');
+    }
+
+    function spawnMinionWave() {
+      for (let i = 0; i < 3; i++) {
+        arenaEnemies.push({
+          x: 880 + (Math.random() * 40 - 20),
+          y: 180 + i * 90,
+          vx: 0,
+          vy: 0,
+          hp: 140,
+          maxHp: 140,
+          speed: 2.2,
+          atk: 18,
+          range: 50,
+          atkType: 'melee',
+          isBoss: false,
+          name: 'Verdant Sapling',
+          minionKey: 'sapling',
+          shootCooldown: Math.floor(Math.random() * 40),
+          radius: 18
+        });
+      }
+    }
+
+    function setupJoystickHandlers() {
+      const zone = document.getElementById('virtualJoystickZone');
+      const knob = document.getElementById('joystickKnob');
+      if (!zone || !knob) return;
+
+      const maxRadius = 45;
+
+      function handleStart(clientX, clientY) {
+        const rect = zone.getBoundingClientRect();
+        joystickState.active = true;
+        joystickState.startX = rect.left + rect.width / 2;
+        joystickState.startY = rect.top + rect.height / 2;
+        handleMove(clientX, clientY);
+      }
+
+      function handleMove(clientX, clientY) {
+        if (!joystickState.active) return;
+        const dx = clientX - joystickState.startX;
+        const dy = clientY - joystickState.startY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const clampedDist = Math.min(dist, maxRadius);
+        const angle = Math.atan2(dy, dx);
+
+        const knobX = Math.cos(angle) * clampedDist;
+        const knobY = Math.sin(angle) * clampedDist;
+        knob.style.transform = `translate(calc(-50% + ${knobX}px), calc(-50% + ${knobY}px))`;
+
+        joystickState.dx = dist > 4 ? Math.cos(angle) * (clampedDist / maxRadius) : 0;
+        joystickState.dy = dist > 4 ? Math.sin(angle) * (clampedDist / maxRadius) : 0;
+        joystickState.dist = clampedDist;
+      }
+
+      function handleEnd() {
+        joystickState.active = false;
+        joystickState.dx = 0;
+        joystickState.dy = 0;
+        knob.style.transform = 'translate(-50%, -50%)';
+      }
+
+      zone.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
+      window.addEventListener('mousemove', (e) => {
+        if (joystickState.active) handleMove(e.clientX, e.clientY);
+      });
+      window.addEventListener('mouseup', handleEnd);
+
+      zone.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0) handleStart(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchmove', (e) => {
+        if (joystickState.active && e.touches.length > 0) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      }, { passive: true });
+      window.addEventListener('touchend', handleEnd);
+    }
+
+    function setupKeyboardHandlers() {
+      window.addEventListener('keydown', (e) => {
+        if (!isArenaRunning) return;
+        const key = e.key.toLowerCase();
+        if (key === 'w' || key === 'arrowup') arenaKeys.w = true;
+        if (key === 'a' || key === 'arrowleft') arenaKeys.a = true;
+        if (key === 's' || key === 'arrowdown') arenaKeys.s = true;
+        if (key === 'd' || key === 'arrowright') arenaKeys.d = true;
+
+        if (key === ' ' || key === 'j') {
+          e.preventDefault();
+          arenaAttack();
+        }
+        if (key === 'q' || key === 'k') {
+          arenaSkillDash();
+        }
+        if (key === 'e' || key === 'l') {
+          arenaSkillHazard();
+        }
+        if (key === 'r' || key === 'u') {
+          arenaTriggerUltimate();
+        }
+      });
+
+      window.addEventListener('keyup', (e) => {
+        const key = e.key.toLowerCase();
+        if (key === 'w' || key === 'arrowup') arenaKeys.w = false;
+        if (key === 'a' || key === 'arrowleft') arenaKeys.a = false;
+        if (key === 's' || key === 'arrowdown') arenaKeys.s = false;
+        if (key === 'd' || key === 'arrowright') arenaKeys.d = false;
+      });
+    }
+
+    function setupActionButtons() {
+      const btnAtk = document.getElementById('btnBasicAttack');
+      if (btnAtk) btnAtk.addEventListener('click', () => arenaAttack());
+
+      const btnDash = document.getElementById('btnSkillDash');
+      if (btnDash) btnDash.addEventListener('click', () => arenaSkillDash());
+
+      const btnHazard = document.getElementById('btnSkillHazard');
+      if (btnHazard) btnHazard.addEventListener('click', () => arenaSkillHazard());
+
+      const btnUlt = document.getElementById('btnQueenUltimateArena');
+      if (btnUlt) btnUlt.addEventListener('click', () => arenaTriggerUltimate());
+    }
+
+    function arenaAttack() {
+      if (arenaPlayer.attackCooldown > 0) return;
+      arenaPlayer.attackCooldown = 18;
+
+      let closest = null;
+      let minDist = 9999;
+      arenaEnemies.forEach(e => {
+        if (e.hp > 0) {
+          const d = Math.hypot(e.x - arenaPlayer.x, e.y - arenaPlayer.y);
+          if (d < minDist) {
+            minDist = d;
+            closest = e;
+          }
+        }
+      });
+
+      let targetAngle = arenaPlayer.angle;
+      if (closest && minDist < 380) {
+        targetAngle = Math.atan2(closest.y - arenaPlayer.y, closest.x - arenaPlayer.x);
+        arenaPlayer.angle = targetAngle;
+      }
+
+      const hData = arenaHeroesData[arenaPlayer.heroKey] || arenaHeroesData['ash-matriarch'];
+      playSound('clash');
+
+      if (hData.atkType === 'slash') {
+        arenaProjectiles.push({
+          x: arenaPlayer.x + Math.cos(targetAngle) * 35,
+          y: arenaPlayer.y + Math.sin(targetAngle) * 35,
+          vx: Math.cos(targetAngle) * 7,
+          vy: Math.sin(targetAngle) * 7,
+          radius: 28,
+          dmg: hData.atk,
+          color: '#f59e0b',
+          life: 12,
+          isMelee: true,
+          fromPlayer: true
+        });
+      } else {
+        arenaProjectiles.push({
+          x: arenaPlayer.x + Math.cos(targetAngle) * 20,
+          y: arenaPlayer.y + Math.sin(targetAngle) * 20,
+          vx: Math.cos(targetAngle) * 11,
+          vy: Math.sin(targetAngle) * 11,
+          radius: 9,
+          dmg: hData.atk,
+          color: arenaPlayer.heroKey === 'forest-matriarch' ? '#22c55e' : '#f97316',
+          life: 45,
+          isMelee: false,
+          fromPlayer: true
+        });
+      }
+
+      for (let i = 0; i < 5; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x + Math.cos(targetAngle) * 22,
+          y: arenaPlayer.y + Math.sin(targetAngle) * 22,
+          vx: (Math.random() - 0.5) * 5 + Math.cos(targetAngle) * 4,
+          vy: (Math.random() - 0.5) * 5 + Math.sin(targetAngle) * 4,
+          radius: Math.random() * 3 + 2,
+          color: '#fbbf24',
+          alpha: 1,
+          decay: 0.05
+        });
+      }
+    }
+
+    function arenaSkillDash() {
+      if (arenaPlayer.dashCooldown > 0) return;
+      arenaPlayer.dashCooldown = 180;
+      arenaPlayer.isDashing = true;
+      arenaPlayer.dashTime = 12;
+
+      playSound('move');
+      const dashDist = 135;
+      arenaPlayer.x += Math.cos(arenaPlayer.angle) * dashDist;
+      arenaPlayer.y += Math.sin(arenaPlayer.angle) * dashDist;
+
+      arenaPlayer.x = Math.max(40, Math.min(960, arenaPlayer.x));
+      arenaPlayer.y = Math.max(40, Math.min(500, arenaPlayer.y));
+
+      for (let i = 0; i < 12; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x + (Math.random() - 0.5) * 40,
+          y: arenaPlayer.y + (Math.random() - 0.5) * 40,
+          vx: (Math.random() - 0.5) * 2,
+          vy: (Math.random() - 0.5) * 2,
+          radius: Math.random() * 5 + 3,
+          color: '#38bdf8',
+          alpha: 0.9,
+          decay: 0.04
+        });
+      }
+    }
+
+    function arenaSkillHazard() {
+      if (arenaPlayer.hazardCooldown > 0) return;
+      arenaPlayer.hazardCooldown = 300;
+
+      playSound('terrain');
+      const type = arenaPlayer.heroKey === 'forest-matriarch' || arenaPlayer.heroKey === 'stag-rider' ? 'verdant' : 'volcanic';
+      arenaHazards.push({
+        x: arenaPlayer.x,
+        y: arenaPlayer.y,
+        radius: 75,
+        type,
+        duration: 360,
+        tickTimer: 0
+      });
+
+      for (let i = 0; i < 16; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x,
+          y: arenaPlayer.y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          radius: Math.random() * 4 + 2,
+          color: type === 'verdant' ? '#4ade80' : '#ef4444',
+          alpha: 1,
+          decay: 0.03
+        });
+      }
+    }
+
+    function arenaTriggerUltimate() {
+      if (arenaPlayer.ultCharge < 100) return;
+      arenaPlayer.ultCharge = 0;
+      screenShakeTime = 25;
+
+      const hData = arenaHeroesData[arenaPlayer.heroKey] || arenaHeroesData['ash-matriarch'];
+      playSound('ultimate');
+
+      for (let a = -0.6; a <= 0.6; a += 0.15) {
+        const uAngle = arenaPlayer.angle + a;
+        arenaProjectiles.push({
+          x: arenaPlayer.x,
+          y: arenaPlayer.y,
+          vx: Math.cos(uAngle) * 14,
+          vy: Math.sin(uAngle) * 14,
+          radius: 24,
+          dmg: 280,
+          color: '#fbbf24',
+          life: 60,
+          isUlt: true,
+          fromPlayer: true
+        });
+      }
+
+      for (let i = 0; i < 40; i++) {
+        arenaParticles.push({
+          x: arenaPlayer.x,
+          y: arenaPlayer.y,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.5) * 16,
+          radius: Math.random() * 8 + 3,
+          color: '#f59e0b',
+          alpha: 1,
+          decay: 0.02
+        });
+      }
+
+      showManifestationBanner(hData.name, hData.ultName);
+    }
+
+    function showManifestationBanner(heroName, ultName) {
+      const banner = document.getElementById('arenaManifestationBanner');
+      if (!banner) return;
+      document.getElementById('manifestationCutinTitle').textContent = `MANIFESTATION: ${ultName.toUpperCase()}!`;
+      document.getElementById('manifestationCutinSubtitle').textContent = `${heroName} triggers board-altering combat execution!`;
+      banner.classList.remove('d-none');
+      setTimeout(() => {
+        banner.classList.add('d-none');
+      }, 2600);
+    }
+
+    function startActionArena() {
+      if (isArenaRunning) return;
+      isArenaRunning = true;
+      if (!arenaCanvas) initActionArena();
+
+      function loop() {
+        if (!isArenaRunning) return;
+        updateArena();
+        drawArena();
+        arenaAnimId = requestAnimationFrame(loop);
+      }
+      arenaAnimId = requestAnimationFrame(loop);
+    }
+
+    function updateArena() {
+      const hData = arenaHeroesData[arenaPlayer.heroKey] || arenaHeroesData['ash-matriarch'];
+
+      let moveX = 0, moveY = 0;
+      if (arenaKeys.w) moveY -= 1;
+      if (arenaKeys.s) moveY += 1;
+      if (arenaKeys.a) moveX -= 1;
+      if (arenaKeys.d) moveX += 1;
+
+      if (joystickState.active && (joystickState.dx !== 0 || joystickState.dy !== 0)) {
+        moveX = joystickState.dx;
+        moveY = joystickState.dy;
+      }
+
+      const len = Math.hypot(moveX, moveY);
+      if (len > 0) {
+        const normX = moveX / (len > 1 ? len : 1);
+        const normY = moveY / (len > 1 ? len : 1);
+        arenaPlayer.vx = normX * hData.speed;
+        arenaPlayer.vy = normY * hData.speed;
+        arenaPlayer.angle = Math.atan2(normY, normX);
+      } else {
+        arenaPlayer.vx *= 0.7;
+        arenaPlayer.vy *= 0.7;
+      }
+
+      arenaPlayer.x += arenaPlayer.vx;
+      arenaPlayer.y += arenaPlayer.vy;
+
+      arenaPlayer.x = Math.max(35, Math.min(965, arenaPlayer.x));
+      arenaPlayer.y = Math.max(35, Math.min(505, arenaPlayer.y));
+
+      if (arenaPlayer.attackCooldown > 0) arenaPlayer.attackCooldown--;
+      if (arenaPlayer.dashCooldown > 0) arenaPlayer.dashCooldown--;
+      if (arenaPlayer.hazardCooldown > 0) arenaPlayer.hazardCooldown--;
+      if (screenShakeTime > 0) screenShakeTime--;
+
+      if (arenaPlayer.ultCharge < 100) {
+        arenaPlayer.ultCharge = Math.min(100, arenaPlayer.ultCharge + 0.05);
+      }
+
+      arenaMinionTimer++;
+      if (arenaMinionTimer > 360) {
+        arenaMinionTimer = 0;
+        if (arenaEnemies.filter(e => !e.isBoss).length < 5) {
+          spawnMinionWave();
+        }
+      }
+
+      arenaEnemies.forEach((e) => {
+        if (e.hp <= 0) return;
+        const distToPlayer = Math.hypot(arenaPlayer.x - e.x, arenaPlayer.y - e.y);
+
+        if (distToPlayer > e.range) {
+          const ang = Math.atan2(arenaPlayer.y - e.y, arenaPlayer.x - e.x);
+          e.x += Math.cos(ang) * e.speed;
+          e.y += Math.sin(ang) * e.speed;
+        }
+
+        if (e.shootCooldown > 0) {
+          e.shootCooldown--;
+        } else if (distToPlayer < e.range + 80) {
+          e.shootCooldown = e.isBoss ? 55 : 85;
+          const ang = Math.atan2(arenaPlayer.y - e.y, arenaPlayer.x - e.x);
+          arenaProjectiles.push({
+            x: e.x + Math.cos(ang) * 20,
+            y: e.y + Math.sin(ang) * 20,
+            vx: Math.cos(ang) * (e.isBoss ? 7 : 5),
+            vy: Math.sin(ang) * (e.isBoss ? 7 : 5),
+            radius: e.isBoss ? 11 : 6,
+            dmg: e.atk,
+            color: '#dc2626',
+            life: 60,
+            fromPlayer: false
+          });
+        }
+      });
+
+      for (let i = arenaHazards.length - 1; i >= 0; i--) {
+        const hz = arenaHazards[i];
+        if (hz.duration < 9999) {
+          hz.duration--;
+          if (hz.duration <= 0) {
+            arenaHazards.splice(i, 1);
+            continue;
+          }
+        }
+        hz.tickTimer = (hz.tickTimer || 0) + 1;
+        if (hz.tickTimer >= 20) {
+          hz.tickTimer = 0;
+          arenaEnemies.forEach(e => {
+            if (e.hp > 0 && Math.hypot(e.x - hz.x, e.y - hz.y) < hz.radius) {
+              const tickDmg = 14;
+              e.hp -= tickDmg;
+              arenaDamageTexts.push({ x: e.x, y: e.y - 20, text: `-${tickDmg}`, color: '#f87171', alpha: 1, vy: -1.2 });
+              if (e.hp <= 0) handleEnemyDefeat(e);
+            }
+          });
+        }
+      }
+
+      for (let i = arenaProjectiles.length - 1; i >= 0; i--) {
+        const p = arenaProjectiles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+
+        if (p.fromPlayer) {
+          arenaEnemies.forEach(e => {
+            if (e.hp > 0 && Math.hypot(e.x - p.x, e.y - p.y) < (e.radius + p.radius)) {
+              p.life = 0;
+              const isCrit = Math.random() < 0.25;
+              const finalDmg = isCrit ? Math.round(p.dmg * 1.5) : p.dmg;
+              e.hp -= finalDmg;
+
+              arenaPlayer.ultCharge = Math.min(100, arenaPlayer.ultCharge + 7);
+
+              arenaDamageTexts.push({
+                x: e.x,
+                y: e.y - 25,
+                text: isCrit ? `-${finalDmg} CRIT!` : `-${finalDmg}`,
+                color: isCrit ? '#fde047' : (p.isUlt ? '#fbbf24' : '#ffffff'),
+                alpha: 1,
+                vy: -1.5
+              });
+
+              for (let k = 0; k < 6; k++) {
+                arenaParticles.push({
+                  x: p.x,
+                  y: p.y,
+                  vx: (Math.random() - 0.5) * 6,
+                  vy: (Math.random() - 0.5) * 6,
+                  radius: Math.random() * 3 + 2,
+                  color: p.color,
+                  alpha: 1,
+                  decay: 0.06
+                });
+              }
+
+              if (e.hp <= 0) handleEnemyDefeat(e);
+            }
+          });
+        } else {
+          if (Math.hypot(arenaPlayer.x - p.x, arenaPlayer.y - p.y) < (22 + p.radius)) {
+            p.life = 0;
+            arenaPlayer.hp = Math.max(0, arenaPlayer.hp - p.dmg);
+            screenShakeTime = 6;
+            arenaDamageTexts.push({
+              x: arenaPlayer.x,
+              y: arenaPlayer.y - 30,
+              text: `-${p.dmg}`,
+              color: '#ef4444',
+              alpha: 1,
+              vy: -1.2
+            });
+
+            if (arenaPlayer.hp <= 0) {
+              arenaPlayer.hp = 1;
+              playSound('terrain');
+              arenaDamageTexts.push({ x: arenaPlayer.x, y: arenaPlayer.y - 45, text: `SURVIVED!`, color: '#f59e0b', alpha: 1, vy: -1.5 });
+            }
+          }
+        }
+
+        if (p.life <= 0 || p.x < 10 || p.x > 990 || p.y < 10 || p.y > 530) {
+          arenaProjectiles.splice(i, 1);
+        }
+      }
+
+      for (let i = arenaParticles.length - 1; i >= 0; i--) {
+        const pt = arenaParticles[i];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.alpha -= pt.decay;
+        if (pt.alpha <= 0) arenaParticles.splice(i, 1);
+      }
+
+      for (let i = arenaDamageTexts.length - 1; i >= 0; i--) {
+        const dt = arenaDamageTexts[i];
+        dt.y += dt.vy;
+        dt.alpha -= 0.025;
+        if (dt.alpha <= 0) arenaDamageTexts.splice(i, 1);
+      }
+
+      updateArenaHUD();
+    }
+
+    function handleEnemyDefeat(e) {
+      playSound('clash');
+      arenaPlayer.kills++;
+      arenaPlayer.gold += e.isBoss ? 250 : 45;
+      document.getElementById('arenaKillsCount').textContent = arenaPlayer.kills;
+      document.getElementById('arenaGoldCount').textContent = `${arenaPlayer.gold} G`;
+
+      for (let k = 0; k < 20; k++) {
+        arenaParticles.push({
+          x: e.x,
+          y: e.y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          radius: Math.random() * 5 + 2,
+          color: e.isBoss ? '#fbbf24' : '#22c55e',
+          alpha: 1,
+          decay: 0.03
+        });
+      }
+
+      if (e.isBoss) {
+        showManifestationBanner(arenaHeroesData[arenaPlayer.heroKey].name, 'VICTORY CONQUEST');
+        setTimeout(() => {
+          spawnArenaBoss(document.getElementById('arenaBossSelect').value);
+        }, 4000);
+      }
+    }
+
+    function updateArenaHUD() {
+      const hpPct = Math.max(0, Math.min(100, (arenaPlayer.hp / arenaPlayer.maxHp) * 100));
+      const hpBar = document.getElementById('arenaHeroHpBar');
+      if (hpBar) {
+        hpBar.style.width = `${hpPct}%`;
+        hpBar.className = hpPct < 30 ? 'progress-bar bg-danger' : (hpPct < 60 ? 'progress-bar bg-warning' : 'progress-bar bg-success');
+      }
+
+      const ultPct = Math.floor(arenaPlayer.ultCharge);
+      const ultOverlay = document.getElementById('ultChargeOverlay');
+      const btnUlt = document.getElementById('btnQueenUltimateArena');
+      if (ultOverlay && btnUlt) {
+        if (ultPct >= 100) {
+          ultOverlay.textContent = 'READY!';
+          btnUlt.classList.add('ult-ready-pulse');
+        } else {
+          ultOverlay.textContent = `${ultPct}%`;
+          btnUlt.classList.remove('ult-ready-pulse');
+        }
+      }
+
+      const cdDash = document.getElementById('cdOverlayDash');
+      if (cdDash) {
+        if (arenaPlayer.dashCooldown > 0) {
+          cdDash.classList.remove('d-none');
+          cdDash.textContent = Math.ceil(arenaPlayer.dashCooldown / 60);
+        } else {
+          cdDash.classList.add('d-none');
+        }
+      }
+
+      const cdHazard = document.getElementById('cdOverlayHazard');
+      if (cdHazard) {
+        if (arenaPlayer.hazardCooldown > 0) {
+          cdHazard.classList.remove('d-none');
+          cdHazard.textContent = Math.ceil(arenaPlayer.hazardCooldown / 60);
+        } else {
+          cdHazard.classList.add('d-none');
+        }
+      }
+    }
+
+    function drawArena() {
+      if (!arenaCtx || !arenaCanvas) return;
+      const ctx = arenaCtx;
+      const w = arenaCanvas.width;
+      const h = arenaCanvas.height;
+
+      let offsetX = 0, offsetY = 0;
+      if (screenShakeTime > 0) {
+        offsetX = (Math.random() - 0.5) * 8;
+        offsetY = (Math.random() - 0.5) * 8;
+      }
+
+      ctx.save();
+      ctx.translate(offsetX, offsetY);
+
+      ctx.fillStyle = '#060914';
+      ctx.fillRect(0, 0, w, h);
+
+      const ambGrad = ctx.createRadialGradient(w / 2, h / 2, 40, w / 2, h / 2, 500);
+      ambGrad.addColorStop(0, 'rgba(124, 58, 237, 0.12)');
+      ambGrad.addColorStop(0.6, 'rgba(15, 23, 42, 0.6)');
+      ambGrad.addColorStop(1, 'rgba(3, 6, 15, 0.98)');
+      ctx.fillStyle = ambGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= w; x += 50) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y <= h; y += 50) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      ctx.strokeStyle = 'rgba(168, 85, 247, 0.5)';
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(15, 15, w - 30, h - 30);
+
+      const obelisks = [
+        { x: 35, y: 35 }, { x: w - 35, y: 35 },
+        { x: 35, y: h - 35 }, { x: w - 35, y: h - 35 }
+      ];
+      obelisks.forEach(ob => {
+        ctx.fillStyle = '#a855f7';
+        ctx.shadowColor = '#a855f7';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(ob.x, ob.y, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      arenaHazards.forEach(hz => {
+        ctx.save();
+        const grad = ctx.createRadialGradient(hz.x, hz.y, 10, hz.x, hz.y, hz.radius);
+        if (hz.type === 'verdant') {
+          grad.addColorStop(0, 'rgba(34, 197, 94, 0.45)');
+          grad.addColorStop(0.7, 'rgba(21, 128, 61, 0.25)');
+          grad.addColorStop(1, 'rgba(5, 46, 22, 0)');
+          ctx.strokeStyle = 'rgba(74, 222, 128, 0.7)';
+        } else {
+          grad.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+          grad.addColorStop(0.7, 'rgba(185, 28, 28, 0.25)');
+          grad.addColorStop(1, 'rgba(69, 10, 10, 0)');
+          ctx.strokeStyle = 'rgba(248, 113, 113, 0.7)';
+        }
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(hz.x, hz.y, hz.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      arenaEnemies.forEach(e => {
+        if (e.hp <= 0) return;
+
+        const barW = e.radius * 2 + 10;
+        const barH = 5;
+        const hpPct = Math.max(0, e.hp / e.maxHp);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        ctx.fillRect(e.x - barW / 2, e.y - e.radius - 14, barW, barH);
+        ctx.fillStyle = e.isBoss ? '#f59e0b' : '#ef4444';
+        ctx.fillRect(e.x - barW / 2, e.y - e.radius - 14, barW * hpPct, barH);
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '9px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(e.name, e.x, e.y - e.radius - 17);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+        ctx.clip();
+
+        const imgKey = e.isBoss ? e.bossKey : e.minionKey;
+        const eImg = preloadedArenaImages[imgKey];
+        if (eImg && eImg.complete) {
+          ctx.drawImage(eImg, e.x - e.radius, e.y - e.radius, e.radius * 2, e.radius * 2);
+        } else {
+          ctx.fillStyle = e.isBoss ? '#7c2d12' : '#14532d';
+          ctx.fill();
+        }
+        ctx.restore();
+
+        ctx.strokeStyle = e.isBoss ? '#fbbf24' : '#ef4444';
+        ctx.lineWidth = e.isBoss ? 2.5 : 1.8;
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      ctx.save();
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.beginPath();
+      ctx.ellipse(arenaPlayer.x, arenaPlayer.y + 12, 22, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.15)';
+      ctx.beginPath();
+      ctx.moveTo(arenaPlayer.x, arenaPlayer.y);
+      ctx.arc(arenaPlayer.x, arenaPlayer.y, 45, arenaPlayer.angle - 0.45, arenaPlayer.angle + 0.45);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(arenaPlayer.x, arenaPlayer.y, 22, 0, Math.PI * 2);
+      ctx.clip();
+
+      const pImg = preloadedArenaImages[arenaPlayer.heroKey];
+      if (pImg && pImg.complete) {
+        ctx.drawImage(pImg, arenaPlayer.x - 22, arenaPlayer.y - 22, 44, 44);
+      } else {
+        ctx.fillStyle = '#b45309';
+        ctx.fill();
+      }
+      ctx.restore();
+
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(arenaPlayer.x, arenaPlayer.y, 22, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(
+        arenaPlayer.x + Math.cos(arenaPlayer.angle) * 28,
+        arenaPlayer.y + Math.sin(arenaPlayer.angle) * 28,
+        4, 0, Math.PI * 2
+      );
+      ctx.fill();
+      ctx.restore();
+
+      arenaProjectiles.forEach(p => {
+        ctx.save();
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      });
+
+      arenaParticles.forEach(pt => {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, pt.alpha);
+        ctx.fillStyle = pt.color;
+        ctx.beginPath();
+        ctx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+
+      arenaDamageTexts.forEach(dt => {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, dt.alpha);
+        ctx.font = 'bold 13px monospace';
+        ctx.fillStyle = dt.color;
+        ctx.textAlign = 'center';
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 4;
+        ctx.fillText(dt.text, dt.x, dt.y);
+        ctx.restore();
+      });
+
+      ctx.restore();
+
+      if (minimapCtx && minimapCanvas) {
+        const mctx = minimapCtx;
+        const mw = minimapCanvas.width;
+        const mh = minimapCanvas.height;
+        mctx.fillStyle = '#060914';
+        mctx.fillRect(0, 0, mw, mh);
+
+        mctx.fillStyle = '#38bdf8';
+        mctx.beginPath();
+        mctx.arc((arenaPlayer.x / w) * mw, (arenaPlayer.y / h) * mh, 3.5, 0, Math.PI * 2);
+        mctx.fill();
+
+        arenaEnemies.forEach(e => {
+          if (e.hp <= 0) return;
+          mctx.fillStyle = e.isBoss ? '#fbbf24' : '#ef4444';
+          mctx.beginPath();
+          mctx.arc((e.x / w) * mw, (e.y / h) * mh, e.isBoss ? 4 : 2, 0, Math.PI * 2);
+          mctx.fill();
+        });
+      }
+    }
+
     // Manual Queen Signature Ultimate Trigger
     document.getElementById('btnQueenUltimate').addEventListener('click', () => {
       triggerVictoryCheckmate();
@@ -4413,6 +5839,7 @@ playSoundBuffer('ultimate');`;
       renderBoard();
       saveTimelineSnapshot('Game Initialized');
       dispatchEngineAction('init', { turn: 1 });
+      initActionArena();
     });
   </script>
 </body>
