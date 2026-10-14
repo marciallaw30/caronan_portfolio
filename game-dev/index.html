@@ -368,9 +368,15 @@
       margin-top: -195px;
       cursor: pointer;
       transform-style: preserve-3d;
-      transition: opacity 0.3s linear, transform 0.25s ease;
+      transition: opacity 0.28s linear, visibility 0.28s linear, transform 0.25s ease;
       filter: none !important;
       -webkit-filter: none !important;
+      backface-visibility: hidden !important;
+      -webkit-backface-visibility: hidden !important;
+    }
+
+    .kingdom-cylinder-card.is-facing {
+      z-index: 20 !important;
     }
 
     .kingdom-cylinder-card .card-shell {
@@ -385,9 +391,14 @@
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
       transform: translateZ(0);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden !important;
+      -webkit-backface-visibility: hidden !important;
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .kingdom-cylinder-card.is-facing .card-shell {
+      border: 2px solid #fbbf24;
+      box-shadow: 0 25px 65px rgba(245, 158, 11, 0.42), 0 0 35px rgba(245, 158, 11, 0.55);
     }
 
     .kingdom-cylinder-card:hover .card-shell {
@@ -2268,9 +2279,8 @@
         return;
       }
 
-      // Calculate radius dynamically to ensure cards are properly spaced in 3D circle
-      const cardWidth = 280;
-      const radius = Math.max(540, Math.min(880, Math.round((cardWidth * count) / (2 * Math.PI) * 1.25)));
+      // Maintain optimal focal distance so the front card is always prominent, crisp, and beautifully framed
+      const radius = count <= 3 ? 540 : (count <= 6 ? 580 : 620);
       const anglePerItem = 360 / count;
 
       filteredCylinderData.forEach((k, idx) => {
@@ -2282,7 +2292,7 @@
         card.setAttribute('title', `Click to inspect ${k.name} lore and piece hierarchy`);
 
         card.innerHTML = `
-          <div class="card-shell" onclick="openKingdomModal('${k.id}')">
+          <div class="card-shell">
             <img src="${k.img}" alt="${k.name}" class="kingdom-cylinder-img">
             <span class="position-absolute top-0 start-0 m-3 pill-badge bg-dark bg-opacity-75 border-secondary" style="font-size:0.75rem; z-index:3;">
               ${k.icon} ${k.element}
@@ -2303,6 +2313,21 @@
         `;
 
         card.style.transform = `rotateY(${itemAngle}deg) translateZ(${radius}px)`;
+
+        // Smart interaction: clicking side card spins it to front; clicking active front card opens modal
+        card.addEventListener('click', (e) => {
+          const itemAngleCurrent = idx * anglePerItem;
+          const totalRotation = cylinderRotation % 360;
+          const relativeAngle = (itemAngleCurrent + totalRotation + 360) % 360;
+          const normalized = Math.abs(relativeAngle > 180 ? 360 - relativeAngle : relativeAngle);
+
+          if (normalized <= (anglePerItem * 0.5) || e.target.closest('.btn-mythic-outline')) {
+            openKingdomModal(k.id);
+          } else {
+            snapToKingdom(idx);
+          }
+        });
+
         cylinderEl.appendChild(card);
       });
 
@@ -2322,6 +2347,11 @@
       let minAngleDist = 999;
       let facingIndex = 0;
 
+      // Visibility cutoff threshold:
+      // When count <= 4 (e.g. Nature & Water with 3 items), allow up to 130 deg so flanking items are visible
+      // When count > 4 (e.g. All 15 Kingdoms), cull any card past 68 deg so only the front focal arc is rendered!
+      const visibilityCutoff = count <= 4 ? 130 : 68;
+
       cards.forEach((card, i) => {
         const itemAngle = i * anglePerItem;
         const totalRotation = cylinderRotation % 360;
@@ -2333,10 +2363,32 @@
           facingIndex = i;
         }
 
-        // Maintain high visual clarity - NO BLUR, NO GRAYSCALE across all cylinder angles
-        const opacity = Math.max(0.65, 1 - (normalized / 180) * 0.45);
-        card.style.opacity = opacity.toFixed(2);
-        card.style.pointerEvents = normalized > 110 ? 'none' : 'auto';
+        // Culling & Front Focal Arc Calculation
+        if (normalized > visibilityCutoff) {
+          // Hide back-facing cards completely - NO CLUTTER, NO BACKWARDS MIRRORED TEXT!
+          card.style.opacity = '0';
+          card.style.visibility = 'hidden';
+          card.style.pointerEvents = 'none';
+          card.classList.remove('is-facing');
+        } else {
+          card.style.visibility = 'visible';
+
+          if (normalized < (anglePerItem * 0.45) || normalized < 14) {
+            // Active Hero Front Card
+            card.style.opacity = '1.0';
+            card.style.pointerEvents = 'auto';
+            card.style.zIndex = '20';
+            card.classList.add('is-facing');
+          } else {
+            // Flanking 3D Perspective Cards
+            const t = normalized / visibilityCutoff;
+            const opacity = Math.max(0.35, 1 - (t * 0.70));
+            card.style.opacity = opacity.toFixed(2);
+            card.style.pointerEvents = normalized > 55 ? 'none' : 'auto';
+            card.style.zIndex = Math.round((1 - t) * 8);
+            card.classList.remove('is-facing');
+          }
+        }
         card.style.filter = 'none';
       });
 
@@ -2348,9 +2400,40 @@
       }
     }
 
+    function snapToKingdom(index) {
+      const count = filteredCylinderData.length;
+      if (count === 0) return;
+      const anglePerItem = 360 / count;
+      let currentAngle = (index * anglePerItem + cylinderRotation) % 360;
+      if (currentAngle > 180) currentAngle -= 360;
+      if (currentAngle < -180) currentAngle += 360;
+      cylinderRotation -= currentAngle;
+
+      const cylinderEl = document.getElementById('kingdoms3DCylinder');
+      if (cylinderEl) {
+        cylinderEl.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
+      updateCylinderCardTransforms();
+    }
+
+    function snapToNearestKingdom() {
+      const count = filteredCylinderData.length;
+      if (count === 0) return;
+      const anglePerItem = 360 / count;
+      cylinderRotation = Math.round(cylinderRotation / anglePerItem) * anglePerItem;
+
+      const cylinderEl = document.getElementById('kingdoms3DCylinder');
+      if (cylinderEl) {
+        cylinderEl.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
+      updateCylinderCardTransforms();
+    }
+
     function startCylinderAnimation() {
       function tick() {
         if (isCylinderAutoRotating && !isDraggingCylinder) {
+          const cylinderEl = document.getElementById('kingdoms3DCylinder');
+          if (cylinderEl) cylinderEl.style.transition = 'none';
           cylinderRotation -= cylinderSpeed;
           updateCylinderCardTransforms();
         }
@@ -2365,7 +2448,12 @@
       const count = filteredCylinderData.length;
       if (count === 0) return;
       const angleStep = 360 / count;
-      cylinderRotation += direction * angleStep;
+      cylinderRotation = Math.round(cylinderRotation / angleStep) * angleStep + (direction * angleStep);
+
+      const cylinderEl = document.getElementById('kingdoms3DCylinder');
+      if (cylinderEl) {
+        cylinderEl.style.transition = 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
       updateCylinderCardTransforms();
     }
 
@@ -2439,6 +2527,7 @@
         document.querySelectorAll('#kingdomFilters .filter-tab').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const filterVal = btn.getAttribute('data-filter');
+        cylinderRotation = 0; // Cleanly reset focus to first kingdom
         renderKingdoms(filterVal);
         renderKingdoms3DCylinder(filterVal);
       });
@@ -2512,17 +2601,24 @@
         isDraggingCylinder = true;
         dragStartX = e.clientX;
         dragStartRotation = cylinderRotation;
+        const cylinderEl = document.getElementById('kingdoms3DCylinder');
+        if (cylinderEl) cylinderEl.style.transition = 'none';
       });
 
       window.addEventListener('mousemove', (e) => {
         if (!isDraggingCylinder) return;
         const dx = e.clientX - dragStartX;
         cylinderRotation = dragStartRotation + dx * 0.35;
+        const cylinderEl = document.getElementById('kingdoms3DCylinder');
+        if (cylinderEl) cylinderEl.style.transition = 'none';
         updateCylinderCardTransforms();
       });
 
       window.addEventListener('mouseup', () => {
-        isDraggingCylinder = false;
+        if (isDraggingCylinder) {
+          isDraggingCylinder = false;
+          snapToNearestKingdom();
+        }
       });
 
       // Touch drag
@@ -2532,6 +2628,8 @@
           isDraggingCylinder = true;
           dragStartX = e.touches[0].clientX;
           dragStartRotation = cylinderRotation;
+          const cylinderEl = document.getElementById('kingdoms3DCylinder');
+          if (cylinderEl) cylinderEl.style.transition = 'none';
         }
       }, { passive: true });
 
@@ -2539,18 +2637,28 @@
         if (!isDraggingCylinder || e.touches.length !== 1) return;
         const dx = e.touches[0].clientX - dragStartX;
         cylinderRotation = dragStartRotation + dx * 0.45;
+        const cylinderEl = document.getElementById('kingdoms3DCylinder');
+        if (cylinderEl) cylinderEl.style.transition = 'none';
         updateCylinderCardTransforms();
       }, { passive: true });
 
       window.addEventListener('touchend', () => {
-        isDraggingCylinder = false;
+        if (isDraggingCylinder) {
+          isDraggingCylinder = false;
+          snapToNearestKingdom();
+        }
       });
 
       // Mouse wheel to rotate
+      let wheelSnapTimeout = null;
       stage3DWrap.addEventListener('wheel', (e) => {
         e.preventDefault();
+        const cylinderEl = document.getElementById('kingdoms3DCylinder');
+        if (cylinderEl) cylinderEl.style.transition = 'none';
         cylinderRotation += e.deltaY * 0.12;
         updateCylinderCardTransforms();
+        clearTimeout(wheelSnapTimeout);
+        wheelSnapTimeout = setTimeout(snapToNearestKingdom, 160);
       }, { passive: false });
     }
 
