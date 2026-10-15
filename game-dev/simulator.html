@@ -123,6 +123,7 @@
       position: relative;
       background: #0d0818;
       transition: filter 0.3s ease;
+      transform-style: preserve-3d;
     }
 
     .cell {
@@ -277,7 +278,8 @@
     .miniature-slot,
     .miniature-body,
     .miniature-img,
-    .pedestal-ring {
+    .pedestal-ring,
+    .miniature-shadow {
       pointer-events: none !important;
     }
 
@@ -286,62 +288,126 @@
       width: 100%;
       height: 100%;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: center;
       transform-style: preserve-3d;
+      pointer-events: none !important;
     }
 
+    /* Soft Floor Contact Drop Shadow - anchors base firmly to tile surface */
+    .miniature-shadow {
+      position: absolute;
+      bottom: 6px;
+      width: 48px;
+      height: 16px;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 75%);
+      border-radius: 50%;
+      transform: translateZ(1px);
+      pointer-events: none !important;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+    }
+
+    /* Flat Circular Pedestal Base - sits flat on the board square */
+    .pedestal-ring {
+      position: absolute;
+      bottom: 6px;
+      width: 46px;
+      height: 16px;
+      border-radius: 50%;
+      transform: translateZ(3px);
+      border: 2px solid;
+      pointer-events: none !important;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .pedestal-obsidian {
+      background: radial-gradient(ellipse at center, #f59e0b 0%, #b45309 60%, #451a03 100%);
+      border-color: #fbbf24;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.8), inset 0 0 4px rgba(255, 255, 255, 0.35);
+    }
+
+    .pedestal-verdant {
+      background: radial-gradient(ellipse at center, #22c55e 0%, #15803d 60%, #052e16 100%);
+      border-color: #86efac;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8), inset 0 0 4px rgba(255, 255, 255, 0.35);
+    }
+
+    /* Upright Standing Miniature Character Body - 
+       Rises vertically 90° from pedestal, counter-rotating the board slant so it stands tall facing camera */
     .miniature-body {
       position: absolute;
-      bottom: 2px;
+      bottom: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      transform: translateZ(24px) rotateX(-35deg);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
-      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.85));
+      justify-content: flex-end;
+      transform-origin: 50% 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.95));
+      pointer-events: none !important;
     }
 
-    .view-topdown .miniature-body {
-      transform: translateZ(10px) rotateX(0deg);
+    /* 3D Symmetric (Cinematic Perspective): Cancel X pitch so character stands vertical */
+    .view-perspective .miniature-body {
+      transform: translateZ(8px) rotateX(-38deg);
     }
+
+    /* 3D Asymmetric (Isometric 45°): Cancel compound Z yaw (-24°) and X pitch (48°) */
     .view-isometric .miniature-body {
-      transform: translateZ(28px) rotateX(-45deg) rotateZ(20deg);
+      transform: translateZ(10px) rotateZ(24deg) rotateX(-48deg);
     }
 
+    /* 2D Tactical (Top-down): Flat overhead */
+    .view-topdown .miniature-body {
+      transform: translateZ(4px) rotateX(0deg);
+    }
+
+    /* Hover Levitation: Figurine floats upwards smoothly while remaining upright */
     .cell:hover .miniature-body {
-      transform: translateZ(38px) rotateX(-35deg) scale(1.12);
-      filter: drop-shadow(0 14px 20px rgba(245, 158, 11, 0.5));
+      filter: drop-shadow(0 16px 22px rgba(245, 158, 11, 0.65)) brightness(1.15);
+    }
+    .view-perspective .cell:hover .miniature-body {
+      transform: translateZ(32px) rotateX(-38deg) scale(1.12);
+    }
+    .view-isometric .cell:hover .miniature-body {
+      transform: translateZ(36px) rotateZ(24deg) rotateX(-48deg) scale(1.12);
+    }
+    .view-topdown .cell:hover .miniature-body {
+      transform: translateZ(16px) rotateX(0deg) scale(1.12);
+    }
+
+    /* Selection Levitation & Golden Aura Focus */
+    .cell-selected .miniature-body {
+      filter: drop-shadow(0 20px 28px rgba(245, 158, 11, 0.95)) brightness(1.25);
+    }
+    .view-perspective .cell-selected .miniature-body {
+      transform: translateZ(40px) rotateX(-38deg) scale(1.16);
+    }
+    .view-isometric .cell-selected .miniature-body {
+      transform: translateZ(44px) rotateZ(24deg) rotateX(-48deg) scale(1.16);
+    }
+    .view-topdown .cell-selected .miniature-body {
+      transform: translateZ(24px) rotateX(0deg) scale(1.16);
+    }
+
+    .cell:hover .miniature-shadow,
+    .cell-selected .miniature-shadow {
+      transform: translateZ(1px) scale(1.25);
+      opacity: 0.6;
+    }
+
+    .cell:hover .pedestal-ring,
+    .cell-selected .pedestal-ring {
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.9), inset 0 0 6px #fff;
     }
 
     .miniature-img {
       width: 58px;
-      height: 70px;
+      height: 72px;
       object-fit: contain;
       pointer-events: none;
       filter: drop-shadow(0 0 6px rgba(0,0,0,0.9));
-    }
-
-    .pedestal-ring {
-      width: 44px;
-      height: 12px;
-      border-radius: 50%;
-      margin-top: -8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.9);
-      border: 2px solid;
-    }
-
-    .pedestal-obsidian {
-      background: radial-gradient(circle, #f59e0b 0%, #b45309 60%, #451a03 100%);
-      border-color: #fbbf24;
-      box-shadow: 0 0 12px rgba(245, 158, 11, 0.8);
-    }
-
-    .pedestal-verdant {
-      background: radial-gradient(circle, #22c55e 0%, #15803d 60%, #052e16 100%);
-      border-color: #86efac;
-      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
     }
 
     /* Enhanced Manifestation Cut-in Banner */
@@ -1690,6 +1756,15 @@
             const miniatureSlot = document.createElement('div');
             miniatureSlot.className = 'miniature-slot';
 
+            // Floor contact shadow
+            const shadow = document.createElement('div');
+            shadow.className = 'miniature-shadow';
+
+            // Flat circular pedestal base resting on tile
+            const pedestal = document.createElement('div');
+            pedestal.className = `pedestal-ring ${isWhite ? 'pedestal-obsidian' : 'pedestal-verdant'}`;
+
+            // Upright standing character figurine
             const miniatureBody = document.createElement('div');
             miniatureBody.className = 'miniature-body';
 
@@ -1698,11 +1773,9 @@
             img.alt = profile.name;
             img.className = 'miniature-img';
 
-            const pedestal = document.createElement('div');
-            pedestal.className = `pedestal-ring ${isWhite ? 'pedestal-obsidian' : 'pedestal-verdant'}`;
-
             miniatureBody.appendChild(img);
-            miniatureBody.appendChild(pedestal);
+            miniatureSlot.appendChild(shadow);
+            miniatureSlot.appendChild(pedestal);
             miniatureSlot.appendChild(miniatureBody);
             cell.appendChild(miniatureSlot);
           }
