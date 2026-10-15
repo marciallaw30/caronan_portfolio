@@ -378,42 +378,157 @@
       display: block;
     }
 
-    /* Soundscape Faction Grid */
+    /* Soundscape Faction Grid & Audio Engine Readability */
+    #simFactionSelect {
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 7px 10px;
+      background-color: #0b1120;
+      border: 1.5px solid #f59e0b;
+      color: #ffffff;
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+    #simFactionSelect:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    }
+
     .soundscape-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 6px;
-      max-height: 220px;
+      max-height: 230px;
       overflow-y: auto;
       padding-right: 4px;
     }
 
     .soundscape-btn {
-      background: rgba(18, 22, 38, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(245, 158, 11, 0.25);
       border-radius: 6px;
       padding: 6px 8px;
-      font-size: 0.72rem;
-      color: #e2e8f0;
+      font-size: 0.73rem;
+      font-weight: 600;
+      color: #f8fafc;
       text-align: left;
       transition: all 0.2s ease;
       cursor: pointer;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
     }
 
     .soundscape-btn:hover {
-      background: rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.25);
       border-color: #f59e0b;
-      color: #fff;
+      color: #ffffff;
       transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
     }
 
     .soundscape-btn.playing {
       background: rgba(245, 158, 11, 0.35);
-      border-color: #f59e0b;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+      border-color: #fbbf24;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.7);
+    }
+
+    .soundscape-equalizer {
+      display: none;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+    .soundscape-btn.playing .soundscape-equalizer {
+      display: inline-flex;
+    }
+    .soundscape-equalizer span {
+      width: 2.5px;
+      background: #fbbf24;
+      border-radius: 1px;
+      animation: eqBounce 0.6s ease-in-out infinite alternate;
+    }
+    .soundscape-equalizer span:nth-child(2) { animation-delay: 0.15s; }
+    .soundscape-equalizer span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes eqBounce {
+      from { height: 3px; }
+      to { height: 12px; }
+    }
+
+    /* Tactical SFX Preview Buttons */
+    .sfx-preview-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1.5px solid;
+      background: rgba(10, 15, 30, 0.7);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .sfx-preview-btn:hover {
+      transform: translateY(-2px);
+    }
+    .sfx-btn-cyan {
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+    .sfx-btn-cyan:hover {
+      background: #38bdf8;
+      color: #03060f;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+    }
+    .sfx-btn-blue {
+      border-color: #60a5fa;
+      color: #93c5fd;
+    }
+    .sfx-btn-blue:hover {
+      background: #60a5fa;
+      color: #03060f;
+      box-shadow: 0 0 12px rgba(96, 165, 250, 0.6);
+    }
+    .sfx-btn-orange {
+      border-color: #f97316;
+      color: #fb923c;
+    }
+    .sfx-btn-orange:hover {
+      background: #f97316;
+      color: #03060f;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.6);
+    }
+    .sfx-btn-gold {
+      border-color: #fbbf24;
+      color: #fef08a;
+      background: rgba(245, 158, 11, 0.15);
+    }
+    .sfx-btn-gold:hover {
+      background: #fbbf24;
+      color: #03060f;
+      box-shadow: 0 0 16px rgba(251, 191, 36, 0.8);
+    }
+    .sfx-btn-crimson {
+      border-color: #f87171;
+      color: #fca5a5;
+    }
+    .sfx-btn-crimson:hover {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+    }
+    .sfx-btn-violet {
+      border-color: #c084fc;
+      color: #e9d5ff;
+    }
+    .sfx-btn-violet:hover {
+      background: #a855f7;
+      color: #ffffff;
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.7);
     }
 
     .btn-mythic-gold {
@@ -438,19 +553,209 @@
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(245, 158, 11, 0.2);
     }
 
-    .ult-ready-pulse {
-      animation: ultPulseGlow 1.2s infinite alternate !important;
-    }
-    @keyframes ultPulseGlow {
-      from { box-shadow: 0 0 15px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(254, 240, 138, 0.5); border-color: #fbbf24; }
-      to { box-shadow: 0 0 40px rgba(245, 158, 11, 1), 0 0 60px rgba(239, 68, 68, 0.8), inset 0 0 20px #fbbf24; border-color: #ffffff; }
+    /* Tactile Arcade Joystick Housing */
+    #virtualJoystickZone {
+      width: 150px;
+      height: 150px;
+      touch-action: none;
+      user-select: none;
     }
 
-    #btnBasicAttack:active,
-    #btnSkillDash:active,
-    #btnSkillHazard:active,
-    #btnQueenUltimateArena:active {
+    #joystickBase {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(30, 41, 59, 0.6) 0%, rgba(10, 15, 30, 0.9) 70%, #020617 100%);
+      border: 3px solid #f59e0b;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), 0 0 15px rgba(245, 158, 11, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.95);
+    }
+
+    /* Engraved Cardinal Glyphs */
+    .joystick-cardinal {
+      position: absolute;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: rgba(245, 158, 11, 0.85);
+      text-shadow: 0 0 6px rgba(245, 158, 11, 0.8);
+      pointer-events: none;
+    }
+    .joystick-cardinal-n { top: 6px; left: 50%; transform: translateX(-50%); }
+    .joystick-cardinal-s { bottom: 6px; left: 50%; transform: translateX(-50%); }
+    .joystick-cardinal-w { left: 8px; top: 50%; transform: translateY(-50%); }
+    .joystick-cardinal-e { right: 8px; top: 50%; transform: translateY(-50%); }
+
+    #joystickKnob {
+      width: 56px;
+      height: 56px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fde047 0%, #f59e0b 50%, #b45309 85%, #78350f 100%);
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 158, 11, 0.9), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.05s ease-out;
+    }
+    #joystickKnob:active {
+      cursor: grabbing;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 30px rgba(245, 158, 11, 1), inset 0 0 10px #ffffff;
+    }
+
+    /* Ergonomic Radial MOBA Skills Cluster */
+    .arcade-skills-cluster {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      width: 220px;
+      height: 200px;
+      pointer-events: auto;
+      user-select: none;
+    }
+
+    .skill-slot {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Skill Positions in MOBA Arc */
+    .skill-slot-strike {
+      right: 10px;
+      bottom: 8px;
+    }
+    .skill-slot-dash {
+      left: 8px;
+      bottom: 22px;
+    }
+    .skill-slot-hazard {
+      left: 36px;
+      top: 36px;
+    }
+    .skill-slot-ult {
+      right: 32px;
+      top: 2px;
+    }
+
+    /* Buttons */
+    .btn-arc-skill {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+      border: none;
+      outline: none;
+    }
+    .btn-arc-skill:hover {
+      transform: scale(1.06);
+    }
+    .btn-arc-skill:active {
       transform: scale(0.92);
+    }
+
+    .btn-strike-moba {
+      width: 76px;
+      height: 76px;
+      background: radial-gradient(circle at 35% 35%, #fffbeb 0%, #fef08a 25%, #f59e0b 65%, #b45309 100%);
+      border: 3px solid #ffffff !important;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.8), 0 0 30px rgba(245, 158, 11, 0.95);
+      color: #03060f;
+    }
+
+    .btn-dash-moba {
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle at 35% 35%, #e0f2fe 0%, #38bdf8 45%, #0284c7 85%, #0369a1 100%);
+      border: 2.5px solid #7dd3fc !important;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.7), 0 0 20px rgba(56, 189, 248, 0.7);
+      color: #ffffff;
+    }
+
+    .btn-hazard-moba {
+      width: 54px;
+      height: 54px;
+      background: radial-gradient(circle at 35% 35%, #fee2e2 0%, #f87171 45%, #dc2626 85%, #991b1b 100%);
+      border: 2.5px solid #fca5a5 !important;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.7), 0 0 20px rgba(239, 68, 68, 0.7);
+      color: #ffffff;
+    }
+
+    .btn-ult-moba {
+      width: 66px;
+      height: 66px;
+      background: radial-gradient(circle at 35% 35%, #f3e8ff 0%, #c084fc 40%, #7c3aed 80%, #4c1d95 100%);
+      border: 2.5px solid #e9d5ff !important;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.8), 0 0 25px rgba(168, 85, 247, 0.85);
+      color: #ffffff;
+    }
+
+    /* Circular SVG charge ring for Ultimate */
+    .ult-svg-ring {
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      width: 76px;
+      height: 76px;
+      pointer-events: none;
+      transform: rotate(-90deg);
+    }
+    .ult-svg-track {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 4;
+    }
+    .ult-svg-fill {
+      fill: none;
+      stroke: #fbbf24;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 226;
+      stroke-dashoffset: 226;
+      transition: stroke-dashoffset 0.15s ease-out;
+      filter: drop-shadow(0 0 6px #f59e0b);
+    }
+
+    /* Label badges with guaranteed no-clipping & high contrast */
+    .skill-label-badge {
+      position: absolute;
+      bottom: -11px;
+      white-space: nowrap !important;
+      pointer-events: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.63rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(5, 7, 15, 0.94);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.9);
+      line-height: 1.2;
+      z-index: 5;
+    }
+
+    .ult-ready-pulse {
+      animation: ultPulseGlow 1s infinite alternate !important;
+    }
+    @keyframes ultPulseGlow {
+      from {
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.8), 0 0 35px rgba(168, 85, 247, 0.9), inset 0 0 10px #fef08a;
+        border-color: #fbbf24 !important;
+      }
+      to {
+        box-shadow: 0 0 45px rgba(251, 191, 36, 1), 0 0 70px rgba(239, 68, 68, 0.9), inset 0 0 25px #ffffff;
+        border-color: #ffffff !important;
+        transform: scale(1.08);
+      }
     }
   </style>
 </head>
@@ -663,22 +968,24 @@
 
           <!-- Tactical SFX Quick Test -->
           <div class="mb-3">
-            <div class="small font-mono text-info fw-bold mb-1"><i class="bi bi-soundwave me-1"></i> Tactical SFX Preview:</div>
+            <div class="small font-mono text-info fw-bold mb-2"><i class="bi bi-soundwave me-1"></i> TACTICAL SFX SYNTHESIZER:</div>
             <div class="d-flex gap-1 flex-wrap">
-              <button class="btn btn-xs btn-outline-secondary text-light font-mono" style="font-size: 0.7rem;" onclick="playSound('select')">Select</button>
-              <button class="btn btn-xs btn-outline-secondary text-light font-mono" style="font-size: 0.7rem;" onclick="playSound('move')">Move</button>
-              <button class="btn btn-xs btn-outline-secondary text-light font-mono" style="font-size: 0.7rem;" onclick="playSound('capture')">Clash</button>
-              <button class="btn btn-xs btn-outline-warning text-warning font-mono" style="font-size: 0.7rem;" onclick="playSound('manifestation')">Manifest</button>
-              <button class="btn btn-xs btn-outline-danger text-danger font-mono" style="font-size: 0.7rem;" onclick="playSound('check')">Check</button>
-              <button class="btn btn-xs btn-outline-info text-info font-mono" style="font-size: 0.7rem;" onclick="playSound('ultimate')">Ultimate</button>
+              <button class="sfx-preview-btn sfx-btn-cyan" onclick="playSound('select')"><i class="bi bi-cursor-fill me-1"></i>Select</button>
+              <button class="sfx-preview-btn sfx-btn-blue" onclick="playSound('move')"><i class="bi bi-arrows-move me-1"></i>Move</button>
+              <button class="sfx-preview-btn sfx-btn-orange" onclick="playSound('capture')"><i class="bi bi-shield-slash me-1"></i>Clash</button>
+              <button class="sfx-preview-btn sfx-btn-gold" onclick="playSound('manifestation')"><i class="bi bi-lightning-fill me-1"></i>Manifest</button>
+              <button class="sfx-preview-btn sfx-btn-crimson" onclick="playSound('check')"><i class="bi bi-exclamation-triangle-fill me-1"></i>Check</button>
+              <button class="sfx-preview-btn sfx-btn-violet" onclick="playSound('ultimate')"><i class="bi bi-stars me-1"></i>Ultimate</button>
             </div>
           </div>
 
           <!-- 15 Kingdom Bespoke Soundscapes -->
           <div>
-            <div class="d-flex justify-content-between align-items-center mb-1">
+            <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="small font-mono text-warning fw-bold"><i class="bi bi-disc-fill me-1"></i> 15 Kingdom Soundscapes:</span>
-              <span class="small text-muted font-mono" style="font-size: 0.68rem;">(GDD Section X)</span>
+              <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-50 font-mono px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">
+                <i class="bi bi-shield-check me-1"></i>GDD SEC. X
+              </span>
             </div>
             <div class="soundscape-grid" id="soundscapeContainer">
               <!-- Dynamically populated 15 kingdoms -->
@@ -702,10 +1009,16 @@
             <i class="bi bi-controller me-1"></i> ARCADE MODE: KINGDOM LAND BATTLE
           </span>
 
-          <!-- Land Territory Environment Selector -->
-          <div class="d-flex align-items-center gap-2">
-            <span class="small font-mono text-warning fw-bold">TERRITORY LAND:</span>
-            <select id="arenaLandSelect" class="form-select form-select-sm bg-dark text-white border-warning font-mono" style="width: auto;">
+          <!-- Land Territory Environment Selector with Fast Switcher -->
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="small font-mono text-warning fw-bold">MAP:</span>
+            <div class="btn-group btn-group-sm p-1 rounded-pill bg-black bg-opacity-70 border border-warning border-opacity-40" id="arenaMapQuickBar">
+              <button type="button" class="btn btn-xs btn-outline-warning active font-mono rounded-pill px-2 py-1" onclick="setArenaMap('obsidian')" id="mapBtn-obsidian">&#127755; Obsidian</button>
+              <button type="button" class="btn btn-xs btn-outline-success font-mono rounded-pill px-2 py-1" onclick="setArenaMap('verdant')" id="mapBtn-verdant">&#127794; Verdant</button>
+              <button type="button" class="btn btn-xs btn-outline-info font-mono rounded-pill px-2 py-1" onclick="setArenaMap('frost')" id="mapBtn-frost">&#10052; Frost</button>
+              <button type="button" class="btn btn-xs btn-outline-primary font-mono rounded-pill px-2 py-1" onclick="setArenaMap('abyssal')" id="mapBtn-abyssal">&#127754; Abyssal</button>
+            </div>
+            <select id="arenaLandSelect" class="form-select form-select-sm bg-dark text-white border-warning font-mono d-none" style="width: auto;">
               <option value="obsidian">&#127755; Obsidian Roost (Volcanic Magma Land)</option>
               <option value="verdant">&#127794; Verdant Court (Ancient Forest Land)</option>
               <option value="frost">&#10052; Frostbound Reach (Permafrost Glacial Land)</option>
@@ -789,11 +1102,16 @@
           </div>
         </div>
 
-        <!-- Virtual Touch / Mouse Joystick (Bottom-Left) -->
-        <div class="position-absolute bottom-0 start-0 m-3 z-3" id="virtualJoystickZone" style="width: 140px; height: 140px; touch-action: none;">
-          <div id="joystickBase" class="position-relative w-100 h-100 rounded-circle border border-warning border-opacity-50" style="background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, rgba(0, 0, 0, 0.65) 100%); box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 15px rgba(245,158,11,0.2);">
-            <div id="joystickKnob" class="position-absolute top-50 start-50 translate-middle rounded-circle shadow-lg" style="width: 50px; height: 50px; background: radial-gradient(circle, #fbbf24 0%, #d97706 100%); border: 2px solid #ffffff; box-shadow: 0 0 15px #f59e0b;">
-              <i class="bi bi-arrows-move position-absolute top-50 start-50 translate-middle text-dark fw-bold" style="font-size: 1.1rem;"></i>
+        <!-- Virtual Tactile Arcade Joystick (Bottom-Left) -->
+        <div class="position-absolute bottom-0 start-0 m-3 z-3" id="virtualJoystickZone">
+          <div id="joystickBase">
+            <div class="joystick-cardinal joystick-cardinal-n">▲ N</div>
+            <div class="joystick-cardinal joystick-cardinal-e">► E</div>
+            <div class="joystick-cardinal joystick-cardinal-s">▼ S</div>
+            <div class="joystick-cardinal joystick-cardinal-w">◄ W</div>
+            <canvas id="joystickTetherCanvas" width="150" height="150" class="position-absolute top-0 start-0 pointer-events-none" style="z-index: 1;"></canvas>
+            <div id="joystickKnob" style="z-index: 2;">
+              <i class="bi bi-crosshair text-dark fw-bold" style="font-size: 1.3rem;"></i>
             </div>
           </div>
         </div>
@@ -819,47 +1137,54 @@
           </div>
         </div>
 
-        <!-- Arcade Mode Combat Skill Action Buttons (Bottom-Right) -->
-        <div class="position-absolute bottom-0 end-0 m-3 z-3 d-flex align-items-end gap-2" id="arenaSkillCluster">
+        <!-- Arcade Mode Combat Skill Action Buttons (Bottom-Right MOBA Arc Cluster) -->
+        <div class="arcade-skills-cluster z-3" id="arenaSkillCluster">
           
-          <!-- Skill 1: Dash / Flank -->
-          <div class="position-relative text-center">
-            <button id="btnSkillDash" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 2px solid #38bdf8;">
+          <!-- Skill 1: Dash / Flank [Q] -->
+          <div class="skill-slot skill-slot-dash">
+            <button type="button" id="btnSkillDash" class="btn-arc-skill btn-dash-moba" title="Mobility Blink / Dash [Q]">
               <i class="bi bi-wind fs-4"></i>
+              <div id="cdOverlayDash" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-80 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.85rem;">3</div>
             </button>
-            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-info border border-info" style="font-size: 0.6rem; margin-bottom: -6px;">[Q] BLINK</span>
-            <div id="cdOverlayDash" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-75 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.8rem;">3</div>
+            <span class="skill-label-badge text-info border-info">[Q] BLINK</span>
           </div>
 
-          <!-- Skill 2: Kingdom Hazard AoE -->
-          <div class="position-relative text-center">
-            <button id="btnSkillHazard" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border: 2px solid #f87171;">
+          <!-- Skill 2: Kingdom Hazard AoE [E] -->
+          <div class="skill-slot skill-slot-hazard">
+            <button type="button" id="btnSkillHazard" class="btn-arc-skill btn-hazard-moba" title="Kingdom Territory Hazard AoE [E]">
               <i class="bi bi-fire fs-4"></i>
+              <div id="cdOverlayHazard" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-80 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.85rem;">5</div>
             </button>
-            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-danger border border-danger" style="font-size: 0.6rem; margin-bottom: -6px;">[E] HAZARD</span>
-            <div id="cdOverlayHazard" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-75 d-flex align-items-center justify-content-center font-mono text-white fw-bold d-none" style="font-size: 0.8rem;">5</div>
+            <span class="skill-label-badge text-danger border-danger">[E] HAZARD</span>
           </div>
 
-          <!-- Basic Attack Button -->
-          <div class="position-relative text-center">
-            <button id="btnBasicAttack" class="btn rounded-circle text-dark shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 72px; height: 72px; background: radial-gradient(circle, #fef08a 0%, #f59e0b 60%, #b45309 100%); border: 3px solid #ffffff; box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);">
-              <i class="bi bi-lightning-charge-fill fs-2"></i>
-            </button>
-            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.62rem; margin-bottom: -6px;">[SPACE] STRIKE</span>
-          </div>
-
-          <!-- Ultimate Charging Button -->
-          <div class="position-relative text-center">
-            <button id="btnQueenUltimateArena" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 65px; height: 65px; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); border: 2.5px solid #c084fc;">
+          <!-- Skill 3: Sovereign Ultimate [R] -->
+          <div class="skill-slot skill-slot-ult">
+            <button type="button" id="btnQueenUltimateArena" class="btn-arc-skill btn-ult-moba" title="Kingdom Sovereign Ultimate Execution [R]">
+              <!-- Circular SVG Charge Meter Ring -->
+              <svg class="ult-svg-ring" viewBox="0 0 76 76">
+                <circle class="ult-svg-track" cx="38" cy="38" r="34" />
+                <circle id="ultSvgFill" class="ult-svg-fill" cx="38" cy="38" r="34" />
+              </svg>
               <i class="bi bi-stars fs-3"></i>
+              <div id="ultChargeOverlay" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-60 d-flex align-items-center justify-content-center font-mono text-warning fw-bold" style="font-size: 0.72rem;">
+                0%
+              </div>
             </button>
-            <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.6rem; margin-bottom: -6px;">[R] ULTIMATE</span>
-            <div id="ultChargeOverlay" class="position-absolute inset-0 rounded-circle bg-black bg-opacity-60 d-flex align-items-center justify-content-center font-mono text-warning fw-bold" style="font-size: 0.75rem;">
-              0%
-            </div>
+            <span class="skill-label-badge text-warning border-warning">[R] ULTIMATE</span>
+          </div>
+
+          <!-- Primary Basic Attack [SPACE] -->
+          <div class="skill-slot skill-slot-strike">
+            <button type="button" id="btnBasicAttack" class="btn-arc-skill btn-strike-moba" title="Basic Weapon Strike [SPACE]">
+              <i class="bi bi-lightning-charge-fill fs-1"></i>
+            </button>
+            <span class="skill-label-badge text-warning border-warning" style="bottom: -13px;">[SPACE] STRIKE</span>
           </div>
 
         </div>
+
+      </div>
 
       </div>
 
@@ -1286,19 +1611,28 @@
       }
     }
 
-    // Populate Soundscape Buttons
+    // Populate Soundscape Buttons with High Contrast & Live Equalizer Waves
     const soundscapeContainer = document.getElementById('soundscapeContainer');
     if (soundscapeContainer) {
+      soundscapeContainer.innerHTML = '';
       KINGDOM_SOUNDSCAPES.forEach(k => {
         const btn = document.createElement('div');
         btn.className = 'soundscape-btn';
-        btn.innerHTML = `<span>${k.icon}</span><span class="text-truncate">${k.name}</span>`;
-        btn.title = k.desc;
+        btn.innerHTML = `
+          <div class="d-flex align-items-center gap-2 overflow-hidden text-nowrap">
+            <span class="fs-6">${k.icon}</span>
+            <span class="fw-bold text-white text-truncate" style="font-size: 0.72rem; letter-spacing: 0.02em;">${k.name}</span>
+          </div>
+          <div class="soundscape-equalizer">
+            <span></span><span></span><span></span>
+          </div>
+        `;
+        btn.title = `${k.name} — ${k.desc}`;
         btn.addEventListener('click', () => {
           document.querySelectorAll('.soundscape-btn').forEach(b => b.classList.remove('playing'));
           btn.classList.add('playing');
           playKingdomSoundscape(k.id);
-          setTimeout(() => btn.classList.remove('playing'), 1800);
+          setTimeout(() => btn.classList.remove('playing'), 2200);
         });
         soundscapeContainer.appendChild(btn);
       });
@@ -2022,6 +2356,13 @@
         });
       }
 
+      const landSelect = document.getElementById('arenaLandSelect');
+      if (landSelect) {
+        landSelect.addEventListener('change', (e) => {
+          setArenaMap(e.target.value);
+        });
+      }
+
       const bossSelect = document.getElementById('arenaBossSelect');
       if (bossSelect) {
         bossSelect.addEventListener('change', (e) => {
@@ -2123,34 +2464,112 @@
       playSound('move');
     }
 
+    function setArenaMap(mapId) {
+      const select = document.getElementById('arenaLandSelect');
+      if (select) {
+        select.value = mapId;
+      }
+      document.querySelectorAll('#arenaMapQuickBar button').forEach(b => {
+        b.classList.remove('active');
+      });
+      const activeBtn = document.getElementById(`mapBtn-${mapId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const bannerText = document.getElementById('arenaPassiveText');
+      if (bannerText) {
+        if (mapId === 'obsidian') {
+          bannerText.textContent = 'Active Battleground: The Obsidian Crags (Magma Land • -25% Enemy Accuracy)';
+        } else if (mapId === 'verdant') {
+          bannerText.textContent = 'Active Battleground: Verdant Sanctum (Ancient Sylvan Forest • -35% Enemy Speed)';
+        } else if (mapId === 'frost') {
+          bannerText.textContent = 'Active Battleground: Frostbound Glaciers (Permafrost • +50% Stamina Cost)';
+        } else if (mapId === 'abyssal') {
+          bannerText.textContent = 'Active Battleground: The Abyssal Trench (Sunken Reefs • Tidal Currents)';
+        }
+      }
+
+      // Atmospheric burst particles on terrain shift
+      for (let i = 0; i < 25; i++) {
+        arenaParticles.push({
+          x: Math.random() * 1000,
+          y: Math.random() * 540,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          radius: Math.random() * 6 + 2,
+          color: mapId === 'obsidian' ? '#f97316' : (mapId === 'verdant' ? '#22c55e' : (mapId === 'frost' ? '#38bdf8' : '#06b6d4')),
+          alpha: 1,
+          decay: 0.03
+        });
+      }
+      playSound('move');
+    }
+
     function spawnMinionWave() {
-      for (let i = 0; i < 3; i++) {
+      const spawnSlots = [
+        { x: 860, y: 160 },
+        { x: 920, y: 270 },
+        { x: 870, y: 390 }
+      ];
+      spawnSlots.forEach((slot, i) => {
         arenaEnemies.push({
-          x: 880 + (Math.random() * 40 - 20),
-          y: 180 + i * 90,
+          x: slot.x + (Math.random() * 20 - 10),
+          y: slot.y + (Math.random() * 20 - 10),
           vx: 0,
           vy: 0,
           hp: 140,
           maxHp: 140,
-          speed: 2.2,
+          speed: 2.1,
           atk: 18,
-          range: 50,
+          range: 52,
           atkType: 'melee',
           isBoss: false,
           name: 'Verdant Sapling',
           minionKey: 'sapling',
-          shootCooldown: Math.floor(Math.random() * 40),
+          seed: i * 2.2,
+          shootCooldown: Math.floor(Math.random() * 40) + 15,
           radius: 18
         });
-      }
+      });
     }
 
     function setupJoystickHandlers() {
       const zone = document.getElementById('virtualJoystickZone');
       const knob = document.getElementById('joystickKnob');
+      const tetherCanvas = document.getElementById('joystickTetherCanvas');
       if (!zone || !knob) return;
 
+      const tetherCtx = tetherCanvas ? tetherCanvas.getContext('2d') : null;
       const maxRadius = 45;
+      const centerCoord = 75; // 150 / 2
+
+      function drawTether(knobX, knobY, angle, dist) {
+        if (!tetherCtx || !tetherCanvas) return;
+        tetherCtx.clearRect(0, 0, tetherCanvas.width, tetherCanvas.height);
+        if (dist < 4) return;
+
+        // Laser vector connecting base center to knob
+        tetherCtx.save();
+        tetherCtx.strokeStyle = 'rgba(251, 191, 36, 0.85)';
+        tetherCtx.lineWidth = 3;
+        tetherCtx.shadowColor = '#f59e0b';
+        tetherCtx.shadowBlur = 10;
+        tetherCtx.beginPath();
+        tetherCtx.moveTo(centerCoord, centerCoord);
+        tetherCtx.lineTo(centerCoord + knobX, centerCoord + knobY);
+        tetherCtx.stroke();
+
+        // Directional arrow tip
+        tetherCtx.fillStyle = '#ffffff';
+        tetherCtx.beginPath();
+        tetherCtx.arc(centerCoord + knobX, centerCoord + knobY, 4, 0, Math.PI * 2);
+        tetherCtx.fill();
+        tetherCtx.restore();
+      }
+
+      function clearTether() {
+        if (!tetherCtx || !tetherCanvas) return;
+        tetherCtx.clearRect(0, 0, tetherCanvas.width, tetherCanvas.height);
+      }
 
       function handleStart(clientX, clientY) {
         const rect = zone.getBoundingClientRect();
@@ -2175,6 +2594,8 @@
         joystickState.dx = dist > 4 ? Math.cos(angle) * (clampedDist / maxRadius) : 0;
         joystickState.dy = dist > 4 ? Math.sin(angle) * (clampedDist / maxRadius) : 0;
         joystickState.dist = clampedDist;
+
+        drawTether(knobX, knobY, angle, dist);
       }
 
       function handleEnd() {
@@ -2182,6 +2603,7 @@
         joystickState.dx = 0;
         joystickState.dy = 0;
         knob.style.transform = 'translate(-50%, -50%)';
+        clearTether();
       }
 
       zone.addEventListener('mousedown', (e) => handleStart(e.clientX, e.clientY));
@@ -2513,6 +2935,26 @@
         }
       });
 
+      // Boid Mutual Separation Physics (Prevents Minion Stacking & Nameplate Overlap)
+      for (let i = 0; i < arenaEnemies.length; i++) {
+        for (let j = i + 1; j < arenaEnemies.length; j++) {
+          const e1 = arenaEnemies[i];
+          const e2 = arenaEnemies[j];
+          if (e1.hp <= 0 || e2.hp <= 0) continue;
+          const d = Math.hypot(e1.x - e2.x, e1.y - e2.y);
+          const minDist = (e1.radius + e2.radius) * 1.6;
+          if (d < minDist && d > 0.01) {
+            const overlap = (minDist - d) * 0.08;
+            const nx = (e1.x - e2.x) / d;
+            const ny = (e1.y - e2.y) / d;
+            e1.x += nx * overlap;
+            e1.y += ny * overlap;
+            e2.x -= nx * overlap;
+            e2.y -= ny * overlap;
+          }
+        }
+      }
+
       for (let i = arenaHazards.length - 1; i >= 0; i--) {
         const hz = arenaHazards[i];
         if (hz.duration < 9999) {
@@ -2529,7 +2971,15 @@
             if (e.hp > 0 && Math.hypot(e.x - hz.x, e.y - hz.y) < hz.radius) {
               const tickDmg = 14;
               e.hp -= tickDmg;
-              arenaDamageTexts.push({ x: e.x, y: e.y - 20, text: `-${tickDmg}`, color: '#f87171', alpha: 1, vy: -1.2 });
+              arenaDamageTexts.push({
+                x: e.x + (Math.random() - 0.5) * 16,
+                y: e.y - 20,
+                text: `-${tickDmg}`,
+                color: '#f87171',
+                alpha: 1,
+                vx: (Math.random() - 0.5) * 1.5,
+                vy: -1.2
+              });
               if (e.hp <= 0) handleEnemyDefeat(e);
             }
           });
@@ -2553,12 +3003,13 @@
               arenaPlayer.ultCharge = Math.min(100, arenaPlayer.ultCharge + 7);
 
               arenaDamageTexts.push({
-                x: e.x,
+                x: e.x + (Math.random() - 0.5) * 14,
                 y: e.y - 25,
                 text: isCrit ? `-${finalDmg} CRIT!` : `-${finalDmg}`,
                 color: isCrit ? '#fde047' : (p.isUlt ? '#fbbf24' : '#ffffff'),
                 alpha: 1,
-                vy: -1.5
+                vx: (Math.random() - 0.5) * 2.0,
+                vy: -1.6
               });
 
               for (let k = 0; k < 6; k++) {
@@ -2583,18 +3034,19 @@
             arenaPlayer.hp = Math.max(0, arenaPlayer.hp - p.dmg);
             screenShakeTime = 6;
             arenaDamageTexts.push({
-              x: arenaPlayer.x,
+              x: arenaPlayer.x + (Math.random() - 0.5) * 12,
               y: arenaPlayer.y - 30,
               text: `-${p.dmg}`,
               color: '#ef4444',
               alpha: 1,
+              vx: (Math.random() - 0.5) * 1.6,
               vy: -1.2
             });
 
             if (arenaPlayer.hp <= 0) {
               arenaPlayer.hp = 1;
               playSound('terrain');
-              arenaDamageTexts.push({ x: arenaPlayer.x, y: arenaPlayer.y - 45, text: `SURVIVED!`, color: '#f59e0b', alpha: 1, vy: -1.5 });
+              arenaDamageTexts.push({ x: arenaPlayer.x, y: arenaPlayer.y - 45, text: `SURVIVED!`, color: '#f59e0b', alpha: 1, vx: 0, vy: -1.5 });
             }
           }
         }
@@ -2615,7 +3067,8 @@
       for (let i = arenaDamageTexts.length - 1; i >= 0; i--) {
         const dt = arenaDamageTexts[i];
         dt.y += dt.vy;
-        dt.alpha -= 0.025;
+        dt.x += (dt.vx || 0);
+        dt.alpha -= 0.022;
         if (dt.alpha <= 0) arenaDamageTexts.splice(i, 1);
       }
 
@@ -2661,6 +3114,13 @@
       const ultPct = Math.floor(arenaPlayer.ultCharge);
       const ultOverlay = document.getElementById('ultChargeOverlay');
       const btnUlt = document.getElementById('btnQueenUltimateArena');
+      const ultSvgFill = document.getElementById('ultSvgFill');
+      if (ultSvgFill) {
+        const circumference = 214;
+        const offset = circumference - (Math.min(100, ultPct) / 100) * circumference;
+        ultSvgFill.style.strokeDashoffset = Math.max(0, offset);
+      }
+
       if (ultOverlay && btnUlt) {
         if (ultPct >= 100) {
           ultOverlay.textContent = 'READY!';
@@ -2708,16 +3168,39 @@
       ctx.save();
       ctx.translate(offsetX, offsetY);
 
-      // 1. TERRITORY LAND RENDERING
+      // ================= 1. PROCEDURAL REALISTIC LIVING TERRITORY MAPS =================
       const selectedLand = document.getElementById('arenaLandSelect')?.value || 'obsidian';
-      
+
       if (selectedLand === 'obsidian') {
-        // Volcanic Magma Territory
-        ctx.fillStyle = '#0b0612';
+        // --- THE OBSIDIAN CRAGS (REALISTIC VOLCANIC MAGMA LAND) ---
+        // Sky & Ambient Atmosphere
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
+        skyGrad.addColorStop(0, '#07020a');
+        skyGrad.addColorStop(0.5, '#150614');
+        skyGrad.addColorStop(1, '#2b0a14');
+        ctx.fillStyle = skyGrad;
         ctx.fillRect(0, 0, w, h);
 
-        ctx.strokeStyle = 'rgba(245, 158, 11, 0.12)';
-        ctx.lineWidth = 1.5;
+        // Distant Jagged Volcanic Crag Silhouettes
+        ctx.fillStyle = 'rgba(20, 7, 18, 0.7)';
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.55);
+        ctx.lineTo(80, h * 0.45);
+        ctx.lineTo(190, h * 0.53);
+        ctx.lineTo(320, h * 0.42);
+        ctx.lineTo(470, h * 0.54);
+        ctx.lineTo(600, h * 0.40);
+        ctx.lineTo(760, h * 0.52);
+        ctx.lineTo(890, h * 0.44);
+        ctx.lineTo(w, h * 0.55);
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+        ctx.fill();
+
+        // Basalt Ground Grid with Glowing Lava Fissures
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.1)';
+        ctx.lineWidth = 1;
         for (let x = 0; x <= w; x += 60) {
           ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
         }
@@ -2725,132 +3208,303 @@
           ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
 
-        // Animated Molten Magma River
+        // Lava Fissure Cracks in Ground
         ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(0, h * 0.75);
-        for (let x = 0; x <= w; x += 30) {
-          const waveY = h * 0.75 + Math.sin(x * 0.015 + animTime) * 35 + Math.cos(x * 0.03 + animTime * 1.5) * 15;
-          ctx.lineTo(x, waveY);
-        }
-        ctx.lineTo(w, h);
-        ctx.lineTo(0, h);
-        ctx.closePath();
-
-        const magmaGrad = ctx.createLinearGradient(0, h * 0.65, 0, h);
-        magmaGrad.addColorStop(0, 'rgba(239, 68, 68, 0.25)');
-        magmaGrad.addColorStop(0.3, 'rgba(249, 115, 22, 0.85)');
-        magmaGrad.addColorStop(0.6, 'rgba(245, 158, 11, 0.95)');
-        magmaGrad.addColorStop(1, 'rgba(185, 28, 28, 0.9)');
-        ctx.fillStyle = magmaGrad;
+        ctx.strokeStyle = 'rgba(249, 115, 22, 0.35)';
+        ctx.lineWidth = 2;
         ctx.shadowColor = '#f97316';
-        ctx.shadowBlur = 25;
-        ctx.fill();
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.moveTo(120, 220); ctx.lineTo(210, 260); ctx.lineTo(260, 240); ctx.lineTo(340, 290);
+        ctx.moveTo(680, 180); ctx.lineTo(750, 230); ctx.lineTo(820, 210); ctx.lineTo(890, 270);
+        ctx.stroke();
         ctx.restore();
 
-        // Magma River glowing border
-        ctx.strokeStyle = '#f59e0b';
-        ctx.lineWidth = 2;
+        // Living Multi-Harmonic Molten Magma River (Bottom 35% of arena)
+        ctx.save();
+        // Layer 1: Deep Magma Glow
         ctx.beginPath();
-        for (let x = 0; x <= w; x += 30) {
-          const waveY = h * 0.75 + Math.sin(x * 0.015 + animTime) * 35 + Math.cos(x * 0.03 + animTime * 1.5) * 15;
-          if (x === 0) ctx.moveTo(x, waveY);
-          else ctx.lineTo(x, waveY);
+        ctx.moveTo(0, h * 0.72);
+        for (let x = 0; x <= w; x += 25) {
+          const wy1 = h * 0.72 + Math.sin(x * 0.012 + animTime * 0.9) * 36 + Math.cos(x * 0.025 + animTime * 1.5) * 14;
+          ctx.lineTo(x, wy1);
+        }
+        ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+        const magmaGrad = ctx.createLinearGradient(0, h * 0.65, 0, h);
+        magmaGrad.addColorStop(0, 'rgba(239, 68, 68, 0.35)');
+        magmaGrad.addColorStop(0.3, 'rgba(249, 115, 22, 0.85)');
+        magmaGrad.addColorStop(0.65, 'rgba(245, 158, 11, 0.96)');
+        magmaGrad.addColorStop(1, 'rgba(153, 27, 27, 0.98)');
+        ctx.fillStyle = magmaGrad;
+        ctx.shadowColor = '#f97316';
+        ctx.shadowBlur = 30;
+        ctx.fill();
+
+        // Layer 2: Radiant Magma Surface Waves
+        ctx.strokeStyle = '#fef08a';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 25) {
+          const wy2 = h * 0.72 + Math.sin(x * 0.012 + animTime * 0.9) * 36 + Math.cos(x * 0.025 + animTime * 1.5) * 14;
+          if (x === 0) ctx.moveTo(x, wy2);
+          else ctx.lineTo(x, wy2);
         }
         ctx.stroke();
 
-        // Floating Volcanic Embers
-        for (let i = 0; i < 18; i++) {
-          const ex = (Math.sin(animTime * 0.8 + i * 99) * 0.5 + 0.5) * w;
-          const ey = ((animTime * 45 + i * 55) % h);
-          ctx.fillStyle = i % 2 === 0 ? 'rgba(251, 191, 36, 0.8)' : 'rgba(239, 68, 68, 0.8)';
+        // Magma River Floating Crust Rock Platelets
+        for (let k = 0; k < 7; k++) {
+          const px = ((k * 155 + animTime * 35) % (w + 60)) - 30;
+          const py = h * 0.82 + Math.sin(px * 0.02 + animTime) * 16;
+          ctx.fillStyle = '#1c0b0b';
           ctx.beginPath();
-          ctx.arc(ex, h - ey, 2.5, 0, Math.PI * 2);
+          ctx.ellipse(px, py, 22, 9, 0.1, 0, Math.PI * 2);
           ctx.fill();
-        }
-      } else if (selectedLand === 'verdant') {
-        // Primeval Forest Land
-        ctx.fillStyle = '#06130b';
-        ctx.fillRect(0, 0, w, h);
-
-        ctx.strokeStyle = 'rgba(34, 197, 94, 0.12)';
-        ctx.lineWidth = 1.5;
-        for (let x = 0; x <= w; x += 60) {
-          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-        }
-        for (let y = 0; y <= h; y += 60) {
-          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+          ctx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
         }
 
-        // Sylvan Leyline Stream
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(0, h * 0.7);
-        for (let x = 0; x <= w; x += 30) {
-          const waveY = h * 0.7 + Math.sin(x * 0.012 + animTime) * 30;
-          ctx.lineTo(x, waveY);
+        // Bubbling Lava Pods that pop into sparks
+        for (let b = 0; b < 4; b++) {
+          const bx = 160 + b * 220 + Math.sin(animTime * 0.5 + b) * 30;
+          const by = h * 0.84 + Math.cos(animTime * 0.7 + b * 2) * 18;
+          const podProgress = (animTime * 2 + b * 1.6) % Math.PI;
+          const bubbleR = Math.sin(podProgress) * 9;
+          if (bubbleR > 1) {
+            ctx.fillStyle = 'rgba(254, 240, 138, 0.85)';
+            ctx.beginPath();
+            ctx.arc(bx, by, bubbleR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#f97316';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          }
         }
-        ctx.lineTo(w, h);
-        ctx.lineTo(0, h);
-        ctx.closePath();
-
-        const sylvanGrad = ctx.createLinearGradient(0, h * 0.6, 0, h);
-        sylvanGrad.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
-        sylvanGrad.addColorStop(0.4, 'rgba(34, 197, 94, 0.75)');
-        sylvanGrad.addColorStop(1, 'rgba(5, 46, 22, 0.95)');
-        ctx.fillStyle = sylvanGrad;
-        ctx.shadowColor = '#22c55e';
-        ctx.shadowBlur = 20;
-        ctx.fill();
         ctx.restore();
 
-        for (let i = 0; i < 18; i++) {
-          const sx = (Math.cos(animTime * 0.6 + i * 87) * 0.5 + 0.5) * w;
-          const sy = ((animTime * 35 + i * 60) % h);
-          ctx.fillStyle = 'rgba(110, 231, 183, 0.85)';
-          ctx.beginPath();
-          ctx.arc(sx, h - sy, 2.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      } else if (selectedLand === 'frost') {
-        // Glacial Permafrost Land
-        ctx.fillStyle = '#06101e';
-        ctx.fillRect(0, 0, w, h);
-
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.15)';
-        ctx.lineWidth = 1.5;
-        for (let x = 0; x <= w; x += 60) {
-          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-        }
-        for (let y = 0; y <= h; y += 60) {
-          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-        }
-
+        // Floating Volcanic Embers with sway & flicker
         for (let i = 0; i < 24; i++) {
-          const fx = ((animTime * 50 + i * 45) % w);
-          const fy = ((animTime * 30 + i * 70) % h);
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+          const ex = (Math.sin(animTime * 0.7 + i * 93) * 0.45 + 0.5) * w + Math.sin(animTime * 2 + i) * 15;
+          const ey = ((animTime * 50 + i * 48) % h);
+          const flicker = 0.5 + Math.sin(animTime * 4 + i) * 0.4;
+          ctx.fillStyle = i % 2 === 0 ? `rgba(251, 191, 36, ${flicker})` : `rgba(239, 68, 68, ${flicker})`;
           ctx.beginPath();
-          ctx.arc(fx, fy, 2, 0, Math.PI * 2);
+          ctx.arc(ex, h - ey, 2.2 + (i % 2), 0, Math.PI * 2);
           ctx.fill();
         }
-      } else {
-        // Abyssal Coastal Reefs
-        ctx.fillStyle = '#020b18';
+
+      } else if (selectedLand === 'verdant') {
+        // --- VERDANT SANCTUM (REALISTIC ANCIENT PRIMEVAL FOREST LAND) ---
+        // Sylvan Canopy Sky
+        const sylvanSky = ctx.createLinearGradient(0, 0, 0, h);
+        sylvanSky.addColorStop(0, '#020d06');
+        sylvanSky.addColorStop(0.5, '#061d0f');
+        sylvanSky.addColorStop(1, '#0b331b');
+        ctx.fillStyle = sylvanSky;
         ctx.fillRect(0, 0, w, h);
 
-        ctx.strokeStyle = 'rgba(6, 182, 212, 0.15)';
-        ctx.lineWidth = 1.5;
+        // Colossal World Tree Silhouettes in Background
+        ctx.fillStyle = 'rgba(4, 25, 12, 0.6)';
+        ctx.beginPath();
+        // Left tree trunk & roots
+        ctx.moveTo(0, h); ctx.lineTo(90, h * 0.3); ctx.lineTo(130, 0); ctx.lineTo(160, 0); ctx.lineTo(150, h * 0.3); ctx.lineTo(260, h);
+        // Right tree trunk & roots
+        ctx.moveTo(780, h); ctx.lineTo(840, h * 0.35); ctx.lineTo(880, 0); ctx.lineTo(920, 0); ctx.lineTo(900, h * 0.35); ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fill();
+
+        // Forest Floor Grid with Mossy Green Tones
+        ctx.strokeStyle = 'rgba(34, 197, 94, 0.12)';
+        ctx.lineWidth = 1;
         for (let x = 0; x <= w; x += 60) {
           ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
         }
         for (let y = 0; y <= h; y += 60) {
           ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Living Sylvan Leyline Stream with Water Ripples
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.70);
+        for (let x = 0; x <= w; x += 30) {
+          const wy = h * 0.70 + Math.sin(x * 0.012 + animTime * 0.8) * 26 + Math.cos(x * 0.024 + animTime * 1.3) * 10;
+          ctx.lineTo(x, wy);
+        }
+        ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+        const streamGrad = ctx.createLinearGradient(0, h * 0.65, 0, h);
+        streamGrad.addColorStop(0, 'rgba(52, 211, 153, 0.3)');
+        streamGrad.addColorStop(0.4, 'rgba(16, 185, 129, 0.75)');
+        streamGrad.addColorStop(1, 'rgba(6, 78, 59, 0.95)');
+        ctx.fillStyle = streamGrad;
+        ctx.shadowColor = '#10b981';
+        ctx.shadowBlur = 24;
+        ctx.fill();
+
+        // Sylvan Water Glowing Crest & Ripples
+        ctx.strokeStyle = '#6ee7b7';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 30) {
+          const wy = h * 0.70 + Math.sin(x * 0.012 + animTime * 0.8) * 26 + Math.cos(x * 0.024 + animTime * 1.3) * 10;
+          if (x === 0) ctx.moveTo(x, wy);
+          else ctx.lineTo(x, wy);
+        }
+        ctx.stroke();
+
+        // Floating Water Lotus Petals
+        for (let p = 0; p < 5; p++) {
+          const lx = ((p * 210 + animTime * 20) % (w + 40)) - 20;
+          const ly = h * 0.80 + Math.sin(lx * 0.02 + p) * 12;
+          ctx.fillStyle = '#f472b6';
+          ctx.beginPath();
+          ctx.ellipse(lx, ly, 10, 5, 0.3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // Wandering Spirit Fireflies with Radial Pulsing Halos
+        for (let i = 0; i < 18; i++) {
+          const fx = (Math.cos(animTime * 0.5 + i * 71) * 0.45 + 0.5) * w + Math.sin(animTime * 1.5 + i) * 25;
+          const fy = ((animTime * 32 + i * 58) % (h - 60)) + 30;
+          const pulse = 0.4 + Math.sin(animTime * 5 + i * 2) * 0.35;
+          
+          // Halo
+          ctx.fillStyle = `rgba(74, 222, 128, ${pulse * 0.35})`;
+          ctx.beginPath();
+          ctx.arc(fx, fy, 8, 0, Math.PI * 2);
+          ctx.fill();
+          // Core
+          ctx.fillStyle = `rgba(187, 247, 208, ${pulse + 0.3})`;
+          ctx.beginPath();
+          ctx.arc(fx, fy, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+      } else if (selectedLand === 'frost') {
+        // --- FROSTBOUND GLACIERS (REALISTIC PERMAFROST & AURORA LAND) ---
+        // Polar Night Sky
+        const polarSky = ctx.createLinearGradient(0, 0, 0, h);
+        polarSky.addColorStop(0, '#020611');
+        polarSky.addColorStop(0.5, '#07152b');
+        polarSky.addColorStop(1, '#0e2849');
+        ctx.fillStyle = polarSky;
+        ctx.fillRect(0, 0, w, h);
+
+        // Animated Shimmering Aurora Borealis Ribbons across the sky
+        ctx.save();
+        for (let a = 0; a < 3; a++) {
+          ctx.beginPath();
+          ctx.moveTo(0, 80 + a * 35);
+          for (let x = 0; x <= w; x += 40) {
+            const ay = 80 + a * 35 + Math.sin(x * 0.008 + animTime * 0.6 + a) * 35 + Math.cos(x * 0.02 + animTime * 0.8) * 15;
+            ctx.lineTo(x, ay);
+          }
+          ctx.lineTo(w, 0); ctx.lineTo(0, 0); ctx.closePath();
+          const auroraGrad = ctx.createLinearGradient(0, 0, 0, 180);
+          auroraGrad.addColorStop(0, a === 1 ? 'rgba(168, 85, 247, 0.25)' : 'rgba(45, 212, 191, 0.25)');
+          auroraGrad.addColorStop(0.8, 'rgba(56, 189, 248, 0.15)');
+          auroraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = auroraGrad;
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 20;
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // Glacial Shelf Ground Grid
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.14)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= w; x += 60) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y <= h; y += 60) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Permafrost Ice Crevasses Glowing Sub-Glacial Cyan
+        ctx.save();
+        ctx.strokeStyle = 'rgba(125, 211, 252, 0.55)';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#38bdf8';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.moveTo(140, 240); ctx.lineTo(220, 280); ctx.lineTo(310, 260); ctx.lineTo(390, 310);
+        ctx.moveTo(630, 200); ctx.lineTo(720, 250); ctx.lineTo(790, 230); ctx.lineTo(870, 290);
+        ctx.stroke();
+        ctx.restore();
+
+        // Howling Blizzard Snowdrift Flurries blowing across arena
+        for (let i = 0; i < 35; i++) {
+          const speedFactor = 1 + (i % 3) * 0.8;
+          const sx = ((animTime * 110 * speedFactor + i * 38) % (w + 40)) - 20;
+          const sy = ((animTime * 35 + i * 62) % h);
+          ctx.fillStyle = i % 3 === 0 ? 'rgba(255, 255, 255, 0.9)' : 'rgba(186, 230, 253, 0.7)';
+          ctx.beginPath();
+          ctx.arc(sx, sy, 1.6 + (i % 2), 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+      } else {
+        // --- THE ABYSSAL TRENCH (REALISTIC SUNKEN COASTAL REEFS & OCEANIC DEPTHS) ---
+        // Twilight Oceanic Abyss Sky/Water
+        const abyssSky = ctx.createLinearGradient(0, 0, 0, h);
+        abyssSky.addColorStop(0, '#01050e');
+        abyssSky.addColorStop(0.5, '#031427');
+        abyssSky.addColorStop(1, '#082745');
+        ctx.fillStyle = abyssSky;
+        ctx.fillRect(0, 0, w, h);
+
+        // Sunken Atlantean Temple Columns & Coral Arches
+        ctx.fillStyle = 'rgba(3, 20, 38, 0.65)';
+        ctx.beginPath();
+        ctx.moveTo(100, h); ctx.lineTo(100, h * 0.4); ctx.lineTo(135, h * 0.4); ctx.lineTo(135, h);
+        ctx.moveTo(220, h); ctx.lineTo(220, h * 0.48); ctx.lineTo(250, h * 0.48); ctx.lineTo(250, h);
+        ctx.moveTo(760, h); ctx.lineTo(760, h * 0.42); ctx.lineTo(795, h * 0.42); ctx.lineTo(795, h);
+        ctx.closePath();
+        ctx.fill();
+
+        // Oceanic Seabed Grid
+        ctx.strokeStyle = 'rgba(6, 182, 212, 0.12)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= w; x += 60) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = 0; y <= h; y += 60) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Shimmering Caustic Sunlight Refraction Across Seabed
+        ctx.save();
+        ctx.strokeStyle = 'rgba(34, 211, 238, 0.18)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 35) {
+          const cy = h * 0.76 + Math.sin(x * 0.02 + animTime * 1.6) * 18 + Math.cos(x * 0.04 - animTime) * 8;
+          if (x === 0) ctx.moveTo(x, cy);
+          else ctx.lineTo(x, cy);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        // Rising Pearlescent Bubbles with sinusoidal wobble
+        for (let i = 0; i < 26; i++) {
+          const bx = (Math.sin(animTime * 0.8 + i * 67) * 0.45 + 0.5) * w + Math.sin(animTime * 3 + i * 2) * 12;
+          const by = ((animTime * 45 + i * 52) % h);
+          ctx.save();
+          ctx.strokeStyle = 'rgba(165, 243, 252, 0.8)';
+          ctx.lineWidth = 1.2;
+          ctx.fillStyle = 'rgba(6, 182, 212, 0.2)';
+          ctx.beginPath();
+          ctx.arc(bx, h - by, 3 + (i % 3) * 1.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
         }
       }
 
-      // Perimeter Borders
-      ctx.strokeStyle = selectedLand === 'obsidian' ? 'rgba(245, 158, 11, 0.6)' : 'rgba(168, 85, 247, 0.5)';
+      // Perimeter Tactical Battle Border
+      ctx.strokeStyle = selectedLand === 'obsidian' ? 'rgba(245, 158, 11, 0.65)' : (selectedLand === 'verdant' ? 'rgba(34, 197, 94, 0.65)' : 'rgba(56, 189, 248, 0.65)');
       ctx.lineWidth = 2.5;
       ctx.strokeRect(15, 15, w - 30, h - 30);
 
@@ -2859,53 +3513,75 @@
         ctx.save();
         const grad = ctx.createRadialGradient(hz.x, hz.y, 10, hz.x, hz.y, hz.radius);
         if (hz.type === 'verdant') {
-          grad.addColorStop(0, 'rgba(34, 197, 94, 0.45)');
+          grad.addColorStop(0, 'rgba(34, 197, 94, 0.5)');
           grad.addColorStop(0.7, 'rgba(21, 128, 61, 0.25)');
           grad.addColorStop(1, 'rgba(5, 46, 22, 0)');
-          ctx.strokeStyle = 'rgba(74, 222, 128, 0.7)';
+          ctx.strokeStyle = 'rgba(74, 222, 128, 0.8)';
         } else {
-          grad.addColorStop(0, 'rgba(239, 68, 68, 0.45)');
+          grad.addColorStop(0, 'rgba(239, 68, 68, 0.5)');
           grad.addColorStop(0.7, 'rgba(185, 28, 28, 0.25)');
           grad.addColorStop(1, 'rgba(69, 10, 10, 0)');
-          ctx.strokeStyle = 'rgba(248, 113, 113, 0.7)';
+          ctx.strokeStyle = 'rgba(248, 113, 113, 0.8)';
         }
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(hz.x, hz.y, hz.radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 1.8;
         ctx.stroke();
         ctx.restore();
       });
 
-      // 2. ENEMIES RENDERING
+      // ================= 2. 5D ANIMATED ENEMIES & BOSSES =================
       arenaEnemies.forEach(e => {
         if (e.hp <= 0) return;
 
+        // 5D Procedural Breathing & Locomotion Lean
+        const bob = Math.sin(animTime * 4.5 + (e.seed || 1)) * 3.2;
+        const lean = Math.max(-0.25, Math.min(0.25, (e.vx || 0) * 0.04));
+
+        // Dynamic Soft Ground Drop Shadow (Breathes with sprite)
         ctx.save();
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         ctx.beginPath();
-        ctx.ellipse(e.x, e.y + 16, e.radius + 6, 8, 0, 0, Math.PI * 2);
+        const shadowRx = (e.radius + 6) * (1 - bob * 0.04);
+        ctx.ellipse(e.x, e.y + 17, shadowRx, 7, 0, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.strokeStyle = e.isBoss ? '#f59e0b' : '#ef4444';
-        ctx.lineWidth = e.isBoss ? 2.5 : 1.8;
-        ctx.shadowColor = e.isBoss ? '#f59e0b' : '#ef4444';
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.ellipse(e.x, e.y + 15, e.radius + 4, 7, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+        // Boss Rotating Summoning Runic Ring
+        if (e.isBoss) {
+          ctx.save();
+          ctx.translate(e.x, e.y + 16);
+          ctx.rotate(-animTime * 1.2);
+          ctx.strokeStyle = 'rgba(245, 158, 11, 0.8)';
+          ctx.lineWidth = 2;
+          ctx.shadowColor = '#f59e0b';
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, e.radius + 12, 10, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        } else {
+          ctx.strokeStyle = '#ef4444';
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          ctx.ellipse(e.x, e.y + 15, e.radius + 4, 6, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
 
+        // Figurine Sprite Rendering with 5D Bob & Lean
+        ctx.save();
         const imgKey = e.isBoss ? e.bossKey : e.minionKey;
         const figImg = preloadedArenaImages[imgKey];
         const facingLeft = (arenaPlayer.x - e.x) < 0;
 
-        ctx.translate(e.x, e.y);
+        ctx.translate(e.x, e.y + bob);
+        ctx.rotate(lean);
         if (facingLeft) ctx.scale(-1, 1);
 
-        const figW = e.isBoss ? 68 : 46;
-        const figH = e.isBoss ? 82 : 56;
+        const figW = e.isBoss ? 70 : 48;
+        const figH = e.isBoss ? 84 : 58;
 
         if (figImg && figImg.complete) {
           ctx.drawImage(figImg, -figW / 2, -figH + 16, figW, figH);
@@ -2917,54 +3593,86 @@
         }
         ctx.restore();
 
-        const barW = e.radius * 2 + 14;
+        // Health Bar & High-Contrast Nameplate (Never stack or clip!)
+        const barW = e.radius * 2 + 16;
         const barH = 5;
         const hpPct = Math.max(0, e.hp / e.maxHp);
-        const headTop = e.y - (e.isBoss ? 70 : 45);
+        const headTop = e.y + bob - (e.isBoss ? 72 : 46);
 
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+        // HP Background
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
         ctx.fillRect(e.x - barW / 2, headTop - 8, barW, barH);
+        // HP Fill
         ctx.fillStyle = e.isBoss ? '#f59e0b' : '#ef4444';
         ctx.fillRect(e.x - barW / 2, headTop - 8, barW * hpPct, barH);
+        // HP Border
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(e.x - barW / 2, headTop - 8, barW, barH);
 
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 10px monospace';
+        // Crisp High-Contrast Nameplate with Thick Black Stroke
+        ctx.font = 'bold 11px monospace';
         ctx.textAlign = 'center';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3;
+        ctx.strokeText(e.name, e.x, headTop - 12);
+        ctx.fillStyle = e.isBoss ? '#fde047' : '#ffffff';
         ctx.fillText(e.name, e.x, headTop - 12);
       });
 
-      // 3. PLAYER RENDERING
+      // ================= 3. 5D ANIMATED PLAYER CHAMPION =================
+      const pBob = Math.sin(animTime * 4.8) * 3.2;
+      const pLean = Math.max(-0.22, Math.min(0.22, arenaPlayer.vx * 0.04));
+
+      // Dynamic Soft Ground Drop Shadow
       ctx.save();
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
       ctx.beginPath();
-      ctx.ellipse(arenaPlayer.x, arenaPlayer.y + 18, 28, 9, 0, 0, Math.PI * 2);
+      ctx.ellipse(arenaPlayer.x, arenaPlayer.y + 18, 30 * (1 - pBob * 0.04), 9, 0, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = '#fbbf24';
-      ctx.lineWidth = 2.5;
+      // Rotating Sovereign Runic Magic Summoning Circle
+      ctx.save();
+      ctx.translate(arenaPlayer.x, arenaPlayer.y + 17);
+      ctx.rotate(animTime * 1.5);
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.85)';
+      ctx.lineWidth = 2;
       ctx.shadowColor = '#f59e0b';
       ctx.shadowBlur = 14;
       ctx.beginPath();
-      ctx.ellipse(arenaPlayer.x, arenaPlayer.y + 17, 24, 8, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, 32, 11, 0, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.shadowBlur = 0;
+
+      // Rotating Summoning Glyphs
+      for (let k = 0; k < 6; k++) {
+        const a = (k * Math.PI) / 3;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.ellipse(Math.cos(a) * 32, Math.sin(a) * 11, 2.5, 2.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      ctx.restore();
 
       // Aim Vector Arc
-      ctx.fillStyle = 'rgba(245, 158, 11, 0.12)';
+      ctx.save();
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.15)';
       ctx.beginPath();
       ctx.moveTo(arenaPlayer.x, arenaPlayer.y + 8);
       ctx.arc(arenaPlayer.x, arenaPlayer.y + 8, 55, arenaPlayer.angle - 0.45, arenaPlayer.angle + 0.45);
       ctx.closePath();
       ctx.fill();
 
+      // Figurine Sprite Rendering with 5D Bob & Lean
       const pFacingLeft = Math.cos(arenaPlayer.angle) < 0;
       ctx.save();
-      ctx.translate(arenaPlayer.x, arenaPlayer.y);
+      ctx.translate(arenaPlayer.x, arenaPlayer.y + pBob);
+      ctx.rotate(pLean);
       if (pFacingLeft) ctx.scale(-1, 1);
 
       const pFig = preloadedArenaImages[arenaPlayer.heroKey];
-      const pFigW = 58;
-      const pFigH = 74;
+      const pFigW = 60;
+      const pFigH = 76;
 
       if (pFig && pFig.complete) {
         ctx.drawImage(pFig, -pFigW / 2, -pFigH + 18, pFigW, pFigH);
@@ -2980,27 +3688,25 @@
       ctx.fillStyle = '#fbbf24';
       ctx.beginPath();
       ctx.arc(
-        arenaPlayer.x + Math.cos(arenaPlayer.angle) * 35,
-        arenaPlayer.y + 8 + Math.sin(arenaPlayer.angle) * 35,
+        arenaPlayer.x + Math.cos(arenaPlayer.angle) * 36,
+        arenaPlayer.y + 8 + Math.sin(arenaPlayer.angle) * 36,
         4.5, 0, Math.PI * 2
       );
       ctx.fill();
       ctx.restore();
 
-      // Projectiles
+      // ================= 4. PROJECTILES & PARTICLES =================
       arenaProjectiles.forEach(p => {
         ctx.save();
         ctx.fillStyle = p.color;
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 12;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0;
         ctx.restore();
       });
 
-      // Particles
       arenaParticles.forEach(pt => {
         ctx.save();
         ctx.globalAlpha = Math.max(0, pt.alpha);
@@ -3011,20 +3717,24 @@
         ctx.restore();
       });
 
-      // Damage Text
+      // ================= 5. CRISP HIGH-CONTRAST DAMAGE POPUPS =================
       arenaDamageTexts.forEach(dt => {
         ctx.save();
         ctx.globalAlpha = Math.max(0, dt.alpha);
-        ctx.font = 'bold 13px monospace';
-        ctx.fillStyle = dt.color;
+        ctx.font = 'bold 14px monospace';
         ctx.textAlign = 'center';
+        // Thick Black Outline Stroke for 100% Readability
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3.5;
+        ctx.strokeText(dt.text, dt.x, dt.y);
+        ctx.fillStyle = dt.color;
         ctx.fillText(dt.text, dt.x, dt.y);
         ctx.restore();
       });
 
       ctx.restore();
 
-      // Minimap Radar
+      // ================= 6. TACTICAL MINIMAP RADAR =================
       if (minimapCtx && minimapCanvas) {
         const mctx = minimapCtx;
         const mw = minimapCanvas.width;
@@ -3032,16 +3742,17 @@
         mctx.fillStyle = '#060914';
         mctx.fillRect(0, 0, mw, mh);
 
+        // Player Blip with Pulse Ring
         mctx.fillStyle = '#38bdf8';
         mctx.beginPath();
-        mctx.arc((arenaPlayer.x / w) * mw, (arenaPlayer.y / h) * mh, 3.5, 0, Math.PI * 2);
+        mctx.arc((arenaPlayer.x / w) * mw, (arenaPlayer.y / h) * mh, 4, 0, Math.PI * 2);
         mctx.fill();
 
         arenaEnemies.forEach(e => {
           if (e.hp <= 0) return;
           mctx.fillStyle = e.isBoss ? '#fbbf24' : '#ef4444';
           mctx.beginPath();
-          mctx.arc((e.x / w) * mw, (e.y / h) * mh, e.isBoss ? 4 : 2, 0, Math.PI * 2);
+          mctx.arc((e.x / w) * mw, (e.y / h) * mh, e.isBoss ? 4.5 : 2.5, 0, Math.PI * 2);
           mctx.fill();
         });
       }

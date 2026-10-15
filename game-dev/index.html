@@ -397,14 +397,37 @@
     }
 
     .kingdom-cylinder-card.is-facing .card-shell {
-      border: 2px solid #fbbf24;
-      box-shadow: 0 25px 65px rgba(245, 158, 11, 0.42), 0 0 35px rgba(245, 158, 11, 0.55);
+      border: 2.5px solid #fbbf24;
+      box-shadow: 0 25px 65px rgba(245, 158, 11, 0.45), 0 0 35px rgba(245, 158, 11, 0.6);
     }
 
     .kingdom-cylinder-card:hover .card-shell {
       transform: translateY(-8px) scale(1.04);
       border-color: #fbbf24;
       box-shadow: 0 25px 60px rgba(245, 158, 11, 0.45), 0 0 30px rgba(245, 158, 11, 0.55);
+    }
+
+    .card-ambient-fx {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 25%, rgba(251, 191, 36, 0.22) 0%, transparent 65%);
+      mix-blend-mode: screen;
+      z-index: 2;
+      animation: ambientGlowPulse 4s ease-in-out infinite alternate;
+    }
+    @keyframes ambientGlowPulse {
+      0% { opacity: 0.35; transform: scale(1); }
+      100% { opacity: 0.85; transform: scale(1.08); }
+    }
+
+    .card-glare {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 55%);
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0.7;
     }
 
     .kingdom-cylinder-img {
@@ -430,7 +453,7 @@
       padding: 16px;
       background: linear-gradient(to top, rgba(3, 7, 18, 0.96) 0%, rgba(3, 7, 18, 0.7) 60%, transparent 100%);
       color: #ffffff;
-      z-index: 2;
+      z-index: 4;
     }
 
     /* Interactive 8x8 Board Simulator */
@@ -2580,8 +2603,10 @@
 
         card.innerHTML = `
           <div class="card-shell">
+            <div class="card-ambient-fx"></div>
+            <div class="card-glare"></div>
             <img src="${k.img}" alt="${k.name}" class="kingdom-cylinder-img">
-            <span class="position-absolute top-0 start-0 m-3 pill-badge bg-dark bg-opacity-75 border-secondary" style="font-size:0.75rem; z-index:3;">
+            <span class="position-absolute top-0 start-0 m-3 pill-badge bg-dark bg-opacity-75 border-secondary" style="font-size:0.75rem; z-index:5;">
               ${k.icon} ${k.element}
             </span>
             <div class="kingdom-cylinder-overlay">
@@ -2589,8 +2614,8 @@
               <div class="mb-2">
                 <span class="tag-catalyst" style="font-size:0.7rem;"><i class="bi bi-heart-pulse-fill me-1"></i>${k.catalyst}</span>
               </div>
-              <div class="small text-light opacity-90 mb-2 font-mono" style="font-size:0.72rem; line-height:1.4;">
-                <span class="text-info fw-bold">TRAIT:</span> ${k.passive.substring(0, 52)}...
+              <div class="small text-light opacity-95 mb-2 font-mono" style="font-size:0.73rem; line-height:1.45;">
+                <span class="text-warning fw-bold">REALM TRAIT:</span> ${k.passive.substring(0, 65)}...
               </div>
               <button type="button" class="btn btn-xs btn-mythic-outline w-100 py-1" style="font-size:0.75rem;">
                 <i class="bi bi-box-arrow-up-right me-1"></i> Click for Full Codex &rarr;
@@ -2600,6 +2625,23 @@
         `;
 
         card.style.transform = `rotateY(${itemAngle}deg) translateZ(${radius}px)`;
+
+        // 5D Interactive Mouse Tilt
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          const shell = card.querySelector('.card-shell');
+          if (shell) {
+            shell.style.transform = `translateZ(18px) rotateY(${x * 16}deg) rotateX(${-y * 16}deg) scale(1.03)`;
+          }
+        });
+        card.addEventListener('mouseleave', () => {
+          const shell = card.querySelector('.card-shell');
+          if (shell) {
+            shell.style.transform = `translateZ(0) rotateY(0deg) rotateX(0deg) scale(1)`;
+          }
+        });
 
         // Smart interaction: clicking side card spins it to front; clicking active front card opens modal
         card.addEventListener('click', (e) => {
