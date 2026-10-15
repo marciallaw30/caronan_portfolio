@@ -435,6 +435,236 @@
       box-shadow: 0 0 18px rgba(245, 158, 11, 0.9), inset 0 0 6px #fff;
     }
 
+    /* ================= REAL-LIFE LIVING FIGURINE ANIMATIONS ================= */
+    /* 1. 3D Symmetric (Cinematic Perspective) Living Breathing */
+    @keyframes livingBreathPerspectiveWhite {
+      0%, 100% {
+        transform: translateZ(8px) rotateX(-38deg) scaleY(1) translateY(0);
+        filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4px rgba(245, 158, 11, 0.25));
+      }
+      50% {
+        transform: translateZ(12px) rotateX(-38deg) scaleY(1.025) translateY(-2px);
+        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 9px rgba(245, 158, 11, 0.55));
+      }
+    }
+
+    @keyframes livingBreathPerspectiveBlack {
+      0%, 100% {
+        transform: translateZ(8px) rotateX(-38deg) scaleY(1) translateY(0);
+        filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4px rgba(34, 197, 94, 0.25));
+      }
+      50% {
+        transform: translateZ(12px) rotateX(-38deg) scaleY(1.025) translateY(-2px);
+        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 9px rgba(34, 197, 94, 0.55));
+      }
+    }
+
+    /* 2. 3D Asymmetric (Isometric 45°) Living Breathing */
+    @keyframes livingBreathIsometricWhite {
+      0%, 100% {
+        transform: translateZ(10px) rotateZ(24deg) rotateX(-48deg) scaleY(1) translateY(0);
+        filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4px rgba(245, 158, 11, 0.25));
+      }
+      50% {
+        transform: translateZ(14px) rotateZ(24deg) rotateX(-48deg) scaleY(1.025) translateY(-2px);
+        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 9px rgba(245, 158, 11, 0.55));
+      }
+    }
+
+    @keyframes livingBreathIsometricBlack {
+      0%, 100% {
+        transform: translateZ(10px) rotateZ(24deg) rotateX(-48deg) scaleY(1) translateY(0);
+        filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 4px rgba(34, 197, 94, 0.25));
+      }
+      50% {
+        transform: translateZ(14px) rotateZ(24deg) rotateX(-48deg) scaleY(1.025) translateY(-2px);
+        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 9px rgba(34, 197, 94, 0.55));
+      }
+    }
+
+    /* 3. 2D Tactical Topdown Living Breathing */
+    @keyframes livingBreathTopdownWhite {
+      0%, 100% { transform: translateZ(4px) rotateX(0deg) scale(1); filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.25)); }
+      50% { transform: translateZ(7px) rotateX(0deg) scale(1.03); filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6)); }
+    }
+    @keyframes livingBreathTopdownBlack {
+      0%, 100% { transform: translateZ(4px) rotateX(0deg) scale(1); filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.25)); }
+      50% { transform: translateZ(7px) rotateX(0deg) scale(1.03); filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.6)); }
+    }
+
+    /* Assign Living Idle Cycles with Organic Stagger */
+    .view-perspective .miniature-living-white {
+      animation: livingBreathPerspectiveWhite 3.2s ease-in-out infinite;
+    }
+    .view-perspective .miniature-living-black {
+      animation: livingBreathPerspectiveBlack 3.2s ease-in-out infinite;
+    }
+
+    .view-isometric .miniature-living-white {
+      animation: livingBreathIsometricWhite 3.2s ease-in-out infinite;
+    }
+    .view-isometric .miniature-living-black {
+      animation: livingBreathIsometricBlack 3.2s ease-in-out infinite;
+    }
+
+    .view-topdown .miniature-living-white {
+      animation: livingBreathTopdownWhite 3.2s ease-in-out infinite;
+    }
+    .view-topdown .miniature-living-black {
+      animation: livingBreathTopdownBlack 3.2s ease-in-out infinite;
+    }
+
+    /* Pause idle cycle when selected or hovered */
+    .cell:hover .miniature-body,
+    .cell-selected .miniature-body {
+      animation: none !important;
+    }
+
+    /* Living Pedestal Glow Shimmer */
+    .pedestal-obsidian {
+      animation: pedestalGlowObsidian 3.2s ease-in-out infinite;
+    }
+    .pedestal-verdant {
+      animation: pedestalGlowVerdant 3.2s ease-in-out infinite;
+    }
+
+    @keyframes pedestalGlowObsidian {
+      0%, 100% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.7), inset 0 0 4px rgba(255, 255, 255, 0.3); }
+      50% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.95), inset 0 0 6px rgba(255, 255, 255, 0.6); }
+    }
+    @keyframes pedestalGlowVerdant {
+      0%, 100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.7), inset 0 0 4px rgba(255, 255, 255, 0.3); }
+      50% { box-shadow: 0 0 16px rgba(34, 197, 94, 0.95), inset 0 0 6px rgba(255, 255, 255, 0.6); }
+    }
+
+    /* Landing Impact Shockwave Rings */
+    .landing-shockwave {
+      position: absolute;
+      bottom: 6px;
+      width: 48px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #fbbf24;
+      pointer-events: none !important;
+      animation: expandShockwave 0.55s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      z-index: 20;
+    }
+    .landing-shockwave-inner {
+      position: absolute;
+      bottom: 8px;
+      width: 32px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 14px #fbbf24;
+      pointer-events: none !important;
+      animation: expandShockwaveInner 0.45s ease-out forwards;
+      z-index: 21;
+    }
+    @keyframes expandShockwave {
+      0% { transform: translateZ(4px) scale(0.5); opacity: 1; border-color: #ffffff; }
+      100% { transform: translateZ(4px) scale(2.2); opacity: 0; border-color: #f59e0b; }
+    }
+    @keyframes expandShockwaveInner {
+      0% { transform: translateZ(6px) scale(0.6); opacity: 1; border-color: #ffffff; }
+      100% { transform: translateZ(6px) scale(1.6); opacity: 0; border-color: #fbbf24; }
+    }
+
+    /* Motion Trail Particle Wisps */
+    .leap-trail-particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none !important;
+      z-index: 120;
+      animation: leapTrailFade 0.65s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+    }
+    .leap-trail-white {
+      background: radial-gradient(circle, #ffffff 0%, #fbbf24 60%, transparent 100%);
+      box-shadow: 0 0 8px #f59e0b, 0 0 16px #fbbf24;
+    }
+    .leap-trail-black {
+      background: radial-gradient(circle, #ffffff 0%, #4ade80 60%, transparent 100%);
+      box-shadow: 0 0 8px #22c55e, 0 0 16px #4ade80;
+    }
+    @keyframes leapTrailFade {
+      0% { transform: translate3d(0, 0, 24px) scale(1.4); opacity: 1; }
+      100% { transform: translate3d(0, -16px, 48px) scale(0.2); opacity: 0; }
+    }
+
+    /* Combat Impact Slash Spark & Directional Beam */
+    .combat-impact-spark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateZ(30px);
+      font-size: 2.2rem;
+      pointer-events: none !important;
+      z-index: 50;
+      animation: combatImpactPop 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      filter: drop-shadow(0 0 14px #ef4444);
+    }
+    @keyframes combatImpactPop {
+      0% { transform: translate(-50%, -50%) translateZ(30px) scale(0.3) rotate(-25deg); opacity: 0; }
+      35% { transform: translate(-50%, -50%) translateZ(42px) scale(1.5) rotate(12deg); opacity: 1; }
+      100% { transform: translate(-50%, -50%) translateZ(48px) scale(1.9) rotate(28deg); opacity: 0; }
+    }
+
+    .combat-slash-beam {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 68px;
+      height: 4px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, transparent, #ffffff, #ef4444, transparent);
+      box-shadow: 0 0 14px #ef4444, 0 0 24px #ff0000;
+      pointer-events: none !important;
+      z-index: 70;
+      transform-origin: center;
+      animation: combatSlashSlash 0.42s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    }
+    @keyframes combatSlashSlash {
+      0% { transform: translate(-50%, -50%) translateZ(35px) rotate(-45deg) scaleX(0.2); opacity: 0; }
+      40% { transform: translate(-50%, -50%) translateZ(35px) rotate(-45deg) scaleX(1.4); opacity: 1; }
+      100% { transform: translate(-50%, -50%) translateZ(40px) rotate(-45deg) scaleX(1.9); opacity: 0; }
+    }
+
+    /* Soul Ember Motes on Defeat */
+    .soul-ember-mote {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffffff 0%, #ef4444 70%, transparent 100%);
+      box-shadow: 0 0 10px #ef4444;
+      pointer-events: none !important;
+      z-index: 60;
+      animation: soulEmberDrift 0.85s ease-out forwards;
+    }
+    @keyframes soulEmberDrift {
+      0% { transform: translate3d(0, 0, 15px) scale(1.2); opacity: 1; }
+      100% { transform: translate3d(var(--ember-dx, 12px), var(--ember-dy, -28px), 55px) scale(0.1); opacity: 0; }
+    }
+
+    /* Victim Defeat Dissolution Recoil */
+    .miniature-defeat-recoil {
+      transition: transform 0.42s ease-out, opacity 0.42s ease-out, filter 0.42s ease-out !important;
+      transform: translateZ(28px) scale(0.55) rotate(22deg) translateY(-10px) !important;
+      opacity: 0 !important;
+      filter: brightness(3) contrast(1.6) blur(5px) drop-shadow(0 0 18px #ff0000) !important;
+    }
+
+    /* King in Check Alarmed Alert */
+    .cell-in-check .miniature-body {
+      animation: kingCheckAlarm 0.75s infinite alternate !important;
+    }
+    @keyframes kingCheckAlarm {
+      0% { filter: drop-shadow(0 0 12px #ef4444) brightness(1.2); transform: translateZ(8px) rotateX(-38deg) scale(1); }
+      100% { filter: drop-shadow(0 0 28px #ff0000) brightness(1.6); transform: translateZ(16px) rotateX(-38deg) scale(1.08); }
+    }
+
     .miniature-img {
       width: 58px;
       height: 72px;
@@ -1833,10 +2063,13 @@
             // Flat circular pedestal base resting on tile
             const pedestal = document.createElement('div');
             pedestal.className = `pedestal-ring ${isWhite ? 'pedestal-obsidian' : 'pedestal-verdant'}`;
+            pedestal.style.animationDelay = `${((r * 2 + c * 4) % 9) * 0.35}s`;
 
-            // Upright standing character figurine
+            // Upright standing character figurine with living breathing idle cycle
             const miniatureBody = document.createElement('div');
-            miniatureBody.className = 'miniature-body';
+            miniatureBody.className = `miniature-body ${isWhite ? 'miniature-living-white' : 'miniature-living-black'}`;
+            // Organic phase offset so figurines breathe independently
+            miniatureBody.style.animationDelay = `${((r * 3 + c * 5) % 11) * 0.28}s`;
 
             const img = document.createElement('img');
             img.src = profile.img;
@@ -1978,20 +2211,192 @@
       renderBoard();
     }
 
+    let isMovingAnimation = false;
+
     function executeMove(fromR, fromC, toR, toC) {
+      if (isMovingAnimation) return;
       const movingPiece = boardState[fromR][fromC];
       const targetPiece = boardState[toR][toC];
       const profile = PIECE_PROFILES[movingPiece];
 
+      const fromCell = chessboard.querySelector(`.cell[data-row="${fromR}"][data-col="${fromC}"]`);
+      const toCell = chessboard.querySelector(`.cell[data-row="${toR}"][data-col="${toC}"]`);
+      const movingSlot = fromCell ? fromCell.querySelector('.miniature-slot') : null;
+
+      // Play move or capture SFX
+      if (targetPiece) playSound('capture');
+      else playSound('move');
+
+      // Live Physical Traversal Animation across the 3D board
+      if (fromCell && toCell && movingSlot && typeof movingSlot.animate === 'function') {
+        isMovingAnimation = true;
+        fromCell.style.zIndex = '180';
+
+        const movingBody = movingSlot.querySelector('.miniature-body');
+        const movingShadow = movingSlot.querySelector('.miniature-shadow');
+        const isWhite = movingPiece === movingPiece.toUpperCase();
+
+        const deltaC = toC - fromC;
+        const deltaR = toR - fromR;
+        const dx = deltaC * 72;
+        const dy = deltaR * 72;
+        const tileDist = Math.hypot(deltaC, deltaR);
+
+        // Dynamic flight duration based on distance (380ms - 560ms)
+        const moveDuration = Math.min(560, Math.max(380, Math.round(360 + tileDist * 32)));
+
+        // Directional lean tilt in flight (-12deg to +12deg)
+        const flightTilt = Math.max(-12, Math.min(12, deltaC * 4.2));
+
+        // Peak Z elevation: Knights vault higher (88px), Pawns lower (52px), Royals (78px), others (68px)
+        const pieceType = movingPiece.toLowerCase();
+        let peakZ = 68;
+        if (pieceType === 'n') peakZ = 88;
+        else if (pieceType === 'p') peakZ = 52;
+        else if (pieceType === 'q' || pieceType === 'k') peakZ = 78;
+
+        // 1. Moving Slot Parabolic Trajectory
+        const leapAnim = movingSlot.animate([
+          { transform: 'translate3d(0, 0, 0px)' },
+          { transform: `translate3d(${dx * 0.12}px, ${dy * 0.12}px, 0px)`, offset: 0.14 },
+          { transform: `translate3d(${dx * 0.5}px, ${dy * 0.5}px, ${peakZ}px)`, offset: 0.52 },
+          { transform: `translate3d(${dx * 0.9}px, ${dy * 0.9}px, 6px)`, offset: 0.88 },
+          { transform: `translate3d(${dx}px, ${dy}px, 0px)` }
+        ], {
+          duration: moveDuration,
+          easing: 'cubic-bezier(0.25, 0.95, 0.45, 1)'
+        });
+
+        // 2. Character Biomechanical Squash, Stretch & Forward Lean
+        if (movingBody && typeof movingBody.animate === 'function') {
+          let baseRot = 'rotateX(-38deg)';
+          if (activeCameraView === 'isometric') baseRot = 'rotateZ(24deg) rotateX(-48deg)';
+          else if (activeCameraView === 'topdown') baseRot = 'rotateX(0deg)';
+
+          movingBody.animate([
+            { transform: `translateZ(8px) ${baseRot} scale(1, 1) translateY(0)` },
+            // Anticipation crouch / compression before leap
+            { transform: `translateZ(4px) ${baseRot} scale(1.14, 0.84) translateY(3px)`, offset: 0.14 },
+            // Takeoff extension & mid-air forward tilt
+            { transform: `translateZ(18px) ${baseRot} rotateZ(${flightTilt}deg) scale(0.90, 1.22) translateY(-8px)`, offset: 0.35 },
+            // Apex float
+            { transform: `translateZ(22px) ${baseRot} rotateZ(${flightTilt}deg) scale(1.02, 1.08) translateY(-4px)`, offset: 0.55 },
+            // Descent stretch
+            { transform: `translateZ(12px) ${baseRot} rotateZ(${flightTilt * 0.4}deg) scale(0.94, 1.16) translateY(-2px)`, offset: 0.84 },
+            // Impact cushion squash on touchdown
+            { transform: `translateZ(4px) ${baseRot} scale(1.16, 0.84) translateY(3px)`, offset: 0.92 },
+            // Rebound settle
+            { transform: `translateZ(8px) ${baseRot} scale(1, 1) translateY(0)` }
+          ], {
+            duration: moveDuration,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
+          });
+        }
+
+        // 3. Ground Shadow Dynamics (diffuses and scales as character ascends, snaps crisp on landing)
+        if (movingShadow && typeof movingShadow.animate === 'function') {
+          movingShadow.animate([
+            { transform: 'translateZ(1px) scale(1)', opacity: 0.85, filter: 'blur(0px)' },
+            { transform: 'translateZ(1px) scale(1.12)', opacity: 0.95, filter: 'blur(0px)', offset: 0.14 },
+            { transform: 'translateZ(1px) scale(1.55)', opacity: 0.22, filter: 'blur(4px)', offset: 0.52 },
+            { transform: 'translateZ(1px) scale(1.15)', opacity: 0.92, filter: 'blur(0px)', offset: 0.90 },
+            { transform: 'translateZ(1px) scale(1)', opacity: 0.85, filter: 'blur(0px)' }
+          ], {
+            duration: moveDuration,
+            easing: 'cubic-bezier(0.25, 0.95, 0.45, 1)'
+          });
+        }
+
+        // 4. Motion Trail Particle Wisps along trajectory
+        const trailColor = isWhite ? 'leap-trail-white' : 'leap-trail-black';
+        const trailSteps = Math.min(5, Math.max(2, Math.round(tileDist)));
+        for (let i = 1; i <= trailSteps; i++) {
+          setTimeout(() => {
+            const progress = i / (trailSteps + 1);
+            const particle = document.createElement('div');
+            particle.className = `leap-trail-particle ${trailColor}`;
+            particle.style.left = `calc(50% + ${dx * progress}px - 4px)`;
+            particle.style.top = `calc(50% + ${dy * progress}px - 4px)`;
+            fromCell.appendChild(particle);
+            setTimeout(() => particle.remove(), 650);
+          }, Math.round(moveDuration * (i / (trailSteps + 1.2))));
+        }
+
+        // 5. Combat Impact and Defeat Recoil (if capturing enemy piece)
+        if (targetPiece) {
+          const victimBody = toCell.querySelector('.miniature-body');
+          setTimeout(() => {
+            if (victimBody) victimBody.classList.add('miniature-defeat-recoil');
+
+            // Combat impact slash spark
+            const spark = document.createElement('div');
+            spark.className = 'combat-impact-spark';
+            spark.textContent = '⚔️';
+            toCell.appendChild(spark);
+            setTimeout(() => spark.remove(), 550);
+
+            // Directional weapon slash beam
+            const slashBeam = document.createElement('div');
+            slashBeam.className = 'combat-slash-beam';
+            toCell.appendChild(slashBeam);
+            setTimeout(() => slashBeam.remove(), 420);
+
+            // Dissolving soul embers
+            for (let e = 0; e < 6; e++) {
+              const ember = document.createElement('div');
+              ember.className = 'soul-ember-mote';
+              ember.style.setProperty('--ember-dx', `${(Math.random() - 0.5) * 36}px`);
+              ember.style.setProperty('--ember-dy', `${-20 - Math.random() * 32}px`);
+              ember.style.left = `calc(50% + ${(Math.random() - 0.5) * 20}px)`;
+              ember.style.top = `calc(50% + ${(Math.random() - 0.5) * 20}px)`;
+              toCell.appendChild(ember);
+              setTimeout(() => ember.remove(), 850);
+            }
+          }, Math.round(moveDuration * 0.58));
+        }
+
+        leapAnim.onfinish = () => {
+          finalizeMoveExecution(fromR, fromC, toR, toC, movingPiece, targetPiece, profile);
+          isMovingAnimation = false;
+
+          // Spawn Double Landing Shockwave on destination square
+          const landedCell = chessboard.querySelector(`.cell[data-row="${toR}"][data-col="${toC}"]`);
+          if (landedCell) {
+            const shockwave = document.createElement('div');
+            shockwave.className = 'landing-shockwave';
+            landedCell.appendChild(shockwave);
+
+            const shockwaveInner = document.createElement('div');
+            shockwaveInner.className = 'landing-shockwave-inner';
+            landedCell.appendChild(shockwaveInner);
+
+            setTimeout(() => {
+              shockwave.remove();
+              shockwaveInner.remove();
+            }, 550);
+          }
+
+          // Camera micro-rumble on heavy piece landing (K, Q, R, N or capture)
+          if (['k', 'q', 'r', 'n'].includes(pieceType) || targetPiece) {
+            const wrapper = document.getElementById('boardWrapper');
+            if (wrapper && !wrapper.classList.contains('board-shake')) {
+              wrapper.classList.add('board-shake');
+              setTimeout(() => wrapper.classList.remove('board-shake'), 260);
+            }
+          }
+        };
+      } else {
+        finalizeMoveExecution(fromR, fromC, toR, toC, movingPiece, targetPiece, profile);
+      }
+    }
+
+    function finalizeMoveExecution(fromR, fromC, toR, toC, movingPiece, targetPiece, profile) {
       // Handle Capture & Manifestation
       if (targetPiece) {
         const victimProfile = PIECE_PROFILES[targetPiece];
         capturedPieces.push(targetPiece);
         updateGraveyard();
         triggerManifestation(profile, victimProfile, toR, toC);
-        playSound('capture');
-      } else {
-        playSound('move');
       }
 
       // Apply Terrain Mutation on arrival
