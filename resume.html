@@ -28,8 +28,20 @@
       --primary-blue: #00d2ff;
       --primary-violet: #8b5cf6;
       --text-main: #f8fafc;
-      --text-muted: #94a3b8;
+      --text-muted: #cbd5e1;
       --border-subtle: rgba(139, 92, 246, 0.25);
+    }
+
+    /* High-Contrast Readability Overrides for Dark Screen Mode */
+    .text-muted, p.text-muted, span.text-muted, div.text-muted, small.text-muted, [data-bs-theme=dark] .text-muted {
+      color: #cbd5e1 !important;
+    }
+    .text-secondary {
+      color: #94a3b8 !important;
+    }
+    .hud-key {
+      color: #94a3b8 !important;
+      font-weight: 500;
     }
 
     body {

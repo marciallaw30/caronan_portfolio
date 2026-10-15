@@ -24,29 +24,20 @@ const DB_KEYS = {
 };
 
 // ================= 0. PRODUCT AVAILABILITY =================
-// Only wire-wrapped pendants (IDs 1-35) and ONE ring (ID 36: Golden Ember Ring) are available now.
-// Everything else stays in the catalog as "Coming Soon / In Production" and cannot be ordered.
-const AVAILABLE_CATEGORIES = ["Pendants"];
-const AVAILABLE_PRODUCT_IDS = [36]; // Golden Ember Ring: Carnelian Agate Solitaire
+// Active inventory: 35 Wire-Wrapped Pendants (IDs 1-35) + 1 Artisan Ring (ID 36: Golden Ember Ring)
 function isProductAvailable(p) {
-  if (!p) return false;
-  if (p.category === "Pendants" && p.id >= 1 && p.id <= 35) return true;
-  if (p.id === 36) return true;
-  return false;
+  return !!p && (p.stock === undefined || p.stock > 0);
 }
 
 // ================= 1. DATABASE INITIALIZATION & REPOSITORY =================
 const Database = {
   // Initialize and load products from LocalStorage or seed from CRYSTAL_PRODUCTS
   getProducts() {
-    return CRYSTAL_PRODUCTS.map(item => {
-      const avail = isProductAvailable(item);
-      return {
-        ...item,
-        isAvailable: avail,
-        stock: avail ? (item.stock > 0 ? item.stock : 6) : 0
-      };
-    });
+    return CRYSTAL_PRODUCTS.map(item => ({
+      ...item,
+      isAvailable: true,
+      stock: item.stock > 0 ? item.stock : 6
+    }));
   },
 
   saveProducts(products) {
@@ -173,7 +164,7 @@ const Database = {
 };
 
 // ================= 2. ACTIVE RUNTIME STATE =================
-let cart = Database.getCart().filter(i => isProductAvailable(i)); // drop any 'coming soon' items saved earlier
+let cart = Database.getCart();
 let currentCategory = "All";
 let searchQuery = "";
 let selectedService = SPIRITUAL_SERVICES[0];
@@ -242,22 +233,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ================= 4. PRODUCT CATALOG RENDERING =================
+function isProductAvailable(p) {
+  if (p.isAvailable === false || p.stock <= 0) return false;
+  return true;
+}
+
 function renderProductCard(p) {
-  const available = isProductAvailable(p);
+  const isAvailable = isProductAvailable(p);
+  const cardClass = isAvailable ? 'product-card' : 'product-card coming-soon';
+  const stockBadge = isAvailable
+    ? `<span class="badge bg-success bg-opacity-25 border border-success text-success font-mono" style="font-size: 0.65rem;">
+         <i class="bi bi-check2-circle me-1"></i>In Stock (${p.stock})
+       </span>`
+    : `<span class="badge font-mono" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24; font-size: 0.65rem;">
+         <i class="bi bi-tools me-1"></i>In Crafting • Coming Soon
+       </span>`;
+
+  const cartButton = isAvailable
+    ? `<button class="btn btn-add-cart" onclick="addToCart(${p.id})">
+         <i class="bi bi-bag-plus"></i> Add
+       </button>`
+    : `<button class="btn btn-add-cart" disabled style="opacity: 0.6; cursor: not-allowed;" title="Currently in artisan wirecraft production">
+         <i class="bi bi-tools"></i> Soon
+       </button>`;
+
   return `
     <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-      <div class="product-card ${available ? '' : 'coming-soon'}">
+      <div class="${cardClass}">
         <div class="product-thumb-wrap">
-          <span class="product-tag-badge ${available ? '' : 'bg-secondary'}">${available ? p.tag : 'Coming Soon'}</span>
+          <span class="product-tag-badge">${p.tag || p.category}</span>
           <span class="product-sku-badge">${p.sku}</span>
           <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='assets/crystals/6.png'">
         </div>
         <div class="product-card-body">
           <div class="d-flex justify-content-between align-items-center mb-1">
             <span class="product-category-meta">${p.category}</span>
-            <span class="badge ${available ? 'bg-success bg-opacity-25 border border-success text-success' : 'bg-dark border border-secondary text-secondary'} font-mono" style="font-size: 0.65rem;">
-              <i class="bi ${available ? 'bi-check2-circle' : 'bi-hourglass-split'} me-1"></i>${available ? 'In Stock' : 'Not Available Yet'}
-            </span>
+            ${stockBadge}
           </div>
           <h3 class="product-title" title="${p.name}">${p.name}</h3>
           <div class="product-chakra-chip">
@@ -274,9 +285,7 @@ function renderProductCard(p) {
               <button class="btn btn-sm btn-outline-warning" onclick="openProductQuickView(${p.id})" title="Inspect Crystal Metaphysics">
                 <i class="bi bi-eye"></i>
               </button>
-              <button class="btn ${available ? 'btn-add-cart' : 'btn-sm btn-secondary'}" onclick="addToCart(${p.id})" ${available ? '' : 'disabled style="opacity: 0.65; cursor: not-allowed;"'}>
-                <i class="bi ${available ? 'bi-bag-plus' : 'bi-lock-fill'}"></i> ${available ? 'Add' : 'Soon'}
-              </button>
+              ${cartButton}
             </div>
           </div>
         </div>
@@ -295,9 +304,12 @@ function renderProducts() {
     let matchesCat = true;
     if (currentCategory === "AvailableOnly") {
       matchesCat = isProductAvailable(p);
+    } else if (currentCategory === "ComingSoon") {
+      matchesCat = !isProductAvailable(p);
     } else if (currentCategory !== "All") {
       matchesCat = (p.category === currentCategory);
     }
+
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           p.chakra.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -328,9 +340,9 @@ function renderProducts() {
         <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);">
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-check-circle-fill text-success fs-5"></i>
-            <span class="text-white fw-bold">Active Artisan Inventory: 35 Wire-Wrapped Pendants + 1 Handcrafted Ring</span>
+            <span class="text-white fw-bold">Active Artisan Inventory: 26 Wire Pendants + 1 Handcrafted Ring</span>
           </div>
-          <span class="badge bg-success font-mono px-3 py-2 text-white">36 Available • Ships via J&amp;T Express</span>
+          <span class="badge bg-success font-mono px-3 py-2 text-white">27 In Stock • Ships via J&amp;T Express</span>
         </div>
       </div>
     `;
@@ -340,17 +352,17 @@ function renderProducts() {
     if (comingSoon.length > 0) {
       html += `
         <div class="col-12 my-3">
-          <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(18, 8, 38, 0.95); border: 1px dashed rgba(168, 85, 247, 0.6); box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+          <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(18, 8, 38, 0.95); border: 1px dashed rgba(245, 158, 11, 0.6); box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
             <div class="d-flex align-items-center gap-3">
-              <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="background: rgba(168, 85, 247, 0.2); width: 44px; height: 44px; color: #c084fc;">
+              <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="background: rgba(245, 158, 11, 0.2); width: 44px; height: 44px; color: #fbbf24;">
                 <i class="bi bi-tools fs-5"></i>
               </div>
               <div>
-                <div class="fw-bold text-white fs-6">Artisan Workshop — Upcoming Pieces (Not Available Yet)</div>
-                <div class="small" style="color: #cbd5e1;">The following handcrafted pieces (2 rings, 3 bracelets, 3 earrings) are currently in wirecraft production and not yet open for ordering.</div>
+                <div class="fw-bold text-white fs-6">Artisan Workshop — In Production (Not Available Yet)</div>
+                <div class="small" style="color: #cbd5e1;">The following 9 handcrafted wire pendants are currently being crafted in our workshop and not yet open for ordering.</div>
               </div>
             </div>
-            <span class="badge bg-secondary font-mono px-3 py-2 text-uppercase">8 Coming Soon</span>
+            <span class="badge font-mono px-3 py-2 text-dark fw-bold" style="background: #fbbf24;">9 In Workshop Crafting</span>
           </div>
         </div>
       `;
@@ -362,62 +374,51 @@ function renderProducts() {
         <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);">
           <div class="d-flex align-items-center gap-2">
             <i class="bi bi-stars text-warning fs-5"></i>
-            <span class="text-white fw-bold">Available Now Collection (36 Handcrafted Pieces)</span>
+            <span class="text-white fw-bold">Available Now Collection (27 Handcrafted Pieces)</span>
           </div>
-          <span class="badge bg-success font-mono px-3 py-2 text-white">35 Wire Pendants + 1 Ring</span>
+          <span class="badge bg-success font-mono px-3 py-2 text-white">26 Wire Pendants + 1 Ring</span>
         </div>
       </div>
     `;
     html += filtered.map(p => renderProductCard(p)).join('');
   } else if (currentCategory === "Pendants") {
+    const availCount = filtered.filter(p => isProductAvailable(p)).length;
+    const soonCount = filtered.filter(p => !isProductAvailable(p)).length;
     html += `
       <div class="col-12 mb-3">
         <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(22, 10, 42, 0.92); border: 1px solid rgba(192, 132, 252, 0.4);">
           <div>
-            <strong class="text-white"><i class="bi bi-gem text-warning me-2"></i>Wire-Wrapped Pendants Collection</strong>
-            <div class="small" style="color: #cbd5e1;">All 35 authentic handcrafted crystal pendants are available in stock for immediate ordering and delivery via J&amp;T Express.</div>
+            <strong class="text-white"><i class="bi bi-gem text-warning me-2"></i>Wire-Wrapped Pendants Collection (35 Pieces)</strong>
+            <div class="small" style="color: #cbd5e1;">26 authentic handcrafted crystal pendants are available in stock for immediate J&amp;T delivery; 9 pieces are in workshop production.</div>
           </div>
-          <span class="badge bg-success font-mono px-3 py-2 text-white">35 Available In Stock</span>
-        </div>
-      </div>
-    `;
-    html += filtered.map(p => renderProductCard(p)).join('');
-  } else if (currentCategory === "Rings") {
-    html += `
-      <div class="col-12 mb-3">
-        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(28, 14, 4, 0.92); border: 1px solid rgba(245, 158, 11, 0.45);">
-          <div>
-            <strong class="text-white"><i class="bi bi-suit-diamond-fill text-warning me-2"></i>Handcrafted Artisan Ring Collection</strong>
-            <div class="small" style="color: #cbd5e1;">1 Wire-Wrapped Ring Available Now (Golden Ember Ring). Other ring styles are in workshop production.</div>
-          </div>
-          <span class="badge bg-warning text-dark font-mono px-3 py-2 fw-bold">1 Available • 2 Coming Soon</span>
+          <span class="badge bg-success font-mono px-3 py-2 text-white">${availCount} Available • ${soonCount} Soon</span>
         </div>
       </div>
     `;
     const sorted = [...filtered].sort((a, b) => Number(isProductAvailable(b)) - Number(isProductAvailable(a)));
     html += sorted.map(p => renderProductCard(p)).join('');
-  } else if (currentCategory === "Bracelets") {
+  } else if (currentCategory === "Rings") {
     html += `
       <div class="col-12 mb-3">
-        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(15, 23, 42, 0.92); border: 1px dashed rgba(148, 163, 184, 0.5);">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(28, 14, 4, 0.92); border: 1px solid rgba(245, 158, 11, 0.45);">
           <div>
-            <strong class="text-white"><i class="bi bi-infinity text-info me-2"></i>Artisan Mala Bracelets (Coming Soon)</strong>
-            <div class="small" style="color: #cbd5e1;">Bracelets are currently in artisan wirecraft production and not available for checkout yet. Explore metaphysical profiles below.</div>
+            <strong class="text-white"><i class="bi bi-suit-diamond-fill text-warning me-2"></i>Handcrafted Artisan Ring</strong>
+            <div class="small" style="color: #cbd5e1;">Golden Ember Carnelian Agate Solitaire Ring — Handcrafted adjustable copper band weave.</div>
           </div>
-          <span class="badge bg-secondary font-mono px-3 py-2">3 In Production • Coming Soon</span>
+          <span class="badge bg-warning text-dark font-mono px-3 py-2 fw-bold">1 Available In Stock</span>
         </div>
       </div>
     `;
     html += filtered.map(p => renderProductCard(p)).join('');
-  } else if (currentCategory === "Earrings") {
+  } else if (currentCategory === "ComingSoon") {
     html += `
       <div class="col-12 mb-3">
-        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(15, 23, 42, 0.92); border: 1px dashed rgba(148, 163, 184, 0.5);">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(18, 8, 38, 0.95); border: 1px dashed rgba(245, 158, 11, 0.6);">
           <div>
-            <strong class="text-white"><i class="bi bi-circle text-info me-2"></i>Hand-Wrapped Dangle Earrings (Coming Soon)</strong>
-            <div class="small" style="color: #cbd5e1;">Artisan wire earrings are currently being crafted in our workshop and not available for checkout yet.</div>
+            <strong class="text-white"><i class="bi bi-tools text-warning me-2"></i>Workshop Production (Not Available Yet)</strong>
+            <div class="small" style="color: #cbd5e1;">These 9 handcrafted pieces are currently being wire-wrapped and will open for ordering once ready.</div>
           </div>
-          <span class="badge bg-secondary font-mono px-3 py-2">3 In Production • Coming Soon</span>
+          <span class="badge font-mono px-3 py-2 text-dark fw-bold" style="background: #fbbf24;">9 Upcoming Pieces</span>
         </div>
       </div>
     `;
@@ -492,7 +493,7 @@ function openProductQuickView(productId) {
   if (addBtn) {
     addBtn.disabled = product.stock <= 0 || !avail;
     addBtn.innerHTML = !avail 
-      ? '<i class="bi bi-lock-fill me-1"></i> Coming Soon — Not Yet Available' 
+      ? '<i class="bi bi-lock-fill me-1"></i> In Workshop Crafting — Not Yet Available' 
       : (product.stock <= 0 ? 'Sold Out' : '<i class="bi bi-bag-plus me-1"></i> Add to Cart');
     addBtn.onclick = () => {
       if (avail && product.stock > 0) {
@@ -512,7 +513,7 @@ function addToCart(productId) {
   const product = products.find(p => p.id === productId);
   if (!product || product.stock <= 0) return;
   if (!isProductAvailable(product)) {
-    showToastNotification(`${product.name} is coming soon and not yet available to order.`);
+    showToastNotification(`${product.name} is currently in artisan crafting and not yet available to order.`);
     return;
   }
 

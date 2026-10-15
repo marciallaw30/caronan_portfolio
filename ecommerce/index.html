@@ -40,6 +40,10 @@
     }
     .text-gold { color: #d4af37 !important; -webkit-text-fill-color: #d4af37 !important; }
     .text-gold-light { color: #f3e5ab !important; -webkit-text-fill-color: #f3e5ab !important; }
+    .text-dark, .badge.text-dark, .btn.text-dark, .badge.bg-warning, .badge.bg-warning *, .badge.bg-info.text-dark {
+      color: #0f172a !important;
+      -webkit-text-fill-color: #0f172a !important;
+    }
   </style>
 </head>
 
@@ -272,14 +276,13 @@
         </div>
       </div>
 
-      <!-- Category Filter Pills (Thesis Categories: Pendants, Bracelets, Rings, Earrings) -->
+      <!-- Category Filter Pills -->
       <div class="filter-pill-bar d-flex flex-wrap justify-content-center align-items-center gap-2 mb-4">
-        <button class="btn-filter-pill active" data-category="All"><i class="bi bi-stars"></i> All Catalog (36 Available • 8 Soon)</button>
-        <button class="btn-filter-pill" data-category="AvailableOnly"><i class="bi bi-check-circle-fill text-success"></i> Available Now (36)</button>
+        <button class="btn-filter-pill active" data-category="All"><i class="bi bi-stars"></i> All Catalog (36)</button>
+        <button class="btn-filter-pill" data-category="AvailableOnly"><i class="bi bi-check-circle-fill text-success"></i> Available Now (27)</button>
         <button class="btn-filter-pill" data-category="Pendants"><i class="bi bi-gem"></i> Wire Pendants (35)</button>
-        <button class="btn-filter-pill" data-category="Rings"><i class="bi bi-suit-diamond"></i> Artisan Rings (1 In Stock)</button>
-        <button class="btn-filter-pill" data-category="Bracelets"><i class="bi bi-infinity"></i> Mala Bracelets <small class="pill-soon">Soon</small></button>
-        <button class="btn-filter-pill" data-category="Earrings"><i class="bi bi-circle"></i> Artisan Earrings <small class="pill-soon">Soon</small></button>
+        <button class="btn-filter-pill" data-category="Rings"><i class="bi bi-suit-diamond"></i> Artisan Ring (1)</button>
+        <button class="btn-filter-pill" data-category="ComingSoon"><i class="bi bi-tools text-warning"></i> In Production / Soon (9)</button>
       </div>
 
       <!-- Products Grid (Dynamically Populated by script.js from CRYSTAL_PRODUCTS) -->
@@ -462,7 +465,7 @@
 
             <div class="api-key-display mb-3">
               <code>pk_test_wfW6N69auD5WdUXDq7dRQVam</code>
-              <span class="badge bg-success text-dark fw-bold">ACTIVE</span>
+              <span class="badge bg-success text-white fw-bold">ACTIVE</span>
             </div>
 
             <p class="text-light small mb-3">

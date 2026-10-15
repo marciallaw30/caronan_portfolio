@@ -917,28 +917,30 @@ p, li, span, label, small, div, td, th {
   }
 }
 
-/* ===== Availability: items not yet available ===== */
+/* ===== Availability: Handcrafted items in workshop production ===== */
 .product-card.coming-soon {
-  opacity: 0.82;
-  border: 1px dashed rgba(168, 85, 247, 0.45);
-  background: rgba(14, 6, 26, 0.92);
+  opacity: 0.9;
+  border: 1px dashed rgba(245, 158, 11, 0.55) !important;
+  background: rgba(18, 8, 38, 0.92) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 .product-card.coming-soon .product-thumb-wrap img {
-  filter: grayscale(0.7) brightness(0.85);
+  filter: grayscale(0.2) brightness(0.92);
   transition: filter 0.3s ease;
 }
 .product-card.coming-soon:hover .product-thumb-wrap img {
-  filter: grayscale(0.3) brightness(0.95);
+  filter: grayscale(0) brightness(1);
 }
 .product-card.coming-soon .product-tag-badge {
-  background: rgba(100, 116, 139, 0.9);
-  color: #f8fafc;
-  font-weight: 600;
+  background: rgba(245, 158, 11, 0.88);
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  font-weight: 700;
 }
 .product-card.coming-soon .btn-add-cart {
-  background: rgba(100, 116, 139, 0.35);
-  border-color: rgba(148, 163, 184, 0.4);
-  color: #cbd5e1;
+  background: rgba(100, 116, 139, 0.3) !important;
+  border-color: rgba(148, 163, 184, 0.4) !important;
+  color: #cbd5e1 !important;
   cursor: not-allowed;
 }
 .pill-soon {
@@ -946,10 +948,10 @@ p, li, span, label, small, div, td, th {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: rgba(168, 85, 247, 0.25);
-  color: #d8b4fe;
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
   padding: 2px 7px;
   border-radius: 999px;
   margin-left: 5px;
-  border: 1px solid rgba(168, 85, 247, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.4);
 }

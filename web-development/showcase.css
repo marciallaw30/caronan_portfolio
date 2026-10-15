@@ -585,6 +585,15 @@ p.lead, .lead {
   margin: 0 auto;
 }
 
+.payslip-voucher .text-muted,
+#payslipPrintArea .text-muted {
+  color: #475569 !important;
+}
+.payslip-voucher .text-dark,
+#payslipPrintArea .text-dark {
+  color: #0f172a !important;
+}
+
 .payslip-header {
   border-bottom: 2px solid #881337;
   padding-bottom: 15px;

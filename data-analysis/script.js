@@ -179,8 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 10. Charts Configuration
-    Chart.defaults.color = '#94a3b8';
-    Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.06)';
+    Chart.defaults.color = '#cbd5e1';
+    Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.08)';
     Chart.defaults.font.family = 'Inter, sans-serif';
 
     // Chart 1: Sales Trend - Total Revenue by Day of Week (Line) - matches workbook Exam_Tasks chart 1

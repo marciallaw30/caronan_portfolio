@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
       category: 'E-Business, Fintech & Logistics Integration',
       overview: 'An academic e-commerce web platform developed for Datamex College of Saint Adeline (In Partial Fulfillment in E-Business under Faculty Adviser Mr. Randy Villanueva). Engineered by Lead Marcial Lawrence Jr V. Caronan and team, the platform combines handcrafted wire-wrapped crystal jewelry retail with real-time spiritual reading appointments, instant PayMongo API gateway verification, and nationwide J&T Express parcel logistics tracking.',
       features: [
-        'Artisan Product Catalog featuring 36 available handcrafted wire-wrapped pendants and rings (more coming soon) with instant search, category filtering, and modal detail views',
+        'Artisan Product Catalog featuring 36 authentic handcrafted wire-wrapped crystal pendants and solitaire rings (27 Available Now • 9 in Workshop Crafting) with instant search, category filtering, and modal detail views',
         'Instant PayMongo payment gateway integration (GCash, Maya, Visa/Mastercard) eliminating manual screenshot receipt checking',
         'Interactive J&T Express parcel logistics tracker with simulated waybills and milestone checkpoints',
         'Spiritual reading appointment booking calendar with real-time time-slot conflict prevention and client confirmation',
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Administrative Control Center modal monitoring gross settled revenue, order count, and real-time inventory ledger'
       ],
       tech: ['JavaScript (ES6+)', 'Bootstrap 5.3', 'PayMongo API', 'J&T Express Logistics API', 'HTML5 / CSS3', 'HTML5 LocalStorage', 'Cinzel & Outfit Fonts'],
-      erd: 'Client-server e-commerce architecture managing `CRYSTAL_PRODUCTS` (44 SKUs), `simulatedOrders` (Waybills & Timelines), `SPIRITUAL_SERVICES` (Appointments), and `cart` session storage.'
+      erd: 'Client-server e-commerce architecture managing `CRYSTAL_PRODUCTS` (36 Verified SKUs: 35 Wire Pendants + 1 Handcrafted Ring), `simulatedOrders` (Waybills & Timelines), `SPIRITUAL_SERVICES` (Appointments), and `cart` session storage.'
     },
     'mythic-gambit': {
       title: 'Mythic Gambit: Tactical High-Fantasy Chess RPG',
