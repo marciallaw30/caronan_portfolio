@@ -2043,12 +2043,15 @@
             const profile = PIECE_PROFILES[piece];
             const isWhite = piece === piece.toUpperCase();
             const isCurrentTurnPiece = (currentTurn === 'white' && isWhite) || (currentTurn === 'black' && !isWhite);
-            const isPlayable = (userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece && !isGameOver;
+            const isPlayable = (!opponentAI || userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece && !isGameOver;
 
             if (isPlayable) {
               cell.classList.add('cell-my-piece');
               cell.setAttribute('draggable', 'true');
-              cell.title = `Your ${profile.name} (${profile.role}). Click or drag to move!`;
+              const activeLabel = isWhite ? 'White (Obsidian)' : 'Black (Verdant)';
+              cell.title = (!opponentAI || userPlaySide === 'both')
+                ? `${profile.name} (${activeLabel}). Click or drag to move!`
+                : `Your ${profile.name} (${profile.role}). Click or drag to move!`;
             } else {
               cell.title = `${profile.name} (${profile.role}) - ${isWhite ? 'Obsidian Roost' : 'Verdant Court'}`;
             }
@@ -2104,7 +2107,7 @@
 
       const isWhite = piece === piece.toUpperCase();
       const isCurrentTurnPiece = (currentTurn === 'white' && isWhite) || (currentTurn === 'black' && !isWhite);
-      const isPlayable = (userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece;
+      const isPlayable = (!opponentAI || userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece;
 
       if (!isPlayable) {
         e.preventDefault();
@@ -2169,32 +2172,38 @@
       if (piece) {
         const isWhitePiece = piece === piece.toUpperCase();
         const isCurrentTurnPiece = (currentTurn === 'white' && isWhitePiece) || (currentTurn === 'black' && !isWhitePiece);
-        const isPlayable = (userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece;
+        const isPlayable = (!opponentAI || userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece;
 
         if (isPlayable) {
-          // Select own piece and show its legal moves
+          // Select piece and show its legal moves
           selectedSquare = { r, c };
           currentLegalMoves = getLegalMoves(r, c, piece);
           updateCharacterInspector(piece);
           playSound('select');
 
           const profile = PIECE_PROFILES[piece];
+          const teamLabel = isWhitePiece ? 'Obsidian (White)' : 'Verdant (Black)';
           if (currentLegalMoves.length > 0) {
-            updateGameplayHint(`⚡ <strong>SELECTED ${profile.name.toUpperCase()}:</strong> Click a glowing green ring to move, or red ring to capture.`);
+            updateGameplayHint(`⚡ <strong>SELECTED ${profile.name.toUpperCase()} (${teamLabel}):</strong> Click a glowing green ring to move, or red ring to capture.`);
           } else {
             updateGameplayHint(`⚠️ ${profile.name} has no legal moves from ${cols[c]}${8 - r}. Select another piece.`);
           }
           renderBoard();
           return;
         } else {
-          // User clicked an enemy or non-turn piece: inspect lore/stats, and guide player!
+          // User clicked an inactive or non-turn piece: inspect lore/stats, and guide player!
           updateCharacterInspector(piece);
           const profile = PIECE_PROFILES[piece];
           const activeSide = currentTurn === 'white' ? 'White (Obsidian Roost)' : 'Black (Verdant Court)';
           const ownerSide = isWhitePiece ? 'Obsidian Roost (White)' : 'Verdant Court (Black)';
 
-          updateGameplayHint(`ℹ️ Inspected ${profile.name} (${ownerSide}). 👉 <strong>It is ${activeSide}'s turn!</strong> Click your own pieces at the bottom to play.`);
-          addLogEntry(`ℹ️ Inspected ${profile.name} at ${cols[c]}${8 - r}. ${activeSide} to move.`);
+          if (!opponentAI || userPlaySide === 'both') {
+            updateGameplayHint(`ℹ️ Inspected ${profile.name} (${ownerSide}). 👉 <strong>It is ${activeSide}'s turn!</strong> Click a ${currentTurn === 'white' ? 'White' : 'Black'} piece to move.`, `TURN: ${currentTurn.toUpperCase()}`);
+            addLogEntry(`ℹ️ Inspected ${profile.name} at ${cols[c]}${8 - r}. ${activeSide} to move.`);
+          } else {
+            updateGameplayHint(`ℹ️ Inspected ${profile.name} (${ownerSide}). 👉 <strong>It is ${activeSide}'s turn!</strong> Click your own pieces at the bottom to play.`, `TURN: ${currentTurn.toUpperCase()}`);
+            addLogEntry(`ℹ️ Inspected ${profile.name} at ${cols[c]}${8 - r}. ${activeSide} to move.`);
+          }
           playSound('select');
           selectedSquare = null;
           currentLegalMoves = [];
@@ -2438,7 +2447,8 @@
       // Switch turn
       currentTurn = currentTurn === 'white' ? 'black' : 'white';
       moveCount++;
-      document.getElementById('turnIndicator').textContent = `TURN: ${moveCount} (${currentTurn.toUpperCase()})`;
+      const modeSuffix = (!opponentAI || userPlaySide === 'both') ? ' • SELF-PLAY' : '';
+      document.getElementById('turnIndicator').textContent = `TURN: ${moveCount} (${currentTurn.toUpperCase()}${modeSuffix})`;
 
       // Comprehensive Legal Moves & Check / Checkmate Evaluation
       const activeLegalMoves = getAllLegalMoves(currentTurn, boardState);
@@ -2469,7 +2479,11 @@
         setTimeout(executeAIMove, 700);
       } else if (!isGameOver) {
         const sideName = currentTurn === 'white' ? 'Obsidian (White)' : 'Verdant (Black)';
-        updateGameplayHint(`👉 <strong>YOUR TURN (${currentTurn.toUpperCase()}):</strong> Click or drag any ${sideName} figurine to play.`);
+        if (!opponentAI || userPlaySide === 'both') {
+          updateGameplayHint(`👉 <strong>PASS & PLAY / SELF-PLAY:</strong> It is ${sideName}'s turn! Click or drag any ${currentTurn} figurine to play.`, `SELF-PLAY: ${currentTurn.toUpperCase()}`);
+        } else {
+          updateGameplayHint(`👉 <strong>YOUR TURN (${currentTurn.toUpperCase()}):</strong> Click or drag any ${sideName} figurine to play.`, `PLAYER: ${currentTurn.toUpperCase()}`);
+        }
       }
     }
 
@@ -3225,8 +3239,11 @@
         opponentAI = false;
       }
 
-      document.getElementById('aiStatusText').textContent = opponentAI ? 'ON' : 'OFF';
-      document.getElementById('aiStatusText').className = opponentAI ? 'text-success' : 'text-danger';
+      const aiStatus = document.getElementById('aiStatusText');
+      if (aiStatus) {
+        aiStatus.textContent = opponentAI ? 'ON' : 'OFF';
+        aiStatus.className = opponentAI ? 'text-success' : 'text-danger';
+      }
 
       resetMatch();
       playSound('select');
@@ -3250,7 +3267,8 @@
       capturedPieces = [];
       isGameOver = false;
       updateGraveyard();
-      document.getElementById('turnIndicator').textContent = 'TURN: 1 (WHITE)';
+      const modeSuffix = (!opponentAI || userPlaySide === 'both') ? ' • SELF-PLAY' : '';
+      document.getElementById('turnIndicator').textContent = `TURN: 1 (WHITE${modeSuffix})`;
 
       // Retain active camera view
       const wrapper = document.getElementById('boardWrapper');
@@ -3262,9 +3280,9 @@
         updateGameplayHint('🤖 <strong>AI OPPONENT (WHITE) OPENING:</strong> White moves first. AI calculating opening move...', 'PLAYER: BLACK');
         addLogEntry('Match initiated. AI (White) opening game.');
         setTimeout(executeAIMove, 700);
-      } else if (userPlaySide === 'both') {
-        updateGameplayHint('👉 <strong>2-PLAYER PASS & PLAY:</strong> White moves first. Click or drag any Obsidian piece (ranks 1-2) to move.', '2-PLAYER');
-        addLogEntry('Local 2-Player match initiated. White moves first.');
+      } else if (userPlaySide === 'both' || !opponentAI) {
+        updateGameplayHint('👉 <strong>PASS & PLAY / SELF-PLAY:</strong> White moves first. Click or drag any Obsidian piece (ranks 1-2) to move.', 'SELF-PLAY');
+        addLogEntry('Local match initiated with AI OFF. You control both sides; White moves first.');
       } else {
         updateGameplayHint('👉 <strong>YOUR TURN:</strong> Click or drag any Obsidian figurine at the bottom (ranks 1-2) to play.', 'PLAYER: WHITE');
         addLogEntry('Match initiated. You are playing as White (Obsidian Roost).');
@@ -3280,11 +3298,65 @@
     // Toggle AI
     document.getElementById('btnToggleAI').addEventListener('click', () => {
       opponentAI = !opponentAI;
-      document.getElementById('aiStatusText').textContent = opponentAI ? 'ON' : 'OFF';
-      document.getElementById('aiStatusText').className = opponentAI ? 'text-success' : 'text-danger';
+      const aiStatus = document.getElementById('aiStatusText');
+      if (aiStatus) {
+        aiStatus.textContent = opponentAI ? 'ON' : 'OFF';
+        aiStatus.className = opponentAI ? 'text-success' : 'text-danger';
+      }
       playSound('select');
-      if (opponentAI && currentTurn === (userPlaySide === 'white' ? 'black' : 'white') && !isGameOver) {
-        setTimeout(executeAIMove, 600);
+
+      const btn2P = document.getElementById('btnPlay2P');
+      const btnW = document.getElementById('btnPlayWhite');
+      const btnB = document.getElementById('btnPlayBlack');
+
+      if (!opponentAI) {
+        // AI is turned OFF: Player can move both sides freely (Pass & Play / Self-Play)
+        if (btn2P) {
+          btn2P.classList.add('active', 'btn-outline-warning');
+          btn2P.classList.remove('btn-outline-secondary', 'text-light');
+        }
+        if (btnW) {
+          btnW.classList.remove('active', 'btn-outline-warning');
+          btnW.classList.add('btn-outline-secondary', 'text-light');
+        }
+        if (btnB) {
+          btnB.classList.remove('active', 'btn-outline-warning');
+          btnB.classList.add('btn-outline-secondary', 'text-light');
+        }
+        addLogEntry('🎮 Opponent AI turned OFF. Both chessboards/armies can now be moved by the player for self-play.');
+        const activeSideName = currentTurn === 'white' ? 'Obsidian (White)' : 'Verdant (Black)';
+        updateGameplayHint(`👉 <strong>SELF-PLAY / PASS & PLAY:</strong> Opponent AI is OFF. You control both armies! It is ${activeSideName}'s turn. Click or drag to move.`, `SELF-PLAY: ${currentTurn.toUpperCase()}`);
+        document.getElementById('turnIndicator').textContent = `TURN: ${moveCount} (${currentTurn.toUpperCase()} • SELF-PLAY)`;
+        renderBoard();
+      } else {
+        // AI is turned back ON
+        if (userPlaySide === 'both') {
+          userPlaySide = 'white';
+        }
+        if (btnW && userPlaySide === 'white') {
+          btnW.classList.add('active', 'btn-outline-warning');
+          btnW.classList.remove('btn-outline-secondary', 'text-light');
+        }
+        if (btnB && userPlaySide === 'black') {
+          btnB.classList.add('active', 'btn-outline-warning');
+          btnB.classList.remove('btn-outline-secondary', 'text-light');
+        }
+        if (btn2P) {
+          btn2P.classList.remove('active', 'btn-outline-warning');
+          btn2P.classList.add('btn-outline-secondary', 'text-light');
+        }
+        addLogEntry('🤖 Opponent AI turned ON. Automated counter-play resumed.');
+        document.getElementById('turnIndicator').textContent = `TURN: ${moveCount} (${currentTurn.toUpperCase()})`;
+        renderBoard();
+
+        const isAITurn = (userPlaySide === 'white' && currentTurn === 'black') || (userPlaySide === 'black' && currentTurn === 'white');
+        if (isAITurn && !isGameOver) {
+          updateGameplayHint(`🤖 <strong>AI OPPONENT RESUMED:</strong> Calculating tactical response...`, 'AI TURN');
+          setTimeout(executeAIMove, 600);
+        } else if (!isGameOver) {
+          const sideName = currentTurn === 'white' ? 'Obsidian (White)' : 'Verdant (Black)';
+          updateGameplayHint(`👉 <strong>YOUR TURN (${currentTurn.toUpperCase()}):</strong> Click or drag any ${sideName} figurine to play.`, `PLAYER: ${currentTurn.toUpperCase()}`);
+        }
       }
     });
 

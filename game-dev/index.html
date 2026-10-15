@@ -6384,13 +6384,16 @@ playSoundBuffer('ultimate');`;
         label.textContent = 'ENABLED (Verdant Court)';
         label.className = 'text-success';
         document.getElementById('simStatusLog').textContent = 'Opponent AI counter-play enabled. Black pieces will respond!';
+        if (activeTurn === 'black' && !isGameOver) {
+          isThinkingAI = true;
+          setTimeout(makeOpponentAIMove, 650);
+        }
       } else {
         label.textContent = 'DISABLED (Sandbox Free-play)';
         label.className = 'text-warning';
         document.getElementById('simStatusLog').textContent = 'Sandbox Free-play enabled. Both sides can be controlled manually.';
+        isThinkingAI = false;
       }
-      activeTurn = 'white';
-      isThinkingAI = false;
       selectedCell = null;
       currentLegalMoves = [];
       renderBoard();
