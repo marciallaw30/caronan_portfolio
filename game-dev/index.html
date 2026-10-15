@@ -3223,7 +3223,7 @@
       return Boolean(p && p === p.toLowerCase());
     }
 
-    function findKing(color, board) {
+    function findKing(color, board = currentBoardState) {
       const kingChar = color === 'white' ? 'K' : 'k';
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
@@ -3233,21 +3233,165 @@
       return null;
     }
 
-    function isSquareAttacked(targetR, targetC, byColor, board) {
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          const p = board[r][c];
-          if (!p) continue;
-          if ((byColor === 'white' && isWhite(p)) || (byColor === 'black' && isBlack(p))) {
-            const moves = getLegalMoves(r, c, board);
-            if (moves.some(m => m.r === targetR && m.c === targetC)) return true;
+    // Positional Piece-Square Tables for 3D Board (8x8 arrays)
+    const PST_INDEX_PAWN = [
+      [  0,  0,  0,  0,  0,  0,  0,  0],
+      [ 50, 50, 50, 50, 50, 50, 50, 50],
+      [ 10, 10, 20, 30, 30, 20, 10, 10],
+      [  5,  5, 10, 25, 25, 10,  5,  5],
+      [  0,  0,  0, 20, 20,  0,  0,  0],
+      [  5, -5,-10,  0,  0,-10, -5,  5],
+      [  5, 10, 10,-20,-20, 10, 10,  5],
+      [  0,  0,  0,  0,  0,  0,  0,  0]
+    ];
+
+    const PST_INDEX_KNIGHT = [
+      [-50,-40,-30,-30,-30,-30,-40,-50],
+      [-40,-20,  0,  0,  0,  0,-20,-40],
+      [-30,  0, 10, 15, 15, 10,  0,-30],
+      [-30,  5, 15, 25, 25, 15,  5,-30],
+      [-30,  0, 15, 25, 25, 15,  0,-30],
+      [-30,  5, 10, 15, 15, 10,  5,-30],
+      [-40,-20,  0,  5,  5,  0,-20,-40],
+      [-50,-40,-30,-30,-30,-30,-40,-50]
+    ];
+
+    const PST_INDEX_BISHOP = [
+      [-20,-10,-10,-10,-10,-10,-10,-20],
+      [-10,  0,  0,  0,  0,  0,  0,-10],
+      [-10,  0,  5, 10, 10,  5,  0,-10],
+      [-10,  5,  5, 15, 15,  5,  5,-10],
+      [-10,  0, 10, 15, 15, 10,  0,-10],
+      [-10, 10, 10, 10, 10, 10, 10,-10],
+      [-10,  5,  0,  0,  0,  0,  5,-10],
+      [-20,-10,-10,-10,-10,-10,-10,-20]
+    ];
+
+    const PST_INDEX_ROOK = [
+      [  0,  0,  0,  0,  0,  0,  0,  0],
+      [  5, 10, 10, 10, 10, 10, 10,  5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [  0,  0,  0,  5,  5,  0,  0,  0]
+    ];
+
+    const PST_INDEX_QUEEN = [
+      [-20,-10,-10, -5, -5,-10,-10,-20],
+      [-10,  0,  0,  0,  0,  0,  0,-10],
+      [-10,  0,  5,  5,  5,  5,  0,-10],
+      [ -5,  0,  5,  5,  5,  5,  0, -5],
+      [  0,  0,  5,  5,  5,  5,  0, -5],
+      [-10,  5,  5,  5,  5,  5,  0,-10],
+      [-10,  0,  5,  0,  0,  0,  0,-10],
+      [-20,-10,-10, -5, -5,-10,-10,-20]
+    ];
+
+    const PST_INDEX_KING = [
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-20,-30,-30,-40,-40,-30,-30,-20],
+      [-10,-20,-20,-20,-20,-20,-20,-10],
+      [ 20, 20,  0,  0,  0,  0, 20, 20],
+      [ 20, 30, 10,  0,  0, 10, 30, 20]
+    ];
+
+    const PIECE_VALS_INDEX = {
+      p: 100,
+      n: 320,
+      b: 335,
+      r: 500,
+      q: 900,
+      k: 20000
+    };
+
+    function isSquareAttacked(targetR, targetC, byColor, board = currentBoardState) {
+      const isAttackerWhite = byColor === 'white';
+      const pawnChar = isAttackerWhite ? 'P' : 'p';
+      const knightChar = isAttackerWhite ? 'N' : 'n';
+      const bishopChar = isAttackerWhite ? 'B' : 'b';
+      const rookChar = isAttackerWhite ? 'R' : 'r';
+      const queenChar = isAttackerWhite ? 'Q' : 'q';
+      const kingChar = isAttackerWhite ? 'K' : 'k';
+
+      // 1. Attacked by Pawns
+      const pawnR = isAttackerWhite ? targetR + 1 : targetR - 1;
+      if (pawnR >= 0 && pawnR < 8) {
+        if (targetC - 1 >= 0 && board[pawnR][targetC - 1] === pawnChar) return true;
+        if (targetC + 1 < 8 && board[pawnR][targetC + 1] === pawnChar) return true;
+      }
+
+      // 2. Attacked by Knights
+      const knightOffsets = [
+        [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+        [1, -2], [1, 2], [2, -1], [2, 1]
+      ];
+      for (let i = 0; i < knightOffsets.length; i++) {
+        const nr = targetR + knightOffsets[i][0];
+        const nc = targetC + knightOffsets[i][1];
+        if (isInside(nr, nc)) {
+          if (board[nr][nc] === knightChar) return true;
+        }
+      }
+
+      // 3. Attacked by Kings
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue;
+          const nr = targetR + dr, nc = targetC + dc;
+          if (isInside(nr, nc)) {
+            if (board[nr][nc] === kingChar) return true;
           }
         }
       }
+
+      // 4. Attacked by Rooks / Queens (Orthogonal)
+      const orthDirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+      for (let i = 0; i < orthDirs.length; i++) {
+        let nr = targetR + orthDirs[i][0];
+        let nc = targetC + orthDirs[i][1];
+        while (isInside(nr, nc)) {
+          const p = board[nr][nc];
+          if (p !== '') {
+            if (p === rookChar || p === queenChar) return true;
+            break;
+          }
+          nr += orthDirs[i][0];
+          nc += orthDirs[i][1];
+        }
+      }
+
+      // 5. Attacked by Bishops / Queens (Diagonal)
+      const diagDirs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
+      for (let i = 0; i < diagDirs.length; i++) {
+        let nr = targetR + diagDirs[i][0];
+        let nc = targetC + diagDirs[i][1];
+        while (isInside(nr, nc)) {
+          const p = board[nr][nc];
+          if (p !== '') {
+            if (p === bishopChar || p === queenChar) return true;
+            break;
+          }
+          nr += diagDirs[i][0];
+          nc += diagDirs[i][1];
+        }
+      }
+
       return false;
     }
 
-    function getLegalMoves(r, c, board) {
+    function isKingInCheck(color, board = currentBoardState) {
+      const kingPos = findKing(color, board);
+      if (!kingPos) return false;
+      const enemyColor = color === 'white' ? 'black' : 'white';
+      return isSquareAttacked(kingPos.r, kingPos.c, enemyColor, board);
+    }
+
+    function getPseudoLegalMoves(r, c, board = currentBoardState) {
       const piece = board[r][c];
       if (!piece) return [];
       const moves = [];
@@ -3255,7 +3399,6 @@
       const type = piece.toUpperCase();
 
       if (type === 'P') {
-        // PAWN: 1 step forward, 2 steps from starting row, diagonal captures
         const dir = isW ? -1 : 1;
         const startRow = isW ? 6 : 1;
         if (isInside(r + dir, c) && board[r + dir][c] === '') {
@@ -3274,7 +3417,6 @@
           }
         });
       } else if (type === 'N') {
-        // KNIGHT: L-shaped hops over any intervening pieces (GDD Section IV)
         const hops = [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]];
         hops.forEach(([dr, dc]) => {
           const nr = r + dr, nc = c + dc;
@@ -3288,7 +3430,6 @@
           }
         });
       } else if (type === 'B') {
-        // BISHOP: Diagonal sweeps across open files
         const dirs = [[-1,-1],[-1,1],[1,-1],[1,1]];
         dirs.forEach(([dr, dc]) => {
           let step = 1;
@@ -3308,7 +3449,6 @@
           }
         });
       } else if (type === 'R') {
-        // ROOK: Orthogonal sweeps (GDD Section IV)
         const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
         dirs.forEach(([dr, dc]) => {
           let step = 1;
@@ -3328,7 +3468,6 @@
           }
         });
       } else if (type === 'Q') {
-        // QUEEN: Combined orthogonal and diagonal sweeps
         const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
         dirs.forEach(([dr, dc]) => {
           let step = 1;
@@ -3348,7 +3487,6 @@
           }
         });
       } else if (type === 'K') {
-        // KING: Single square in any direction
         const dirs = [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
         dirs.forEach(([dr, dc]) => {
           const nr = r + dr, nc = c + dc;
@@ -3364,6 +3502,252 @@
       }
 
       return moves;
+    }
+
+    function getLegalMoves(r, c, board = currentBoardState) {
+      const piece = board[r][c];
+      if (!piece) return [];
+      const pseudo = getPseudoLegalMoves(r, c, board);
+      const pieceColor = isWhite(piece) ? 'white' : 'black';
+      const legal = [];
+
+      for (let i = 0; i < pseudo.length; i++) {
+        const m = pseudo[i];
+        // Clone board
+        const nextBoard = board.map(row => [...row]);
+        // Apply move
+        nextBoard[m.r][m.c] = piece;
+        nextBoard[r][c] = '';
+        // Promotion simulation
+        if (piece === 'P' && m.r === 0) nextBoard[m.r][m.c] = 'Q';
+        if (piece === 'p' && m.r === 7) nextBoard[m.r][m.c] = 'q';
+
+        // Candidate move is strictly valid only if moving side's king is safe
+        if (!isKingInCheck(pieceColor, nextBoard)) {
+          legal.push(m);
+        }
+      }
+
+      return legal;
+    }
+
+    function getAllLegalMoves(color, board = currentBoardState) {
+      const allMoves = [];
+      const isW = color === 'white';
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = board[r][c];
+          if (!p) continue;
+          if ((isW && isWhite(p)) || (!isW && isBlack(p))) {
+            const legals = getLegalMoves(r, c, board);
+            for (let i = 0; i < legals.length; i++) {
+              const m = legals[i];
+              allMoves.push({
+                fromR: r,
+                fromC: c,
+                toR: m.r,
+                toC: m.c,
+                piece: p,
+                isCapture: m.isCapture,
+                target: board[m.r][m.c]
+              });
+            }
+          }
+        }
+      }
+      return allMoves;
+    }
+
+    function evaluateBoardIndex(board) {
+      let score = 0;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          const p = board[r][c];
+          if (!p) continue;
+          const isW = isWhite(p);
+          const type = p.toLowerCase();
+          const baseVal = PIECE_VALS_INDEX[type] || 0;
+
+          let pstVal = 0;
+          const tableRow = isW ? 7 - r : r;
+          const tableCol = c;
+          if (type === 'p') pstVal = PST_INDEX_PAWN[tableRow][tableCol];
+          else if (type === 'n') pstVal = PST_INDEX_KNIGHT[tableRow][tableCol];
+          else if (type === 'b') pstVal = PST_INDEX_BISHOP[tableRow][tableCol];
+          else if (type === 'r') pstVal = PST_INDEX_ROOK[tableRow][tableCol];
+          else if (type === 'q') pstVal = PST_INDEX_QUEEN[tableRow][tableCol];
+          else if (type === 'k') pstVal = PST_INDEX_KING[tableRow][tableCol];
+
+          const total = baseVal + pstVal;
+          if (isW) score -= total;
+          else score += total;
+        }
+      }
+      if (isKingInCheck('white', board)) score += 45;
+      if (isKingInCheck('black', board)) score -= 55;
+      return score;
+    }
+
+    function scoreMoveTacticsIndex(move, board, color) {
+      const isBlackSide = color === 'black';
+      const enemySide = isBlackSide ? 'white' : 'black';
+      const moverType = move.piece.toLowerCase();
+      const moverVal = PIECE_VALS_INDEX[moverType];
+      const targetPiece = board[move.toR][move.toC];
+      const targetVal = targetPiece ? PIECE_VALS_INDEX[targetPiece.toLowerCase()] : 0;
+
+      let score = 0;
+      const nextBoard = board.map(row => [...row]);
+      nextBoard[move.toR][move.toC] = move.piece;
+      nextBoard[move.fromR][move.fromC] = '';
+      if (move.piece === 'p' && move.toR === 7) nextBoard[move.toR][move.toC] = 'q';
+      if (move.piece === 'P' && move.toR === 0) nextBoard[move.toR][move.toC] = 'Q';
+
+      // 1. Instant checkmate
+      if (isKingInCheck(enemySide, nextBoard)) {
+        const enemyReplies = getAllLegalMoves(enemySide, nextBoard);
+        if (enemyReplies.length === 0) return 99999;
+        score += 50;
+      }
+
+      // 2. Destination square safety
+      const isDestAttacked = isSquareAttacked(move.toR, move.toC, enemySide, nextBoard);
+
+      // --- TACTICAL CAPTURE ("HOLDING TO EAT") ---
+      if (targetPiece) {
+        if (!isDestAttacked) {
+          score += targetVal * 1.6 + 50;
+        } else {
+          if (moverVal > targetVal) {
+            // "HOLD TO EAT": Refuse to trade Queen/Rook for defended pawn/knight
+            score -= (moverVal - targetVal) * 2.2 + 350;
+          } else if (moverVal < targetVal) {
+            score += (targetVal - moverVal) * 1.8 + 80;
+          } else {
+            score += 25;
+          }
+        }
+      } else {
+        if (isDestAttacked) score -= moverVal * 1.25;
+        const wasAttacked = isSquareAttacked(move.fromR, move.fromC, enemySide, board);
+        if (wasAttacked && !isDestAttacked) score += moverVal * 1.1;
+      }
+
+      // Center control
+      if ((move.toR === 3 || move.toR === 4) && (move.toC === 3 || move.toC === 4)) {
+        score += 20;
+      }
+
+      // Promotion
+      if (moverType === 'p') {
+        const promoRank = isBlackSide ? 7 : 0;
+        if (move.toR === promoRank) score += 850;
+        else if (Math.abs(move.toR - promoRank) === 1) score += 70;
+      }
+
+      // King evasion priority when King in check
+      if (moverType === 'k') {
+        if (isKingInCheck(color, board)) score += 260;
+      }
+
+      // Interposition priority (blocks checkmate)
+      if (moverType !== 'k' && isKingInCheck(color, board)) {
+        score += 230;
+      }
+
+      return score;
+    }
+
+    function minimaxSearchIndex(board, depth, alpha, beta, isMaximizing) {
+      const currentSide = isMaximizing ? 'black' : 'white';
+      const legalMoves = getAllLegalMoves(currentSide, board);
+
+      if (legalMoves.length === 0) {
+        if (isKingInCheck(currentSide, board)) {
+          return isMaximizing ? -100000 - depth : 100000 + depth;
+        }
+        return 0;
+      }
+
+      if (depth === 0) return evaluateBoardIndex(board);
+
+      for (let i = 0; i < legalMoves.length; i++) {
+        legalMoves[i].tScore = scoreMoveTacticsIndex(legalMoves[i], board, currentSide);
+      }
+      legalMoves.sort((a, b) => b.tScore - a.tScore);
+
+      if (isMaximizing) {
+        let maxEval = -Infinity;
+        for (let i = 0; i < legalMoves.length; i++) {
+          const m = legalMoves[i];
+          const nextBoard = board.map(row => [...row]);
+          nextBoard[m.toR][m.toC] = m.piece;
+          nextBoard[m.fromR][m.fromC] = '';
+          if (m.piece === 'p' && m.toR === 7) nextBoard[m.toR][m.toC] = 'q';
+
+          const evaluation = minimaxSearchIndex(nextBoard, depth - 1, alpha, beta, false);
+          maxEval = Math.max(maxEval, evaluation);
+          alpha = Math.max(alpha, evaluation);
+          if (beta <= alpha) break;
+        }
+        return maxEval;
+      } else {
+        let minEval = Infinity;
+        for (let i = 0; i < legalMoves.length; i++) {
+          const m = legalMoves[i];
+          const nextBoard = board.map(row => [...row]);
+          nextBoard[m.toR][m.toC] = m.piece;
+          nextBoard[m.fromR][m.fromC] = '';
+          if (m.piece === 'P' && m.toR === 0) nextBoard[m.toR][m.toC] = 'Q';
+
+          const evaluation = minimaxSearchIndex(nextBoard, depth - 1, alpha, beta, true);
+          minEval = Math.min(minEval, evaluation);
+          beta = Math.min(beta, evaluation);
+          if (beta <= alpha) break;
+        }
+        return minEval;
+      }
+    }
+
+    function findBestAIMoveIndex(color, board) {
+      const legalMoves = getAllLegalMoves(color, board);
+      if (legalMoves.length === 0) return null;
+
+      const inCheck = isKingInCheck(color, board);
+
+      for (let i = 0; i < legalMoves.length; i++) {
+        legalMoves[i].tacticalScore = scoreMoveTacticsIndex(legalMoves[i], board, color);
+      }
+      legalMoves.sort((a, b) => b.tacticalScore - a.tacticalScore);
+
+      if (legalMoves[0].tacticalScore >= 90000) {
+        return legalMoves[0];
+      }
+
+      let bestMove = legalMoves[0];
+      let bestScore = -Infinity;
+      let alpha = -Infinity;
+      const beta = Infinity;
+
+      for (let i = 0; i < legalMoves.length; i++) {
+        const m = legalMoves[i];
+        const nextBoard = board.map(row => [...row]);
+        nextBoard[m.toR][m.toC] = m.piece;
+        nextBoard[m.fromR][m.fromC] = '';
+        if (m.piece === 'p' && m.toR === 7) nextBoard[m.toR][m.toC] = 'q';
+
+        const evalScore = minimaxSearchIndex(nextBoard, 2, alpha, beta, false);
+        const combinedScore = evalScore + (m.tacticalScore * 0.45);
+
+        if (combinedScore > bestScore) {
+          bestScore = combinedScore;
+          bestMove = m;
+        }
+        alpha = Math.max(alpha, combinedScore);
+      }
+
+      bestMove.wasInCheck = inCheck;
+      return bestMove;
     }
 
     // Render Board & State (3D Planar Grid & Layered Dimensional Tokens)
@@ -4311,7 +4695,12 @@ playSoundBuffer('ultimate');`;
           });
 
           if (currentLegalMoves.length === 0) {
-            statusLog.textContent = `Selected ${lore.name} (${pieceIcons[piece] || piece}) at ${coordStr}, but it has no legal moves. Path is obstructed!`;
+            const kingInCheck = isKingInCheck(currentTurnColor, currentBoardState);
+            if (kingInCheck) {
+              statusLog.textContent = `Selected ${lore.name} at ${coordStr}, but it cannot resolve the check! You must move your King, interpose to block, or capture the checking threat.`;
+            } else {
+              statusLog.textContent = `Selected ${lore.name} (${pieceIcons[piece] || piece}) at ${coordStr}, but it has no legal moves. Path is obstructed or piece is pinned to protect your King!`;
+            }
           } else {
             statusLog.textContent = `Selected ${lore.name} at ${coordStr}. ${currentLegalMoves.length} legal squares highlighted.`;
           }
@@ -4359,7 +4748,12 @@ playSoundBuffer('ultimate');`;
         const validMove = currentLegalMoves.find(m => m.r === r && m.c === c);
         if (!validMove) {
           const movingLore = getPieceLore(movingPiece, faction);
-          statusLog.textContent = `Illegal move for ${movingLore.name}! Enforcing classical chess movement rules strictly.`;
+          const kingInCheck = isKingInCheck(currentTurnColor, currentBoardState);
+          if (kingInCheck) {
+            statusLog.textContent = `Illegal move! Sovereign Drake is in check! You must move your King, block the checkmate, or capture the attacker.`;
+          } else {
+            statusLog.textContent = `Illegal move for ${movingLore.name}! Enforcing classical chess movement rules strictly.`;
+          }
           return;
         }
 
@@ -4448,6 +4842,23 @@ playSoundBuffer('ultimate');`;
 
         // Handle Turn Alternation
         if (aiOpponentEnabled) {
+          const aiLegalMoves = getAllLegalMoves('black', currentBoardState);
+          const aiInCheck = isKingInCheck('black', currentBoardState);
+
+          if (aiLegalMoves.length === 0) {
+            if (aiInCheck) {
+              triggerVictoryCheckmate();
+              return;
+            } else {
+              isGameOver = true;
+              statusLog.innerHTML = '<strong class="text-warning fs-5">⚔️ STALEMATE! Verdant Court has no valid moves.</strong>';
+              return;
+            }
+          } else if (aiInCheck) {
+            playSound('check');
+            statusLog.innerHTML = `<span class="text-warning fw-bold">⚠️ CHECK! The Elder Dryad is under attack! Automation evaluating King evasion or interposing block!</span>`;
+          }
+
           document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (Verdant Court Thinking...)`;
           renderBoard();
           saveTimelineSnapshot(`Player 1 Move to ${coordStr}`);
@@ -4455,7 +4866,7 @@ playSoundBuffer('ultimate');`;
           // Initiate Black AI counter-move
           if (!isGameOver) {
             isThinkingAI = true;
-            statusLog.innerHTML = '<span class="text-info"><i class="bi bi-cpu-fill me-1"></i> Verdant Court AI computing counter-strategy...</span>';
+            statusLog.innerHTML = '<span class="text-info"><i class="bi bi-cpu-fill me-1"></i> Verdant Court AI computing tactical defense & holding tension...</span>';
             setTimeout(makeOpponentAIMove, 650);
           }
         } else {
@@ -4468,78 +4879,53 @@ playSoundBuffer('ultimate');`;
       }
     }
 
-    // Tactical Opponent AI (Verdant Court Response)
+    // Tactical Opponent AI (Verdant Court Response - Genius Tactical Evaluator)
     function makeOpponentAIMove() {
       if (isGameOver) {
         isThinkingAI = false;
         return;
       }
 
-      const allBlackMoves = [];
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          if (isBlack(currentBoardState[r][c])) {
-            const legal = getLegalMoves(r, c, currentBoardState);
-            legal.forEach(m => {
-              allBlackMoves.push({
-                fromR: r, fromC: c,
-                toR: m.r, toC: m.c,
-                piece: currentBoardState[r][c],
-                isCapture: m.isCapture,
-                target: currentBoardState[m.r][m.c]
-              });
-            });
-          }
-        }
-      }
+      const wasInCheck = isKingInCheck('black', currentBoardState);
+      const allBlackMoves = getAllLegalMoves('black', currentBoardState);
 
       if (allBlackMoves.length === 0) {
+        isThinkingAI = false;
+        if (wasInCheck) {
+          triggerVictoryCheckmate();
+        } else {
+          isGameOver = true;
+          document.getElementById('simStatusLog').innerHTML = '<strong class="text-warning fs-5">⚔️ STALEMATE! Verdant Court has no valid moves.</strong>';
+        }
+        return;
+      }
+
+      // Minimax Search with Tactical Exchange Safety ("Holding to Eat")
+      const chosen = findBestAIMoveIndex('black', currentBoardState);
+      if (!chosen) {
         isThinkingAI = false;
         triggerVictoryCheckmate();
         return;
       }
 
-      // Tactical Evaluation (King > Queen > Rook > Bishop/Knight > Pawn > Center Control)
-      const pieceVal = { 'K': 1000, 'Q': 90, 'R': 50, 'B': 30, 'N': 30, 'P': 10 };
-      allBlackMoves.forEach(m => {
-        let score = 0;
-        if (m.isCapture && m.target) {
-          score += (pieceVal[m.target.toUpperCase()] || 10) * 10;
-        }
-        // Center control (d4, d5, e4, e5)
-        if ((m.toR === 3 || m.toR === 4) && (m.toC === 3 || m.toC === 4)) {
-          score += 6;
-        }
-        // Pawn advancement
-        if (m.piece === 'p') {
-          score += m.toR * 2;
-          if (m.toR === 7) score += 80; // Promotion
-        }
-        // Slight organic variation
-        score += Math.random() * 2.5;
-        m.score = score;
-      });
-
-      allBlackMoves.sort((a, b) => b.score - a.score);
-
-      const chosen = allBlackMoves[0];
       const coordStr = `${String.fromCharCode(97 + chosen.toC)}${8 - chosen.toR}`;
       const fromCoordStr = `${String.fromCharCode(97 + chosen.fromC)}${8 - chosen.fromR}`;
       const targetPiece = currentBoardState[chosen.toR][chosen.toC];
       const aiLore = getPieceLore(chosen.piece, 'verdant');
+      const isMoverKing = chosen.piece === 'k';
 
       dispatchEngineAction('ai_think', {
         moveCount: allBlackMoves.length,
         chosenPiece: chosen.piece,
         targetCoord: coordStr,
-        score: `+${chosen.score.toFixed(1)}`
+        score: chosen.tacticalScore ? `+${chosen.tacticalScore.toFixed(1)}` : '+25.0'
       });
 
       currentBoardState[chosen.fromR][chosen.fromC] = '';
       currentBoardState[chosen.toR][chosen.toC] = chosen.piece;
       cellTerrains[chosen.toR][chosen.toC] = 'verdant';
 
-      // Black Pawn promotion to Queen
+      // Black Pawn promotion to Queen (The Forest Matriarch)
       if (chosen.piece === 'p' && chosen.toR === 7) {
         currentBoardState[chosen.toR][chosen.toC] = 'q';
       }
@@ -4547,7 +4933,19 @@ playSoundBuffer('ultimate');`;
       const moveList = document.getElementById('moveLogList');
       const logEntry = document.createElement('div');
 
-      if (chosen.isCapture) {
+      if (wasInCheck) {
+        if (isMoverKing) {
+          logEntry.innerHTML = `<span class="text-info font-mono">#${moveTurn}. Opponent Sovereign Dryad &rarr; ${coordStr}</span> <span class="badge bg-info text-dark font-mono" style="font-size:0.65rem;">KING EVASION</span> <span class="text-muted">(Check Escaped)</span>`;
+        } else if (chosen.isCapture) {
+          playSound('clash');
+          const playerFaction = document.getElementById('simKingdomSelect').value;
+          const targetLore = getPieceLore(targetPiece, playerFaction);
+          logEntry.innerHTML = `<span class="text-warning font-mono">#${moveTurn}. Opponent ${aiLore.name}x${coordStr}</span> <span class="badge bg-warning text-dark font-mono" style="font-size:0.65rem;">CHECK DEFENSE</span> <span class="text-muted">(${targetLore.name} Eradicated)</span>`;
+        } else {
+          playSound('move');
+          logEntry.innerHTML = `<span class="text-info font-mono">#${moveTurn}. Opponent ${aiLore.name} &rarr; ${coordStr}</span> <span class="badge bg-secondary font-mono" style="font-size:0.65rem;">INTERPOSITION</span> <span class="text-muted">(Checkmate Blocked)</span>`;
+        }
+      } else if (chosen.isCapture) {
         playSound('clash');
         const playerFaction = document.getElementById('simKingdomSelect').value;
         const targetLore = getPieceLore(targetPiece, playerFaction);
@@ -4581,12 +4979,25 @@ playSoundBuffer('ultimate');`;
 
       moveTurn++;
       document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (Your Move - Player 1)`;
-      document.getElementById('simStatusLog').textContent = `Opponent moved ${aiLore.name} to ${coordStr}. Select a unit for your turn!`;
 
-      // Check if Player King was captured
-      if (targetPiece && targetPiece.toUpperCase() === 'K') {
-        isGameOver = true;
-        document.getElementById('simStatusLog').innerHTML = '<strong class="text-danger fs-5">CHECKMATE! Allied King fallen. Verdant Court claims planar dominance.</strong>';
+      // Check if Player 1 (White) King is now under Check or Checkmate
+      const playerLegalMoves = getAllLegalMoves('white', currentBoardState);
+      const playerInCheck = isKingInCheck('white', currentBoardState);
+
+      if (playerLegalMoves.length === 0) {
+        if (playerInCheck) {
+          isGameOver = true;
+          document.getElementById('simStatusLog').innerHTML = '<strong class="text-danger fs-5">👑 CHECKMATE! Allied King fallen. Verdant Court claims planar dominance.</strong>';
+          playSound('ultimate');
+        } else {
+          isGameOver = true;
+          document.getElementById('simStatusLog').innerHTML = '<strong class="text-warning fs-5">⚔️ STALEMATE! No legal moves available for Allied Forces.</strong>';
+        }
+      } else if (playerInCheck) {
+        playSound('check');
+        document.getElementById('simStatusLog').innerHTML = `<span class="text-danger fw-bold fs-6">⚠️ CHECK! Sovereign Drake under siege! Move your King or block the checkmate!</span>`;
+      } else {
+        document.getElementById('simStatusLog').textContent = `Opponent moved ${aiLore.name} to ${coordStr}. Select a unit for your turn!`;
       }
 
       isThinkingAI = false;
