@@ -329,6 +329,371 @@
       font-weight: 700;
     }
 
+    /* ================= 📖 LIVING GRIMOIRE & BOOK PAGE FLIP READER ================= */
+    .kingdoms-book-stage {
+      position: relative;
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+      perspective: 2500px;
+      user-select: none;
+    }
+
+    .book-altar-glow {
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.12) 0%, rgba(168, 85, 247, 0.1) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: altarPulse 6s ease-in-out infinite alternate;
+    }
+    @keyframes altarPulse {
+      0% { opacity: 0.5; transform: scale(0.98); }
+      100% { opacity: 0.85; transform: scale(1.03); }
+    }
+
+    .grimoire-tome {
+      position: relative;
+      width: 100%;
+      min-height: 620px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #090614;
+      border-radius: 20px;
+      padding: 18px 22px;
+      box-shadow: 
+        0 35px 80px rgba(0, 0, 0, 0.95),
+        0 0 45px rgba(245, 158, 11, 0.22),
+        inset 0 0 35px rgba(0, 0, 0, 0.9);
+      border: 3px solid #b45309;
+      outline: 1.5px solid rgba(251, 191, 36, 0.65);
+      transform-style: preserve-3d;
+      z-index: 2;
+    }
+
+    /* Central Book Spine & Leather Ribbing */
+    .tome-spine {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 34px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, #05020a 0%, #1c142e 30%, #2a1c44 50%, #1c142e 70%, #05020a 100%);
+      box-shadow: 
+        inset 5px 0 10px rgba(0, 0, 0, 0.85),
+        inset -5px 0 10px rgba(0, 0, 0, 0.85),
+        0 0 20px rgba(0, 0, 0, 0.9);
+      z-index: 10;
+      border-left: 1px solid rgba(245, 158, 11, 0.35);
+      border-right: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    /* Embroidered Crimson/Gold Ribbon Bookmark */
+    .tome-ribbon {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: calc(100% + 42px);
+      background: linear-gradient(180deg, #dc2626 0%, #991b1b 80%, #7f1d1d 100%);
+      border-left: 1px solid #fbbf24;
+      border-right: 1px solid #fbbf24;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9);
+      z-index: 12;
+      pointer-events: none;
+      clip-path: polygon(0% 0%, 100% 0%, 100% 92%, 50% 100%, 0% 92%);
+    }
+
+    /* Grimoire Parchment Pages */
+    .tome-page {
+      position: relative;
+      background: linear-gradient(135deg, rgba(22, 18, 38, 0.96) 0%, rgba(13, 10, 24, 0.98) 100%);
+      border: 1.5px solid rgba(245, 158, 11, 0.35);
+      border-radius: 12px;
+      padding: 24px 26px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.85);
+      transition: all 0.35s ease;
+    }
+
+    .tome-page-left {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      margin-right: 18px;
+      box-shadow: inset -15px 0 25px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0, 0, 0, 0.85);
+    }
+
+    .tome-page-right {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+      margin-left: 18px;
+      box-shadow: inset 15px 0 25px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0, 0, 0, 0.85);
+    }
+
+    /* Golden Corner Brackets */
+    .page-corner-bracket {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-color: #fbbf24;
+      border-style: solid;
+      pointer-events: none;
+      opacity: 0.75;
+      z-index: 4;
+    }
+    .page-corner-bracket.top-left { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+    .page-corner-bracket.bottom-left { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
+    .page-corner-bracket.top-right { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
+    .page-corner-bracket.bottom-right { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+    /* The Living Realm Window Portal */
+    .tome-portal-frame {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #fbbf24;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(0, 0, 0, 0.7);
+      background: #020205;
+      cursor: crosshair;
+    }
+
+    .tome-living-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-origin: center center;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+      animation: kenBurnsLiving 18s ease-in-out infinite alternate;
+    }
+    @keyframes kenBurnsLiving {
+      0% { transform: scale(1.0) translate(0, 0); }
+      50% { transform: scale(1.08) translate(-1.5%, 1%); }
+      100% { transform: scale(1.04) translate(1.5%, -1%); }
+    }
+
+    .tome-living-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .portal-inner-glow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.9), inset 0 0 25px var(--portal-theme-glow, rgba(245, 158, 11, 0.4));
+      z-index: 4;
+      transition: box-shadow 0.5s ease;
+    }
+
+    .portal-weather-hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .hud-pill {
+      background: rgba(8, 6, 18, 0.88);
+      border: 1px solid rgba(245, 158, 11, 0.55);
+      color: #f1f5f9;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    }
+
+    .portal-touch-hint {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e2e8f0;
+      font-size: 0.68rem;
+      font-family: 'Fira Code', monospace;
+      padding: 2px 10px;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.85;
+      white-space: nowrap;
+    }
+
+    /* Illuminated Medieval Drop Cap */
+    .dropcap-illuminated {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%);
+      color: #000000;
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      border-radius: 6px;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.8);
+      flex-shrink: 0;
+    }
+
+    /* Interactive Page Corner Curl */
+    .page-corner-curl {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, transparent 50%, rgba(245, 158, 11, 0.35) 50%, #fbbf24 100%);
+      cursor: pointer;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 4px 6px;
+      color: #000000;
+      font-weight: 900;
+      font-size: 0.8rem;
+      border-top-left-radius: 12px;
+      box-shadow: -4px -4px 14px rgba(0, 0, 0, 0.6);
+      transition: all 0.25s ease;
+      z-index: 6;
+    }
+    .page-corner-curl:hover {
+      width: 62px;
+      height: 62px;
+      background: linear-gradient(135deg, transparent 45%, rgba(245, 158, 11, 0.6) 45%, #ffffff 100%);
+      box-shadow: -6px -6px 20px rgba(245, 158, 11, 0.8);
+    }
+
+    /* 3D Page Turn Flipper Animation */
+    .tome-page-turn-flipper {
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      right: 22px;
+      width: calc(50% - 22px);
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      pointer-events: none;
+      z-index: 25;
+      display: none;
+    }
+    .tome-page-turn-flipper.flipping-next {
+      display: block;
+      animation: flipNextPage 0.65s cubic-bezier(0.25, 0.95, 0.45, 1) forwards;
+    }
+    .tome-page-turn-flipper.flipping-prev {
+      display: block;
+      left: 22px;
+      right: auto;
+      transform-origin: right center;
+      animation: flipPrevPage 0.65s cubic-bezier(0.25, 0.95, 0.45, 1) forwards;
+    }
+    @keyframes flipNextPage {
+      0% { transform: rotateY(0deg); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+      50% { transform: rotateY(-90deg) scale(1.02); box-shadow: -20px 25px 50px rgba(0,0,0,0.85); }
+      100% { transform: rotateY(-180deg); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+    }
+    @keyframes flipPrevPage {
+      0% { transform: rotateY(0deg); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+      50% { transform: rotateY(90deg) scale(1.02); box-shadow: 20px 25px 50px rgba(0,0,0,0.85); }
+      100% { transform: rotateY(180deg); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
+    }
+
+    .flipper-face {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #1b162b 0%, #100b1c 100%);
+      border: 1.5px solid #fbbf24;
+      border-radius: 8px;
+      backface-visibility: hidden;
+      box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.8);
+    }
+    .flipper-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #120e20 0%, #1d182e 100%);
+    }
+
+    /* Page Navigation Folio Indicators */
+    .tome-folio-pill {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(18, 14, 32, 0.9);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tome-folio-pill:hover {
+      border-color: #fbbf24;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .tome-folio-pill.active {
+      background: #f59e0b;
+      border-color: #fbbf24;
+      color: #000000;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.8);
+      transform: scale(1.15);
+    }
+
+    /* Living Canvas for Cylinder Cards */
+    .cylinder-living-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 4;
+      border-radius: 16px;
+    }
+
+    /* Responsive Adaptation for Book Tome */
+    @media (max-width: 900px) {
+      .grimoire-tome {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        min-height: auto;
+      }
+      .tome-spine, .tome-ribbon {
+        display: none;
+      }
+      .tome-page-left, .tome-page-right {
+        margin: 0;
+        border-radius: 12px;
+      }
+      .tome-portal-frame {
+        height: 270px;
+      }
+    }
+
     /* ================= 3D CIRCULAR CYLINDER GALLERY FOR KINGDOMS ================= */
     .kingdoms-3d-stage-wrapper {
       position: relative;
@@ -1419,15 +1784,18 @@
           <!-- View Mode & Interactive Cylinder Controls -->
           <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mb-3">
             <div class="p-1 rounded-pill bg-dark bg-opacity-75 border border-secondary border-opacity-50 d-inline-flex gap-1">
-              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold active btn-mythic-gold" id="btnView3DCylinder">
-                <i class="bi bi-arrow-repeat me-1"></i> 3D Circular Gallery View
+              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold active btn-mythic-gold" id="btnViewGrimoireBook">
+                <i class="bi bi-book-half me-1"></i> 📖 Living Grimoire (Book Folio)
+              </button>
+              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold text-light btn-outline-secondary" id="btnView3DCylinder">
+                <i class="bi bi-arrow-repeat me-1"></i> 🌀 3D Arc Gallery
               </button>
               <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold text-light btn-outline-secondary" id="btnViewGrid">
-                <i class="bi bi-grid-3x3-gap-fill me-1"></i> Tactical Grid View
+                <i class="bi bi-grid-3x3-gap-fill me-1"></i> 📋 Tactical Grid
               </button>
             </div>
 
-            <div class="d-flex align-items-center gap-2 ms-md-3">
+            <div class="d-flex align-items-center gap-2 ms-md-3 d-none" id="cylinderControlsCluster">
               <button class="btn btn-sm btn-outline-secondary text-light rounded-pill px-3" id="btnCylinderRotateToggle">
                 <i class="bi bi-pause-fill me-1" id="cylinderRotateIcon"></i> <span id="cylinderRotateLabel">Pause Auto-Rotate</span>
               </button>
@@ -1452,8 +1820,156 @@
           </div>
         </div>
 
-        <!-- 3D Cylindrical Gallery Stage -->
-        <div id="kingdoms3DStageWrapper" class="kingdoms-3d-stage-wrapper position-relative mb-4">
+        <!-- 📖 LIVING GRIMOIRE BOOK FOLIO CONTAINER (DEFAULT PRIMARY VIEW) -->
+        <div id="kingdomsBookStage" class="kingdoms-book-stage position-relative mb-5">
+          <!-- Ambient Altar Glow -->
+          <div class="book-altar-glow"></div>
+
+          <!-- Open Grimoire Tome -->
+          <div class="grimoire-tome" id="grimoireTome">
+            <!-- Spine with Ribbon Bookmark -->
+            <div class="tome-spine">
+              <div class="tome-ribbon"></div>
+            </div>
+
+            <!-- Left Page: The Living Realm Window Portal -->
+            <div class="tome-page tome-page-left" id="tomePageLeft">
+              <div class="page-corner-bracket top-left"></div>
+              <div class="page-corner-bracket bottom-left"></div>
+              
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="font-mono text-warning text-uppercase small fw-bold" id="tomePageFolioLabel">FOLIO VI • KINGDOM CODEX</span>
+                <span class="badge bg-dark border border-secondary text-info font-mono" id="tomeCategoryBadge">Ice &amp; Lightning</span>
+              </div>
+
+              <!-- Living Realm Moving Window Portal -->
+              <div class="tome-portal-frame" id="tomePortalFrame">
+                <div class="portal-inner-glow" id="portalInnerGlow"></div>
+                <img id="tomeKingdomImg" class="tome-living-img" src="" alt="Kingdom Landscape">
+                <canvas id="tomeLivingCanvas" class="tome-living-canvas"></canvas>
+                
+                <!-- Floating Weather / Realm Status Badges -->
+                <div class="portal-weather-hud">
+                  <span class="hud-pill" id="tomeWeatherBadge"><i class="bi bi-lightning-charge-fill text-warning me-1"></i> Thunderstorm Active</span>
+                  <span class="hud-pill ms-auto" id="tomeTimeOfDayBadge">Temporal Shift: Night</span>
+                </div>
+
+                <div class="portal-touch-hint">
+                  <i class="bi bi-cursor-fill me-1"></i> Hover cursor over portal to stir environment
+                </div>
+              </div>
+
+              <!-- Trait Snapshot Banner on Left Page -->
+              <div class="mt-3 p-3 rounded-3 bg-black bg-opacity-50 border border-warning border-opacity-30">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fs-4" id="tomeIconLeft">⚡</span>
+                    <div>
+                      <div class="fw-bold text-white font-title" id="tomeNameLeft" style="font-size: 1.05rem;">The Fulminating Spire</div>
+                      <div class="small text-warning font-mono" id="tomeElementLeft">Lightning &amp; Storm Energy</div>
+                    </div>
+                  </div>
+                  <span class="badge bg-danger bg-opacity-75 text-white font-mono small" id="tomeCatalystLeft">
+                    <i class="bi bi-heart-pulse-fill me-1"></i> Hyperactive Impatience
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Page: Royal Hierarchy, Realm Traits & Codex Mechanics -->
+            <div class="tome-page tome-page-right" id="tomePageRight">
+              <div class="page-corner-bracket top-right"></div>
+              <div class="page-corner-bracket bottom-right"></div>
+
+              <!-- Right Page Header -->
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="font-mono text-muted small"><i class="bi bi-book-half me-1"></i> Mythic Gambit GDD Tome</span>
+                <span class="font-mono text-warning small fw-bold" id="tomePageNumber">PAGE 6 OF 15</span>
+              </div>
+
+              <!-- Illuminated Title & Subtitle -->
+              <div class="mb-3 border-bottom border-warning border-opacity-25 pb-2">
+                <h3 class="h4 fw-bold font-title text-white mb-1 d-flex align-items-center gap-2">
+                  <span class="dropcap-illuminated" id="tomeDropcap">F</span>
+                  <span id="tomeKingdomTitleRight">The Fulminating Spire</span>
+                </h3>
+                <p class="small text-secondary mb-0 font-mono" id="tomeSubheadingRight">
+                  High-voltage atmospheric domain governed by restless storm monarchs and arc lightning.
+                </p>
+              </div>
+
+              <!-- Royal Unit Hierarchy -->
+              <div class="mb-2">
+                <div class="small fw-bold text-warning font-mono text-uppercase mb-1">
+                  <i class="bi bi-crown me-1"></i> Sovereign Unit Hierarchy
+                </div>
+                <div class="p-2 rounded-3 bg-black bg-opacity-50 border border-secondary border-opacity-40 font-mono small text-light" id="tomeHierarchyBox" style="font-size: 0.76rem; line-height: 1.6;">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- Tactical Realm Trait -->
+              <div class="mb-2">
+                <div class="small fw-bold text-info font-mono text-uppercase mb-1">
+                  <i class="bi bi-shield-shaded me-1"></i> Tactical Realm Trait
+                </div>
+                <div class="p-2 rounded-3 bg-info bg-opacity-10 border border-info border-opacity-40 small text-light" id="tomePassiveBox" style="font-size: 0.8rem; line-height: 1.5;">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- Sovereign Queen Ultimate Execution -->
+              <div class="mb-3">
+                <div class="small fw-bold text-danger font-mono text-uppercase mb-1">
+                  <i class="bi bi-stars me-1"></i> Sovereign Queen Ultimate
+                </div>
+                <div class="p-2 rounded-3 bg-danger bg-opacity-10 border border-danger border-opacity-40 small text-light" id="tomeUltimateBox" style="font-size: 0.8rem; line-height: 1.5;">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- Page Actions: Soundscape + Play Simulator CTA -->
+              <div class="d-flex align-items-center gap-2 flex-wrap pt-2 border-top border-secondary border-opacity-25 mt-auto">
+                <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3 font-mono" id="btnTomePlayAudio">
+                  <i class="bi bi-volume-up-fill me-1"></i> <span id="tomeAudioLabel">Play Soundscape</span>
+                </button>
+                <a id="btnTomeLaunchSim" href="simulator.html" target="_blank" class="btn btn-sm btn-mythic-gold rounded-pill px-3 font-mono ms-auto">
+                  <i class="bi bi-controller me-1"></i> Deploy in 3D Simulator &rarr;
+                </a>
+              </div>
+
+              <!-- Interactive Corner Page Turn Curl -->
+              <div class="page-corner-curl" id="tomePageCornerCurl" title="Click to turn to next page">
+                <span>❯</span>
+              </div>
+            </div>
+
+            <!-- Flipping 3D Page Overlay for Realistic Turn -->
+            <div class="tome-page-turn-flipper" id="tomePageFlipper">
+              <div class="flipper-face flipper-front"></div>
+              <div class="flipper-face flipper-back"></div>
+            </div>
+          </div>
+
+          <!-- Book Nav Controls (Previous / Next / Quick Jump Tabs) -->
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4 px-2">
+            <button class="btn btn-mythic-outline rounded-pill px-4 py-2 font-mono" id="btnTomePrevPage">
+              <i class="bi bi-arrow-left-circle-fill me-2"></i> ❮ Previous Folio
+            </button>
+
+            <!-- Quick Jump Page Folio Indicator Pills -->
+            <div class="d-flex align-items-center gap-1 flex-wrap justify-content-center" id="tomeFolioPills">
+              <!-- 1..15 pills injected via JS -->
+            </div>
+
+            <button class="btn btn-mythic-gold rounded-pill px-4 py-2 font-mono" id="btnTomeNextPage">
+              Next Folio ❯ <i class="bi bi-arrow-right-circle-fill ms-2"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3D Cylindrical Gallery Stage (Secondary Alternate View) -->
+        <div id="kingdoms3DStageWrapper" class="kingdoms-3d-stage-wrapper position-relative mb-4 d-none">
           <div class="position-absolute top-0 start-0 m-3 z-3 badge bg-dark bg-opacity-75 border border-secondary text-info font-mono small d-flex align-items-center gap-2">
             <span class="spinner-grow spinner-grow-sm text-warning" role="status"></span>
             <span id="cylinderFacingLabel">Facing: The Obsidian Roost 🔥</span>
@@ -2564,6 +3080,626 @@
       }
     ];
 
+    // ================= ⛈️ PROCEDURAL ALIVE MOVING ENVIRONMENT ENGINE =================
+    class KingdomLivingFX {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.animId = null;
+        this.particles = [];
+        this.kingdomId = 'fulminating';
+        this.mouseX = -1;
+        this.mouseY = -1;
+        this.time = 0;
+        this.lightningTimer = 0;
+        this.lightningBolts = [];
+        this.ambientFlash = 0;
+        this.auroraWave = 0;
+        this.gearAngle = 0;
+
+        this.initCanvasSize();
+        window.addEventListener('resize', () => this.initCanvasSize());
+
+        const frame = canvas.parentElement;
+        if (frame) {
+          frame.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            this.mouseX = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+            this.mouseY = (e.clientY - rect.top) * (this.canvas.height / rect.height);
+            this.handleMouseStir();
+          });
+          frame.addEventListener('mouseleave', () => {
+            this.mouseX = -1;
+            this.mouseY = -1;
+          });
+        }
+      }
+
+      initCanvasSize() {
+        if (!this.canvas) return;
+        const rect = this.canvas.getBoundingClientRect();
+        this.width = rect.width || 480;
+        this.height = rect.height || 350;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+      }
+
+      setKingdom(id) {
+        this.kingdomId = id;
+        this.particles = [];
+        this.lightningBolts = [];
+        this.ambientFlash = 0;
+        this.initCanvasSize();
+        this.seedParticles();
+      }
+
+      seedParticles() {
+        const count = 45;
+        for (let i = 0; i < count; i++) {
+          this.particles.push(this.createParticle(true));
+        }
+      }
+
+      createParticle(initial = false) {
+        const w = this.width || 480, h = this.height || 350;
+        const k = this.kingdomId;
+        const p = {
+          x: Math.random() * w,
+          y: initial ? Math.random() * h : h + 10,
+          vx: (Math.random() - 0.5) * 0.8,
+          vy: -0.8 - Math.random() * 1.5,
+          size: Math.random() * 3 + 1.5,
+          alpha: Math.random() * 0.7 + 0.3,
+          maxLife: 90 + Math.random() * 120,
+          life: initial ? Math.random() * 90 : 0,
+          color: '#ffffff',
+          angle: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.05,
+          seed: Math.random() * 100
+        };
+
+        if (k === 'fulminating') {
+          p.color = Math.random() < 0.35 ? '#ffffff' : (Math.random() < 0.7 ? '#c084fc' : '#38bdf8');
+          p.vy = (Math.random() - 0.5) * 2.2;
+          p.vx = (Math.random() - 0.5) * 2.2;
+          p.size = Math.random() * 2.5 + 1;
+        } else if (k === 'obsidian' || k === 'iron-anvil' || k === 'iron-tusk') {
+          p.color = Math.random() < 0.4 ? '#fbbf24' : (Math.random() < 0.75 ? '#f97316' : '#ef4444');
+          p.y = initial ? Math.random() * h : h + 5;
+          p.vy = -1.2 - Math.random() * 2.4;
+          p.size = Math.random() * 3.5 + 1.5;
+        } else if (k === 'frostbound') {
+          p.color = '#ffffff';
+          p.y = initial ? Math.random() * h : -10;
+          p.vx = 1.0 + Math.random() * 2.0;
+          p.vy = 1.4 + Math.random() * 2.6;
+          p.size = Math.random() * 3.5 + 1.2;
+        } else if (k === 'gossamer' || k === 'verdant') {
+          p.color = Math.random() < 0.4 ? '#4ade80' : (Math.random() < 0.75 ? '#38bdf8' : '#f472b6');
+          p.size = Math.random() * 4 + 2;
+          p.vy = (Math.random() - 0.5) * 0.8;
+          p.vx = (Math.random() - 0.5) * 0.8;
+        } else if (k === 'abyssal-tides') {
+          p.color = 'rgba(56, 189, 248, 0.75)';
+          p.y = initial ? Math.random() * h : h + 10;
+          p.vy = -0.9 - Math.random() * 1.6;
+          p.size = Math.random() * 4.5 + 2;
+        } else if (k === 'sun-sand') {
+          p.color = Math.random() < 0.5 ? '#fbbf24' : '#d97706';
+          p.x = initial ? Math.random() * w : -10;
+          p.vx = 4.5 + Math.random() * 5.5;
+          p.vy = 0.2 + Math.random() * 0.8;
+          p.size = Math.random() * 2.5 + 1;
+        } else if (k === 'grave-bound' || k === 'sanguine') {
+          p.color = k === 'sanguine' ? '#fb7185' : '#34d399';
+          p.y = initial ? Math.random() * h : h + 10;
+          p.vy = -0.6 - Math.random() * 1.4;
+          p.size = Math.random() * 4 + 2;
+        } else if (k === 'abyssal-veil') {
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.random() * (w * 0.45);
+          p.x = w * 0.5 + Math.cos(angle) * dist;
+          p.y = h * 0.5 + Math.sin(angle) * dist;
+          p.color = Math.random() < 0.5 ? '#c084fc' : '#a855f7';
+          p.size = Math.random() * 3 + 1;
+        }
+        return p;
+      }
+
+      handleMouseStir() {
+        if (this.mouseX < 0 || this.mouseY < 0) return;
+        if (this.kingdomId === 'fulminating') {
+          if (Math.random() < 0.28) {
+            this.generateLightningTo(this.mouseX, this.mouseY);
+          }
+        } else if (this.kingdomId === 'obsidian' || this.kingdomId === 'iron-anvil') {
+          for (let i = 0; i < 3; i++) {
+            this.particles.push({
+              x: this.mouseX + (Math.random() - 0.5) * 20,
+              y: this.mouseY + (Math.random() - 0.5) * 20,
+              vx: (Math.random() - 0.5) * 4,
+              vy: -2 - Math.random() * 3,
+              size: Math.random() * 4 + 2,
+              alpha: 1,
+              life: 0,
+              maxLife: 60,
+              color: '#fef08a',
+              seed: Math.random() * 10
+            });
+          }
+        }
+      }
+
+      generateLightning() {
+        const startX = this.width * (0.2 + Math.random() * 0.6);
+        const startY = 0;
+        const endX = startX + (Math.random() - 0.5) * (this.width * 0.4);
+        const endY = this.height * (0.7 + Math.random() * 0.3);
+        this.generateLightningPath(startX, startY, endX, endY);
+      }
+
+      generateLightningTo(targetX, targetY) {
+        const startX = this.width * (0.3 + Math.random() * 0.4);
+        const startY = 0;
+        this.generateLightningPath(startX, startY, targetX, targetY);
+      }
+
+      generateLightningPath(startX, startY, endX, endY) {
+        const segments = [];
+        let curX = startX, curY = startY;
+        const steps = 14;
+        const dx = (endX - startX) / steps;
+        const dy = (endY - startY) / steps;
+
+        segments.push({ x: curX, y: curY });
+        for (let i = 1; i <= steps; i++) {
+          curX += dx + (Math.random() - 0.5) * 36;
+          curY += dy;
+          segments.push({ x: curX, y: curY });
+        }
+
+        this.lightningBolts.push({
+          segments,
+          life: 1.0,
+          color: Math.random() < 0.4 ? '#ffffff' : '#e9d5ff'
+        });
+        this.ambientFlash = 0.75;
+      }
+
+      start() {
+        if (this.animId) cancelAnimationFrame(this.animId);
+        const loop = () => {
+          this.update();
+          this.render();
+          this.animId = requestAnimationFrame(loop);
+        };
+        this.animId = requestAnimationFrame(loop);
+      }
+
+      stop() {
+        if (this.animId) cancelAnimationFrame(this.animId);
+        this.animId = null;
+      }
+
+      update() {
+        this.time += 0.03;
+        const w = this.width || 480, h = this.height || 350;
+        const k = this.kingdomId;
+
+        // Fulminating Spire periodic lightning strikes
+        if (k === 'fulminating') {
+          this.lightningTimer++;
+          if (this.lightningTimer > 80 && Math.random() < 0.03) {
+            this.generateLightning();
+            this.lightningTimer = 0;
+          }
+        }
+
+        // Update lightning bolts
+        for (let i = this.lightningBolts.length - 1; i >= 0; i--) {
+          const bolt = this.lightningBolts[i];
+          bolt.life -= 0.12;
+          if (bolt.life <= 0) this.lightningBolts.splice(i, 1);
+        }
+
+        if (this.ambientFlash > 0) {
+          this.ambientFlash = Math.max(0, this.ambientFlash - 0.05);
+        }
+
+        this.gearAngle += 0.015;
+        this.auroraWave += 0.02;
+
+        // Update particles
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.life++;
+
+          if (k === 'abyssal-veil') {
+            const cx = w * 0.5, cy = h * 0.5;
+            const dx = cx - p.x, dy = cy - p.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 8 || p.life > p.maxLife) {
+              this.particles[i] = this.createParticle(false);
+              continue;
+            }
+            const tangentX = -dy / dist;
+            const tangentY = dx / dist;
+            p.x += (dx / dist) * 1.2 + tangentX * 2.2;
+            p.y += (dy / dist) * 1.2 + tangentY * 2.2;
+          } else if (k === 'gossamer') {
+            p.x += p.vx + Math.sin(this.time + p.seed) * 0.8;
+            p.y += p.vy + Math.cos(this.time * 0.8 + p.seed) * 0.6;
+          } else {
+            p.x += p.vx;
+            p.y += p.vy;
+          }
+
+          if (p.life > p.maxLife || p.y < -20 || p.y > h + 20 || p.x < -20 || p.x > w + 20) {
+            this.particles[i] = this.createParticle(false);
+          }
+        }
+      }
+
+      render() {
+        const ctx = this.ctx;
+        if (!ctx) return;
+        const w = this.width || 480, h = this.height || 350;
+        const k = this.kingdomId;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Ambient flash for lightning
+        if (this.ambientFlash > 0) {
+          ctx.save();
+          ctx.fillStyle = `rgba(216, 180, 254, ${this.ambientFlash * 0.38})`;
+          ctx.fillRect(0, 0, w, h);
+          ctx.restore();
+        }
+
+        // Kingdom-specific environmental backdrops
+        if (k === 'obsidian' || k === 'iron-anvil') {
+          const magmaGrad = ctx.createLinearGradient(0, h, 0, h - 130);
+          const magmaPulse = 0.28 + Math.sin(this.time * 1.8) * 0.12;
+          magmaGrad.addColorStop(0, `rgba(239, 68, 68, ${magmaPulse})`);
+          magmaGrad.addColorStop(0.6, `rgba(245, 158, 11, ${magmaPulse * 0.5})`);
+          magmaGrad.addColorStop(1, 'transparent');
+          ctx.fillStyle = magmaGrad;
+          ctx.fillRect(0, h - 130, w, 130);
+        } else if (k === 'frostbound') {
+          ctx.save();
+          ctx.globalAlpha = 0.22 + Math.sin(this.auroraWave) * 0.08;
+          const auroraGrad = ctx.createLinearGradient(0, 0, w, 80);
+          auroraGrad.addColorStop(0, '#22c55e');
+          auroraGrad.addColorStop(0.5, '#38bdf8');
+          auroraGrad.addColorStop(1, '#a855f7');
+          ctx.strokeStyle = auroraGrad;
+          ctx.lineWidth = 14;
+          ctx.beginPath();
+          ctx.moveTo(0, 40 + Math.sin(this.auroraWave) * 15);
+          ctx.bezierCurveTo(w * 0.33, 20 + Math.cos(this.auroraWave) * 18, w * 0.66, 60 + Math.sin(this.auroraWave * 1.2) * 15, w, 35);
+          ctx.stroke();
+          ctx.restore();
+        } else if (k === 'gearwork') {
+          const gears = [
+            { x: 0.85, y: 0.22, r: 42, teeth: 12, speed: 0.008, color: '#f59e0b' },
+            { x: 0.72, y: 0.32, r: 26, teeth: 8, speed: -0.013, color: '#d97706' },
+            { x: 0.62, y: 0.24, r: 18, teeth: 6, speed: 0.019, color: '#fbbf24' }
+          ];
+          gears.forEach(g => {
+            this.drawGear(ctx, w * g.x, h * g.y, g.r, g.teeth, this.gearAngle * (g.speed / 0.01), g.color);
+          });
+        } else if (k === 'abyssal-veil') {
+          ctx.save();
+          const cx = w * 0.5, cy = h * 0.5;
+          ctx.strokeStyle = 'rgba(192, 132, 252, 0.45)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(cx, cy, 28 + Math.sin(this.time * 2) * 4, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Draw lightning bolts
+        this.lightningBolts.forEach(bolt => {
+          ctx.save();
+          ctx.shadowBlur = 18;
+          ctx.shadowColor = '#c084fc';
+          ctx.strokeStyle = bolt.color;
+          ctx.lineWidth = 2.4 * bolt.life;
+          ctx.globalAlpha = bolt.life;
+          ctx.beginPath();
+          bolt.segments.forEach((pt, idx) => {
+            if (idx === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+          });
+          ctx.stroke();
+          ctx.restore();
+        });
+
+        // Draw Particles
+        this.particles.forEach(p => {
+          ctx.save();
+          const progress = p.life / p.maxLife;
+          const alpha = p.alpha * (progress < 0.2 ? progress / 0.2 : (1 - progress));
+          ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+
+          if (k === 'gossamer') {
+            const haloGrad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2.8);
+            haloGrad.addColorStop(0, p.color);
+            haloGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = haloGrad;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * 2.8, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (k === 'verdant') {
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.ellipse(p.x, p.y, p.size * 1.4, p.size * 0.7, p.angle, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (k === 'abyssal-tides') {
+            ctx.strokeStyle = p.color;
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(p.x - p.size * 0.3, p.y - p.size * 0.3, p.size * 0.25, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.fillStyle = p.color;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        });
+      }
+
+      drawGear(ctx, cx, cy, radius, teeth, angle, color) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(angle);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.8;
+        ctx.globalAlpha = 0.45;
+
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        for (let i = 0; i < teeth; i++) {
+          const a = (i / teeth) * Math.PI * 2;
+          const toothLength = radius * 0.22;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(a) * radius, Math.sin(a) * radius);
+          ctx.lineTo(Math.cos(a) * (radius + toothLength), Math.sin(a) * (radius + toothLength));
+          ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.35, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    // ================= 📖 LIVING GRIMOIRE BOOK CONTROLLER =================
+    let grimoireBookIndex = 5; // Default: The Fulminating Spire ⚡ (as in user screenshot)
+    let grimoireLivingFX = null;
+    let grimoireFilteredData = [...kingdomsData];
+
+    const REALM_WEATHER_STATUS = {
+      'fulminating': { text: 'Thunderstorm & Lightning', icon: 'bi-lightning-charge-fill text-warning' },
+      'obsidian': { text: 'Magma Heat Haze Active', icon: 'bi-fire text-danger' },
+      'frostbound': { text: 'Glacial Permafrost Blizzard', icon: 'bi-snow text-info' },
+      'gossamer': { text: 'Fae Luminescence Active', icon: 'bi-stars text-warning' },
+      'abyssal-tides': { text: 'Oceanic Tidal Deluge', icon: 'bi-water text-primary' },
+      'verdant': { text: 'Primeval Ley-line Surge', icon: 'bi-tree-fill text-success' },
+      'iron-anvil': { text: 'Industrial Forge Steam', icon: 'bi-hammer text-warning' },
+      'titan': { text: 'Seismic Tectonic Tremors', icon: 'bi-shield-shaded text-warning' },
+      'sanguine': { text: 'Blood Moon Eclipse', icon: 'bi-droplet-fill text-danger' },
+      'howling': { text: 'Lunar Mist & Pack Call', icon: 'bi-moon-stars-fill text-light' },
+      'abyssal-veil': { text: 'Void Singularity Active', icon: 'bi-record-circle-fill text-purple' },
+      'gearwork': { text: 'Clockwork Overclock Drive', icon: 'bi-gear-wide-connected text-warning' },
+      'sun-sand': { text: 'Desert Sandstorm & Mirage', icon: 'bi-brightness-high-fill text-warning' },
+      'grave-bound': { text: 'Necrotic Soul Well Rise', icon: 'bi-skull-fill text-success' },
+      'iron-tusk': { text: 'War Horde Battle Smoke', icon: 'bi-slash-circle text-danger' }
+    };
+
+    function initGrimoireBook() {
+      const canvas = document.getElementById('tomeLivingCanvas');
+      if (canvas) {
+        grimoireLivingFX = new KingdomLivingFX(canvas);
+        grimoireLivingFX.start();
+      }
+
+      // Generate Folio Quick Jump Pills
+      renderTomeFolioPills();
+
+      // Navigation Buttons
+      const btnPrev = document.getElementById('btnTomePrevPage');
+      const btnNext = document.getElementById('btnTomeNextPage');
+      const cornerCurl = document.getElementById('tomePageCornerCurl');
+
+      if (btnPrev) btnPrev.addEventListener('click', flipToPrevFolio);
+      if (btnNext) btnNext.addEventListener('click', flipToNextFolio);
+      if (cornerCurl) cornerCurl.addEventListener('click', flipToNextFolio);
+
+      // Keyboard left/right arrow navigation
+      window.addEventListener('keydown', (e) => {
+        const bookStage = document.getElementById('kingdomsBookStage');
+        if (bookStage && !bookStage.classList.contains('d-none')) {
+          if (e.key === 'ArrowRight') flipToNextFolio();
+          else if (e.key === 'ArrowLeft') flipToPrevFolio();
+        }
+      });
+
+      // Soundscape button
+      const btnAudio = document.getElementById('btnTomePlayAudio');
+      if (btnAudio) {
+        btnAudio.addEventListener('click', () => {
+          const k = grimoireFilteredData[grimoireBookIndex];
+          if (k) {
+            playKingdomSoundscape(k.id);
+            const lbl = document.getElementById('tomeAudioLabel');
+            if (lbl) {
+              lbl.textContent = 'Playing...';
+              setTimeout(() => { lbl.textContent = 'Play Soundscape'; }, 2400);
+            }
+          }
+        });
+      }
+
+      renderGrimoirePage(grimoireBookIndex);
+    }
+
+    function renderTomeFolioPills() {
+      const container = document.getElementById('tomeFolioPills');
+      if (!container) return;
+      container.innerHTML = '';
+      kingdomsData.forEach((k, idx) => {
+        const pill = document.createElement('div');
+        pill.className = `tome-folio-pill ${idx === grimoireBookIndex ? 'active' : ''}`;
+        pill.textContent = idx + 1;
+        pill.title = `${idx + 1}. ${k.name} (${k.element})`;
+        pill.addEventListener('click', () => {
+          if (idx !== grimoireBookIndex) {
+            const dir = idx > grimoireBookIndex ? 'next' : 'prev';
+            grimoireBookIndex = idx;
+            renderGrimoirePage(idx, dir);
+          }
+        });
+        container.appendChild(pill);
+      });
+    }
+
+    function flipToNextFolio() {
+      const count = grimoireFilteredData.length;
+      if (count === 0) return;
+      const nextIdx = (grimoireBookIndex + 1) % count;
+      grimoireBookIndex = nextIdx;
+      renderGrimoirePage(nextIdx, 'next');
+    }
+
+    function flipToPrevFolio() {
+      const count = grimoireFilteredData.length;
+      if (count === 0) return;
+      const prevIdx = (grimoireBookIndex - 1 + count) % count;
+      grimoireBookIndex = prevIdx;
+      renderGrimoirePage(prevIdx, 'prev');
+    }
+
+    function renderGrimoirePage(index, animateDir = null) {
+      if (index < 0 || index >= grimoireFilteredData.length) return;
+      const k = grimoireFilteredData[index];
+
+      // 3D Page Turn Animation
+      const flipper = document.getElementById('tomePageFlipper');
+      if (flipper && animateDir) {
+        flipper.className = `tome-page-turn-flipper flipping-${animateDir}`;
+        playSound('pageturn');
+        setTimeout(() => {
+          flipper.className = 'tome-page-turn-flipper';
+        }, 650);
+      }
+
+      // Update Left Page: Living Realm Window
+      const folioLabel = document.getElementById('tomePageFolioLabel');
+      const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV'];
+      if (folioLabel) folioLabel.textContent = `FOLIO ${romanNumerals[index] || index + 1} • KINGDOM CODEX`;
+
+      const catBadge = document.getElementById('tomeCategoryBadge');
+      if (catBadge) catBadge.textContent = k.element;
+
+      const img = document.getElementById('tomeKingdomImg');
+      if (img) {
+        img.src = k.img;
+        img.alt = k.name;
+      }
+
+      const weather = REALM_WEATHER_STATUS[k.id] || { text: 'Magical Atmospheric Drift', icon: 'bi-stars text-warning' };
+      const weatherBadge = document.getElementById('tomeWeatherBadge');
+      if (weatherBadge) {
+        weatherBadge.innerHTML = `<i class="bi ${weather.icon} me-1"></i> ${weather.text}`;
+      }
+
+      const iconLeft = document.getElementById('tomeIconLeft');
+      if (iconLeft) iconLeft.textContent = k.icon;
+
+      const nameLeft = document.getElementById('tomeNameLeft');
+      if (nameLeft) nameLeft.textContent = k.name;
+
+      const elemLeft = document.getElementById('tomeElementLeft');
+      if (elemLeft) elemLeft.textContent = k.element;
+
+      const catLeft = document.getElementById('tomeCatalystLeft');
+      if (catLeft) catLeft.innerHTML = `<i class="bi bi-heart-pulse-fill me-1"></i> ${k.catalyst}`;
+
+      // Update living canvas for this kingdom
+      if (grimoireLivingFX) {
+        grimoireLivingFX.setKingdom(k.id);
+      }
+
+      // Update Right Page: Lore & Hierarchy
+      const pageNum = document.getElementById('tomePageNumber');
+      if (pageNum) pageNum.textContent = `PAGE ${index + 1} OF 15`;
+
+      const dropcap = document.getElementById('tomeDropcap');
+      if (dropcap) dropcap.textContent = k.name.replace(/^The\s+/, '')[0] || 'K';
+
+      const titleRight = document.getElementById('tomeKingdomTitleRight');
+      if (titleRight) titleRight.textContent = k.name;
+
+      const subheadRight = document.getElementById('tomeSubheadingRight');
+      if (subheadRight) subheadRight.textContent = `${k.element} realm governed by emotional catalyst: ${k.catalyst}.`;
+
+      // Hierarchy Box
+      const hierBox = document.getElementById('tomeHierarchyBox');
+      if (hierBox) {
+        const parts = k.hierarchy.split('|').map(s => s.trim());
+        hierBox.innerHTML = `
+          <div class="row g-1">
+            ${parts.map(p => {
+              const [role, name] = p.split(':').map(x => x.trim());
+              return `<div class="col-6 mb-1"><span class="text-warning fw-bold">${role}:</span> <span class="text-white">${name || ''}</span></div>`;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      // Passive Box
+      const passBox = document.getElementById('tomePassiveBox');
+      if (passBox) {
+        passBox.innerHTML = `<strong>REALM TRAIT:</strong> ${k.passive}`;
+      }
+
+      // Ultimate Box
+      const ultBox = document.getElementById('tomeUltimateBox');
+      if (ultBox) {
+        ultBox.innerHTML = `<strong>SOVEREIGN QUEEN ULTIMATE:</strong> ${k.ultimate}`;
+      }
+
+      // Simulator Deploy Button
+      const launchBtn = document.getElementById('btnTomeLaunchSim');
+      if (launchBtn) {
+        launchBtn.href = `simulator.html?kingdom=${k.id}`;
+      }
+
+      // Update folio indicator pills
+      document.querySelectorAll('#tomeFolioPills .tome-folio-pill').forEach((p, idx) => {
+        if (idx === index) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+
+      // Synchronize 3D Cylinder rotation so if user toggles view, it stays on the same kingdom
+      if (typeof snapToKingdom === 'function') {
+        snapToKingdom(index);
+      }
+    }
+
     // ================= 3D CYLINDRICAL GALLERY ENGINE FOR 15 KINGDOMS =================
     let currentCylinderFilter = 'all';
     let cylinderRotation = 0;
@@ -2852,7 +3988,7 @@
       modal.show();
     }
 
-    // Filter Buttons - updates both 3D cylinder and grid
+    // Filter Buttons - updates Living Grimoire book, 3D cylinder, and grid
     document.querySelectorAll('#kingdomFilters .filter-tab').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('#kingdomFilters .filter-tab').forEach(b => b.classList.remove('active'));
@@ -2861,35 +3997,71 @@
         cylinderRotation = 0; // Cleanly reset focus to first kingdom
         renderKingdoms(filterVal);
         renderKingdoms3DCylinder(filterVal);
+
+        // Update Living Grimoire Book
+        if (filterVal === 'all') {
+          grimoireFilteredData = [...kingdomsData];
+        } else {
+          grimoireFilteredData = kingdomsData.filter(k => k.category === filterVal);
+        }
+        grimoireBookIndex = 0;
+        renderGrimoirePage(0);
+        renderTomeFolioPills();
       });
     });
 
-    // View Mode Switcher
+    // 3-Way View Mode Switcher (Living Grimoire Book / 3D Arc Gallery / Tactical Grid)
+    const btnViewGrimoire = document.getElementById('btnViewGrimoireBook');
     const btnView3D = document.getElementById('btnView3DCylinder');
     const btnViewGrid = document.getElementById('btnViewGrid');
+    const bookStageWrap = document.getElementById('kingdomsBookStage');
     const stage3DWrap = document.getElementById('kingdoms3DStageWrapper');
     const gridWrap = document.getElementById('kingdomsGrid');
+    const cylinderControls = document.getElementById('cylinderControlsCluster');
 
-    if (btnView3D && btnViewGrid && stage3DWrap && gridWrap) {
-      btnView3D.addEventListener('click', () => {
-        btnView3D.classList.add('active', 'btn-mythic-gold');
-        btnView3D.classList.remove('btn-outline-secondary');
-        btnViewGrid.classList.remove('active', 'btn-mythic-gold');
-        btnViewGrid.classList.add('btn-outline-secondary');
-        stage3DWrap.classList.remove('d-none');
-        gridWrap.classList.add('d-none');
+    function switchKingdomsView(view) {
+      // Reset all buttons
+      [btnViewGrimoire, btnView3D, btnViewGrid].forEach(btn => {
+        if (!btn) return;
+        btn.classList.remove('active', 'btn-mythic-gold');
+        btn.classList.add('btn-outline-secondary', 'text-light');
+      });
+
+      // Hide all stages
+      if (bookStageWrap) bookStageWrap.classList.add('d-none');
+      if (stage3DWrap) stage3DWrap.classList.add('d-none');
+      if (gridWrap) gridWrap.classList.add('d-none');
+      if (cylinderControls) cylinderControls.classList.add('d-none');
+
+      if (view === 'grimoire') {
+        if (btnViewGrimoire) {
+          btnViewGrimoire.classList.add('active', 'btn-mythic-gold');
+          btnViewGrimoire.classList.remove('btn-outline-secondary', 'text-light');
+        }
+        if (bookStageWrap) bookStageWrap.classList.remove('d-none');
+        if (grimoireLivingFX) {
+          grimoireLivingFX.initCanvasSize();
+        }
+      } else if (view === 'cylinder') {
+        if (btnView3D) {
+          btnView3D.classList.add('active', 'btn-mythic-gold');
+          btnView3D.classList.remove('btn-outline-secondary', 'text-light');
+        }
+        if (stage3DWrap) stage3DWrap.classList.remove('d-none');
+        if (cylinderControls) cylinderControls.classList.remove('d-none');
         updateCylinderCardTransforms();
-      });
-
-      btnViewGrid.addEventListener('click', () => {
-        btnViewGrid.classList.add('active', 'btn-mythic-gold');
-        btnViewGrid.classList.remove('btn-outline-secondary');
-        btnView3D.classList.remove('active', 'btn-mythic-gold');
-        btnView3D.classList.add('btn-outline-secondary');
-        gridWrap.classList.remove('d-none');
-        stage3DWrap.classList.add('d-none');
-      });
+      } else if (view === 'grid') {
+        if (btnViewGrid) {
+          btnViewGrid.classList.add('active', 'btn-mythic-gold');
+          btnViewGrid.classList.remove('btn-outline-secondary', 'text-light');
+        }
+        if (gridWrap) gridWrap.classList.remove('d-none');
+      }
     }
+
+    if (btnViewGrimoire) btnViewGrimoire.addEventListener('click', () => switchKingdomsView('grimoire'));
+    if (btnView3D) btnView3D.addEventListener('click', () => switchKingdomsView('cylinder'));
+    if (btnViewGrid) btnViewGrid.addEventListener('click', () => switchKingdomsView('grid'));
 
     // Auto-Rotate Play/Pause Toggle
     const btnRotateToggle = document.getElementById('btnCylinderRotateToggle');
@@ -3078,6 +4250,29 @@
           osc2.start(now);
           osc1.stop(now + 0.35);
           osc2.stop(now + 0.35);
+        } else if (type === 'pageturn') {
+          // Realistic parchment page flip rustle using shaped noise & bandpass
+          const bufferSize = Math.floor(ctx.sampleRate * 0.24);
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            const decay = 1 - (i / bufferSize);
+            data[i] = (Math.random() * 2 - 1) * decay * (0.6 + 0.4 * Math.sin(i * 0.05));
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(850, now);
+          filter.frequency.exponentialRampToValueAtTime(340, now + 0.22);
+          filter.Q.value = 1.6;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.32, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+          noise.start(now);
         } else if (type === 'ultimate') {
           // Apocalyptic sweeping chord
           [220, 330, 440, 660].forEach((freq, idx) => {
@@ -3094,6 +4289,48 @@
             osc.stop(now + 1.5);
           });
         }
+      } catch (e) {
+        // Audio fallback
+      }
+    }
+
+    // Procedural Ambient Kingdom Soundscapes
+    function playKingdomSoundscape(kingdomId) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+        const chords = {
+          'fulminating': [220, 277.18, 329.63, 440, 659.25], // High electric A major
+          'obsidian': [65.41, 130.81, 196, 261.63], // Deep C power chord
+          'frostbound': [392, 587.33, 783.99, 1174.66], // Crystal G bells
+          'gossamer': [349.23, 440, 523.25, 659.25], // Fmaj7 luminous fae
+          'abyssal-tides': [146.83, 220, 293.66, 440], // D minor ocean tide
+          'verdant': [261.63, 329.63, 392, 523.25], // C major nature
+          'iron-anvil': [110, 164.81, 220, 329.63], // A power metal anvil
+          'titan': [73.42, 110, 146.83, 220], // Low D tectonic rumble
+          'sanguine': [174.61, 207.65, 261.63, 311.13], // F minor vampiric chord
+          'howling': [196, 246.94, 293.66, 392], // G mysterious pack
+          'abyssal-veil': [130.81, 155.56, 196, 233.08], // C diminished void
+          'gearwork': [261.63, 329.63, 392, 493.88], // C mechanical major
+          'sun-sand': [220, 246.94, 293.66, 349.23], // Phrygian desert scale
+          'grave-bound': [146.83, 174.61, 220, 261.63], // D minor necrotic
+          'iron-tusk': [98, 146.83, 196, 293.66] // G horde war
+        };
+        const freqs = chords[kingdomId] || [220, 277.18, 329.63, 440];
+        freqs.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = kingdomId === 'frostbound' ? 'sine' : (kingdomId === 'fulminating' ? 'sawtooth' : 'triangle');
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+          osc.frequency.exponentialRampToValueAtTime(freq * 1.01, now + 1.8);
+          gain.gain.setValueAtTime(0.08, now + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + idx * 0.08);
+          osc.stop(now + 2.2);
+        });
       } catch (e) {
         // Audio fallback
       }
@@ -6496,6 +7733,7 @@ playSoundBuffer('ultimate');`;
     document.addEventListener('DOMContentLoaded', () => {
       renderKingdoms('all');
       renderKingdoms3DCylinder('all');
+      initGrimoireBook();
       startCylinderAnimation();
       initEngineRuntimeHUD();
       renderBoard();
