@@ -224,44 +224,77 @@
       transition: filter 0.3s ease;
     }
 
-    /* Cell States */
+    /* Cell States & Playability Highlights */
     .cell-selected {
       background: radial-gradient(circle, rgba(245, 158, 11, 0.45) 0%, rgba(180, 83, 9, 0.25) 100%) !important;
       box-shadow: inset 0 0 18px var(--gold-neon), 0 0 20px rgba(245, 158, 11, 0.8) !important;
+      outline: 2px solid #fbbf24 !important;
     }
 
+    .cell-my-piece {
+      cursor: grab !important;
+    }
+    .cell-my-piece:active {
+      cursor: grabbing !important;
+    }
+    .cell-my-piece:hover {
+      box-shadow: inset 0 0 14px rgba(245, 158, 11, 0.65), 0 0 12px rgba(245, 158, 11, 0.4) !important;
+    }
+    .cell-my-piece:hover .miniature-body {
+      filter: drop-shadow(0 16px 22px rgba(245, 158, 11, 0.95)) brightness(1.22);
+    }
+
+    .cell-valid-move {
+      cursor: pointer !important;
+    }
     .cell-valid-move::after {
-      content: '\2694\FE0F';
+      content: '';
       position: absolute;
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: rgba(34, 197, 94, 0.7);
+      background: radial-gradient(circle, #22c55e 0%, rgba(34, 197, 94, 0.7) 60%, transparent 100%);
       border: 2px solid #ffffff;
-      box-shadow: 0 0 12px #22c55e;
-      z-index: 10;
+      box-shadow: 0 0 14px #22c55e, inset 0 0 6px #ffffff;
+      transform: translateZ(6px);
+      z-index: 15;
       pointer-events: none !important;
       animation: validMovePulse 1.2s infinite ease-in-out;
     }
+    .cell-valid-move:hover::after {
+      transform: translateZ(10px) scale(1.3);
+      box-shadow: 0 0 22px #22c55e, inset 0 0 8px #ffffff;
+    }
 
     @keyframes validMovePulse {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.25); opacity: 1; }
+      0%, 100% { transform: translateZ(6px) scale(1); opacity: 0.85; }
+      50% { transform: translateZ(6px) scale(1.22); opacity: 1; }
     }
 
+    .cell-valid-capture {
+      cursor: pointer !important;
+      outline: 2px dashed rgba(239, 68, 68, 0.85) !important;
+    }
     .cell-valid-capture::after {
-      content: '\2694\FE0F';
-      font-size: 1.4rem;
+      content: '';
       position: absolute;
-      z-index: 10;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid #ef4444;
+      box-shadow: 0 0 18px #ef4444, inset 0 0 10px rgba(239, 68, 68, 0.5);
+      transform: translateZ(6px);
+      z-index: 15;
       pointer-events: none !important;
-      filter: drop-shadow(0 0 10px #ef4444);
       animation: capturePulse 0.9s infinite alternate;
     }
+    .cell-valid-capture:hover::after {
+      transform: translateZ(10px) scale(1.15);
+      box-shadow: 0 0 28px #ff0000;
+    }
 
-    @keyframes capturePulse {
-      0% { transform: scale(1) rotate(-10deg); }
-      100% { transform: scale(1.25) rotate(10deg); }
+    .cell-drag-hover {
+      box-shadow: inset 0 0 24px #22c55e, 0 0 20px #22c55e !important;
     }
 
     .cell-in-check {
@@ -961,6 +994,21 @@
             </button>
             <button class="btn btn-xs btn-sm btn-outline-secondary text-light rounded-pill px-3 font-mono cam-btn" data-view="isometric">
               Isometric 45&deg;</button>
+          </div>
+
+          <!-- Interactive Play Guidance & Turn HUD -->
+          <div id="playGuidanceBanner" class="p-2 px-3 mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2 text-start font-mono" style="background: rgba(14, 9, 28, 0.96); border: 1.5px solid rgba(245, 158, 11, 0.65); border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(245, 158, 11, 0.2);">
+            <div class="d-flex align-items-center gap-2 flex-grow-1">
+              <span class="badge bg-warning text-dark px-2 py-1 fw-bold" id="playBadge">PLAYER: WHITE</span>
+              <span id="playInstructionText" class="text-white small">
+                👉 <strong>YOUR TURN:</strong> Click (or drag) any Obsidian figurine at the bottom (ranks 1-2) to move.
+              </span>
+            </div>
+            <div class="d-flex align-items-center gap-1">
+              <button class="btn btn-xs btn-outline-warning active font-mono rounded-pill px-2 py-1" id="btnPlayWhite" title="Play White (You move first)">Play White</button>
+              <button class="btn btn-xs btn-outline-secondary text-light font-mono rounded-pill px-2 py-1" id="btnPlayBlack" title="Play Black (AI opens with White)">Play Black</button>
+              <button class="btn btn-xs btn-outline-secondary text-light font-mono rounded-pill px-2 py-1" id="btnPlay2P" title="Local 2-Player Pass & Play (No AI)">2P Local</button>
+            </div>
           </div>
 
           <!-- Board Stage with 3D wrapper -->
@@ -1711,10 +1759,22 @@
 
     // ================= BOARD RENDERING & INTERACTION =================
     const chessboard = document.getElementById('chessboard');
+    let draggedSquare = null;
+    let userPlaySide = 'white'; // 'white', 'black', or 'both'
+    let activeCameraView = 'perspective';
+
+    function updateGameplayHint(msgHtml, badgeText = null) {
+      const textEl = document.getElementById('playInstructionText');
+      const badgeEl = document.getElementById('playBadge');
+      if (textEl) textEl.innerHTML = msgHtml;
+      if (badgeEl && badgeText) badgeEl.textContent = badgeText;
+    }
 
     function renderBoard() {
       if (!chessboard) return;
       chessboard.innerHTML = '';
+      const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
           const cell = document.createElement('div');
@@ -1752,6 +1812,16 @@
           if (piece) {
             const profile = PIECE_PROFILES[piece];
             const isWhite = piece === piece.toUpperCase();
+            const isCurrentTurnPiece = (currentTurn === 'white' && isWhite) || (currentTurn === 'black' && !isWhite);
+            const isPlayable = (userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece && !isGameOver;
+
+            if (isPlayable) {
+              cell.classList.add('cell-my-piece');
+              cell.setAttribute('draggable', 'true');
+              cell.title = `Your ${profile.name} (${profile.role}). Click or drag to move!`;
+            } else {
+              cell.title = `${profile.name} (${profile.role}) - ${isWhite ? 'Obsidian Roost' : 'Verdant Court'}`;
+            }
             
             const miniatureSlot = document.createElement('div');
             miniatureSlot.className = 'miniature-slot';
@@ -1772,6 +1842,7 @@
             img.src = profile.img;
             img.alt = profile.name;
             img.className = 'miniature-img';
+            img.draggable = false; // Prevent default ghost image drag
 
             miniatureBody.appendChild(img);
             miniatureSlot.appendChild(shadow);
@@ -1780,10 +1851,69 @@
             cell.appendChild(miniatureSlot);
           }
 
+          // Drag-and-Drop Event Listeners
+          cell.addEventListener('dragstart', (e) => handleDragStart(e, r, c));
+          cell.addEventListener('dragover', (e) => handleDragOver(e, r, c));
+          cell.addEventListener('dragleave', (e) => handleDragLeave(e, r, c));
+          cell.addEventListener('drop', (e) => handleDrop(e, r, c));
+
+          // Click Event Listener
           cell.addEventListener('click', () => handleCellClick(r, c));
           chessboard.appendChild(cell);
         }
       }
+    }
+
+    function handleDragStart(e, r, c) {
+      if (isGameOver) { e.preventDefault(); return; }
+      const piece = boardState[r][c];
+      if (!piece) { e.preventDefault(); return; }
+
+      const isWhite = piece === piece.toUpperCase();
+      const isCurrentTurnPiece = (currentTurn === 'white' && isWhite) || (currentTurn === 'black' && !isWhite);
+      const isPlayable = (userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece;
+
+      if (!isPlayable) {
+        e.preventDefault();
+        return;
+      }
+
+      draggedSquare = { r, c };
+      selectedSquare = { r, c };
+      currentLegalMoves = getLegalMoves(r, c, piece);
+      updateCharacterInspector(piece);
+      playSound('select');
+      updateGameplayHint(`⚡ <strong>DRAGGING ${PIECE_PROFILES[piece].name.toUpperCase()}:</strong> Drop onto any highlighted destination tile.`);
+      renderBoard();
+      e.dataTransfer.setData('text/plain', `${r},${c}`);
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragOver(e, r, c) {
+      if (selectedSquare && currentLegalMoves.some(m => m.r === r && m.c === c)) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const cell = e.currentTarget;
+        if (cell && !cell.classList.contains('cell-drag-hover')) {
+          cell.classList.add('cell-drag-hover');
+        }
+      }
+    }
+
+    function handleDragLeave(e) {
+      const cell = e.currentTarget;
+      if (cell) cell.classList.remove('cell-drag-hover');
+    }
+
+    function handleDrop(e, r, c) {
+      e.preventDefault();
+      const cell = e.currentTarget;
+      if (cell) cell.classList.remove('cell-drag-hover');
+
+      if (selectedSquare && currentLegalMoves.some(m => m.r === r && m.c === c)) {
+        executeMove(selectedSquare.r, selectedSquare.c, r, c);
+      }
+      draggedSquare = null;
     }
 
     function handleCellClick(r, c) {
@@ -1794,6 +1924,7 @@
 
       const piece = boardState[r][c];
       const isLegalMove = currentLegalMoves.some(m => m.r === r && m.c === c);
+      const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
       // Execute move if clicking valid target square
       if (selectedSquare && isLegalMove) {
@@ -1801,22 +1932,49 @@
         return;
       }
 
-      // Select own piece
+      // If clicking a piece on the board
       if (piece) {
         const isWhitePiece = piece === piece.toUpperCase();
-        if ((currentTurn === 'white' && isWhitePiece) || (currentTurn === 'black' && !isWhitePiece)) {
+        const isCurrentTurnPiece = (currentTurn === 'white' && isWhitePiece) || (currentTurn === 'black' && !isWhitePiece);
+        const isPlayable = (userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece;
+
+        if (isPlayable) {
+          // Select own piece and show its legal moves
           selectedSquare = { r, c };
           currentLegalMoves = getLegalMoves(r, c, piece);
           updateCharacterInspector(piece);
           playSound('select');
+
+          const profile = PIECE_PROFILES[piece];
+          if (currentLegalMoves.length > 0) {
+            updateGameplayHint(`⚡ <strong>SELECTED ${profile.name.toUpperCase()}:</strong> Click a glowing green ring to move, or red ring to capture.`);
+          } else {
+            updateGameplayHint(`⚠️ ${profile.name} has no legal moves from ${cols[c]}${8 - r}. Select another piece.`);
+          }
+          renderBoard();
+          return;
+        } else {
+          // User clicked an enemy or non-turn piece: inspect lore/stats, and guide player!
+          updateCharacterInspector(piece);
+          const profile = PIECE_PROFILES[piece];
+          const activeSide = currentTurn === 'white' ? 'White (Obsidian Roost)' : 'Black (Verdant Court)';
+          const ownerSide = isWhitePiece ? 'Obsidian Roost (White)' : 'Verdant Court (Black)';
+
+          updateGameplayHint(`ℹ️ Inspected ${profile.name} (${ownerSide}). 👉 <strong>It is ${activeSide}'s turn!</strong> Click your own pieces at the bottom to play.`);
+          addLogEntry(`ℹ️ Inspected ${profile.name} at ${cols[c]}${8 - r}. ${activeSide} to move.`);
+          playSound('select');
+          selectedSquare = null;
+          currentLegalMoves = [];
           renderBoard();
           return;
         }
       }
 
-      // Deselect
+      // Deselect on empty non-move square
       selectedSquare = null;
       currentLegalMoves = [];
+      const sideName = currentTurn === 'white' ? 'Obsidian (White)' : 'Verdant (Black)';
+      updateGameplayHint(`👉 <strong>YOUR TURN:</strong> Click or drag any ${sideName} figurine to play.`);
       renderBoard();
     }
 
@@ -1899,48 +2057,56 @@
 
       renderBoard();
 
-      // Trigger AI move if enabled and black's turn
-      if (opponentAI && currentTurn === 'black' && !isGameOver) {
+      // Check if AI should play the upcoming turn
+      const isAITurn = opponentAI && ((userPlaySide === 'white' && currentTurn === 'black') || (userPlaySide === 'black' && currentTurn === 'white'));
+      if (isAITurn && !isGameOver) {
+        updateGameplayHint(`🤖 <strong>AI OPPONENT THINKING:</strong> Calculating tactical response...`);
         setTimeout(executeAIMove, 700);
+      } else if (!isGameOver) {
+        const sideName = currentTurn === 'white' ? 'Obsidian (White)' : 'Verdant (Black)';
+        updateGameplayHint(`👉 <strong>YOUR TURN (${currentTurn.toUpperCase()}):</strong> Click or drag any ${sideName} figurine to play.`);
       }
     }
 
     function executeAIMove() {
       if (isGameOver) return;
-      const wasInCheck = isKingInCheck('black', boardState);
-      const blackMoves = getAllLegalMoves('black', boardState);
+      const aiSide = currentTurn;
+      const wasInCheck = isKingInCheck(aiSide, boardState);
+      const aiMoves = getAllLegalMoves(aiSide, boardState);
 
-      if (blackMoves.length === 0) {
+      if (aiMoves.length === 0) {
         if (wasInCheck) {
-          addLogEntry('👑 CHECKMATE! Sovereign Dryad has no legal escape squares or interpositions.');
-          triggerCheckmateSpectacle('white');
+          const winner = aiSide === 'white' ? 'black' : 'white';
+          addLogEntry(`👑 CHECKMATE! ${aiSide.toUpperCase()} has no legal escape squares.`);
+          triggerCheckmateSpectacle(winner);
         } else {
           isGameOver = true;
-          addLogEntry('⚔️ STALEMATE! Verdant Court has no valid moves.');
+          addLogEntry('⚔️ STALEMATE! No valid moves available for ' + aiSide.toUpperCase());
         }
         return;
       }
 
       if (wasInCheck) {
-        addLogEntry('🛡️ Sovereign Dryad in Check! AI calculating tactical escape: moving King or interposing defense...');
+        addLogEntry(`🛡️ ${aiSide.toUpperCase()} King in Check! AI calculating tactical escape or interposition defense...`);
       }
 
-      const chosenMove = findBestAIMove('black', boardState);
+      const chosenMove = findBestAIMove(aiSide, boardState);
       if (!chosenMove) {
-        triggerCheckmateSpectacle('white');
+        const winner = aiSide === 'white' ? 'black' : 'white';
+        triggerCheckmateSpectacle(winner);
         return;
       }
 
       const moverProfile = PIECE_PROFILES[chosenMove.piece];
-      const isMoverKing = chosenMove.piece === 'k';
+      const isMoverKing = chosenMove.piece.toLowerCase() === 'k';
       const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
       const targetCoord = `${cols[chosenMove.toC]}${8 - chosenMove.toR}`;
 
       if (wasInCheck) {
         if (isMoverKing) {
-          addLogEntry(`🛡️ AI Sovereign Dryad relocated to safe square ${targetCoord}!`);
+          addLogEntry(`🛡️ AI ${moverProfile.name} relocated to safe square ${targetCoord}!`);
         } else if (chosenMove.isCapture) {
-          addLogEntry(`⚔️ AI neutralized the check by capturing the attacker at ${targetCoord}!`);
+          addLogEntry(`⚔️ AI neutralized check by capturing attacker at ${targetCoord}!`);
         } else {
           addLogEntry(`🛡️ AI ${moverProfile.name} interposed defense at ${targetCoord} to block checkmate!`);
         }
@@ -2626,8 +2792,50 @@
       if (!audioEnabled) stopDynamicMusic();
     });
 
-    // Reset Game
-    document.getElementById('btnResetGame').addEventListener('click', () => {
+    // Play Mode Switcher (Play White / Play Black / 2P Local)
+    function setPlayMode(side) {
+      userPlaySide = side;
+      const btnW = document.getElementById('btnPlayWhite');
+      const btnB = document.getElementById('btnPlayBlack');
+      const btn2P = document.getElementById('btnPlay2P');
+
+      [btnW, btnB, btn2P].forEach(b => {
+        if (b) {
+          b.classList.remove('active', 'btn-outline-warning');
+          b.classList.add('btn-outline-secondary', 'text-light');
+        }
+      });
+
+      if (side === 'white' && btnW) {
+        btnW.classList.add('active', 'btn-outline-warning');
+        btnW.classList.remove('btn-outline-secondary', 'text-light');
+        opponentAI = true;
+      } else if (side === 'black' && btnB) {
+        btnB.classList.add('active', 'btn-outline-warning');
+        btnB.classList.remove('btn-outline-secondary', 'text-light');
+        opponentAI = true;
+      } else if (side === 'both' && btn2P) {
+        btn2P.classList.add('active', 'btn-outline-warning');
+        btn2P.classList.remove('btn-outline-secondary', 'text-light');
+        opponentAI = false;
+      }
+
+      document.getElementById('aiStatusText').textContent = opponentAI ? 'ON' : 'OFF';
+      document.getElementById('aiStatusText').className = opponentAI ? 'text-success' : 'text-danger';
+
+      resetMatch();
+      playSound('select');
+    }
+
+    const btnPlayWhite = document.getElementById('btnPlayWhite');
+    const btnPlayBlack = document.getElementById('btnPlayBlack');
+    const btnPlay2P = document.getElementById('btnPlay2P');
+
+    if (btnPlayWhite) btnPlayWhite.addEventListener('click', () => setPlayMode('white'));
+    if (btnPlayBlack) btnPlayBlack.addEventListener('click', () => setPlayMode('black'));
+    if (btnPlay2P) btnPlay2P.addEventListener('click', () => setPlayMode('both'));
+
+    function resetMatch() {
       boardState = JSON.parse(JSON.stringify(initialBoard));
       cellTerrains = Array(8).fill(null).map(() => Array(8).fill(null));
       selectedSquare = null;
@@ -2638,11 +2846,30 @@
       isGameOver = false;
       updateGraveyard();
       document.getElementById('turnIndicator').textContent = 'TURN: 1 (WHITE)';
+
+      // Retain active camera view
       const wrapper = document.getElementById('boardWrapper');
-      if (wrapper) wrapper.className = 'planar-board-wrapper view-perspective';
-      playSound('select');
+      if (wrapper) wrapper.className = `planar-board-wrapper view-${activeCameraView}`;
+
       renderBoard();
-      addLogEntry('Board reset to starting layout.');
+
+      if (userPlaySide === 'black' && opponentAI) {
+        updateGameplayHint('🤖 <strong>AI OPPONENT (WHITE) OPENING:</strong> White moves first. AI calculating opening move...', 'PLAYER: BLACK');
+        addLogEntry('Match initiated. AI (White) opening game.');
+        setTimeout(executeAIMove, 700);
+      } else if (userPlaySide === 'both') {
+        updateGameplayHint('👉 <strong>2-PLAYER PASS & PLAY:</strong> White moves first. Click or drag any Obsidian piece (ranks 1-2) to move.', '2-PLAYER');
+        addLogEntry('Local 2-Player match initiated. White moves first.');
+      } else {
+        updateGameplayHint('👉 <strong>YOUR TURN:</strong> Click or drag any Obsidian figurine at the bottom (ranks 1-2) to play.', 'PLAYER: WHITE');
+        addLogEntry('Match initiated. You are playing as White (Obsidian Roost).');
+      }
+    }
+
+    // Reset Game button
+    document.getElementById('btnResetGame').addEventListener('click', () => {
+      resetMatch();
+      playSound('select');
     });
 
     // Toggle AI
@@ -2651,6 +2878,9 @@
       document.getElementById('aiStatusText').textContent = opponentAI ? 'ON' : 'OFF';
       document.getElementById('aiStatusText').className = opponentAI ? 'text-success' : 'text-danger';
       playSound('select');
+      if (opponentAI && currentTurn === (userPlaySide === 'white' ? 'black' : 'white') && !isGameOver) {
+        setTimeout(executeAIMove, 600);
+      }
     });
 
     // 3D Camera Switching
@@ -2662,9 +2892,9 @@
         });
         btn.classList.add('active', 'btn-outline-warning');
         btn.classList.remove('btn-outline-secondary', 'text-light');
-        const view = btn.getAttribute('data-view');
+        activeCameraView = btn.getAttribute('data-view');
         const wrapper = document.getElementById('boardWrapper');
-        wrapper.className = `planar-board-wrapper view-${view}`;
+        if (wrapper) wrapper.className = `planar-board-wrapper view-${activeCameraView}`;
         playSound('select');
       });
     });
