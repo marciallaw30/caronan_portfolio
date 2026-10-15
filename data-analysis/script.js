@@ -183,60 +183,24 @@ document.addEventListener('DOMContentLoaded', () => {
     Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.06)';
     Chart.defaults.font.family = 'Inter, sans-serif';
 
-    // Chart 1: 50-Day Sales Trend (Line)
+    // Chart 1: Sales Trend - Total Revenue by Day of Week (Line) - matches workbook Exam_Tasks chart 1
     const salesCtx = document.getElementById('salesChart');
-    if (salesCtx) {
+    if (salesCtx && typeof dayOfWeekSales !== 'undefined') {
       new Chart(salesCtx, {
         type: 'line',
         data: {
-          labels: rawData.map(r => `D${r.Day}`),
-          datasets: [{
-            label: 'Transaction Revenue (₱)',
-            data: rawData.map(r => r.Total_Sales),
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.35,
-            pointBackgroundColor: '#10b981',
-            pointRadius: 2.5,
-            pointHoverRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: (ctx) => ` ₱${ctx.raw} (Tx: ${rawData[ctx.dataIndex].Transaction_ID}, ${rawData[ctx.dataIndex].Day_of_Week})`
-              }
-            }
-          },
-          scales: {
-            y: {
-              grid: { color: 'rgba(255,255,255,0.05)' },
-              ticks: { callback: v => `₱${v}` }
-            },
-            x: { grid: { display: false } }
-          }
-        }
-      });
-    }
-
-    // Chart 2: Day of Week Revenue (Bar)
-    const dowCtx = document.getElementById('dowChart');
-    if (dowCtx && typeof dayOfWeekSales !== 'undefined') {
-      new Chart(dowCtx, {
-        type: 'bar',
-        data: {
           labels: dayOfWeekSales.map(d => d.day),
           datasets: [{
-            label: 'Total Revenue (₱)',
+            label: 'Total Revenue',
             data: dayOfWeekSales.map(d => d.revenue),
-            backgroundColor: dayOfWeekSales.map(d => d.day === 'Mon' || d.day === 'Sun' ? '#10b981' : (d.day === 'Wed' ? '#ef4444' : '#3b82f6')),
-            borderRadius: 6
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            borderWidth: 2.5,
+            fill: true,
+            tension: 0,
+            pointBackgroundColor: '#10b981',
+            pointRadius: 5,
+            pointHoverRadius: 8
           }]
         },
         options: {
@@ -246,19 +210,19 @@ document.addEventListener('DOMContentLoaded', () => {
             legend: { display: false },
             tooltip: {
               callbacks: {
-                label: ctx => ` ₱${ctx.raw} (${dayOfWeekSales[ctx.dataIndex].status})`
+                label: ctx => ` ₱${ctx.raw.toLocaleString()} (${dayOfWeekSales[ctx.dataIndex].status})`
               }
             }
           },
           scales: {
-            y: { ticks: { callback: v => `₱${v}` } },
+            y: { beginAtZero: false, min: 1000, max: 1600, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { callback: v => `₱${v}` } },
             x: { grid: { display: false } }
           }
         }
       });
     }
 
-    // Chart 3: Pearson Correlation Scatter Plot (Internet Hours vs Sales)
+    // Task 10: Pearson Correlation Scatter Plot (Internet Hours vs Sales)
     const correlCtx = document.getElementById('correlationChart');
     if (correlCtx) {
       new Chart(correlCtx, {
@@ -298,56 +262,76 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Chart 4: Service Output Volume (Doughnut)
+
+    // Chart 2: Service Usage Totals (Column) - matches workbook Exam_Tasks chart 2
     const serviceCtx = document.getElementById('serviceVolumeChart');
     if (serviceCtx && typeof serviceRevenueVolume !== 'undefined') {
+      const order = ['Internet Hours', 'Printing Pages', 'Scanning Pages', 'Gaming Sessions'];
+      const svc = order.map(n => serviceRevenueVolume.find(s => s.service === n)).filter(Boolean);
       new Chart(serviceCtx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-          labels: serviceRevenueVolume.map(s => s.service),
+          labels: svc.map(s => s.service.replace('Sessions', '').replace('Pages', 'Page').trim()),
           datasets: [{
-            data: serviceRevenueVolume.map(s => s.total),
-            backgroundColor: ['#10b981', '#6366f1', '#06b6d4', '#f59e0b'],
-            borderWidth: 0
+            label: 'Total',
+            data: svc.map(s => s.total),
+            backgroundColor: '#3b82f6',
+            borderRadius: 4
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          cutout: '68%',
           plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } }
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.raw} ${svc[ctx.dataIndex].unit}` } }
+          },
+          scales: {
+            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+            x: { grid: { display: false } }
           }
         }
       });
     }
 
-    // Chart 5: Demographics (Gender & Student Pie)
-    const demoCtx = document.getElementById('demographicChart');
-    if (demoCtx && typeof demographicBreakdown !== 'undefined') {
-      new Chart(demoCtx, {
+    // Charts 3-5: Students, Gender, Gaming (Pie) - match workbook Exam_Tasks pie charts
+    const pieValueLabels = {
+      id: 'pieValueLabels',
+      afterDatasetsDraw(chart) {
+        const { ctx } = chart;
+        const meta = chart.getDatasetMeta(0);
+        const vals = chart.data.datasets[0].data;
+        const total = vals.reduce((a, b) => a + b, 0);
+        ctx.save();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '600 13px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        meta.data.forEach((arc, i) => {
+          const pos = arc.tooltipPosition();
+          ctx.fillText(`${vals[i]} (${(vals[i] / total * 100).toFixed(0)}%)`, pos.x, pos.y);
+        });
+        ctx.restore();
+      }
+    };
+    const makePie = (id, labels, values, colors) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      new Chart(el, {
         type: 'pie',
-        data: {
-          labels: ['Male Students', 'Female Students', 'Male Non-Students', 'Female Non-Students'],
-          datasets: [{
-            data: [
-              demographicBreakdown.crossTab.students.male,
-              demographicBreakdown.crossTab.students.female,
-              demographicBreakdown.crossTab.nonStudents.male,
-              demographicBreakdown.crossTab.nonStudents.female
-            ],
-            backgroundColor: ['#10b981', '#34d399', '#6366f1', '#a855f7'],
-            borderWidth: 0
-          }]
-        },
+        data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: '#0b0b1a', borderWidth: 2 }] },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } }
-          }
-        }
+          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } } }
+        },
+        plugins: [pieValueLabels]
       });
+    };
+    if (typeof demographicBreakdown !== 'undefined') {
+      makePie('studentsChart', ['Yes', 'No'], [demographicBreakdown.studentStatus.yes, demographicBreakdown.studentStatus.no], ['#3b82f6', '#f97316']);
+      makePie('genderChart', ['Male', 'Female'], [demographicBreakdown.gender.male, demographicBreakdown.gender.female], ['#3b82f6', '#f97316']);
+      makePie('gamingChart', ['Yes', 'No'], [demographicBreakdown.gaming.yes, demographicBreakdown.gaming.no], ['#3b82f6', '#f97316']);
     }
 
     // 11. Interactive Filterable Raw Data Table

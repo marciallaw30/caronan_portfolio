@@ -776,8 +776,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .plant-svg-container {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  max-width: 280px;
+  height: 230px;
   position: relative;
   display: flex;
   align-items: center;
@@ -1307,11 +1308,16 @@ h1, h2, h3, h4, h5, h6 {
     padding: 14px;
   }
   .plant-svg-container {
-    width: 90px;
-    height: 90px;
+    max-width: 240px;
+    height: 190px;
   }
   .serial-body {
     height: 150px;
     font-size: 0.72rem;
   }
 }
+
+/* 3D plant canvas */
+.plant-svg-container.plant-3d-active { cursor: grab; }
+.plant-svg-container canvas { display: block; border-radius: 12px; }
+.plant-3d-hint { font-size: 0.68rem; color: var(--text-muted); opacity: 0.7; margin-top: 4px; }

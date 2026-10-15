@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -23,6 +23,25 @@
       --gold-neon: #f59e0b;
       --cyan-neon: #00d2ff;
       --purple-neon: #c084fc;
+    }
+
+    /* High-Contrast Readability Overrides for Dark Medieval / Obsidian Theme */
+    .text-muted,
+    p.text-muted,
+    span.text-muted,
+    div.text-muted,
+    small.text-muted,
+    .small.text-muted,
+    label.text-muted {
+      color: #cbd5e1 !important; /* Crisp Slate-300 contrast */
+    }
+
+    .text-secondary {
+      color: #94a3b8 !important;
+    }
+
+    .sim-panel p, .sim-panel .small {
+      color: #e2e8f0;
     }
 
     * { box-sizing: border-box; }
@@ -698,11 +717,11 @@
           <div class="d-flex align-items-center gap-2">
             <span class="small font-mono text-white fw-bold">CHAMPION:</span>
             <select id="arenaHeroSelect" class="form-select form-select-sm bg-dark text-white border-warning font-mono" style="width: auto;">
-              <option value="ash-matriarch">&#128081; The Ash Matriarch (Queen â€¢ Volcanic Burst Mage)</option>
-              <option value="flame-vanguard">&#9876; Flame-Winged Vanguard (Knight â€¢ Swift Assassin)</option>
-              <option value="eternal-drake">&#128009; The Eternal Drake (King â€¢ Dragon Sovereign)</option>
-              <option value="forest-matriarch">&#127807; The Forest Matriarch (Queen â€¢ Thorn Control Mage)</option>
-              <option value="stag-rider">&#129420; The Stag-Rider (Knight â€¢ Celestial Cavalier)</option>
+              <option value="ash-matriarch">&#128081; The Ash Matriarch (Queen • Volcanic Burst Mage)</option>
+              <option value="flame-vanguard">&#9876; Flame-Winged Vanguard (Knight • Swift Assassin)</option>
+              <option value="eternal-drake">&#128009; The Eternal Drake (King • Dragon Sovereign)</option>
+              <option value="forest-matriarch">&#127807; The Forest Matriarch (Queen • Thorn Control Mage)</option>
+              <option value="stag-rider">&#129420; The Stag-Rider (Knight • Celestial Cavalier)</option>
             </select>
           </div>
 
@@ -749,10 +768,10 @@
         <div class="position-absolute top-0 start-0 m-3 z-3 d-flex flex-column gap-2 pointer-events-none">
           <div id="arenaPassiveBanner" class="badge bg-dark bg-opacity-80 border border-info text-info font-mono px-3 py-2 d-flex align-items-center gap-2 shadow-lg" style="font-size: 0.78rem;">
             <span class="spinner-grow spinner-grow-sm text-warning"></span>
-            <span id="arenaPassiveText">Active Battleground: The Obsidian Crags (Magma Land â€¢ -25% Enemy Accuracy)</span>
+            <span id="arenaPassiveText">Active Battleground: The Obsidian Crags (Magma Land • -25% Enemy Accuracy)</span>
           </div>
           <div class="badge bg-dark bg-opacity-80 border border-secondary text-light font-mono px-2 py-1 small" style="font-size: 0.68rem;">
-            Controls: [W][A][S][D] / Drag Joystick to Move â€¢ [Space]/Tap to Strike â€¢ [Q] Blink â€¢ [E] Land Hazard â€¢ [R] KINGDOM ULTIMATE
+            Controls: [W][A][S][D] / Drag Joystick to Move • [Space]/Tap to Strike • [Q] Blink • [E] Land Hazard • [R] KINGDOM ULTIMATE
           </div>
         </div>
 
@@ -1443,7 +1462,7 @@
       // Check for check condition
       if (isKingInCheck(currentTurn)) {
         playSound('check');
-        addLogEntry(`âš ï¸ ${currentTurn.toUpperCase()} KING IN CHECK!`);
+        addLogEntry(`⚠️ ${currentTurn.toUpperCase()} KING IN CHECK!`);
       }
 
       renderBoard();
@@ -1546,7 +1565,7 @@
       const desc = document.getElementById('manifDesc');
       const badge = document.getElementById('manifBadge');
 
-      if (title) title.textContent = `ðŸ‘‘ CHECKMATE! ${winnerName.toUpperCase()} VICTORIOUS!`;
+      if (title) title.textContent = `👑 CHECKMATE! ${winnerName.toUpperCase()} VICTORIOUS!`;
       if (desc) desc.textContent = `Queen unleashes signature ultimate: ${ultName}! All opposing tiles engulfed in kingdom cataclysm!`;
       if (badge) badge.textContent = 'APOCALYPTIC VICTORY CONQUEST';
 
@@ -1572,7 +1591,7 @@
       });
 
       overlay.classList.add('active');
-      addLogEntry(`ðŸ‘‘ CHECKMATE! ${winnerName} unleashed ${ultName} achieving absolute victory!`);
+      addLogEntry(`👑 CHECKMATE! ${winnerName} unleashed ${ultName} achieving absolute victory!`);
 
       setTimeout(() => {
         overlay.classList.remove('active');
@@ -1830,7 +1849,7 @@
     const arenaHeroesData = {
       'ash-matriarch': {
         name: 'The Ash Matriarch',
-        title: 'Queen â€¢ Fire Burst Mage',
+        title: 'Queen • Fire Burst Mage',
         img: 'pieces/obsidian_queen.png',
         maxHp: 480,
         speed: 3.8,
@@ -1844,7 +1863,7 @@
       },
       'flame-vanguard': {
         name: 'Flame-Winged Vanguard',
-        title: 'Knight â€¢ Swift Assassin',
+        title: 'Knight • Swift Assassin',
         img: 'pieces/obsidian_knight.png',
         maxHp: 440,
         speed: 4.8,
@@ -1858,7 +1877,7 @@
       },
       'eternal-drake': {
         name: 'The Eternal Drake',
-        title: 'King â€¢ Dragon Sovereign',
+        title: 'King • Dragon Sovereign',
         img: 'pieces/obsidian_king.png',
         maxHp: 650,
         speed: 3.2,
@@ -1872,7 +1891,7 @@
       },
       'forest-matriarch': {
         name: 'The Forest Matriarch',
-        title: 'Queen â€¢ Thorn Mage',
+        title: 'Queen • Thorn Mage',
         img: 'pieces/verdant_queen.png',
         maxHp: 500,
         speed: 3.6,
@@ -1886,7 +1905,7 @@
       },
       'stag-rider': {
         name: 'The Stag-Rider',
-        title: 'Knight â€¢ Celestial Cavalier',
+        title: 'Knight • Celestial Cavalier',
         img: 'pieces/verdant_knight.png',
         maxHp: 540,
         speed: 4.4,

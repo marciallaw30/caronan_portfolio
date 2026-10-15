@@ -23,21 +23,30 @@ const DB_KEYS = {
   REVIEWS: "tk_reviews_db"
 };
 
+// ================= 0. PRODUCT AVAILABILITY =================
+// Only wire-wrapped pendants (IDs 1-35) and ONE ring (ID 36: Golden Ember Ring) are available now.
+// Everything else stays in the catalog as "Coming Soon / In Production" and cannot be ordered.
+const AVAILABLE_CATEGORIES = ["Pendants"];
+const AVAILABLE_PRODUCT_IDS = [36]; // Golden Ember Ring: Carnelian Agate Solitaire
+function isProductAvailable(p) {
+  if (!p) return false;
+  if (p.category === "Pendants" && p.id >= 1 && p.id <= 35) return true;
+  if (p.id === 36) return true;
+  return false;
+}
+
 // ================= 1. DATABASE INITIALIZATION & REPOSITORY =================
 const Database = {
   // Initialize and load products from LocalStorage or seed from CRYSTAL_PRODUCTS
   getProducts() {
-    const raw = localStorage.getItem(DB_KEYS.PRODUCTS);
-    if (!raw) {
-      localStorage.setItem(DB_KEYS.PRODUCTS, JSON.stringify(CRYSTAL_PRODUCTS));
-      return CRYSTAL_PRODUCTS;
-    }
-    try {
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) && parsed.length > 0 ? parsed : CRYSTAL_PRODUCTS;
-    } catch (e) {
-      return CRYSTAL_PRODUCTS;
-    }
+    return CRYSTAL_PRODUCTS.map(item => {
+      const avail = isProductAvailable(item);
+      return {
+        ...item,
+        isAvailable: avail,
+        stock: avail ? (item.stock > 0 ? item.stock : 6) : 0
+      };
+    });
   },
 
   saveProducts(products) {
@@ -164,7 +173,7 @@ const Database = {
 };
 
 // ================= 2. ACTIVE RUNTIME STATE =================
-let cart = Database.getCart();
+let cart = Database.getCart().filter(i => isProductAvailable(i)); // drop any 'coming soon' items saved earlier
 let currentCategory = "All";
 let searchQuery = "";
 let selectedService = SPIRITUAL_SERVICES[0];
@@ -233,43 +242,23 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ================= 4. PRODUCT CATALOG RENDERING =================
-function renderProducts() {
-  const container = document.getElementById('productsGrid');
-  if (!container) return;
-
-  const products = Database.getProducts();
-
-  const filtered = products.filter(p => {
-    const matchesCat = (currentCategory === "All") || (p.category === currentCategory);
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.chakra.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.wireMaterial.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCat && matchesSearch;
-  });
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div class="col-12 text-center py-5">
-        <i class="bi bi-search text-gold fs-1 mb-3 d-block"></i>
-        <h4 class="text-white">No Crystals Found Matching "${searchQuery}"</h4>
-        <p class="text-muted">Try another metaphysical keyword or clear your active category filter.</p>
-        <button class="btn btn-gold-primary mt-2" onclick="resetFilters()">View All 44 Crystals</button>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = filtered.map(p => `
+function renderProductCard(p) {
+  const available = isProductAvailable(p);
+  return `
     <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-      <div class="product-card">
+      <div class="product-card ${available ? '' : 'coming-soon'}">
         <div class="product-thumb-wrap">
-          <span class="product-tag-badge">${p.tag}</span>
+          <span class="product-tag-badge ${available ? '' : 'bg-secondary'}">${available ? p.tag : 'Coming Soon'}</span>
           <span class="product-sku-badge">${p.sku}</span>
           <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='assets/crystals/6.png'">
         </div>
         <div class="product-card-body">
-          <div class="product-category-meta">${p.category}</div>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="product-category-meta">${p.category}</span>
+            <span class="badge ${available ? 'bg-success bg-opacity-25 border border-success text-success' : 'bg-dark border border-secondary text-secondary'} font-mono" style="font-size: 0.65rem;">
+              <i class="bi ${available ? 'bi-check2-circle' : 'bi-hourglass-split'} me-1"></i>${available ? 'In Stock' : 'Not Available Yet'}
+            </span>
+          </div>
           <h3 class="product-title" title="${p.name}">${p.name}</h3>
           <div class="product-chakra-chip">
             <i class="bi bi-stars"></i> ${p.chakra}
@@ -285,15 +274,160 @@ function renderProducts() {
               <button class="btn btn-sm btn-outline-warning" onclick="openProductQuickView(${p.id})" title="Inspect Crystal Metaphysics">
                 <i class="bi bi-eye"></i>
               </button>
-              <button class="btn btn-add-cart" onclick="addToCart(${p.id})" ${p.stock <= 0 ? 'disabled' : ''}>
-                <i class="bi bi-bag-plus"></i> ${p.stock <= 0 ? 'Sold Out' : 'Add'}
+              <button class="btn ${available ? 'btn-add-cart' : 'btn-sm btn-secondary'}" onclick="addToCart(${p.id})" ${available ? '' : 'disabled style="opacity: 0.65; cursor: not-allowed;"'}>
+                <i class="bi ${available ? 'bi-bag-plus' : 'bi-lock-fill'}"></i> ${available ? 'Add' : 'Soon'}
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  `).join('');
+  `;
+}
+
+function renderProducts() {
+  const container = document.getElementById('productsGrid');
+  if (!container) return;
+
+  const products = Database.getProducts();
+
+  const filtered = products.filter(p => {
+    let matchesCat = true;
+    if (currentCategory === "AvailableOnly") {
+      matchesCat = isProductAvailable(p);
+    } else if (currentCategory !== "All") {
+      matchesCat = (p.category === currentCategory);
+    }
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.chakra.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.wireMaterial.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCat && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="col-12 text-center py-5">
+        <i class="bi bi-search text-gold fs-1 mb-3 d-block"></i>
+        <h4 class="text-white">No Crystals Found Matching "${searchQuery}"</h4>
+        <p class="text-muted">Try another metaphysical keyword or clear your active category filter.</p>
+        <button class="btn btn-gold-primary mt-2" onclick="resetFilters()">View All Available Crystals</button>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+
+  if (currentCategory === "All" && !searchQuery) {
+    const available = filtered.filter(p => isProductAvailable(p));
+    const comingSoon = filtered.filter(p => !isProductAvailable(p));
+
+    html += `
+      <div class="col-12 mb-3">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-check-circle-fill text-success fs-5"></i>
+            <span class="text-white fw-bold">Active Artisan Inventory: 35 Wire-Wrapped Pendants + 1 Handcrafted Ring</span>
+          </div>
+          <span class="badge bg-success font-mono px-3 py-2 text-white">36 Available • Ships via J&amp;T Express</span>
+        </div>
+      </div>
+    `;
+
+    html += available.map(p => renderProductCard(p)).join('');
+
+    if (comingSoon.length > 0) {
+      html += `
+        <div class="col-12 my-3">
+          <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(18, 8, 38, 0.95); border: 1px dashed rgba(168, 85, 247, 0.6); box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <div class="d-flex align-items-center gap-3">
+              <div class="rounded-circle p-2 d-flex align-items-center justify-content-center" style="background: rgba(168, 85, 247, 0.2); width: 44px; height: 44px; color: #c084fc;">
+                <i class="bi bi-tools fs-5"></i>
+              </div>
+              <div>
+                <div class="fw-bold text-white fs-6">Artisan Workshop — Upcoming Pieces (Not Available Yet)</div>
+                <div class="small" style="color: #cbd5e1;">The following handcrafted pieces (2 rings, 3 bracelets, 3 earrings) are currently in wirecraft production and not yet open for ordering.</div>
+              </div>
+            </div>
+            <span class="badge bg-secondary font-mono px-3 py-2 text-uppercase">8 Coming Soon</span>
+          </div>
+        </div>
+      `;
+      html += comingSoon.map(p => renderProductCard(p)).join('');
+    }
+  } else if (currentCategory === "AvailableOnly") {
+    html += `
+      <div class="col-12 mb-3">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35);">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-stars text-warning fs-5"></i>
+            <span class="text-white fw-bold">Available Now Collection (36 Handcrafted Pieces)</span>
+          </div>
+          <span class="badge bg-success font-mono px-3 py-2 text-white">35 Wire Pendants + 1 Ring</span>
+        </div>
+      </div>
+    `;
+    html += filtered.map(p => renderProductCard(p)).join('');
+  } else if (currentCategory === "Pendants") {
+    html += `
+      <div class="col-12 mb-3">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(22, 10, 42, 0.92); border: 1px solid rgba(192, 132, 252, 0.4);">
+          <div>
+            <strong class="text-white"><i class="bi bi-gem text-warning me-2"></i>Wire-Wrapped Pendants Collection</strong>
+            <div class="small" style="color: #cbd5e1;">All 35 authentic handcrafted crystal pendants are available in stock for immediate ordering and delivery via J&amp;T Express.</div>
+          </div>
+          <span class="badge bg-success font-mono px-3 py-2 text-white">35 Available In Stock</span>
+        </div>
+      </div>
+    `;
+    html += filtered.map(p => renderProductCard(p)).join('');
+  } else if (currentCategory === "Rings") {
+    html += `
+      <div class="col-12 mb-3">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(28, 14, 4, 0.92); border: 1px solid rgba(245, 158, 11, 0.45);">
+          <div>
+            <strong class="text-white"><i class="bi bi-suit-diamond-fill text-warning me-2"></i>Handcrafted Artisan Ring Collection</strong>
+            <div class="small" style="color: #cbd5e1;">1 Wire-Wrapped Ring Available Now (Golden Ember Ring). Other ring styles are in workshop production.</div>
+          </div>
+          <span class="badge bg-warning text-dark font-mono px-3 py-2 fw-bold">1 Available • 2 Coming Soon</span>
+        </div>
+      </div>
+    `;
+    const sorted = [...filtered].sort((a, b) => Number(isProductAvailable(b)) - Number(isProductAvailable(a)));
+    html += sorted.map(p => renderProductCard(p)).join('');
+  } else if (currentCategory === "Bracelets") {
+    html += `
+      <div class="col-12 mb-3">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(15, 23, 42, 0.92); border: 1px dashed rgba(148, 163, 184, 0.5);">
+          <div>
+            <strong class="text-white"><i class="bi bi-infinity text-info me-2"></i>Artisan Mala Bracelets (Coming Soon)</strong>
+            <div class="small" style="color: #cbd5e1;">Bracelets are currently in artisan wirecraft production and not available for checkout yet. Explore metaphysical profiles below.</div>
+          </div>
+          <span class="badge bg-secondary font-mono px-3 py-2">3 In Production • Coming Soon</span>
+        </div>
+      </div>
+    `;
+    html += filtered.map(p => renderProductCard(p)).join('');
+  } else if (currentCategory === "Earrings") {
+    html += `
+      <div class="col-12 mb-3">
+        <div class="p-3 rounded-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" style="background: rgba(15, 23, 42, 0.92); border: 1px dashed rgba(148, 163, 184, 0.5);">
+          <div>
+            <strong class="text-white"><i class="bi bi-circle text-info me-2"></i>Hand-Wrapped Dangle Earrings (Coming Soon)</strong>
+            <div class="small" style="color: #cbd5e1;">Artisan wire earrings are currently being crafted in our workshop and not available for checkout yet.</div>
+          </div>
+          <span class="badge bg-secondary font-mono px-3 py-2">3 In Production • Coming Soon</span>
+        </div>
+      </div>
+    `;
+    html += filtered.map(p => renderProductCard(p)).join('');
+  } else {
+    const sorted = [...filtered].sort((a, b) => Number(isProductAvailable(b)) - Number(isProductAvailable(a)));
+    html += sorted.map(p => renderProductCard(p)).join('');
+  }
+
+  container.innerHTML = html;
 }
 
 // Filter pills logic
@@ -349,15 +483,22 @@ function openProductQuickView(productId) {
   document.getElementById('qvPrice').textContent = `₱${product.price.toLocaleString()}`;
   document.getElementById('qvDesc').textContent = product.description;
   document.getElementById('qvWire').textContent = product.wireMaterial;
-  document.getElementById('qvCleansing').textContent = product.cleansing;
-  document.getElementById('qvStock').textContent = product.stock > 0 ? `${product.stock} pieces in stock` : `Sold out`;
+  const avail = isProductAvailable(product);
+  document.getElementById('qvStock').innerHTML = !avail 
+    ? '<span class="badge bg-secondary font-mono px-2 py-1"><i class="bi bi-tools me-1"></i> In Artisan Production • Coming Soon (Not Available Yet)</span>' 
+    : (product.stock > 0 ? `<span class="badge bg-success bg-opacity-25 border border-success text-success font-mono px-2 py-1"><i class="bi bi-check-circle-fill me-1"></i> ${product.stock} pieces in stock (Ships via J&T)</span>` : `<span class="badge bg-danger font-mono">Sold out</span>`);
   
   const addBtn = document.getElementById('qvAddBtn');
   if (addBtn) {
-    addBtn.disabled = product.stock <= 0;
+    addBtn.disabled = product.stock <= 0 || !avail;
+    addBtn.innerHTML = !avail 
+      ? '<i class="bi bi-lock-fill me-1"></i> Coming Soon — Not Yet Available' 
+      : (product.stock <= 0 ? 'Sold Out' : '<i class="bi bi-bag-plus me-1"></i> Add to Cart');
     addBtn.onclick = () => {
-      addToCart(product.id);
-      bootstrap.Modal.getInstance(modalEl).hide();
+      if (avail && product.stock > 0) {
+        addToCart(product.id);
+        bootstrap.Modal.getInstance(modalEl).hide();
+      }
     };
   }
 
@@ -370,6 +511,10 @@ function addToCart(productId) {
   const products = Database.getProducts();
   const product = products.find(p => p.id === productId);
   if (!product || product.stock <= 0) return;
+  if (!isProductAvailable(product)) {
+    showToastNotification(`${product.name} is coming soon and not yet available to order.`);
+    return;
+  }
 
   const existing = cart.find(item => item.id === productId);
   if (existing) {

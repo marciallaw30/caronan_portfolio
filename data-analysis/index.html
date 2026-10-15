@@ -812,59 +812,69 @@
         <!-- TAB 2: VISUAL CHARTS & GRAPHS (TASK 9) -->
         <div class="tab-pane fade" id="overview" role="tabpanel">
           <div class="row g-4 mb-4">
-            <!-- Daily Sales Trend Chart -->
-            <div class="col-lg-8">
+            <!-- Chart 1: Sales Trend (Line) -->
+            <div class="col-lg-6">
               <div class="chart-box chart-box-tall">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-graph-up text-success me-2"></i>9. Sales Trend Chart (50 Sequential Operations Days)</h5>
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-graph-up text-success me-2"></i>Sales Trend</h5>
                   <span class="badge bg-success-subtle text-success">Task 9 Line Chart</span>
                 </div>
-                <div style="height: 330px;">
+                <p class="text-muted small mb-2">Total revenue by day of the week (Mon–Sun).</p>
+                <div style="height: 300px;">
                   <canvas id="salesChart"></canvas>
                 </div>
               </div>
             </div>
 
-            <!-- Day of Week Revenue -->
-            <div class="col-lg-4">
+            <!-- Chart 2: Service Usage Totals (Column) -->
+            <div class="col-lg-6">
               <div class="chart-box chart-box-tall">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-calendar-week text-success me-2"></i>Weekly Revenue Breakdown</h5>
-                  <span class="badge bg-success-subtle text-success">Task 6 / 9 Bar Chart</span>
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-bar-chart-fill text-info me-2"></i>Service Usage Totals</h5>
+                  <span class="badge bg-info-subtle text-info">Task 7 / 9 Column Chart</span>
                 </div>
-                <div style="height: 330px;">
-                  <canvas id="dowChart"></canvas>
+                <p class="text-muted small mb-2">Printing Pages (415) represent the single highest volume service output.</p>
+                <div style="height: 300px;">
+                  <canvas id="serviceVolumeChart"></canvas>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="row g-4 mb-4">
-            <!-- Multi-Service Volume Doughnut -->
-            <div class="col-lg-6">
+            <!-- Chart 3: Students Pie -->
+            <div class="col-lg-4">
               <div class="chart-box">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-pie-chart-fill text-info me-2"></i>Service Output Utilization Volume</h5>
-                  <span class="badge bg-info-subtle text-info">Task 7 / 9</span>
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-mortarboard-fill text-primary me-2"></i>Students</h5>
+                  <span class="badge bg-primary-subtle text-primary">Task 8 / 9 Pie</span>
                 </div>
-                <p class="text-muted small mb-2">Printing Pages (415) represent the single highest volume service output.</p>
-                <div style="height: 280px;">
-                  <canvas id="serviceVolumeChart"></canvas>
-                </div>
+                <p class="text-muted small mb-2">Student customers: Yes 38, No 12.</p>
+                <div style="height: 260px;"><canvas id="studentsChart"></canvas></div>
               </div>
             </div>
 
-            <!-- Demographic Segmentation Chart -->
-            <div class="col-lg-6">
+            <!-- Chart 4: Gender Pie -->
+            <div class="col-lg-4">
               <div class="chart-box">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-gender-ambiguous text-warning me-2"></i>Demographics (Gender × Student Status)</h5>
-                  <span class="badge bg-warning-subtle text-warning">Task 8 / 9</span>
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-gender-ambiguous text-warning me-2"></i>Gender</h5>
+                  <span class="badge bg-warning-subtle text-warning">Task 8 / 9 Pie</span>
                 </div>
-                <p class="text-muted small mb-2">Cross-tabulation reveals male students as the primary computer shop demographic.</p>
-                <div style="height: 280px;">
-                  <canvas id="demographicChart"></canvas>
+                <p class="text-muted small mb-2">Customers by gender: Male 28, Female 22.</p>
+                <div style="height: 260px;"><canvas id="genderChart"></canvas></div>
+              </div>
+            </div>
+
+            <!-- Chart 5: Gaming Pie -->
+            <div class="col-lg-4">
+              <div class="chart-box">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h5 class="fw-bold text-white mb-0"><i class="bi bi-controller text-danger me-2"></i>Gaming</h5>
+                  <span class="badge bg-danger-subtle text-danger">Task 8 / 9 Pie</span>
                 </div>
+                <p class="text-muted small mb-2">Gaming station use: Yes 14, No 36.</p>
+                <div style="height: 260px;"><canvas id="gamingChart"></canvas></div>
               </div>
             </div>
           </div>

@@ -332,6 +332,7 @@ if (signInForm) {
     signInForm.reset();
 
     updateAuthUI();
+    if (typeof OracleHistory !== 'undefined') OracleHistory.onLogin();
     showToast(`Welcome back, ${user.name || user.email}! You have ${user.freeChatsRemaining} free insights available today.`, "success");
   });
 }
@@ -381,6 +382,7 @@ if (signUpForm) {
     signUpForm.reset();
 
     updateAuthUI();
+    if (typeof OracleHistory !== 'undefined') OracleHistory.onLogin(false);
     showToast(`🌟 Blessed Welcome, ${newUser.name}! Your account has been credited with 5 Free Daily Insights!`, "success");
   });
 }
@@ -399,6 +401,7 @@ function fillDemoAccount() {
 function logoutUser() {
   localStorage.removeItem(STORAGE_CURRENT_USER_KEY);
   updateAuthUI();
+  if (typeof OracleHistory !== 'undefined') OracleHistory.onLogout();
   showToast("You have safely disconnected from the Oracle session.", "info");
 }
 
@@ -514,7 +517,7 @@ function closeDepletedAndOpenStore() {
 // 6. CHATBOT CORE & KNOWLEDGE RETRIEVAL
 // ==========================================
 
-function appendMessage(role, text) {
+function appendMessage(role, text, opts = {}) {
   const msgDiv = document.createElement('div');
   msgDiv.className = `chat-message ${role === 'user' ? 'user-message' : 'oracle-message'}`;
   
@@ -532,6 +535,11 @@ function appendMessage(role, text) {
   msgDiv.appendChild(contentDiv);
   chatHistory.appendChild(msgDiv);
   scrollToBottom();
+
+  // Persist to chat history (skipped when re-rendering a saved conversation)
+  if (!opts.skipSave && typeof OracleHistory !== 'undefined') {
+    OracleHistory.saveMessage(role === 'user' ? 'user' : 'model', text);
+  }
 }
 
 function scrollToBottom() {
@@ -548,6 +556,7 @@ function clearChat() {
   `;
   conversationContext = [];
   suggestionChips.style.display = "flex";
+  if (typeof OracleHistory !== 'undefined') OracleHistory.newConversation();
 }
 
 // Handler for Suggestion Chips
@@ -555,6 +564,17 @@ function sendSuggestion(text) {
   userInput.value = text;
   suggestionChips.style.display = "none";
   chatForm.dispatchEvent(new Event('submit'));
+}
+
+// Prepends the Oracle system directive to the first user message of a conversation
+function withSystemPrompt(userText) {
+  const systemPrompt = `[System Directive: You are Oracle AI, a metaphysical guide connected to the universal consciousness. 
+Your duty is to provide Universal Spiritual Meanings for any question asked.
+When answering, format your response exactly like a 'Google AI Overview' (precise, concise summary followed by bullet points), but write it with a spiritual, mystical twist. 
+Always begin your answer with a variation of 'According to the Universe...' or 'The cosmic energies reveal...'.
+If a user asks about dreams (e.g., 'a dream running away from a tiger'), give the specific spiritual and psychological meaning of that exact dream.
+Confine your expertise strictly to metaphysical topics, dreams, astrology, crystals, numerology, tarot, etc. If asked something completely unrelated to spirituality, gently deflect and ask what their spirit seeks.]\n\nUser Question: `;
+  return systemPrompt + userText;
 }
 
 // Gemini Knowledge API Call
@@ -568,13 +588,7 @@ async function fetchKnowledgeResponse(userText) {
   
   let textToSend = userText;
   if (conversationContext.length === 0) {
-    const systemPrompt = `[System Directive: You are Oracle AI, a metaphysical guide connected to the universal consciousness. 
-Your duty is to provide Universal Spiritual Meanings for any question asked.
-When answering, format your response exactly like a 'Google AI Overview' (precise, concise summary followed by bullet points), but write it with a spiritual, mystical twist. 
-Always begin your answer with a variation of 'According to the Universe...' or 'The cosmic energies reveal...'.
-If a user asks about dreams (e.g., 'a dream running away from a tiger'), give the specific spiritual and psychological meaning of that exact dream.
-Confine your expertise strictly to metaphysical topics, dreams, astrology, crystals, numerology, tarot, etc. If asked something completely unrelated to spirituality, gently deflect and ask what their spirit seeks.]\n\nUser Question: `;
-    textToSend = systemPrompt + userText;
+    textToSend = withSystemPrompt(userText);
   }
 
   // Add user message to context
@@ -781,4 +795,7 @@ function showToast(message, type = "info") {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   updateAuthUI();
+  if (typeof OracleHistory !== 'undefined') {
+    if (getCurrentUser()) OracleHistory.onLogin(); else OracleHistory.refreshList();
+  }
 });

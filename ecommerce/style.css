@@ -916,3 +916,40 @@ p, li, span, label, small, div, td, th {
     padding: 60px 0;
   }
 }
+
+/* ===== Availability: items not yet available ===== */
+.product-card.coming-soon {
+  opacity: 0.82;
+  border: 1px dashed rgba(168, 85, 247, 0.45);
+  background: rgba(14, 6, 26, 0.92);
+}
+.product-card.coming-soon .product-thumb-wrap img {
+  filter: grayscale(0.7) brightness(0.85);
+  transition: filter 0.3s ease;
+}
+.product-card.coming-soon:hover .product-thumb-wrap img {
+  filter: grayscale(0.3) brightness(0.95);
+}
+.product-card.coming-soon .product-tag-badge {
+  background: rgba(100, 116, 139, 0.9);
+  color: #f8fafc;
+  font-weight: 600;
+}
+.product-card.coming-soon .btn-add-cart {
+  background: rgba(100, 116, 139, 0.35);
+  border-color: rgba(148, 163, 184, 0.4);
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+.pill-soon {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(168, 85, 247, 0.25);
+  color: #d8b4fe;
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-left: 5px;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}

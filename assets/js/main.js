@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
       category: 'E-Business, Fintech & Logistics Integration',
       overview: 'An academic e-commerce web platform developed for Datamex College of Saint Adeline (In Partial Fulfillment in E-Business under Faculty Adviser Mr. Randy Villanueva). Engineered by Lead Marcial Lawrence Jr V. Caronan and team, the platform combines handcrafted wire-wrapped crystal jewelry retail with real-time spiritual reading appointments, instant PayMongo API gateway verification, and nationwide J&T Express parcel logistics tracking.',
       features: [
-        'Artisan Product Catalog featuring 44 handcrafted crystal items with instant search, category filtering, and modal detail views',
+        'Artisan Product Catalog featuring 36 available handcrafted wire-wrapped pendants and rings (more coming soon) with instant search, category filtering, and modal detail views',
         'Instant PayMongo payment gateway integration (GCash, Maya, Visa/Mastercard) eliminating manual screenshot receipt checking',
         'Interactive J&T Express parcel logistics tracker with simulated waybills and milestone checkpoints',
         'Spiritual reading appointment booking calendar with real-time time-slot conflict prevention and client confirmation',

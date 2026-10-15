@@ -267,18 +267,19 @@
           <div class="input-group shadow">
             <span class="input-group-text bg-dark border-warning text-gold"><i class="bi bi-search"></i></span>
             <input type="text" id="crystalSearchInput" class="form-control bg-dark border-warning text-white"
-              placeholder="Search by crystal name (e.g. Amethyst, Citrine, Obsidian, Love, Shield)...">
+              placeholder="Search by crystal or wire jewelry (e.g. Labradorite, Rose Quartz, Onyx, Ring, Wire Wrap)...">
           </div>
         </div>
       </div>
 
       <!-- Category Filter Pills (Thesis Categories: Pendants, Bracelets, Rings, Earrings) -->
-      <div class="filter-pill-bar">
-        <button class="btn-filter-pill active" data-category="All"><i class="bi bi-stars"></i> All Crystals (44)</button>
-        <button class="btn-filter-pill" data-category="Pendants"><i class="bi bi-gem"></i> Wire Pendants</button>
-        <button class="btn-filter-pill" data-category="Rings"><i class="bi bi-suit-diamond"></i> Artisan Rings</button>
-        <button class="btn-filter-pill" data-category="Bracelets"><i class="bi bi-infinity"></i> Mala Bracelets</button>
-        <button class="btn-filter-pill" data-category="Earrings"><i class="bi bi-circle"></i> Artisan Earrings</button>
+      <div class="filter-pill-bar d-flex flex-wrap justify-content-center align-items-center gap-2 mb-4">
+        <button class="btn-filter-pill active" data-category="All"><i class="bi bi-stars"></i> All Catalog (36 Available • 8 Soon)</button>
+        <button class="btn-filter-pill" data-category="AvailableOnly"><i class="bi bi-check-circle-fill text-success"></i> Available Now (36)</button>
+        <button class="btn-filter-pill" data-category="Pendants"><i class="bi bi-gem"></i> Wire Pendants (35)</button>
+        <button class="btn-filter-pill" data-category="Rings"><i class="bi bi-suit-diamond"></i> Artisan Rings (1 In Stock)</button>
+        <button class="btn-filter-pill" data-category="Bracelets"><i class="bi bi-infinity"></i> Mala Bracelets <small class="pill-soon">Soon</small></button>
+        <button class="btn-filter-pill" data-category="Earrings"><i class="bi bi-circle"></i> Artisan Earrings <small class="pill-soon">Soon</small></button>
       </div>
 
       <!-- Products Grid (Dynamically Populated by script.js from CRYSTAL_PRODUCTS) -->

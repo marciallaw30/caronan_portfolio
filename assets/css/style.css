@@ -110,15 +110,35 @@ body {
    Bootstrap Typography Overrides for High Contrast
    =================================================================== */
 .text-muted, .text-secondary {
-  color: var(--text-muted) !important;
+  color: #cbd5e1 !important; /* Crisp slate-300 with high contrast */
+}
+
+.text-light {
+  color: #f8fafc !important;
 }
 
 .text-dark {
-  color: var(--text-dark) !important;
+  color: #0f172a !important;
 }
 
 .text-white {
-  color: var(--text-main) !important;
+  color: #ffffff !important;
+}
+
+.text-success {
+  color: #4ade80 !important; /* Vibrant neon green on dark background */
+}
+
+.text-danger {
+  color: #fb7185 !important; /* Vibrant rose on dark background */
+}
+
+.text-info {
+  color: #38bdf8 !important; /* Neon sky blue on dark background */
+}
+
+.text-warning {
+  color: #facc15 !important; /* Neon golden yellow on dark background */
 }
 
 
@@ -414,8 +434,8 @@ a {
 /* ================= Codespot-Style Cards ================= */
 .codespot-card {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border-card);
   border-radius: 20px;
   padding: 1.85rem;
@@ -423,6 +443,10 @@ a {
   box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
+}
+
+.codespot-card p {
+  color: #f1f5f9;
 }
 
 .codespot-card::before {
@@ -715,23 +739,25 @@ a {
 }
 
 .skill-badge {
-  font-size: 0.72rem;
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.28);
-  color: #e9d5ff;
-  padding: 4px 9px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  background: rgba(22, 10, 42, 0.92);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  color: #f3e8ff;
+  padding: 4px 10px;
   border-radius: 6px;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  margin: 2px 2px;
+  margin: 3px 2px;
   transition: all 0.2s ease;
   line-height: 1.35;
+  backdrop-filter: blur(8px);
 }
 
 .skill-badge:hover {
-  background: rgba(168, 85, 247, 0.24);
-  border-color: rgba(192, 132, 252, 0.6);
+  background: rgba(168, 85, 247, 0.35);
+  border-color: rgba(192, 132, 252, 0.8);
   color: #ffffff;
   transform: translateY(-1px);
 }
@@ -1176,4 +1202,23 @@ a {
     max-width: 100% !important;
     width: 100% !important;
   }
+}
+/* Project quick-jump pills: higher contrast so labels are always readable over the animated background */
+.project-jump .btn {
+  background: rgba(10, 8, 24, 0.85);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.project-jump .btn-outline-info { color: #7ee8ff; border-color: #22d3ee; }
+.project-jump .btn-outline-success { color: #6ee7a8; border-color: #34d399; }
+.project-jump .btn-outline-warning { color: #ffd45e; border-color: #fbbf24; }
+.project-jump .btn-outline-danger { color: #ff8a9a; border-color: #fb7185; }
+.project-jump .btn-outline-purple { color: #d8b4fe !important; border-color: #c084fc !important; }
+.project-jump .btn:hover {
+  transform: translateY(-2px);
+  background: rgba(30, 24, 60, 0.95);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
 }

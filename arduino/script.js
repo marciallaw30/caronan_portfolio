@@ -149,7 +149,7 @@ function updateHardwareState(percent, triggerAudio = true) {
         : 'Moisture 10% - 30%. Moderate range! Red LED & 1000Hz sound alarm active.';
     }
     if (plantSvg) {
-      plantSvg.innerHTML = getPlantSvg(moistureRatio <= 0.1 ? 'dry' : 'moderate');
+      renderPlant(plantSvg, moistureRatio <= 0.1 ? 'dry' : 'moderate');
     }
 
     // Trigger 1000Hz alarm tone
@@ -186,11 +186,26 @@ function updateHardwareState(percent, triggerAudio = true) {
       plantSubtext.textContent = `Moisture ${currentMoisturePercent}%. Optimal to saturated state (> 30% to 100%). Speaker is completely MUTED & 100% silent.`;
     }
     if (plantSvg) {
-      plantSvg.innerHTML = getPlantSvg('healthy');
+      renderPlant(plantSvg, 'healthy');
     }
 
     // Completely muted on optimal to saturated: zero sound
     logSerial(`[A0: ${rawAnalog}] moistureRatio: ${(moistureRatio).toFixed(2)} &gt; 0.30 -> GREEN LED ON | MUTED noTone() (100% Silent in Optimal/Saturated State)`);
+  }
+}
+
+// Renders the plant: interactive 3D (Three.js) when WebGL is available, otherwise the flat SVG
+let plant3dTried = false;
+function renderPlant(container, state) {
+  if (!container) return;
+  if (!plant3dTried && typeof Plant3D !== 'undefined') {
+    plant3dTried = true;
+    Plant3D.mount(container);
+  }
+  if (typeof Plant3D !== 'undefined' && Plant3D.ready) {
+    Plant3D.setState(state);
+  } else {
+    container.innerHTML = getPlantSvg(state);
   }
 }
 

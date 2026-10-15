@@ -19,7 +19,7 @@
 }
 
 .text-muted.small, small.text-muted {
-  color: #94a3b8 !important;
+  color: #cbd5e1 !important;
 }
 
 .oracle-subtitle, .lead, p.lead {
@@ -541,3 +541,56 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
+
+/* ===== Chat History Panel ===== */
+.history-offcanvas {
+  background: rgba(14, 8, 25, 0.97);
+  border-right: 1px solid var(--border-card);
+  color: var(--text-main);
+  width: 340px;
+}
+.history-db-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  background: rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  color: #cbd5e1;
+}
+.history-db-badge.cloud { background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #86efac; }
+.history-db-badge.local { background: rgba(251, 191, 36, 0.15); border-color: #fbbf24; color: #fde68a; }
+.history-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.history-item {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.08);
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.history-item:hover { background: rgba(124, 58, 237, 0.2); transform: translateX(2px); }
+.history-item.active { border-color: var(--violet-neon); background: rgba(124, 58, 237, 0.28); }
+.history-item-main {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  color: inherit;
+  padding: 0.7rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.history-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #ffffff; }
+.history-item-when { font-size: 0.72rem; color: #cbd5e1; }
+.history-item-del {
+  background: none;
+  border: 0;
+  color: #cbd5e1;
+  padding: 0 0.85rem;
+  border-radius: 0 12px 12px 0;
+  transition: color 0.2s, background 0.2s;
+}
+.history-item-del:hover { color: #fb7185; background: rgba(251, 113, 133, 0.12); }
+.history-empty { text-align: center; color: #cbd5e1; padding: 2rem 1rem; font-size: 0.85rem; }
+.history-empty i { font-size: 2rem; color: var(--violet-neon); display: block; margin-bottom: 0.5rem; }
