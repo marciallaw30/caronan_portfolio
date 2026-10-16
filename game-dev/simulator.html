@@ -4242,6 +4242,50 @@
       });
     }
 
+    // Auto-initialize Kingdom and Arcade Mode from URL parameters & Hash
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const modeParam = urlParams.get('mode') || (window.location.hash.includes('arcade') ? 'arcade' : null);
+      const kingdomParam = urlParams.get('kingdom');
+
+      if (kingdomParam) {
+        const kingdomMap = {
+          'obsidian': 'volcanic',
+          'volcanic': 'volcanic',
+          'verdant': 'verdant',
+          'abyssal': 'abyssal',
+          'frostbound': 'frost',
+          'frost': 'frost',
+          'abyssalveil': 'void',
+          'void': 'void',
+          'gearwork': 'gearwork',
+          'gravebound': 'grave',
+          'grave': 'grave'
+        };
+        const mappedFaction = kingdomMap[kingdomParam.toLowerCase()];
+        if (mappedFaction && FACTION_DATA[mappedFaction]) {
+          activePlayerFaction = mappedFaction;
+          if (factionSelect) factionSelect.value = mappedFaction;
+          const fData = FACTION_DATA[mappedFaction];
+          document.getElementById('simFactionName').textContent = fData.name;
+          document.getElementById('simPassiveName').textContent = fData.passiveName;
+          document.getElementById('simPassiveDesc').textContent = fData.passiveDesc;
+          const btnUlt = document.getElementById('btnQueenUltimate');
+          if (btnUlt) {
+            btnUlt.innerHTML = `<i class="bi bi-stars me-1"></i> Trigger Queen Ultimate: ${fData.queenUlt}`;
+          }
+        }
+      }
+
+      if (modeParam === 'arcade' && btnSwitchArena) {
+        setTimeout(() => {
+          btnSwitchArena.click();
+        }, 100);
+      }
+    } catch (e) {
+      console.warn('URL param parse error:', e);
+    }
+
     // ================= REAL-TIME ARCADE MODE ENGINE =================
     let isArenaRunning = false;
     let arenaAnimId = null;
@@ -4576,9 +4620,9 @@
 
     function spawnMinionWave() {
       const spawnSlots = [
-        { x: 860, y: 160 },
-        { x: 920, y: 270 },
-        { x: 870, y: 390 }
+        { x: 880, y: 140 },
+        { x: 960, y: 270 },
+        { x: 890, y: 400 }
       ];
       spawnSlots.forEach((slot, i) => {
         arenaEnemies.push({
@@ -5603,7 +5647,8 @@
       });
 
       // ================= 2. 5D ANIMATED ENEMIES & BOSSES =================
-      arenaEnemies.forEach(e => {
+      const sortedEnemies = arenaEnemies.slice().sort((a, b) => a.y - b.y);
+      sortedEnemies.forEach(e => {
         if (e.hp <= 0) return;
 
         // 5D Procedural Breathing & Locomotion Lean
@@ -5667,7 +5712,7 @@
         const barW = e.radius * 2 + 16;
         const barH = 5;
         const hpPct = Math.max(0, e.hp / e.maxHp);
-        const headTop = e.y + bob - (e.isBoss ? 72 : 46);
+        const headTop = e.y + bob - (e.isBoss ? 82 : 54);
 
         // HP Background
         ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
