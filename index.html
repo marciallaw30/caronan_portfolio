@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
 <head>
@@ -2301,7 +2301,7 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
       <ul class="nav nav-pills justify-content-center gap-2 mb-4" id="employabilityTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active rounded-pill px-4 py-2 font-mono fw-bold" id="tab-mock-btn" data-bs-toggle="pill" data-bs-target="#tab-mock" type="button" role="tab">
-            <i class="bi bi-person-video3 me-1"></i> Mock IT Interview (12 Q&amp;A)
+            <i class="bi bi-camera-video-fill me-1"></i> Video Mock Interview
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -2324,195 +2324,53 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
       <!-- Tab Content Area -->
       <div class="tab-content" id="employabilityTabsContent">
 
-        <!-- ================= TAB 1: MOCK JOB INTERVIEW (12 QUESTIONS) ================= -->
+        <!-- ================= TAB 1: VIDEO-RECORDED MOCK INTERVIEW ================= -->
         <div class="tab-pane fade show active" id="tab-mock" role="tabpanel">
           <div class="codespot-card p-4 p-md-5">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4 pb-3 border-bottom border-secondary border-opacity-25">
               <div>
                 <span class="badge bg-info text-dark font-mono px-2 py-1 mb-1">STEP 21 COMPLIANCE</span>
-                <h4 class="h5 fw-bold text-white mb-0">Simulated IT Job Interview: Professional Model Responses</h4>
-                <span class="small text-muted font-mono">Curriculum Template: Student Guidelines Step 21 (Pages 6–7)</span>
+                <h4 class="h5 fw-bold text-white mb-0">Simulated IT Job Interview: Recorded Video Defense</h4>
+                <span class="small text-muted font-mono">Curriculum Guide: Datamex College of Saint Adeline Step 21</span>
               </div>
-              <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-40 font-mono px-3 py-2">
-                <i class="bi bi-mic-fill me-1"></i> 12/12 Questions Documented
+              <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-40 font-mono px-3 py-2">
+                <i class="bi bi-camera-video-fill me-1"></i> Video Recording
               </span>
             </div>
 
-            <!-- Accordion of 12 Questions -->
-            <div class="accordion" id="mockInterviewAccordion">
+            <!-- Video Player Showcase Container -->
+            <div class="rounded-4 p-4 p-md-5 text-center bg-black bg-opacity-60 border border-secondary border-opacity-30 position-relative overflow-hidden" style="min-height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              
+              <!-- Subtle Radial Glow -->
+              <div class="position-absolute" style="width: 320px; height: 320px; background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;"></div>
 
-              <!-- Q1 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock1">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock1">
-                    <span class="badge bg-info text-dark me-2">Q1</span> Tell me about yourself.
-                  </button>
-                </h2>
-                <div id="cMock1" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "I am <strong>Marcial Lawrence Jr V. Caronan</strong>, a graduating Bachelor of Science in Information Technology (BSIT) professional from Datamex College of Saint Adeline. My academic journey is distinguished by earning Dean’s Lister honors across all three consecutive years and serving as an Overall Cluster Leader for the National Service Training Program (NSTP). What sets me apart is my dual background: I financed my education through front-line operations as a Warehouse Data Encoder at SM Supermarket Warehouse, a Stock Clerk at SM Appliances, and a Service Crew &amp; Inventory Assistant at McDonald's. On the warehouse floor, I saw firsthand how manual data loss, scanner overflows, and inventory discrepancies halt operations. This inspired me to specialize in relational database design (3NF/ACID in MySQL), full-stack web development (PHP 8 &amp; JavaScript), and data analytics. I don’t just write code that compiles—I build resilient software that solves practical business bottlenecks."
-                  </div>
+              <div class="position-relative z-1 max-w-600 mx-auto">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-info bg-opacity-10 border border-info border-opacity-30 mb-3 shadow" style="width: 80px; height: 80px;">
+                  <i class="bi bi-camera-reels-fill text-info fs-1"></i>
+                </div>
+                
+                <h4 class="h5 fw-bold text-white mb-2">Video-Recorded Mock IT Job Interview</h4>
+                <p class="text-light opacity-80 small mb-4" style="max-width: 540px; line-height: 1.7;">
+                  The simulated IT job interview session is recorded on video. Once uploaded, the full recorded session covering technical background, database and full-stack systems defense, and behavioral inquiries will be embedded directly in this viewer.
+                </p>
+
+                <!-- Status Badges -->
+                <div class="d-inline-flex flex-wrap justify-content-center gap-2">
+                  <span class="badge bg-black bg-opacity-70 border border-secondary border-opacity-40 font-mono px-3 py-2 text-info">
+                    <i class="bi bi-person-fill text-info me-1"></i> Candidate: Marcial D. Caronan Jr.
+                  </span>
+                  <span class="badge bg-black bg-opacity-70 border border-secondary border-opacity-40 font-mono px-3 py-2 text-warning">
+                    <i class="bi bi-hourglass-split me-1"></i> Pending Video Upload
+                  </span>
+                  <span class="badge bg-black bg-opacity-70 border border-secondary border-opacity-40 font-mono px-3 py-2 text-light">
+                    <i class="bi bi-mortarboard-fill text-primary me-1"></i> DCSA BSIT Final Assessment
+                  </span>
                 </div>
               </div>
-
-              <!-- Q2 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock2">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock2">
-                    <span class="badge bg-info text-dark me-2">Q2</span> Why did you choose BSIT?
-                  </button>
-                </h2>
-                <div id="cMock2" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "I chose Information Technology because software is the digital nervous system of human enterprise. When working at cash registers and warehouse dispatch docks, I witnessed how a 5-minute system freeze or an unhandled null value can halt hundreds of customer transactions. I wanted to be on the engineering side of those systems—designing relational databases that never duplicate records, building responsive user interfaces that minimize operator fatigue, and architecting backend APIs with zero-trust security."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q3 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock3">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock3">
-                    <span class="badge bg-info text-dark me-2">Q3</span> What are your strongest IT skills?
-                  </button>
-                </h2>
-                <div id="cMock3" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "My core competencies lie in three interconnected pillars: (1) <strong>Relational Database Engineering</strong>: Designing normalized 3NF schemas in MySQL with strict referential integrity, row-level locking, and indexed queries; (2) <strong>Full-Stack Web Development</strong>: Crafting secure, high-performance web systems using PHP 8 (OOP/PDO), JavaScript (ES6+), and Bootstrap 5; and (3) <strong>Operational Data Analytics &amp; Troubleshooting</strong>: Advanced formula auditing in MS Excel and Python for transactional reconciliation, backed by hands-on hardware/peripheral diagnostics."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q4 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock4">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock4">
-                    <span class="badge bg-info text-dark me-2">Q4</span> What is your weakest skill?
-                  </button>
-                </h2>
-                <div id="cMock4" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "Early in my programming journey, I had a tendency to over-engineer low-level optimizations before completing the minimum viable feature set—for example, spending excessive time fine-tuning micro-caching mechanisms before user validation flows were finished. I addressed this weakness by adopting Agile timeboxing and MoSCoW prioritization: I now prioritize delivering the core functional requirement first, validating it through automated test scripts, and reserving optimizations for designated refactoring cycles."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q5 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock5">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock5">
-                    <span class="badge bg-info text-dark me-2">Q5</span> Tell us about your major project.
-                  </button>
-                </h2>
-                <div id="cMock5" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "My flagship project is the <strong>Enterprise E-Commerce Web Application (TarotKnight Store)</strong>. Unlike simple catalog websites, this system features an atomic inventory decrementing pipeline that prevents overselling race conditions under concurrent purchasing. It integrates automated payment gateway webhooks with cryptographic HMAC-SHA256 signature validation, live order lifecycle tracking, customer-to-merchant direct messaging, and an executive administration dashboard. The database is strictly normalized to 3NF in MySQL InnoDB, ensuring zero transactional redundancy."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q6 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock6">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock6">
-                    <span class="badge bg-info text-dark me-2">Q6</span> What was your biggest technical problem?
-                  </button>
-                </h2>
-                <div id="cMock6" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "My biggest challenge occurred during payment webhook integration: customers completed credit card payments in the sandbox, but the database never transitioned order records from 'Pending' to 'Paid'. The server was rejecting the provider's signature header, leaving orders orphaned. A second concurrent challenge was preventing race conditions when two users clicked 'Checkout' on the single remaining item in stock simultaneously."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q7 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock7">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock7">
-                    <span class="badge bg-info text-dark me-2">Q7</span> How did you solve it?
-                  </button>
-                </h2>
-                <div id="cMock7" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "By inspecting raw HTTP streams, I discovered that decoding incoming JSON and re-encoding it via <code>json_encode()</code> altered whitespace and forward-slash escaping, breaking hash parity. I resolved this by feeding the unmodified raw binary byte stream directly via <code>file_get_contents('php://input')</code> into <code>hash_hmac('sha256', ...)</code> with <code>hash_equals()</code>. For the inventory race condition, I wrapped the checkout in a MySQL transaction utilizing pessimistic row-locking (<code>SELECT ... FOR UPDATE</code>), ensuring stock checks and decrements execute atomically."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q8 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock8">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock8">
-                    <span class="badge bg-info text-dark me-2">Q8</span> How do you handle deadlines?
-                  </button>
-                </h2>
-                <div id="cMock8" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "I treat deadlines with strict operational discipline. Working 8-hour warehouse shifts while maintaining Dean's Lister honors taught me that time management is about proactive structuring. I decompose deliverables into discrete Git milestone branches, establish self-imposed buffers 48 hours prior to official deadlines, and use continuous automated checks to verify progress rather than relying on last-minute crunching."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q9 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock9">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock9">
-                    <span class="badge bg-info text-dark me-2">Q9</span> How do you work with a team?
-                  </button>
-                </h2>
-                <div id="cMock9" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "As the Overall Cluster Leader for NSTP 1 and 2, I coordinated diverse student groups executing community service projects across Parañaque. In software development, team success relies on clear technical documentation, standardized Git commit conventions, and empathy for teammates. I ensure API endpoints are documented with clear request/response contracts, communicate blockers early, and conduct peer code reviews with constructive clarity."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q10 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock10">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock10">
-                    <span class="badge bg-info text-dark me-2">Q10</span> Why should an organization consider hiring you?
-                  </button>
-                </h2>
-                <div id="cMock10" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "An organization should hire me because I bring an uncommon operational perspective to software engineering: I know what happens on both sides of the screen. I understand the warehouse clerk entering stock, the manager analyzing sales in Excel, and the software developer architecting the database schema. Combined with a consistent Dean's Lister academic track record and a philosophy of 'No claim without evidence,' I deliver immediate, disciplined value to engineering and data teams."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q11 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock11">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock11">
-                    <span class="badge bg-info text-dark me-2">Q11</span> What technology are you currently learning?
-                  </button>
-                </h2>
-                <div id="cMock11" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "I am currently deepening my knowledge in <strong>Cloud Containerization (Docker)</strong> and <strong>Retrieval-Augmented Generation (RAG)</strong>. In my Oracle AI project, I integrated live Google Gemini Flash endpoints with Supabase cloud chat history; I am now studying vector embeddings in PostgreSQL (pgvector) to empower business databases with semantic natural language querying."
-                  </div>
-                </div>
-              </div>
-
-              <!-- Q12 -->
-              <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
-                <h2 class="accordion-header" id="hMock12">
-                  <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock12">
-                    <span class="badge bg-info text-dark me-2">Q12</span> Where do you want to develop professionally?
-                  </button>
-                </h2>
-                <div id="cMock12" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
-                  <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
-                    "In the next 6 months, I aim to secure a Junior Web Developer or Junior Data Analyst role where I can contribute to mission-critical business software. Within 3 years, I plan to attain industry certifications in Oracle/MySQL Database Administration and AWS Cloud Architecture, progressing into a Systems Architect and Database Engineering Lead."
-                  </div>
-                </div>
-              </div>
-
             </div>
+
           </div>
         </div>
-
         <!-- ================= TAB 2: TECHNICAL INTERVIEW DEFENSE CARDS ================= -->
         <div class="tab-pane fade" id="tab-tech" role="tabpanel">
           <div class="codespot-card p-4 p-md-5">
