@@ -860,6 +860,125 @@
       box-shadow: 0 0 14px rgba(168, 85, 247, 0.7);
     }
 
+    /* Dynamic Score Active State */
+    .btn-score-active {
+      background: rgba(245, 158, 11, 0.28) !important;
+      border-color: #fbbf24 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.75), inset 0 0 8px rgba(245, 158, 11, 0.4) !important;
+      font-weight: 700 !important;
+    }
+
+    /* Gearwork and Grave Terrain Tiles */
+    .cell-gearwork {
+      background: radial-gradient(circle, #78350f 0%, #451a03 70%, #1f0a00 100%) !important;
+      box-shadow: inset 0 0 14px #f59e0b, 0 0 10px rgba(245, 158, 11, 0.6) !important;
+      animation: gearworkPulse 3s infinite alternate;
+    }
+    @keyframes gearworkPulse {
+      0% { box-shadow: inset 0 0 10px #f59e0b; }
+      100% { box-shadow: inset 0 0 20px #fbbf24, 0 0 14px #d97706; }
+    }
+
+    .cell-grave {
+      background: radial-gradient(circle, #064e3b 0%, #022c22 70%, #01140e 100%) !important;
+      box-shadow: inset 0 0 14px #34d399, 0 0 10px rgba(52, 211, 153, 0.6) !important;
+      animation: gravePulse 3s infinite alternate;
+    }
+    @keyframes gravePulse {
+      0% { box-shadow: inset 0 0 10px #10b981; }
+      100% { box-shadow: inset 0 0 20px #6ee7b7, 0 0 14px #059669; }
+    }
+
+    /* Passive Trigger Cell Pulse */
+    .cell-passive-pulse {
+      animation: cellPassivePop 1.4s ease-out !important;
+    }
+    @keyframes cellPassivePop {
+      0% { transform: scale(1); filter: brightness(1); }
+      30% { transform: scale(1.05); filter: brightness(1.7) drop-shadow(0 0 18px var(--gold-neon)); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+
+    /* Passive Floater Toast */
+    .passive-floater {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(48px);
+      z-index: 180;
+      pointer-events: none !important;
+      white-space: nowrap;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.9);
+      animation: passiveFloaterRise 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes passiveFloaterRise {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateZ(20px) translateY(10px) scale(0.65);
+      }
+      18% {
+        opacity: 1;
+        transform: translateX(-50%) translateZ(48px) translateY(-10px) scale(1.06);
+      }
+      70% {
+        opacity: 1;
+        transform: translateX(-50%) translateZ(52px) translateY(-24px) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateZ(58px) translateY(-40px) scale(0.88);
+      }
+    }
+
+    .floater-volcanic {
+      background: linear-gradient(135deg, #b91c1c, #d97706);
+      border: 1.5px solid #f59e0b;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.85);
+    }
+    .floater-verdant {
+      background: linear-gradient(135deg, #15803d, #16a34a);
+      border: 1.5px solid #86efac;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(34, 197, 94, 0.85);
+    }
+    .floater-frost {
+      background: linear-gradient(135deg, #1e40af, #0284c7);
+      border: 1.5px solid #93c5fd;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(96, 165, 250, 0.85);
+    }
+    .floater-abyssal {
+      background: linear-gradient(135deg, #0e7490, #0891b2);
+      border: 1.5px solid #67e8f9;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(6, 182, 212, 0.85);
+    }
+    .floater-gearwork {
+      background: linear-gradient(135deg, #78350f, #d97706);
+      border: 1.5px solid #fde047;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(251, 191, 36, 0.85);
+    }
+    .floater-void {
+      background: linear-gradient(135deg, #581c87, #7e22ce);
+      border: 1.5px solid #c084fc;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.85);
+    }
+    .floater-grave {
+      background: linear-gradient(135deg, #064e3b, #047857);
+      border: 1.5px solid #6ee7b7;
+      color: #ffffff;
+      box-shadow: 0 0 16px rgba(52, 211, 153, 0.85);
+    }
+
     .btn-mythic-gold {
       background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
       color: #03060f !important;
@@ -1164,11 +1283,25 @@
             </div>
 
             <div class="small font-mono text-muted mb-1">OPPONENT FACTION:</div>
-            <div class="p-2 rounded bg-black bg-opacity-60 border border-success border-opacity-50 d-flex align-items-center gap-2">
+            <div class="p-2 rounded bg-black bg-opacity-60 border border-success border-opacity-50 d-flex align-items-center gap-2 mb-2">
               <span class="fs-5">&#127807;</span>
               <div>
                 <strong class="text-white d-block small">The Verdant Court</strong>
                 <span class="text-success" style="font-size: 0.72rem;">Primeval Briars &bull; Root-Bound Passive</span>
+              </div>
+            </div>
+
+            <!-- Live Realm Trait & Passive Telemetry Box -->
+            <div class="p-2 rounded bg-black bg-opacity-70 border border-info border-opacity-40 d-flex align-items-center gap-2 mb-3" id="simPassiveEventBox">
+              <span class="spinner-grow spinner-grow-sm text-info flex-shrink-0" id="simPassivePulse"></span>
+              <div class="overflow-hidden w-100">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="text-info fw-bold font-mono" style="font-size: 0.65rem; letter-spacing: 0.04em;"><i class="bi bi-shield-shaded me-1"></i>PASSIVE ENGINE:</span>
+                  <span class="badge bg-info text-dark font-mono" style="font-size: 0.58rem;" id="simPassiveActiveCount">ONLINE</span>
+                </div>
+                <div class="text-light text-truncate font-mono" id="simPassiveStatusText" style="font-size: 0.70rem;">
+                  Awaiting piece movement onto claimed territory...
+                </div>
               </div>
             </div>
           </div>
@@ -1327,7 +1460,7 @@
           <div>
             <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="small font-mono text-warning fw-bold"><i class="bi bi-disc-fill me-1"></i> 15 Kingdom Soundscapes:</span>
-              <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-50 font-mono px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">
+              <span class="badge font-mono px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.04em; background: rgba(245, 158, 11, 0.18) !important; color: #fbbf24 !important; border: 1px solid rgba(245, 158, 11, 0.6) !important;">
                 <i class="bi bi-shield-check me-1"></i>GDD SEC. X
               </span>
             </div>
@@ -1608,7 +1741,7 @@
         name: 'The Gearwork Citadel', icon: '&#9881;',
         passiveName: 'Clockwork Drive',
         passiveDesc: 'Mechanical escapement grants allied units +1 movement speed every second turn.',
-        cellClass: 'cell-volcanic',
+        cellClass: 'cell-gearwork',
         terrainName: 'Clockwork Slag',
         queenUlt: 'Overclock Blitz'
       },
@@ -1616,7 +1749,7 @@
         name: 'The Grave-Bound Dynasty', icon: '&#128128;',
         passiveName: 'Soul Harvest',
         passiveDesc: 'Defeated units spawn soul beacons that heal the allied King upon capture.',
-        cellClass: 'cell-void',
+        cellClass: 'cell-grave',
         terrainName: 'Soul Well',
         queenUlt: 'Danse Macabre'
       }
@@ -1721,6 +1854,38 @@
       draw();
     }
 
+    // Helper: Procedural White Noise Buffer
+    function createProceduralNoiseBuffer(ctx, duration = 0.5) {
+      const bufferSize = Math.floor(ctx.sampleRate * duration);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      return buffer;
+    }
+
+    function playNoiseBurst(ctx, startTime, duration, filterType, freq, Q = 1, gainVal = 0.2) {
+      try {
+        const noise = ctx.createBufferSource();
+        noise.buffer = createProceduralNoiseBuffer(ctx, duration + 0.05);
+        const filter = ctx.createBiquadFilter();
+        filter.type = filterType;
+        filter.frequency.setValueAtTime(freq, startTime);
+        filter.Q.setValueAtTime(Q, startTime);
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(gainVal, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(analyserNode);
+        noise.start(startTime);
+        noise.stop(startTime + duration);
+        activeMusicOscs.push(noise);
+      } catch (e) {}
+    }
+
+    // Refined Master Tactical SFX Synthesizer
     function playSound(type) {
       if (!audioEnabled) return;
       try {
@@ -1730,111 +1895,193 @@
         if (audioLabel) audioLabel.textContent = `PLAYING: ${type.toUpperCase()}`;
 
         if (type === 'select') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(520, now);
-          osc.frequency.exponentialRampToValueAtTime(780, now + 0.1);
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-          osc.connect(gain);
-          gain.connect(analyserNode);
-          osc.start(now);
-          osc.stop(now + 0.14);
-        } else if (type === 'move') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(260, now);
-          osc.frequency.exponentialRampToValueAtTime(110, now + 0.16);
-          gain.gain.setValueAtTime(0.25, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-          osc.connect(gain);
-          gain.connect(analyserNode);
-          osc.start(now);
-          osc.stop(now + 0.18);
-        } else if (type === 'capture' || type === 'clash') {
+          // Delicate Glass/Crystal Piece Select Chime
           const osc1 = ctx.createOscillator();
           const osc2 = ctx.createOscillator();
           const gain = ctx.createGain();
-          osc1.type = 'sawtooth';
-          osc1.frequency.setValueAtTime(880, now);
-          osc1.frequency.exponentialRampToValueAtTime(220, now + 0.28);
-          osc2.type = 'square';
-          osc2.frequency.setValueAtTime(90, now);
-          osc2.frequency.exponentialRampToValueAtTime(45, now + 0.35);
-          gain.gain.setValueAtTime(0.35, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc1.type = 'sine';
+          osc2.type = 'sine';
+          osc1.frequency.setValueAtTime(960, now);
+          osc1.frequency.exponentialRampToValueAtTime(1200, now + 0.09);
+          osc2.frequency.setValueAtTime(1440, now);
+          osc2.frequency.exponentialRampToValueAtTime(1920, now + 0.07);
+
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+
           osc1.connect(gain);
           osc2.connect(gain);
           gain.connect(analyserNode);
           osc1.start(now);
           osc2.start(now);
-          osc1.stop(now + 0.35);
-          osc2.stop(now + 0.35);
+          osc1.stop(now + 0.11);
+          osc2.stop(now + 0.11);
+        } else if (type === 'move') {
+          // Tactile Board Game Piece Placement: Deep Sub Thud + Felt/Wood Tap
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(85, now);
+          osc.frequency.exponentialRampToValueAtTime(36, now + 0.08);
+
+          gain.gain.setValueAtTime(0.32, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.10);
+
+          osc.connect(gain);
+          gain.connect(analyserNode);
+          osc.start(now);
+          osc.stop(now + 0.10);
+
+          // Felt / Wood Surface Clatter
+          playNoiseBurst(ctx, now, 0.045, 'bandpass', 1150, 3.2, 0.16);
+        } else if (type === 'capture' || type === 'clash') {
+          // Visceral Martial Blade Clash: Sub Impact + Resonant Ringing Steel + Metal Scrape
+          const sub = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          sub.type = 'sine';
+          sub.frequency.setValueAtTime(115, now);
+          sub.frequency.exponentialRampToValueAtTime(42, now + 0.18);
+          subGain.gain.setValueAtTime(0.42, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          sub.connect(subGain);
+          subGain.connect(analyserNode);
+          sub.start(now);
+          sub.stop(now + 0.22);
+
+          // Detuned Dual Steel Blades with Acoustic Beating
+          const ring1 = ctx.createOscillator();
+          const ring2 = ctx.createOscillator();
+          const ringHarmonic = ctx.createOscillator();
+          const ringGain = ctx.createGain();
+          ring1.type = 'sine';
+          ring2.type = 'sine';
+          ringHarmonic.type = 'triangle';
+          ring1.frequency.setValueAtTime(784, now); // G5
+          ring2.frequency.setValueAtTime(812, now); // ~28Hz metallic beat
+          ringHarmonic.frequency.setValueAtTime(1568, now); // G6 octave
+
+          ringGain.gain.setValueAtTime(0.24, now);
+          ringGain.gain.exponentialRampToValueAtTime(0.001, now + 0.52);
+
+          ring1.connect(ringGain);
+          ring2.connect(ringGain);
+          ringHarmonic.connect(ringGain);
+          ringGain.connect(analyserNode);
+          ring1.start(now);
+          ring2.start(now);
+          ringHarmonic.start(now);
+          ring1.stop(now + 0.52);
+          ring2.stop(now + 0.52);
+          ringHarmonic.stop(now + 0.52);
+
+          // Metallic Edge Crash
+          playNoiseBurst(ctx, now, 0.09, 'highpass', 2800, 2, 0.22);
         } else if (type === 'manifestation') {
-          [65, 130, 260, 520].forEach((freq, idx) => {
+          // Ascending Celestial Chime Arpeggio
+          const chord = [392, 493.88, 587.33, 783.99, 987.77, 1174.66]; // G4, B4, D5, G5, B5, D6
+          chord.forEach((freq, idx) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            osc.type = idx % 2 === 0 ? 'sawtooth' : 'triangle';
-            osc.frequency.setValueAtTime(freq, now + (idx * 0.08));
-            osc.frequency.exponentialRampToValueAtTime(freq * 1.8, now + 0.8);
-            gain.gain.setValueAtTime(0.16, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+            osc.type = 'sine';
+            const noteStart = now + (idx * 0.06);
+            osc.frequency.setValueAtTime(freq, noteStart);
+            gain.gain.setValueAtTime(0.14, noteStart);
+            gain.gain.exponentialRampToValueAtTime(0.001, noteStart + 0.45);
             osc.connect(gain);
             gain.connect(analyserNode);
-            osc.start(now);
-            osc.stop(now + 1.2);
+            osc.start(noteStart);
+            osc.stop(noteStart + 0.5);
           });
         } else if (type === 'ultimate') {
-          [110, 220, 330, 440, 660].forEach((freq) => {
+          // Apocalyptic Seismic Crescendo: Sub-Bass Earthquake + Choral Swell + Thunder Boom
+          const sub = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          sub.type = 'sine';
+          sub.frequency.setValueAtTime(36, now);
+          sub.frequency.linearRampToValueAtTime(44, now + 0.8);
+          subGain.gain.setValueAtTime(0.38, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
+          sub.connect(subGain);
+          subGain.connect(analyserNode);
+          sub.start(now);
+          sub.stop(now + 1.6);
+
+          // Sweeping Multi-Harmonic Choir Swell
+          [110, 164.81, 220, 329.63, 440].forEach((freq) => {
             const osc = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
             const gain = ctx.createGain();
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(freq, now);
-            osc.frequency.linearRampToValueAtTime(freq * 1.4, now + 1.5);
-            gain.gain.setValueAtTime(0.12, now);
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(350, now);
+            filter.frequency.exponentialRampToValueAtTime(2600, now + 0.7);
+            filter.frequency.exponentialRampToValueAtTime(600, now + 1.8);
+
+            gain.gain.setValueAtTime(0.02, now);
+            gain.gain.linearRampToValueAtTime(0.14, now + 0.65);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
-            osc.connect(gain);
+
+            osc.connect(filter);
+            filter.connect(gain);
             gain.connect(analyserNode);
             osc.start(now);
             osc.stop(now + 1.8);
           });
+
+          // Impact Thunder Boom at Peak
+          setTimeout(() => {
+            try {
+              playNoiseBurst(getAudioCtx(), getAudioCtx().currentTime, 0.6, 'lowpass', 240, 1.5, 0.35);
+            } catch (e) {}
+          }, 650);
         } else if (type === 'check') {
-          const osc1 = ctx.createOscillator();
-          const osc2 = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc1.type = 'square';
-          osc2.type = 'sawtooth';
-          osc1.frequency.setValueAtTime(440, now);
-          osc2.frequency.setValueAtTime(554, now);
-          gain.gain.setValueAtTime(0.25, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-          osc1.connect(gain);
-          osc2.connect(gain);
-          gain.connect(analyserNode);
-          osc1.start(now);
-          osc2.start(now);
-          osc1.stop(now + 0.4);
-          osc2.stop(now + 0.4);
-        } else if (type === 'terrain') {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(180, now);
-          osc.frequency.linearRampToValueAtTime(320, now + 0.2);
-          gain.gain.setValueAtTime(0.2, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-          osc.connect(gain);
-          gain.connect(analyserNode);
-          osc.start(now);
-          osc.stop(now + 0.25);
+          // Majestic Royal Herald Trumpet Fanfare Triad (D-Minor Brass Fanfare)
+          const notes = [293.66, 349.23, 440.00, 587.33]; // D4, F4, A4, D5
+          notes.forEach((freq) => {
+            const osc = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(500, now);
+            filter.frequency.exponentialRampToValueAtTime(2600, now + 0.08);
+            filter.frequency.exponentialRampToValueAtTime(750, now + 0.55);
+            filter.Q.setValueAtTime(3, now);
+
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now);
+            osc.stop(now + 0.6);
+          });
+        } else if (type === 'passive' || type === 'terrain') {
+          // Mystical Elemental Surge: Swept Bandpass Filter + Resonant Open 5th
+          [196.00, 293.66, 392.00].forEach((freq) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now);
+            osc.stop(now + 0.55);
+          });
+          playNoiseBurst(ctx, now, 0.45, 'bandpass', 850, 4.0, 0.18);
         }
       } catch (e) {
         console.warn('Audio synthesis note:', e);
       }
     }
 
+    // Bespoke Procedural Acoustic Signatures for all 15 Kingdoms (GDD Section X)
     function playKingdomSoundscape(kingdomId) {
       if (!audioEnabled) return;
       try {
@@ -1844,43 +2091,351 @@
         if (kingdom) document.getElementById('activeAudioLabel').textContent = `SOUNDSCAPE: ${kingdom.name}`;
 
         if (kingdomId === 'obsidian') {
-          const oscBass = ctx.createOscillator();
-          const gainBass = ctx.createGain();
-          oscBass.type = 'sawtooth';
-          oscBass.frequency.setValueAtTime(55, now);
-          oscBass.frequency.linearRampToValueAtTime(45, now + 1.5);
-          gainBass.gain.setValueAtTime(0.35, now);
-          gainBass.gain.exponentialRampToValueAtTime(0.001, now + 1.6);
-          oscBass.connect(gainBass);
-          gainBass.connect(analyserNode);
-          oscBass.start(now);
-          oscBass.stop(now + 1.6);
+          // The Obsidian Roost: Subterranean Magma Drone + Lava Bubble Crackle + Dragon Screech
+          const sub = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          sub.type = 'sawtooth';
+          sub.frequency.setValueAtTime(42, now);
+          sub.frequency.linearRampToValueAtTime(36, now + 1.8);
+          subGain.gain.setValueAtTime(0.30, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
+          sub.connect(subGain);
+          subGain.connect(analyserNode);
+          sub.start(now);
+          sub.stop(now + 1.9);
+
+          // Lava bubble pops
+          [0.15, 0.45, 0.85, 1.25].forEach(delay => {
+            playNoiseBurst(ctx, now + delay, 0.05, 'bandpass', 1700, 4.5, 0.15);
+          });
+
+          // Dragon roar sweep
+          const screech = ctx.createOscillator();
+          const scrFilter = ctx.createBiquadFilter();
+          const scrGain = ctx.createGain();
+          screech.type = 'sawtooth';
+          screech.frequency.setValueAtTime(280, now + 0.3);
+          screech.frequency.exponentialRampToValueAtTime(580, now + 0.75);
+          screech.frequency.exponentialRampToValueAtTime(220, now + 1.4);
+          scrFilter.type = 'lowpass';
+          scrFilter.frequency.setValueAtTime(900, now);
+          scrGain.gain.setValueAtTime(0.01, now + 0.3);
+          scrGain.gain.linearRampToValueAtTime(0.12, now + 0.6);
+          scrGain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+          screech.connect(scrFilter);
+          scrFilter.connect(scrGain);
+          scrGain.connect(analyserNode);
+          screech.start(now + 0.3);
+          screech.stop(now + 1.5);
         } else if (kingdomId === 'verdant') {
+          // The Verdant Court: Whispering Canopy Breeze + Pentatonic Wooden Wind-Chimes
+          playNoiseBurst(ctx, now, 1.8, 'bandpass', 520, 1.8, 0.16);
           [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now + (idx * 0.12));
-            gain.gain.setValueAtTime(0.18, now + (idx * 0.12));
-            gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.12) + 0.6);
+            const t = now + (idx * 0.18);
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.16, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
             osc.connect(gain);
             gain.connect(analyserNode);
-            osc.start(now + (idx * 0.12));
-            osc.stop(now + (idx * 0.12) + 0.65);
+            osc.start(t);
+            osc.stop(t + 0.75);
           });
-        } else {
-          // General ambient soundscape chord
-          [180, 240, 360, 480].forEach((freq, idx) => {
+        } else if (kingdomId === 'ironanvil') {
+          // Iron-Anvil Forge: Rhythmic Dwarven Anvil Strikes + Roaring Furnace Bellows
+          playNoiseBurst(ctx, now, 1.6, 'lowpass', 380, 1.2, 0.22);
+          [0.0, 0.55, 1.1].forEach((delay, idx) => {
+            const strikeNow = now + delay;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(784 + (idx * 60), strikeNow);
+            gain.gain.setValueAtTime(0.28, strikeNow);
+            gain.gain.exponentialRampToValueAtTime(0.001, strikeNow + 0.48);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(strikeNow);
+            osc.stop(strikeNow + 0.5);
+
+            const punch = ctx.createOscillator();
+            const punchGain = ctx.createGain();
+            punch.type = 'triangle';
+            punch.frequency.setValueAtTime(80, strikeNow);
+            punch.frequency.exponentialRampToValueAtTime(35, strikeNow + 0.08);
+            punchGain.gain.setValueAtTime(0.35, strikeNow);
+            punchGain.gain.exponentialRampToValueAtTime(0.001, strikeNow + 0.09);
+            punch.connect(punchGain);
+            punchGain.connect(analyserNode);
+            punch.start(strikeNow);
+            punch.stop(strikeNow + 0.09);
+          });
+        } else if (kingdomId === 'abyssal') {
+          // The Abyssal Tides: Deep Trench Pressure Groan + Oceanic Sonar Ping
+          const sub = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          sub.type = 'sine';
+          sub.frequency.setValueAtTime(34, now);
+          sub.frequency.linearRampToValueAtTime(40, now + 1.8);
+          subGain.gain.setValueAtTime(0.35, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
+          sub.connect(subGain);
+          subGain.connect(analyserNode);
+          sub.start(now);
+          sub.stop(now + 1.9);
+
+          const sonar = ctx.createOscillator();
+          const sonarGain = ctx.createGain();
+          sonar.type = 'sine';
+          sonar.frequency.setValueAtTime(1175, now + 0.4);
+          sonarGain.gain.setValueAtTime(0.22, now + 0.4);
+          sonarGain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+          sonar.connect(sonarGain);
+          sonarGain.connect(analyserNode);
+          sonar.start(now + 0.4);
+          sonar.stop(now + 1.5);
+
+          playNoiseBurst(ctx, now, 1.8, 'lowpass', 240, 1, 0.22);
+        } else if (kingdomId === 'frostbound') {
+          // Frostbound Reach: Howling Arctic Blizzard Gale + Brittle Ice Cracks
+          playNoiseBurst(ctx, now, 1.8, 'bandpass', 580, 3.5, 0.24);
+          [2200, 3100, 4200].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            const t = now + (idx * 0.35) + 0.1;
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.14, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(t);
+            osc.stop(t + 0.2);
+          });
+        } else if (kingdomId === 'fulminating') {
+          // Fulminating Spire: 60Hz/120Hz Transformer Hum + Static Arc Discharges
+          const hum1 = ctx.createOscillator();
+          const hum2 = ctx.createOscillator();
+          const humGain = ctx.createGain();
+          hum1.type = 'sawtooth';
+          hum2.type = 'sine';
+          hum1.frequency.setValueAtTime(60, now);
+          hum2.frequency.setValueAtTime(120, now);
+          humGain.gain.setValueAtTime(0.18, now);
+          humGain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+          hum1.connect(humGain);
+          hum2.connect(humGain);
+          humGain.connect(analyserNode);
+          hum1.start(now);
+          hum2.start(now);
+          hum1.stop(now + 1.5);
+          hum2.stop(now + 1.5);
+
+          [0.1, 0.4, 0.75].forEach(delay => {
+            playNoiseBurst(ctx, now + delay, 0.06, 'highpass', 3500, 2.5, 0.26);
+          });
+        } else if (kingdomId === 'gossamer') {
+          // The Gossamer Glade: Enchanted Music-Box Melody + Pixie Dust Chimes
+          const melody = [659.25, 830.61, 987.77, 1318.51, 1661.22];
+          melody.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            const t = now + (idx * 0.22);
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.18, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(t);
+            osc.stop(t + 0.65);
+          });
+        } else if (kingdomId === 'titans') {
+          // Titan's Foothold: 30Hz Tectonic Continental Shift + Boulder Grinding Impact
+          const sub = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          sub.type = 'sawtooth';
+          sub.frequency.setValueAtTime(30, now);
+          sub.frequency.linearRampToValueAtTime(38, now + 1.8);
+          subGain.gain.setValueAtTime(0.38, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+          sub.connect(subGain);
+          subGain.connect(analyserNode);
+          sub.start(now);
+          sub.stop(now + 2.0);
+
+          playNoiseBurst(ctx, now, 1.8, 'lowpass', 120, 2.0, 0.28);
+          setTimeout(() => {
+            try {
+              playNoiseBurst(getAudioCtx(), getAudioCtx().currentTime, 0.45, 'bandpass', 350, 1.5, 0.32);
+            } catch (e) {}
+          }, 850);
+        } else if (kingdomId === 'irontusk') {
+          // Iron-Tusk Horde: Savage Taiko Tribal War Drums + Blaring Primitive Horn
+          [0.0, 0.22, 0.45, 0.9, 1.12].forEach((delay) => {
+            const hitNow = now + delay;
+            const kick = ctx.createOscillator();
+            const gain = ctx.createGain();
+            kick.type = 'sine';
+            kick.frequency.setValueAtTime(130, hitNow);
+            kick.frequency.exponentialRampToValueAtTime(45, hitNow + 0.14);
+            gain.gain.setValueAtTime(0.38, hitNow);
+            gain.gain.exponentialRampToValueAtTime(0.001, hitNow + 0.16);
+            kick.connect(gain);
+            gain.connect(analyserNode);
+            kick.start(hitNow);
+            kick.stop(hitNow + 0.16);
+          });
+
+          const horn = ctx.createOscillator();
+          const hFilter = ctx.createBiquadFilter();
+          const hGain = ctx.createGain();
+          horn.type = 'sawtooth';
+          horn.frequency.setValueAtTime(110, now + 0.5);
+          hFilter.type = 'lowpass';
+          hFilter.frequency.setValueAtTime(650, now);
+          hGain.gain.setValueAtTime(0.20, now + 0.5);
+          hGain.gain.exponentialRampToValueAtTime(0.001, now + 1.7);
+          horn.connect(hFilter);
+          hFilter.connect(hGain);
+          hGain.connect(analyserNode);
+          horn.start(now + 0.5);
+          horn.stop(now + 1.7);
+        } else if (kingdomId === 'sanguine') {
+          // The Sanguine Court: Gothic Cathedral Pipe Organ Chords (D Minor)
+          [146.83, 174.61, 220.00, 293.66].forEach((freq) => {
+            const osc = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now);
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1400, now);
+            gain.gain.setValueAtTime(0.14, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now);
+            osc.stop(now + 2.0);
+          });
+
+          const pedal = ctx.createOscillator();
+          const pGain = ctx.createGain();
+          pedal.type = 'triangle';
+          pedal.frequency.setValueAtTime(55, now);
+          pGain.gain.setValueAtTime(0.32, now);
+          pGain.gain.exponentialRampToValueAtTime(0.001, now + 2.1);
+          pedal.connect(pGain);
+          pGain.connect(analyserNode);
+          pedal.start(now);
+          pedal.stop(now + 2.1);
+        } else if (kingdomId === 'howling') {
+          // The Howling Pack: Haunting Lunar Wolf Howl + Night Wind
+          playNoiseBurst(ctx, now, 1.8, 'bandpass', 450, 1.5, 0.16);
+          const howl = ctx.createOscillator();
+          const hFilter = ctx.createBiquadFilter();
+          const hGain = ctx.createGain();
+          howl.type = 'sine';
+          howl.frequency.setValueAtTime(220, now + 0.2);
+          howl.frequency.exponentialRampToValueAtTime(494, now + 0.85);
+          howl.frequency.linearRampToValueAtTime(440, now + 1.3);
+          howl.frequency.exponentialRampToValueAtTime(293, now + 1.8);
+
+          hFilter.type = 'bandpass';
+          hFilter.frequency.setValueAtTime(750, now);
+          hFilter.Q.setValueAtTime(2.5, now);
+
+          hGain.gain.setValueAtTime(0.01, now + 0.2);
+          hGain.gain.linearRampToValueAtTime(0.24, now + 0.8);
+          hGain.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
+
+          howl.connect(hFilter);
+          hFilter.connect(hGain);
+          hGain.connect(analyserNode);
+          howl.start(now + 0.2);
+          howl.stop(now + 1.9);
+        } else if (kingdomId === 'abyssalveil') {
+          // The Abyssal Veil: Cosmic Dark Matter Void Drone with Binaural Pulsation
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc1.type = 'sine';
+          osc2.type = 'sawtooth';
+          osc1.frequency.setValueAtTime(75, now);
+          osc2.frequency.setValueAtTime(77.5, now);
+          gain.gain.setValueAtTime(0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(analyserNode);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 1.9);
+          osc2.stop(now + 1.9);
+        } else if (kingdomId === 'gearwork') {
+          // The Gearwork Citadel: Clockwork Ticks at 120BPM + Steam Valve Pressure Hiss
+          [0.0, 0.4, 0.8, 1.2].forEach((delay, idx) => {
+            const t = now + delay;
+            const click = ctx.createOscillator();
+            const cGain = ctx.createGain();
+            click.type = idx % 2 === 0 ? 'sine' : 'triangle';
+            click.frequency.setValueAtTime(idx % 2 === 0 ? 1800 : 1200, t);
+            cGain.gain.setValueAtTime(0.25, t);
+            cGain.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+            click.connect(cGain);
+            cGain.connect(analyserNode);
+            click.start(t);
+            click.stop(t + 0.04);
+          });
+          playNoiseBurst(ctx, now + 1.35, 0.45, 'highpass', 2400, 2, 0.24);
+        } else if (kingdomId === 'sunsand') {
+          // Sun-Scorched Sands: Sirocco Wind + Exotic Phrygian Dulcimer Motif
+          playNoiseBurst(ctx, now, 1.8, 'bandpass', 620, 2, 0.18);
+          const notes = [293.66, 311.13, 369.99, 392.00];
+          notes.forEach((freq, idx) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'triangle';
+            const t = now + (idx * 0.28) + 0.2;
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.18, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(t);
+            osc.stop(t + 0.5);
+          });
+        } else if (kingdomId === 'gravebound') {
+          // Grave-Bound Dynasty: Churchyard Crypt Bell Toll with Inharmonic Partials
+          [110, 275, 440, 680, 1100].forEach((freq, idx) => {
+            const bell = ctx.createOscillator();
+            const bGain = ctx.createGain();
+            bell.type = 'sine';
+            bell.frequency.setValueAtTime(freq, now);
+            const initialAmp = 0.24 / (idx + 1);
+            bGain.gain.setValueAtTime(initialAmp, now);
+            bGain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+            bell.connect(bGain);
+            bGain.connect(analyserNode);
+            bell.start(now);
+            bell.stop(now + 2.2);
+          });
+          playNoiseBurst(ctx, now + 0.5, 1.5, 'bandpass', 400, 3, 0.14);
+        } else {
+          // Harmonic fallback
+          [220, 330, 440].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, now + (idx * 0.1));
-            gain.gain.setValueAtTime(0.2, now + (idx * 0.1));
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+            gain.gain.setValueAtTime(0.18, now + (idx * 0.1));
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
             osc.connect(gain);
             gain.connect(analyserNode);
             osc.start(now + (idx * 0.1));
-            osc.stop(now + 1.25);
+            osc.stop(now + 1.05);
           });
         }
       } catch (err) {
@@ -1888,71 +2443,343 @@
       }
     }
 
+    // ================= DYNAMIC ORCHESTRAL SCORE LOOPING ENGINE =================
+    let dynamicScoreInterval = null;
+    let dynamicScoreActiveStage = null;
+    let dynamicScoreStep = 0;
+
     function stopDynamicMusic() {
+      if (dynamicScoreInterval) {
+        clearInterval(dynamicScoreInterval);
+        dynamicScoreInterval = null;
+      }
+      dynamicScoreActiveStage = null;
       activeMusicOscs.forEach(o => {
         try { o.stop(); } catch (e) {}
       });
       activeMusicOscs = [];
       isMusicPlaying = false;
-      document.getElementById('activeAudioLabel').textContent = 'SCORE: STOPPED';
+      document.querySelectorAll('#btnMusicContemplative, #btnMusicBattle, #btnMusicClimax').forEach(b => {
+        b.classList.remove('btn-score-active');
+      });
+      const lbl = document.getElementById('activeAudioLabel');
+      if (lbl) lbl.textContent = 'SCORE: STOPPED';
     }
 
     function playDynamicScore(stage) {
-      stopDynamicMusic();
       if (!audioEnabled) return;
       const ctx = getAudioCtx();
-      const now = ctx.currentTime;
+
+      if (dynamicScoreActiveStage === stage && isMusicPlaying) {
+        stopDynamicMusic();
+        return;
+      }
+
+      stopDynamicMusic();
+      dynamicScoreActiveStage = stage;
       isMusicPlaying = true;
+      dynamicScoreStep = 0;
+
+      const activeBtn = stage === 'contemplative' ? document.getElementById('btnMusicContemplative')
+                      : stage === 'battle' ? document.getElementById('btnMusicBattle')
+                      : document.getElementById('btnMusicClimax');
+      if (activeBtn) activeBtn.classList.add('btn-score-active');
+
+      const lbl = document.getElementById('activeAudioLabel');
+      if (lbl) lbl.textContent = `SCORE: ${stage.toUpperCase()} (LOOPING)`;
 
       if (stage === 'contemplative') {
-        document.getElementById('activeAudioLabel').textContent = 'SCORE: STAGE 1 (TACTICAL)';
-        const chords = [[220, 261.63, 329.63], [174.61, 220, 261.63], [130.81, 164.81, 196.00]];
-        chords.forEach((chord, cIdx) => {
+        const chords = [
+          [146.83, 174.61, 220.00, 261.63, 329.63], // Dm9
+          [116.54, 146.83, 174.61, 220.00],         // Bbmaj7
+          [98.00, 116.54, 146.83, 174.61, 220.00],  // Gm9
+          [110.00, 146.83, 164.81, 196.00]          // A7sus4
+        ];
+        function playContemplativeBar() {
+          if (!isMusicPlaying) return;
+          const now = ctx.currentTime;
+          const chord = chords[dynamicScoreStep % chords.length];
+          dynamicScoreStep++;
+
           chord.forEach(freq => {
             const osc = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
             const gain = ctx.createGain();
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now + (cIdx * 2.5));
-            gain.gain.setValueAtTime(0.08, now + (cIdx * 2.5));
-            gain.gain.exponentialRampToValueAtTime(0.001, now + (cIdx * 2.5) + 2.4);
-            osc.connect(gain);
+            osc.frequency.setValueAtTime(freq, now);
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(650, now);
+
+            gain.gain.setValueAtTime(0.01, now);
+            gain.gain.linearRampToValueAtTime(0.08, now + 0.8);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 3.8);
+
+            osc.connect(filter);
+            filter.connect(gain);
             gain.connect(analyserNode);
-            osc.start(now + (cIdx * 2.5));
-            osc.stop(now + (cIdx * 2.5) + 2.45);
+            osc.start(now);
+            osc.stop(now + 3.9);
             activeMusicOscs.push(osc);
           });
-        });
-      } else if (stage === 'battle') {
-        document.getElementById('activeAudioLabel').textContent = 'SCORE: STAGE 2 (BATTLE CADENCE)';
-        for (let i = 0; i < 8; i++) {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(110, now + (i * 0.4));
-          gain.gain.setValueAtTime(0.12, now + (i * 0.4));
-          gain.gain.exponentialRampToValueAtTime(0.001, now + (i * 0.4) + 0.35);
-          osc.connect(gain);
-          gain.connect(analyserNode);
-          osc.start(now + (i * 0.4));
-          osc.stop(now + (i * 0.4) + 0.35);
-          activeMusicOscs.push(osc);
+
+          const harpFreq = [880, 1046.5, 1174.66, 1318.51][Math.floor(Math.random() * 4)];
+          const harp = ctx.createOscillator();
+          const hGain = ctx.createGain();
+          harp.type = 'sine';
+          harp.frequency.setValueAtTime(harpFreq, now + 1.2);
+          hGain.gain.setValueAtTime(0.12, now + 1.2);
+          hGain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+          harp.connect(hGain);
+          hGain.connect(analyserNode);
+          harp.start(now + 1.2);
+          harp.stop(now + 2.25);
+          activeMusicOscs.push(harp);
         }
+        playContemplativeBar();
+        dynamicScoreInterval = setInterval(playContemplativeBar, 4000);
+
+      } else if (stage === 'battle') {
+        const bassNotes = [73.42, 73.42, 87.31, 73.42, 98.00, 87.31, 82.41, 65.41];
+        function playBattleMeasure() {
+          if (!isMusicPlaying) return;
+          const now = ctx.currentTime;
+          const beatDuration = 0.25;
+
+          for (let i = 0; i < 8; i++) {
+            const noteTime = now + (i * beatDuration);
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(bassNotes[i], noteTime);
+            gain.gain.setValueAtTime(0.12, noteTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.22);
+            osc.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(noteTime);
+            osc.stop(noteTime + 0.23);
+            activeMusicOscs.push(osc);
+
+            if (i === 0 || i === 4) {
+              const kick = ctx.createOscillator();
+              const kGain = ctx.createGain();
+              kick.type = 'sine';
+              kick.frequency.setValueAtTime(125, noteTime);
+              kick.frequency.exponentialRampToValueAtTime(42, noteTime + 0.14);
+              kGain.gain.setValueAtTime(0.35, noteTime);
+              kGain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.16);
+              kick.connect(kGain);
+              kGain.connect(analyserNode);
+              kick.start(noteTime);
+              kick.stop(noteTime + 0.16);
+              activeMusicOscs.push(kick);
+            }
+            if (i === 2 || i === 6) {
+              playNoiseBurst(ctx, noteTime, 0.08, 'bandpass', 1200, 3, 0.22);
+            }
+          }
+
+          const tensionOsc = ctx.createOscillator();
+          const tGain = ctx.createGain();
+          tensionOsc.type = 'sawtooth';
+          tensionOsc.frequency.setValueAtTime(dynamicScoreStep % 2 === 0 ? 146.83 : 138.59, now);
+          tGain.gain.setValueAtTime(0.04, now);
+          tGain.gain.linearRampToValueAtTime(0.09, now + 1.0);
+          tGain.gain.exponentialRampToValueAtTime(0.001, now + 1.95);
+          tensionOsc.connect(tGain);
+          tGain.connect(analyserNode);
+          tensionOsc.start(now);
+          tensionOsc.stop(now + 1.98);
+          activeMusicOscs.push(tensionOsc);
+
+          dynamicScoreStep++;
+        }
+        playBattleMeasure();
+        dynamicScoreInterval = setInterval(playBattleMeasure, 2000);
+
       } else if (stage === 'climax') {
-        document.getElementById('activeAudioLabel').textContent = 'SCORE: STAGE 3 (CLIMAX CHOIR)';
-        [110, 164.81, 220, 329.63, 440].forEach(freq => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(freq, now);
-          gain.gain.setValueAtTime(0.12, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 3.0);
-          osc.connect(gain);
-          gain.connect(analyserNode);
-          osc.start(now);
-          osc.stop(now + 3.0);
-          activeMusicOscs.push(osc);
-        });
+        const choirChords = [
+          [146.83, 220.00, 293.66, 349.23, 440.00],
+          [155.56, 233.08, 311.13, 369.99, 466.16],
+          [146.83, 220.00, 293.66, 440.00, 587.33]
+        ];
+        function playClimaxBar() {
+          if (!isMusicPlaying) return;
+          const now = ctx.currentTime;
+          const chord = choirChords[dynamicScoreStep % choirChords.length];
+          dynamicScoreStep++;
+
+          [0.0, 0.25, 0.5, 1.6, 2.4].forEach((delay) => {
+            const hitTime = now + delay;
+            const sub = ctx.createOscillator();
+            const sGain = ctx.createGain();
+            sub.type = 'sine';
+            sub.frequency.setValueAtTime(100, hitTime);
+            sub.frequency.exponentialRampToValueAtTime(36, hitTime + 0.24);
+            sGain.gain.setValueAtTime(0.40, hitTime);
+            sGain.gain.exponentialRampToValueAtTime(0.001, hitTime + 0.28);
+            sub.connect(sGain);
+            sGain.connect(analyserNode);
+            sub.start(hitTime);
+            sub.stop(hitTime + 0.28);
+            activeMusicOscs.push(sub);
+          });
+
+          chord.forEach(freq => {
+            const osc = ctx.createOscillator();
+            const filter = ctx.createBiquadFilter();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now);
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1600, now);
+
+            gain.gain.setValueAtTime(0.03, now);
+            gain.gain.linearRampToValueAtTime(0.12, now + 0.6);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 3.1);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(analyserNode);
+            osc.start(now);
+            osc.stop(now + 3.15);
+            activeMusicOscs.push(osc);
+          });
+        }
+        playClimaxBar();
+        dynamicScoreInterval = setInterval(playClimaxBar, 3200);
       }
+    }
+
+    // ================= REALM TRAIT & PASSIVE TACTICAL ENGINE =================
+    function updatePassiveTelemetry(title, details, factionId = null) {
+      const statusText = document.getElementById('simPassiveStatusText');
+      const badge = document.getElementById('simPassiveActiveCount');
+      const eventBox = document.getElementById('simPassiveEventBox');
+      const fData = factionId ? (FACTION_DATA[factionId] || FACTION_DATA.volcanic) : (FACTION_DATA[activePlayerFaction] || FACTION_DATA.volcanic);
+
+      if (statusText) {
+        statusText.innerHTML = `<strong>${fData.icon} ${title}:</strong> ${details}`;
+      }
+      if (badge) {
+        badge.textContent = 'ACTIVE TRIGGER';
+        badge.className = 'badge bg-warning text-dark font-mono';
+        setTimeout(() => {
+          if (badge) {
+            badge.textContent = 'ONLINE';
+            badge.className = 'badge bg-info text-dark font-mono';
+          }
+        }, 2500);
+      }
+      if (eventBox) {
+        eventBox.style.borderColor = '#fbbf24';
+        eventBox.style.boxShadow = '0 0 15px rgba(245, 158, 11, 0.4)';
+        setTimeout(() => {
+          if (eventBox) {
+            eventBox.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+            eventBox.style.boxShadow = 'none';
+          }
+        }, 1800);
+      }
+    }
+
+    function spawnPassiveFloater(r, c, text, icon, colorClass) {
+      const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+      if (!cell) return;
+      const floater = document.createElement('div');
+      floater.className = `passive-floater ${colorClass}`;
+      floater.innerHTML = `<span>${icon}</span> <strong>${text}</strong>`;
+      cell.appendChild(floater);
+      cell.classList.add('cell-passive-pulse');
+      setTimeout(() => {
+        floater.remove();
+        cell.classList.remove('cell-passive-pulse');
+      }, 2200);
+    }
+
+    function applyTerrainPassiveEffects(fromR, fromC, toR, toC, movingPiece, targetPiece, profile, previousTerrain) {
+      const isWhite = movingPiece === movingPiece.toUpperCase();
+      const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+      const posStr = `${cols[toC]}${8 - toR}`;
+      const fData = FACTION_DATA[activePlayerFaction] || FACTION_DATA.volcanic;
+
+      // 1. HAZARD TRIGGERS: Moving piece stepped into opposing territory
+      if (isWhite && previousTerrain === 'verdant') {
+        spawnPassiveFloater(toR, toC, 'ROOT-BOUND ENTANGLED', '🌿', 'floater-verdant');
+        playSound('passive');
+        addLogEntry(`🌿 [PASSIVE TRIGGER] The Verdant Court - Root-Bound: Primeval briars entangle ${profile.name} at ${posStr}! Movement constricted!`);
+        updatePassiveTelemetry('Root-Bound Entanglement', `${profile.name} entangled at ${posStr}`, 'verdant');
+      } else if (!isWhite && previousTerrain === 'volcanic') {
+        spawnPassiveFloater(toR, toC, 'HEAT HAZE SCORCH', '🔥', 'floater-volcanic');
+        playSound('passive');
+        addLogEntry(`🔥 [PASSIVE TRIGGER] The Obsidian Roost - Heat Haze: Thermal distortions engulf enemy ${profile.name} at ${posStr}! Ranged slide reach reduced!`);
+        updatePassiveTelemetry('Heat Haze Scorch', `Enemy ${profile.name} scorched at ${posStr}`, 'volcanic');
+      } else if (previousTerrain === 'frost') {
+        spawnPassiveFloater(toR, toC, 'GLACIAL RIME FROST', '❄️', 'floater-frost');
+        playSound('passive');
+        addLogEntry(`❄️ [PASSIVE TRIGGER] Frostbound Reach - Glacial Rime: Permafrost chills tile ${posStr}!`);
+        updatePassiveTelemetry('Glacial Rime', `Permafrost chill active at ${posStr}`, 'frost');
+      } else if (previousTerrain === 'abyssal') {
+        spawnPassiveFloater(toR, toC, 'TIDAL DRAG PULL', '🌊', 'floater-abyssal');
+        playSound('passive');
+        addLogEntry(`🌊 [PASSIVE TRIGGER] Abyssal Tides - Tidal Drag: Oceanic undertow surges at ${posStr}!`);
+        updatePassiveTelemetry('Tidal Drag', `Oceanic undertow active at ${posStr}`, 'abyssal');
+      } else if (previousTerrain === 'void') {
+        spawnPassiveFloater(toR, toC, 'EVENT HORIZON', '🌀', 'floater-void');
+        playSound('passive');
+        addLogEntry(`🌀 [PASSIVE TRIGGER] Abyssal Veil - Event Horizon: Gravitational singularity pulls energy at ${posStr}!`);
+        updatePassiveTelemetry('Event Horizon', `Singularity distortion at ${posStr}`, 'void');
+      }
+
+      // 2. ALLIED DOMAIN REINFORCEMENT & HARVEST
+      const currentTerrain = cellTerrains[toR][toC];
+      if (isWhite && currentTerrain === activePlayerFaction) {
+        if (activePlayerFaction === 'volcanic') {
+          spawnPassiveFloater(toR, toC, 'HEAT HAZE TERRITORY', '🔥', 'floater-volcanic');
+          updatePassiveTelemetry('Heat Haze Domain', `Tile ${posStr} claimed by Obsidian Roost`, 'volcanic');
+        } else if (activePlayerFaction === 'gearwork') {
+          spawnPassiveFloater(toR, toC, 'CLOCKWORK DRIVE', '⚙️', 'floater-gearwork');
+          addLogEntry(`⚙️ [PASSIVE EMPOWER] Clockwork Drive: Mechanical gears overclock ${profile.name} at ${posStr}!`);
+          updatePassiveTelemetry('Clockwork Drive', `Pawn double-sprint ready at ${posStr}`, 'gearwork');
+        } else if (activePlayerFaction === 'grave' && targetPiece) {
+          spawnPassiveFloater(toR, toC, 'SOUL BEACON HARVEST', '💀', 'floater-grave');
+          addLogEntry(`💀 [PASSIVE HARVEST] Soul Harvest: Soul beacon erected at ${posStr}! Allied King shielded.`);
+          updatePassiveTelemetry('Soul Harvest', `Soul beacon captured at ${posStr}`, 'grave');
+        }
+      } else if (!isWhite && currentTerrain === 'verdant') {
+        spawnPassiveFloater(toR, toC, 'ROOT-ANCHOR DOMAIN', '🌿', 'floater-verdant');
+        updatePassiveTelemetry('Root-Bound Briars', `Tile ${posStr} claimed by Verdant Court`, 'verdant');
+      }
+    }
+
+    function triggerQueenUltimateTactical() {
+      if (isGameOver) return;
+      const fData = FACTION_DATA[activePlayerFaction] || FACTION_DATA.volcanic;
+      playSound('ultimate');
+
+      const wrapper = document.getElementById('boardWrapper');
+      if (wrapper) {
+        wrapper.classList.add('board-shake');
+        setTimeout(() => wrapper.classList.remove('board-shake'), 750);
+      }
+
+      const rowsToTransmute = [3, 4];
+      rowsToTransmute.forEach(row => {
+        for (let c = 0; c < 8; c++) {
+          cellTerrains[row][c] = activePlayerFaction;
+        }
+      });
+
+      addLogEntry(`✨ [QUEEN ULTIMATE] ${fData.queenUlt} UNLEASHED! Mid-board flooded with ${fData.terrainName}! Passive ${fData.passiveName} activated across ranks 4-5!`);
+      updatePassiveTelemetry(`${fData.queenUlt} Eruption`, `Ranks 4 & 5 transmuted to ${fData.terrainName}`, activePlayerFaction);
+      renderBoard();
+
+      // Spawn tactile passive floaters across the transmuted ranks
+      rowsToTransmute.forEach(row => {
+        for (let c = 0; c < 8; c++) {
+          const cleanIcon = fData.icon.includes(';') ? fData.icon.replace(/&#(\d+);/, (_, d) => String.fromCharCode(d)) : fData.icon;
+          spawnPassiveFloater(row, c, `${fData.passiveName.toUpperCase()}`, cleanIcon, `floater-${activePlayerFaction}`);
+        }
+      });
     }
 
     // Populate Soundscape Buttons with High Contrast & Live Equalizer Waves
@@ -2400,6 +3227,8 @@
     }
 
     function finalizeMoveExecution(fromR, fromC, toR, toC, movingPiece, targetPiece, profile) {
+      const previousTerrain = cellTerrains[toR][toC];
+
       // Handle Capture & Manifestation
       if (targetPiece) {
         const victimProfile = PIECE_PROFILES[targetPiece];
@@ -2414,6 +3243,9 @@
       } else {
         cellTerrains[toR][toC] = 'verdant';
       }
+
+      // Apply Active Realm Trait Passive Mechanics & Combat Telemetry
+      applyTerrainPassiveEffects(fromR, fromC, toR, toC, movingPiece, targetPiece, profile, previousTerrain);
 
       // Move piece
       boardState[toR][toC] = movingPiece;
@@ -3193,6 +4025,10 @@
         document.getElementById('simFactionName').textContent = fData.name;
         document.getElementById('simPassiveName').textContent = fData.passiveName;
         document.getElementById('simPassiveDesc').textContent = fData.passiveDesc;
+        const btnUlt = document.getElementById('btnQueenUltimate');
+        if (btnUlt) {
+          btnUlt.innerHTML = `<i class="bi bi-stars me-1"></i> Trigger Queen Ultimate: ${fData.queenUlt}`;
+        }
         playSound('terrain');
         addLogEntry(`Faction allegiance shifted to ${fData.name}.`);
       });
@@ -3200,7 +4036,7 @@
 
     // Queen Ultimate button
     document.getElementById('btnQueenUltimate').addEventListener('click', () => {
-      triggerCheckmateSpectacle('white');
+      triggerQueenUltimateTactical();
     });
 
     // Toggle Audio
