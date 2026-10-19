@@ -1831,19 +1831,38 @@
     let activeMusicOscs = [];
     let isMusicPlaying = false;
 
-    // Helper: Procedural Stereo Impulse Response for Natural Room / Stone Hall Reverb
-    function createStoneHallImpulseResponse(ctx, duration = 1.4, decay = 2.4) {
+    // Helper: Procedural Stereo Impulse Response for Ancient Stone Sanctuary / Cathedral Reverb
+    function createStoneHallImpulseResponse(ctx, duration = 2.2, decay = 2.6) {
       const sampleRate = ctx.sampleRate;
       const length = Math.floor(sampleRate * duration);
       const impulse = ctx.createBuffer(2, length, sampleRate);
       const left = impulse.getChannelData(0);
       const right = impulse.getChannelData(1);
+
+      // Stereo discrete early reflections representing colossal stone pillars
+      const earlyTaps = [
+        { sample: Math.floor(sampleRate * 0.018), gainL: 0.85, gainR: 0.35 },
+        { sample: Math.floor(sampleRate * 0.038), gainL: 0.30, gainR: 0.75 },
+        { sample: Math.floor(sampleRate * 0.065), gainL: 0.60, gainR: 0.50 },
+        { sample: Math.floor(sampleRate * 0.098), gainL: 0.40, gainR: 0.55 },
+        { sample: Math.floor(sampleRate * 0.135), gainL: 0.45, gainR: 0.30 }
+      ];
+
       for (let i = 0; i < length; i++) {
         const t = i / length;
         const env = Math.pow(1 - t, decay);
-        const earlyReflect = (i < sampleRate * 0.04 && (i % 160 === 0 || i % 240 === 0)) ? 1.4 : 1.0;
-        left[i] = (Math.random() * 2 - 1) * env * earlyReflect;
-        right[i] = (Math.random() * 2 - 1) * env * earlyReflect;
+        let sL = (Math.random() * 2 - 1) * env;
+        let sR = (Math.random() * 2 - 1) * env;
+
+        for (let j = 0; j < earlyTaps.length; j++) {
+          if (i === earlyTaps[j].sample) {
+            sL += earlyTaps[j].gainL;
+            sR += earlyTaps[j].gainR;
+          }
+        }
+
+        left[i] = sL;
+        right[i] = sR;
       }
       return impulse;
     }
@@ -2009,8 +2028,8 @@
       } catch (e) {}
     }
 
-    // Master Tactical SFX Synthesizer with Physical Acoustics & Foley
-    function playSound(type) {
+    // Master Tactical SFX Synthesizer with Realistic High-Fantasy Physical Acoustics & Foley
+    function playSound(type, pieceChar = null) {
       if (audioEnabled === false) return;
       try {
         const ctx = getAudioCtx();
@@ -2018,7 +2037,7 @@
         const audioLabel = document.getElementById('activeAudioLabel');
         const freqBadge = document.getElementById('audioFreqBadge');
 
-        const connectToMaster = (node, dryLevel = 1.0, wetLevel = 0.25) => {
+        const connectToMaster = (node, dryLevel = 1.0, wetLevel = 0.35) => {
           const g = ctx.createGain();
           g.gain.setValueAtTime(dryLevel, now);
           node.connect(g);
@@ -2031,108 +2050,301 @@
           }
         };
 
+        const pType = pieceChar ? pieceChar.toLowerCase() : '';
+
         if (type === 'select') {
-          if (audioLabel) audioLabel.textContent = 'SFX: PIECE SELECT (CRYSTAL TOUCH)';
-          if (freqBadge) freqBadge.textContent = '1.76 kHz CRYSTAL';
+          if (audioLabel) {
+            const pName = pType === 'n' ? 'PEGASUS CAVALIER' : pType === 'b' ? 'HIGH HIEROPHANT' : pType === 'r' ? 'CITADEL BASTION' : pType === 'q' ? 'DRAGON SOVEREIGN' : pType === 'k' ? 'GRAND MONARCH' : pType === 'p' ? 'ASHFALL VANGUARD' : 'AETHER LEVITATION';
+            audioLabel.textContent = `SFX: RUNE SELECTION (${pName})`;
+          }
+          if (freqBadge) freqBadge.textContent = 'MYSTIC QUARTZ 1.66 kHz';
 
-          // Layer 1: Tactile fingertip / surface lift micro-click
-          playAcousticNoiseBurst(ctx, now, 0.006, 'bandpass', 2400, 3.5, 0.22, 'pink', 0.1);
+          // Layer 1: Whispering Ley-Line Air Swirl
+          playAcousticNoiseBurst(ctx, now, 0.08, 'bandpass', 2800, 4.0, 0.28, 'pink', 0.25);
 
-          // Layer 2: Inharmonic crystal / polished marble modal chime
-          const crystalModes = [
-            { f: 1760.00, gain: 0.18, tau: 0.22 },
-            { f: 2640.00, gain: 0.12, tau: 0.18 },
-            { f: 3520.00, gain: 0.08, tau: 0.14 },
-            { f: 4850.00, gain: 0.05, tau: 0.09 }
+          // Layer 2: Arcane Ley-Line Levitation Hum (55Hz grounding rising as piece is raised)
+          const hum = ctx.createOscillator();
+          const humGain = ctx.createGain();
+          hum.type = 'sine';
+          hum.frequency.setValueAtTime(55, now);
+          hum.frequency.exponentialRampToValueAtTime(73.4, now + 0.18);
+          humGain.gain.setValueAtTime(0.001, now);
+          humGain.gain.linearRampToValueAtTime(0.28, now + 0.04);
+          humGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+          hum.connect(humGain);
+          connectToMaster(humGain, 0.8, 0.2);
+          hum.start(now);
+          hum.stop(now + 0.28);
+
+          // Layer 3: Mystical Quartz Rune Chime (E6 Dorian Harmonic Overtone Sequence)
+          const runeModes = [
+            { f: 1318.51, gain: 0.22, tau: 0.35 },
+            { f: 1661.22, gain: 0.18, tau: 0.30 },
+            { f: 1975.53, gain: 0.14, tau: 0.25 },
+            { f: 2489.02, gain: 0.10, tau: 0.18 },
+            { f: 3135.96, gain: 0.06, tau: 0.12 }
           ];
 
-          crystalModes.forEach(mode => {
+          runeModes.forEach((mode, idx) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(mode.f, now);
-            gain.gain.setValueAtTime(mode.gain, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + mode.tau);
+            const noteStart = now + (idx * 0.012);
+            osc.frequency.setValueAtTime(mode.f, noteStart);
+            osc.frequency.exponentialRampToValueAtTime(mode.f * 1.008, noteStart + 0.04);
+            osc.frequency.exponentialRampToValueAtTime(mode.f, noteStart + mode.tau);
+
+            gain.gain.setValueAtTime(0.001, noteStart);
+            gain.gain.linearRampToValueAtTime(mode.gain, noteStart + 0.005);
+            gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + mode.tau);
             osc.connect(gain);
-            connectToMaster(gain, 1.0, 0.3);
-            osc.start(now);
-            osc.stop(now + mode.tau);
+            connectToMaster(gain, 1.0, 0.45);
+            osc.start(noteStart);
+            osc.stop(noteStart + mode.tau + 0.05);
           });
 
+          // Layer 4: Piece-Specific Fantasy Trait Whispers
+          if (pType === 'n') {
+            // Pegasus/Gryphon: winged feather rush + celestial whinny harmonic
+            playAcousticNoiseBurst(ctx, now + 0.02, 0.14, 'bandpass', 1950, 2.5, 0.24, 'pink', 0.3);
+            const wOsc = ctx.createOscillator();
+            const wG = ctx.createGain();
+            wOsc.type = 'sine';
+            wOsc.frequency.setValueAtTime(1760, now + 0.03);
+            wOsc.frequency.exponentialRampToValueAtTime(2349.32, now + 0.15);
+            wG.gain.setValueAtTime(0.08, now + 0.03);
+            wG.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+            wOsc.connect(wG);
+            connectToMaster(wG, 0.7, 0.4);
+            wOsc.start(now + 0.03);
+            wOsc.stop(now + 0.23);
+          } else if (pType === 'b') {
+            // Hierophant: Tibetan singing bowl / sacred prayer bell harmonic shimmer
+            [587.33, 880.00, 1480.00].forEach((bf, bi) => {
+              const bOsc = ctx.createOscillator();
+              const bG = ctx.createGain();
+              bOsc.type = 'sine';
+              bOsc.frequency.setValueAtTime(bf, now + 0.02);
+              bG.gain.setValueAtTime(0.10 - bi * 0.02, now + 0.02);
+              bG.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+              bOsc.connect(bG);
+              connectToMaster(bG, 0.8, 0.55);
+              bOsc.start(now + 0.02);
+              bOsc.stop(now + 0.46);
+            });
+          } else if (pType === 'r') {
+            // Citadel Bastion: Tectonic granite tremor & grinding monolith friction
+            const rHum = ctx.createOscillator();
+            const rHG = ctx.createGain();
+            rHum.type = 'sawtooth';
+            rHum.frequency.setValueAtTime(42, now);
+            rHum.frequency.linearRampToValueAtTime(56, now + 0.22);
+            rHG.gain.setValueAtTime(0.25, now);
+            rHG.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+            rHum.connect(rHG);
+            connectToMaster(rHG, 0.9, 0.25);
+            rHum.start(now);
+            rHum.stop(now + 0.26);
+            playAcousticNoiseBurst(ctx, now, 0.18, 'lowpass', 240, 2.0, 0.35, 'brown', 0.25);
+          } else if (pType === 'q') {
+            // Dragon Sovereign: Radiant coronal flare + royal triad sweep
+            playAcousticNoiseBurst(ctx, now, 0.22, 'highpass', 3400, 2.0, 0.22, 'pink', 0.45);
+            [739.99, 932.33, 1108.73].forEach((qf, qi) => {
+              const qOsc = ctx.createOscillator();
+              const qG = ctx.createGain();
+              qOsc.type = 'triangle';
+              qOsc.frequency.setValueAtTime(qf, now + qi * 0.025);
+              qG.gain.setValueAtTime(0.12, now + qi * 0.025);
+              qG.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+              qOsc.connect(qG);
+              connectToMaster(qG, 0.8, 0.6);
+              qOsc.start(now + qi * 0.025);
+              qOsc.stop(now + 0.45);
+            });
+          } else if (pType === 'k') {
+            // Grand Monarch: Imperial gold sceptre chime & bronze hall reflection
+            [293.66, 587.33].forEach((kf, ki) => {
+              const kOsc = ctx.createOscillator();
+              const kG = ctx.createGain();
+              kOsc.type = 'sine';
+              kOsc.frequency.setValueAtTime(kf, now + 0.01);
+              kG.gain.setValueAtTime(0.15 - ki * 0.04, now + 0.01);
+              kG.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+              kOsc.connect(kG);
+              connectToMaster(kG, 0.85, 0.6);
+              kOsc.start(now + 0.01);
+              kOsc.stop(now + 0.56);
+            });
+          }
+
         } else if (type === 'move') {
-          if (audioLabel) audioLabel.textContent = 'SFX: PIECE MOVE (HARDWOOD IMPACT)';
-          if (freqBadge) freqBadge.textContent = '240 Hz BOARD THUD';
+          if (audioLabel) {
+            const pName = pType === 'n' ? 'PEGASUS VAULT' : pType === 'b' ? 'HIEROPHANT STRIDE' : pType === 'r' ? 'BASTION SLAM' : pType === 'q' ? 'SOVEREIGN ADVANCE' : pType === 'k' ? 'ROYAL PROCESSION' : pType === 'p' ? 'VANGUARD ADVANCE' : 'ENCHANTED STONE';
+            audioLabel.textContent = `SFX: RELIC PLACEMENT (${pName})`;
+          }
+          if (freqBadge) freqBadge.textContent = '58 Hz BASALT THUD + RUNE RING';
 
-          // Layer 1: Surface contact click transient (felt/varnish contact snap)
-          playAcousticNoiseBurst(ctx, now, 0.008, 'bandpass', 1550, 2.4, 0.35, 'pink', 0.12);
+          // Layer 1: Subterranean Basalt / Granite Mass Thump
+          const sub = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          sub.type = 'sine';
+          sub.frequency.setValueAtTime(78, now);
+          sub.frequency.exponentialRampToValueAtTime(34, now + 0.075);
+          subGain.gain.setValueAtTime(0.55, now);
+          subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.085);
+          sub.connect(subGain);
+          connectToMaster(subGain, 1.0, 0.18);
+          sub.start(now);
+          sub.stop(now + 0.085);
 
-          // Layer 2: Hardwood chessboard cavity and plate modal resonance
-          const woodModes = [
-            { f: 240, gain: 0.36, tau: 0.075 },
-            { f: 580, gain: 0.22, tau: 0.055 },
-            { f: 1150, gain: 0.12, tau: 0.035 }
+          // Layer 2: Ancient Sanctum Tabletop Hardwood & Stone Cavity Modes
+          const stoneModes = [
+            { f: 180, gain: 0.42, tau: 0.09 },
+            { f: 380, gain: 0.28, tau: 0.07 },
+            { f: 720, gain: 0.16, tau: 0.05 }
           ];
 
-          woodModes.forEach(m => {
+          stoneModes.forEach(m => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            osc.type = 'sine';
+            osc.type = 'triangle';
             osc.frequency.setValueAtTime(m.f, now);
             gain.gain.setValueAtTime(m.gain, now);
             gain.gain.exponentialRampToValueAtTime(0.0001, now + m.tau);
             osc.connect(gain);
-            connectToMaster(gain, 1.0, 0.18);
+            connectToMaster(gain, 1.0, 0.25);
             osc.start(now);
             osc.stop(now + m.tau);
           });
 
-          // Layer 3: Weighted piece base kinetic mass punch
-          const sub = ctx.createOscillator();
-          const subGain = ctx.createGain();
-          sub.type = 'sine';
-          sub.frequency.setValueAtTime(74, now);
-          sub.frequency.exponentialRampToValueAtTime(32, now + 0.055);
-          subGain.gain.setValueAtTime(0.42, now);
-          subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
-          sub.connect(subGain);
-          connectToMaster(subGain, 1.0, 0.1);
-          sub.start(now);
-          sub.stop(now + 0.06);
+          // Layer 3: Tactile Vellum / Felt Surface Contact Snap
+          playAcousticNoiseBurst(ctx, now, 0.012, 'bandpass', 1450, 2.2, 0.42, 'pink', 0.15);
 
-          // Layer 4: Micro-texture felt settling
-          playAcousticNoiseBurst(ctx, now + 0.015, 0.025, 'bandpass', 780, 2.0, 0.12, 'pink', 0.05);
+          // Layer 4: Enchanted Ley-Line Ringing Tail (Subtle magical fifth 440Hz & 660Hz)
+          [440.00, 659.25].forEach((rf, i) => {
+            const rOsc = ctx.createOscillator();
+            const rGain = ctx.createGain();
+            rOsc.type = 'sine';
+            rOsc.frequency.setValueAtTime(rf, now + 0.01);
+            rGain.gain.setValueAtTime(0.12 - i * 0.04, now + 0.01);
+            rGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+            rOsc.connect(rGain);
+            connectToMaster(rGain, 0.8, 0.5);
+            rOsc.start(now + 0.01);
+            rOsc.stop(now + 0.4);
+          });
+
+          // Layer 5: Piece-Specific Landing Foley & Magic Resonance
+          if (pType === 'n') {
+            // Knight: Double-hoof cadence on stone (clip-clop 42ms apart)
+            const hoof2 = ctx.createOscillator();
+            const h2Gain = ctx.createGain();
+            hoof2.type = 'triangle';
+            hoof2.frequency.setValueAtTime(110, now + 0.042);
+            hoof2.frequency.exponentialRampToValueAtTime(42, now + 0.10);
+            h2Gain.gain.setValueAtTime(0.38, now + 0.042);
+            h2Gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.11);
+            hoof2.connect(h2Gain);
+            connectToMaster(h2Gain, 0.9, 0.2);
+            hoof2.start(now + 0.042);
+            hoof2.stop(now + 0.11);
+            playAcousticNoiseBurst(ctx, now + 0.042, 0.012, 'bandpass', 1800, 2.8, 0.28, 'pink', 0.15);
+          } else if (pType === 'r') {
+            // Rook: Seismic monolith crushing slam (sub-bass 34Hz + stone fracture)
+            const rSub = ctx.createOscillator();
+            const rSG = ctx.createGain();
+            rSub.type = 'sine';
+            rSub.frequency.setValueAtTime(65, now + 0.01);
+            rSub.frequency.exponentialRampToValueAtTime(26, now + 0.14);
+            rSG.gain.setValueAtTime(0.65, now + 0.01);
+            rSG.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+            rSub.connect(rSG);
+            connectToMaster(rSG, 1.0, 0.35);
+            rSub.start(now + 0.01);
+            rSub.stop(now + 0.18);
+            playAcousticNoiseBurst(ctx, now + 0.01, 0.08, 'lowpass', 280, 2.0, 0.45, 'brown', 0.35);
+          } else if (pType === 'b') {
+            // Bishop: Sacred formant breath tail ([o] vocal resonance)
+            const bFilt = ctx.createBiquadFilter();
+            const bOsc = ctx.createOscillator();
+            const bG = ctx.createGain();
+            bOsc.type = 'sawtooth';
+            bOsc.frequency.setValueAtTime(293.66, now + 0.02);
+            bFilt.type = 'bandpass';
+            bFilt.frequency.setValueAtTime(750, now + 0.02);
+            bFilt.Q.setValueAtTime(4.0, now + 0.02);
+            bG.gain.setValueAtTime(0.08, now + 0.02);
+            bG.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+            bOsc.connect(bFilt);
+            bFilt.connect(bG);
+            connectToMaster(bG, 0.8, 0.55);
+            bOsc.start(now + 0.02);
+            bOsc.stop(now + 0.36);
+          } else if (pType === 'q') {
+            // Queen: Searing arcane touchdown sweep
+            playAcousticNoiseBurst(ctx, now, 0.25, 'bandpass', 1800, 3.2, 0.30, 'pink', 0.45);
+            const qO = ctx.createOscillator();
+            const qG = ctx.createGain();
+            qO.type = 'triangle';
+            qO.frequency.setValueAtTime(880, now);
+            qO.frequency.exponentialRampToValueAtTime(440, now + 0.24);
+            qG.gain.setValueAtTime(0.18, now);
+            qG.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+            qO.connect(qG);
+            connectToMaster(qG, 0.85, 0.55);
+            qO.start(now);
+            qO.stop(now + 0.29);
+          } else if (pType === 'k') {
+            // King: Heavy ceremonial golden sceptre impact
+            const kO = ctx.createOscillator();
+            const kG = ctx.createGain();
+            kO.type = 'sine';
+            kO.frequency.setValueAtTime(196, now + 0.01);
+            kG.gain.setValueAtTime(0.24, now + 0.01);
+            kG.gain.exponentialRampToValueAtTime(0.0001, now + 0.48);
+            kO.connect(kG);
+            connectToMaster(kG, 0.9, 0.6);
+            kO.start(now + 0.01);
+            kO.stop(now + 0.5);
+          } else if (pType === 'p') {
+            // Pawn: Steel spear-butt & iron buckler contact
+            playAcousticNoiseBurst(ctx, now, 0.018, 'highpass', 3200, 2.5, 0.32, 'pink', 0.15);
+          }
 
         } else if (type === 'capture' || type === 'clash') {
-          if (audioLabel) audioLabel.textContent = 'SFX: MARTIAL CLASH (TEMPERED STEEL)';
-          if (freqBadge) freqBadge.textContent = '1.18 kHz STEEL BEAT';
+          if (audioLabel) {
+            const victimName = pType === 'q' ? 'DRAGON SOVEREIGN' : pType === 'k' ? 'GRAND MONARCH' : pType === 'r' ? 'CITADEL BASTION' : pType === 'b' ? 'HIGH HIEROPHANT' : pType === 'n' ? 'PEGASUS CAVALIER' : 'VALYRIAN STEEL';
+            audioLabel.textContent = `SFX: MYTHIC WEAPON CLASH (${victimName})`;
+          }
+          if (freqBadge) freqBadge.textContent = '1.24 kHz DETUNED BLADES + DRAGON SHIELD';
 
-          // Layer 1: Kinetic Impact Punch & Shield Armor Strike
+          // Layer 1: Massive Kinetic Impact & Dragon-Hide Buckler Thud
           const sub = ctx.createOscillator();
           const subGain = ctx.createGain();
           sub.type = 'sine';
-          sub.frequency.setValueAtTime(125, now);
-          sub.frequency.exponentialRampToValueAtTime(38, now + 0.18);
-          subGain.gain.setValueAtTime(0.52, now);
-          subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+          sub.frequency.setValueAtTime(140, now);
+          sub.frequency.exponentialRampToValueAtTime(32, now + 0.22);
+          subGain.gain.setValueAtTime(0.65, now);
+          subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
           sub.connect(subGain);
-          connectToMaster(subGain, 1.0, 0.2);
+          connectToMaster(subGain, 1.0, 0.25);
           sub.start(now);
-          sub.stop(now + 0.22);
+          sub.stop(now + 0.26);
 
-          // Armor impact slap (wooden-iron buckler)
-          playAcousticNoiseBurst(ctx, now, 0.045, 'bandpass', 360, 2.0, 0.38, 'brown', 0.25);
+          // Armor impact slap (iron-reinforced dragon plate)
+          playAcousticNoiseBurst(ctx, now, 0.05, 'bandpass', 320, 1.8, 0.48, 'brown', 0.3);
 
-          // Layer 2: Sharp Steel Blade Edge Shearing Scrape
-          playAcousticNoiseBurst(ctx, now, 0.07, 'bandpass', 3400, 4.5, 0.42, 'pink', 0.35);
-          playAcousticNoiseBurst(ctx, now + 0.01, 0.09, 'highpass', 5200, 3.0, 0.30, 'white', 0.3);
+          // Layer 2: Abrasive Forged Blade Edge Shearing Scrape
+          playAcousticNoiseBurst(ctx, now, 0.08, 'bandpass', 3600, 4.2, 0.50, 'pink', 0.4);
+          playAcousticNoiseBurst(ctx, now + 0.01, 0.11, 'highpass', 5800, 2.8, 0.38, 'white', 0.35);
 
-          // Layer 3: Physical Carbon Steel Blade Inharmonic Resonance
+          // Layer 3: Physical Tempered Carbon Blade Inharmonic Modes (24Hz Acoustic Beating Warble)
           const bladeModes = [
-            { f: 1180, gain: 0.26, tau: 0.72 },
-            { f: 1202, gain: 0.24, tau: 0.68 }, // 22Hz acoustic beating
-            { f: 2450, gain: 0.16, tau: 0.48 },
-            { f: 3850, gain: 0.11, tau: 0.35 },
-            { f: 5400, gain: 0.07, tau: 0.22 }
+            { f: 1240, gain: 0.34, tau: 0.85 },
+            { f: 1264, gain: 0.32, tau: 0.82 },
+            { f: 2580, gain: 0.20, tau: 0.55 },
+            { f: 4120, gain: 0.14, tau: 0.38 },
+            { f: 5950, gain: 0.09, tau: 0.24 }
           ];
 
           bladeModes.forEach(m => {
@@ -2143,17 +2355,51 @@
             gain.gain.setValueAtTime(m.gain, now);
             gain.gain.exponentialRampToValueAtTime(0.0001, now + m.tau);
             osc.connect(gain);
-            connectToMaster(gain, 1.0, 0.45);
+            connectToMaster(gain, 1.0, 0.55);
             osc.start(now);
             osc.stop(now + m.tau);
           });
 
-          // Layer 4: Micro-spark particle flecks
-          playAcousticNoiseBurst(ctx, now + 0.02, 0.04, 'highpass', 7500, 1.5, 0.20, 'white', 0.2);
+          // Layer 4: Arcane Soul-Shatter Spark Flecks
+          playAcousticNoiseBurst(ctx, now + 0.015, 0.05, 'highpass', 8200, 1.5, 0.26, 'white', 0.3);
+
+          // Layer 5: Target Piece Specific Cleave / Shatter Reaction
+          if (pType === 'q' || pType === 'k') {
+            // Royal / Dragon Queen Cleave: Seismic cataclysm & soul shockwave
+            const rBlast = ctx.createOscillator();
+            const rBG = ctx.createGain();
+            rBlast.type = 'sawtooth';
+            rBlast.frequency.setValueAtTime(90, now + 0.05);
+            rBlast.frequency.exponentialRampToValueAtTime(24, now + 0.5);
+            rBG.gain.setValueAtTime(0.45, now + 0.05);
+            rBG.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+            rBlast.connect(rBG);
+            connectToMaster(rBG, 1.0, 0.65);
+            rBlast.start(now + 0.05);
+            rBlast.stop(now + 0.66);
+            playAcousticNoiseBurst(ctx, now + 0.06, 0.35, 'lowpass', 450, 1.8, 0.48, 'brown', 0.6);
+          } else if (pType === 'r') {
+            // Rook Demolition: Stone crumbling pulverize
+            playAcousticNoiseBurst(ctx, now + 0.02, 0.22, 'lowpass', 380, 2.0, 0.50, 'brown', 0.4);
+          } else if (pType === 'b') {
+            // Bishop: Prismatic holy glass ward shatter
+            [1567.98, 2093.00, 2637.02, 3135.96].forEach((gf, gi) => {
+              const gO = ctx.createOscillator();
+              const gG = ctx.createGain();
+              gO.type = 'sine';
+              gO.frequency.setValueAtTime(gf, now + gi * 0.015);
+              gG.gain.setValueAtTime(0.14, now + gi * 0.015);
+              gG.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+              gO.connect(gG);
+              connectToMaster(gG, 0.85, 0.55);
+              gO.start(now + gi * 0.015);
+              gO.stop(now + 0.36);
+            });
+          }
 
         } else if (type === 'manifestation') {
-          if (audioLabel) audioLabel.textContent = 'SFX: DIVINE MANIFESTATION (AETHER)';
-          if (freqBadge) freqBadge.textContent = 'D-MAJ9 VOCAL CHOIR';
+          if (audioLabel) audioLabel.textContent = 'SFX: SACRED MANIFESTATION (ELVEN CHOIR)';
+          if (freqBadge) freqBadge.textContent = 'D-MAJ9 GREGORIAN CHOIR + HARP';
 
           // Layer 1: Celestial Vocal Formant Choir Swell (D-major 9th harmony)
           const choirPitches = [146.83, 220.00, 293.66, 369.99, 440.00, 554.37];
@@ -2168,61 +2414,62 @@
             formant.type = 'bandpass';
             const formants = [650, 1100, 2400];
             formant.frequency.setValueAtTime(formants[idx % 3], now);
-            formant.Q.setValueAtTime(3.8, now);
+            formant.Q.setValueAtTime(3.6, now);
 
             gain.gain.setValueAtTime(0.001, now);
-            gain.gain.linearRampToValueAtTime(0.09, now + 0.22);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+            gain.gain.linearRampToValueAtTime(0.12, now + 0.24);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.8);
 
             osc.connect(formant);
             formant.connect(gain);
-            connectToMaster(gain, 0.8, 0.6);
+            connectToMaster(gain, 0.85, 0.65);
             osc.start(now);
-            osc.stop(now + 1.65);
+            osc.stop(now + 1.85);
           });
 
-          // Layer 2: Cascading Crystal Glockenspiel / Starlight Chimes
-          const chimes = [783.99, 1046.50, 1318.51, 1567.98, 2093.00, 2637.02];
+          // Layer 2: Cascading Starlight Crystal Glockenspiel / Elven Harp
+          const chimes = [783.99, 1046.50, 1318.51, 1567.98, 2093.00, 2637.02, 3135.96];
           chimes.forEach((f, idx) => {
-            const noteStart = now + (idx * 0.07);
+            const noteStart = now + (idx * 0.065);
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'sine';
             osc.frequency.setValueAtTime(f, noteStart);
-            gain.gain.setValueAtTime(0.14, noteStart);
-            gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.55);
+            gain.gain.setValueAtTime(0.18, noteStart);
+            gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.65);
             osc.connect(gain);
-            connectToMaster(gain, 0.9, 0.5);
+            connectToMaster(gain, 0.9, 0.55);
             osc.start(noteStart);
-            osc.stop(noteStart + 0.6);
+            osc.stop(noteStart + 0.7);
           });
 
-          // Layer 3: Seismic Aether Grounding Surge
+          // Layer 3: Subterranean Divine Aether Grounding Pulse
           const aether = ctx.createOscillator();
           const aGain = ctx.createGain();
           aether.type = 'sine';
-          aether.frequency.setValueAtTime(38, now);
-          aether.frequency.linearRampToValueAtTime(54, now + 1.0);
+          aether.frequency.setValueAtTime(34, now);
+          aether.frequency.linearRampToValueAtTime(52, now + 1.1);
           aGain.gain.setValueAtTime(0.01, now);
-          aGain.gain.linearRampToValueAtTime(0.38, now + 0.35);
-          aGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.5);
+          aGain.gain.linearRampToValueAtTime(0.45, now + 0.35);
+          aGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.7);
           aether.connect(aGain);
-          connectToMaster(aGain, 1.0, 0.15);
+          connectToMaster(aGain, 1.0, 0.2);
           aether.start(now);
-          aether.stop(now + 1.5);
+          aether.stop(now + 1.7);
 
-          // Layer 4: Shimmering Holy Wind Rush
-          playAcousticNoiseBurst(ctx, now, 1.3, 'bandpass', 1200, 2.5, 0.18, 'pink', 0.5);
+          // Layer 4: Shimmering Holy Aura Wind Rush
+          playAcousticNoiseBurst(ctx, now, 1.5, 'bandpass', 1350, 2.2, 0.24, 'pink', 0.55);
 
         } else if (type === 'check') {
-          if (audioLabel) audioLabel.textContent = 'SFX: ROYAL HERALD FANFARE (BRASS)';
-          if (freqBadge) freqBadge.textContent = '587 Hz BRASS FM';
+          if (audioLabel) audioLabel.textContent = 'SFX: ROYAL HERALD FANFARE & SANCTUM BELL';
+          if (freqBadge) freqBadge.textContent = '587 Hz BRASS FM + BRONZE BELL';
 
+          // Layer 1: Imperial Brass War Horn Fanfare (FM synthesis)
           const notes = [
             { f: 293.66, t: now },
-            { f: 440.00, t: now + 0.14 },
-            { f: 369.99, t: now + 0.28 },
-            { f: 587.33, t: now + 0.28 }
+            { f: 440.00, t: now + 0.13 },
+            { f: 369.99, t: now + 0.26 },
+            { f: 587.33, t: now + 0.26 }
           ];
 
           notes.forEach(n => {
@@ -2237,22 +2484,22 @@
             carrier.frequency.setValueAtTime(n.f, n.t);
             modulator.frequency.setValueAtTime(n.f, n.t);
 
-            modGain.gain.setValueAtTime(n.f * 1.8, n.t);
+            modGain.gain.setValueAtTime(n.f * 2.1, n.t);
             modGain.gain.exponentialRampToValueAtTime(n.f * 0.35, n.t + 0.25);
             modulator.connect(carrier.frequency);
 
             bellFilter.type = 'bandpass';
-            bellFilter.frequency.setValueAtTime(1450, n.t);
+            bellFilter.frequency.setValueAtTime(1480, n.t);
             bellFilter.Q.setValueAtTime(2.2, n.t);
 
-            const duration = n.t === now + 0.28 ? 0.85 : 0.24;
+            const duration = n.t === now + 0.26 ? 0.95 : 0.25;
             hornGain.gain.setValueAtTime(0.01, n.t);
-            hornGain.gain.linearRampToValueAtTime(0.18, n.t + 0.03);
+            hornGain.gain.linearRampToValueAtTime(0.24, n.t + 0.03);
             hornGain.gain.exponentialRampToValueAtTime(0.0001, n.t + duration);
 
             carrier.connect(bellFilter);
             bellFilter.connect(hornGain);
-            connectToMaster(hornGain, 1.0, 0.45);
+            connectToMaster(hornGain, 1.0, 0.5);
 
             carrier.start(n.t);
             modulator.start(n.t);
@@ -2260,118 +2507,162 @@
             modulator.stop(n.t + duration);
           });
 
-          // Orchestral kettle drum punch underneath
+          // Layer 2: Great Bronze Tower Sanctum Alarm Bell
+          const bellT = now + 0.26;
+          const bellModes = [
+            { f: 196.00, g: 0.35, tau: 1.4 },
+            { f: 415.30, g: 0.24, tau: 1.1 },
+            { f: 892.00, g: 0.16, tau: 0.8 },
+            { f: 1420.0, g: 0.09, tau: 0.5 }
+          ];
+          bellModes.forEach(bm => {
+            const bOsc = ctx.createOscillator();
+            const bGain = ctx.createGain();
+            bOsc.type = 'sine';
+            bOsc.frequency.setValueAtTime(bm.f, bellT);
+            bGain.gain.setValueAtTime(bm.g, bellT);
+            bGain.gain.exponentialRampToValueAtTime(0.0001, bellT + bm.tau);
+            bOsc.connect(bGain);
+            connectToMaster(bGain, 0.8, 0.6);
+            bOsc.start(bellT);
+            bOsc.stop(bellT + bm.tau);
+          });
+
+          // Layer 3: Orchestral War Timpani Body Punch
           const timp = ctx.createOscillator();
           const timpGain = ctx.createGain();
           timp.type = 'sine';
-          timp.frequency.setValueAtTime(95, now + 0.28);
-          timp.frequency.exponentialRampToValueAtTime(42, now + 0.45);
-          timpGain.gain.setValueAtTime(0.38, now + 0.28);
-          timpGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+          timp.frequency.setValueAtTime(98, now + 0.26);
+          timp.frequency.exponentialRampToValueAtTime(40, now + 0.48);
+          timpGain.gain.setValueAtTime(0.48, now + 0.26);
+          timpGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.58);
           timp.connect(timpGain);
-          connectToMaster(timpGain, 1.0, 0.25);
-          timp.start(now + 0.28);
-          timp.stop(now + 0.55);
+          connectToMaster(timpGain, 1.0, 0.3);
+          timp.start(now + 0.26);
+          timp.stop(now + 0.58);
 
         } else if (type === 'ultimate') {
-          if (audioLabel) audioLabel.textContent = 'SFX: QUEEN ULTIMATE (APOCALYPSE)';
-          if (freqBadge) freqBadge.textContent = '30 Hz SEISMIC DETONATION';
+          if (audioLabel) audioLabel.textContent = 'SFX: QUEEN ULTIMATE (LAVA TORRENT APOCALYPSE)';
+          if (freqBadge) freqBadge.textContent = '28 Hz DRAGON MAGMA BLAST';
 
-          // Stage 1: Reverse-Vacuum Energy Riser (0.0s - 0.72s)
+          // Stage 1: Arcane Vacuum Inversion / Ley-line Suction Riser (0.0s - 0.72s)
           const riserOsc = ctx.createOscillator();
           const riserFilter = ctx.createBiquadFilter();
           const riserGain = ctx.createGain();
           riserOsc.type = 'sawtooth';
-          riserOsc.frequency.setValueAtTime(50, now);
-          riserOsc.frequency.exponentialRampToValueAtTime(420, now + 0.72);
+          riserOsc.frequency.setValueAtTime(45, now);
+          riserOsc.frequency.exponentialRampToValueAtTime(480, now + 0.72);
           riserFilter.type = 'lowpass';
-          riserFilter.frequency.setValueAtTime(200, now);
-          riserFilter.frequency.exponentialRampToValueAtTime(2600, now + 0.72);
+          riserFilter.frequency.setValueAtTime(160, now);
+          riserFilter.frequency.exponentialRampToValueAtTime(3200, now + 0.72);
           riserGain.gain.setValueAtTime(0.02, now);
-          riserGain.gain.linearRampToValueAtTime(0.24, now + 0.70);
+          riserGain.gain.linearRampToValueAtTime(0.30, now + 0.70);
           riserGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
           riserOsc.connect(riserFilter);
           riserFilter.connect(riserGain);
-          connectToMaster(riserGain, 1.0, 0.35);
+          connectToMaster(riserGain, 1.0, 0.4);
           riserOsc.start(now);
           riserOsc.stop(now + 0.75);
 
-          // Reverse wind whoosh
-          playAcousticNoiseBurst(ctx, now, 0.72, 'bandpass', 1200, 3.0, 0.32, 'pink', 0.4);
+          // Reverse mystic wind vortex
+          playAcousticNoiseBurst(ctx, now, 0.72, 'bandpass', 1400, 2.8, 0.38, 'pink', 0.45);
 
-          // Stage 2: Cataclysmic Detonation Shockwave (0.72s)
+          // Stage 2: Apocalyptic Cataclysm Detonation (0.72s)
           setTimeout(() => {
             try {
               const cNow = ctx.currentTime;
               const blast = ctx.createOscillator();
               const blastGain = ctx.createGain();
               blast.type = 'sine';
-              blast.frequency.setValueAtTime(110, cNow);
-              blast.frequency.exponentialRampToValueAtTime(30, cNow + 0.45);
-              blastGain.gain.setValueAtTime(0.65, cNow);
-              blastGain.gain.exponentialRampToValueAtTime(0.0001, cNow + 1.6);
+              blast.frequency.setValueAtTime(120, cNow);
+              blast.frequency.exponentialRampToValueAtTime(28, cNow + 0.5);
+              blastGain.gain.setValueAtTime(0.85, cNow);
+              blastGain.gain.exponentialRampToValueAtTime(0.0001, cNow + 1.9);
               blast.connect(blastGain);
-              connectToMaster(blastGain, 1.0, 0.5);
+              connectToMaster(blastGain, 1.0, 0.55);
               blast.start(cNow);
-              blast.stop(cNow + 1.6);
+              blast.stop(cNow + 1.9);
 
-              playAcousticNoiseBurst(ctx, cNow, 0.18, 'lowpass', 450, 1.8, 0.55, 'white', 0.5);
-              playAcousticNoiseBurst(ctx, cNow + 0.08, 1.8, 'lowpass', 180, 2.2, 0.48, 'brown', 0.65);
-              playAcousticNoiseBurst(ctx, cNow + 0.35, 1.4, 'bandpass', 320, 2.5, 0.35, 'brown', 0.6);
+              // Dragon Magma Roar Throat Filter
+              const roar = ctx.createOscillator();
+              const roarFilter = ctx.createBiquadFilter();
+              const roarGain = ctx.createGain();
+              roar.type = 'sawtooth';
+              roar.frequency.setValueAtTime(180, cNow + 0.05);
+              roar.frequency.exponentialRampToValueAtTime(95, cNow + 1.2);
+              roarFilter.type = 'bandpass';
+              roarFilter.frequency.setValueAtTime(450, cNow + 0.05);
+              roarFilter.frequency.linearRampToValueAtTime(220, cNow + 1.2);
+              roarFilter.Q.setValueAtTime(4.0, cNow);
+              roarGain.gain.setValueAtTime(0.38, cNow + 0.05);
+              roarGain.gain.exponentialRampToValueAtTime(0.0001, cNow + 1.4);
+              roar.connect(roarFilter);
+              roarFilter.connect(roarGain);
+              connectToMaster(roarGain, 0.9, 0.6);
+              roar.start(cNow + 0.05);
+              roar.stop(cNow + 1.45);
 
-              [220, 330, 440, 660].forEach((freq) => {
+              // Subterranean explosion noise layers
+              playAcousticNoiseBurst(ctx, cNow, 0.22, 'lowpass', 520, 1.6, 0.68, 'white', 0.55);
+              playAcousticNoiseBurst(ctx, cNow + 0.08, 2.2, 'lowpass', 210, 2.0, 0.58, 'brown', 0.7);
+              playAcousticNoiseBurst(ctx, cNow + 0.35, 1.8, 'bandpass', 380, 2.2, 0.44, 'brown', 0.65);
+
+              // Mountain cathedral reverberation chords
+              [196, 293.66, 392, 587.33].forEach(freq => {
                 const ring = ctx.createOscillator();
                 const rGain = ctx.createGain();
                 ring.type = 'triangle';
-                ring.frequency.setValueAtTime(freq, cNow + 0.15);
-                rGain.gain.setValueAtTime(0.08, cNow + 0.15);
-                rGain.gain.exponentialRampToValueAtTime(0.0001, cNow + 1.8);
+                ring.frequency.setValueAtTime(freq, cNow + 0.18);
+                rGain.gain.setValueAtTime(0.12, cNow + 0.18);
+                rGain.gain.exponentialRampToValueAtTime(0.0001, cNow + 2.1);
                 ring.connect(rGain);
-                connectToMaster(rGain, 0.6, 0.65);
-                ring.start(cNow + 0.15);
-                ring.stop(cNow + 1.85);
+                connectToMaster(rGain, 0.7, 0.75);
+                ring.start(cNow + 0.18);
+                ring.stop(cNow + 2.15);
               });
             } catch (e) {}
           }, 700);
 
         } else if (type === 'pageturn') {
-          if (audioLabel) audioLabel.textContent = 'SFX: ARCHIVAL FOLIO PAGE TURN';
-          if (freqBadge) freqBadge.textContent = '1.55 kHz PARCHMENT';
+          if (audioLabel) audioLabel.textContent = 'SFX: ANCIENT SPELL GRIMOIRE FOLIO';
+          if (freqBadge) freqBadge.textContent = '1.65 kHz VELLUM & GOLD LEAF';
 
-          playAcousticNoiseBurst(ctx, now, 0.035, 'bandpass', 1800, 2.5, 0.22, 'pink', 0.1);
-          playAcousticNoiseBurst(ctx, now + 0.02, 0.065, 'bandpass', 1550, 3.2, 0.28, 'pink', 0.15);
-          playAcousticNoiseBurst(ctx, now + 0.04, 0.12, 'lowpass', 380, 1.5, 0.24, 'pink', 0.18);
-          playAcousticNoiseBurst(ctx, now + 0.11, 0.08, 'bandpass', 620, 1.8, 0.18, 'pink', 0.12);
+          playAcousticNoiseBurst(ctx, now, 0.045, 'bandpass', 2100, 2.8, 0.32, 'pink', 0.15);
+          playAcousticNoiseBurst(ctx, now + 0.02, 0.075, 'bandpass', 1650, 3.5, 0.38, 'pink', 0.2);
+          playAcousticNoiseBurst(ctx, now + 0.04, 0.14, 'lowpass', 420, 1.6, 0.30, 'brown', 0.22);
+          playAcousticNoiseBurst(ctx, now + 0.12, 0.09, 'bandpass', 680, 2.0, 0.24, 'pink', 0.15);
 
         } else if (type === 'terrain' || type === 'passive') {
-          if (audioLabel) audioLabel.textContent = 'SFX: ELEMENTAL TERRAIN MUTATION';
-          if (freqBadge) freqBadge.textContent = '80 Hz TECTONIC SHIFT';
+          if (audioLabel) audioLabel.textContent = 'SFX: ELEMENTAL LEY-LINE CONVERGENCE';
+          if (freqBadge) freqBadge.textContent = '48 Hz LIVING EARTH + MANA CHIME';
 
           const rumble = ctx.createOscillator();
           const rGain = ctx.createGain();
           rumble.type = 'triangle';
-          rumble.frequency.setValueAtTime(65, now);
-          rumble.frequency.linearRampToValueAtTime(40, now + 0.6);
-          rGain.gain.setValueAtTime(0.35, now);
-          rGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+          rumble.frequency.setValueAtTime(75, now);
+          rumble.frequency.linearRampToValueAtTime(38, now + 0.7);
+          rGain.gain.setValueAtTime(0.48, now);
+          rGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
           rumble.connect(rGain);
-          connectToMaster(rGain, 1.0, 0.25);
+          connectToMaster(rGain, 1.0, 0.3);
           rumble.start(now);
-          rumble.stop(now + 0.65);
+          rumble.stop(now + 0.75);
 
-          playAcousticNoiseBurst(ctx, now, 0.55, 'bandpass', 340, 2.5, 0.28, 'brown', 0.35);
+          playAcousticNoiseBurst(ctx, now, 0.65, 'bandpass', 380, 2.4, 0.38, 'brown', 0.4);
 
-          [220.00, 329.63, 440.00].forEach((freq, idx) => {
+          // Living Mana Chimes (Mystical Pentatonic Bloom)
+          [369.99, 440.00, 554.37, 739.99].forEach((freq, idx) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now + idx * 0.04);
-            gain.gain.setValueAtTime(0.12, now + idx * 0.04);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+            const t = now + idx * 0.045;
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.18, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.65);
             osc.connect(gain);
-            connectToMaster(gain, 0.8, 0.4);
-            osc.start(now + idx * 0.04);
-            osc.stop(now + 0.6);
+            connectToMaster(gain, 0.85, 0.5);
+            osc.start(t);
+            osc.stop(t + 0.7);
           });
         }
       } catch (e) {
@@ -2936,7 +3227,7 @@
               activeMusicOscs.push(kick);
             }
             if (i === 2 || i === 6) {
-              playNoiseBurst(ctx, noteTime, 0.08, 'bandpass', 1200, 3, 0.22);
+              playAcousticNoiseBurst(ctx, noteTime, 0.08, 'bandpass', 1200, 3, 0.22, 'pink', 0.2);
             }
           }
 
@@ -3307,7 +3598,7 @@
       selectedSquare = { r, c };
       currentLegalMoves = getLegalMoves(r, c, piece);
       updateCharacterInspector(piece);
-      playSound('select');
+      playSound('select', piece);
       updateGameplayHint(`⚡ <strong>DRAGGING ${PIECE_PROFILES[piece].name.toUpperCase()}:</strong> Drop onto any highlighted destination tile.`);
 
       // Highlight in-place without blowing away the active drag element from DOM
@@ -3391,7 +3682,7 @@
           selectedSquare = { r, c };
           currentLegalMoves = getLegalMoves(r, c, piece);
           updateCharacterInspector(piece);
-          playSound('select');
+          playSound('select', piece);
 
           const profile = PIECE_PROFILES[piece];
           const teamLabel = isWhitePiece ? 'Obsidian (White)' : 'Verdant (Black)';
@@ -3416,7 +3707,7 @@
             updateGameplayHint(`ℹ️ Inspected ${profile.name} (${ownerSide}). 👉 <strong>It is ${activeSide}'s turn!</strong> Click your own pieces at the bottom to play.`, `TURN: ${currentTurn.toUpperCase()}`);
             addLogEntry(`ℹ️ Inspected ${profile.name} at ${cols[c]}${8 - r}. ${activeSide} to move.`);
           }
-          playSound('select');
+          playSound('select', piece);
           selectedSquare = null;
           currentLegalMoves = [];
           renderBoard();
@@ -3444,9 +3735,9 @@
       const toCell = chessboard.querySelector(`.cell[data-row="${toR}"][data-col="${toC}"]`);
       const movingSlot = fromCell ? fromCell.querySelector('.miniature-slot') : null;
 
-      // Play move or capture SFX
-      if (targetPiece) playSound('capture');
-      else playSound('move');
+      // Play move or capture SFX with authentic fantasy character profile
+      if (targetPiece) playSound('capture', targetPiece);
+      else playSound('move', movingPiece);
 
       // Live Physical Traversal Animation across the 3D board
       if (fromCell && toCell && movingSlot && typeof movingSlot.animate === 'function') {
