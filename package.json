@@ -4,6 +4,9 @@
   "private": true,
   "description": "BSIT Portfolio with shadcn/ui components, Tailwind CSS and TypeScript",
   "scripts": {
+    "start": "start game-dev/simulator.html",
+    "dev": "npx serve .",
+    "game": "start game-dev/simulator.html",
     "build": "echo 'Static portfolio ready for deployment'",
     "typecheck": "tsc --noEmit"
   },
