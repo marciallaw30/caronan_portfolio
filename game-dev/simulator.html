@@ -1821,6 +1821,7 @@
     // Physically modeled acoustic transients, modal resonance, multi-layer foley,
     // procedural colored noise buffers, FM brass synthesis, vocal formant filters,
     // and algorithmic spatial convolution reverb with master dynamics limiter.
+    let audioEnabled = true;
     let audioCtx = null;
     let analyserNode = null;
     let masterCompressor = null;
@@ -1918,10 +1919,23 @@
         startOscilloscope();
       }
       if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+        audioCtx.resume().catch(() => {});
       }
       return audioCtx;
     }
+
+    // Unblock browser autoplay policy on first user gesture anywhere on page
+    const unlockAudioOnGesture = () => {
+      try {
+        const ctx = getAudioCtx();
+        if (ctx && ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+      } catch (e) {}
+    };
+    ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, unlockAudioOnGesture, { once: true, passive: true });
+    });
 
     function startOscilloscope() {
       const canvas = document.getElementById('oscilloscopeCanvas');
@@ -1992,7 +2006,7 @@
 
     // Master Tactical SFX Synthesizer with Physical Acoustics & Foley
     function playSound(type) {
-      if (!audioEnabled) return;
+      if (audioEnabled === false) return;
       try {
         const ctx = getAudioCtx();
         const now = ctx.currentTime;
@@ -2362,7 +2376,7 @@
 
     // Bespoke Procedural Acoustic Signatures for all 15 Kingdoms (GDD Section X)
     function playKingdomSoundscape(kingdomId) {
-      if (!audioEnabled) return;
+      if (audioEnabled === false) return;
       try {
         const ctx = getAudioCtx();
         const now = ctx.currentTime;
@@ -2810,7 +2824,7 @@
     }
 
     function playDynamicScore(stage) {
-      if (!audioEnabled) return;
+      if (audioEnabled === false) return;
       const ctx = getAudioCtx();
 
       if (dynamicScoreActiveStage === stage && isMusicPlaying) {
@@ -3534,7 +3548,15 @@
           }, Math.round(moveDuration * 0.58));
         }
 
+        let safetyTimer = setTimeout(() => {
+          if (isMovingAnimation) {
+            finalizeMoveExecution(fromR, fromC, toR, toC, movingPiece, targetPiece, profile);
+            isMovingAnimation = false;
+          }
+        }, moveDuration + 200);
+
         leapAnim.onfinish = () => {
+          clearTimeout(safetyTimer);
           finalizeMoveExecution(fromR, fromC, toR, toC, movingPiece, targetPiece, profile);
           isMovingAnimation = false;
 

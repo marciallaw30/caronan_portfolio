@@ -4280,10 +4280,23 @@
         masterCompressor.connect(audioCtx.destination);
       }
       if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+        audioCtx.resume().catch(() => {});
       }
       return audioCtx;
     }
+
+    // Unblock browser autoplay policy on first user gesture anywhere on page
+    const unlockAudioOnGesture = () => {
+      try {
+        const ctx = getAudioCtx();
+        if (ctx && ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+      } catch (e) {}
+    };
+    ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+      window.addEventListener(evt, unlockAudioOnGesture, { once: true, passive: true });
+    });
 
     // Helper: Play Filtered Organic Noise Burst with Optional Reverb Send
     function playAcousticNoiseBurst(ctx, startTime, duration, filterType, freq, Q = 1, gainVal = 0.2, noiseType = 'pink', reverbSend = 0.2) {
@@ -4319,7 +4332,7 @@
 
     // Master Tactical SFX Synthesizer with Physical Acoustics & Foley
     function playSound(type) {
-      if (!audioEnabled) return;
+      if (audioEnabled === false) return;
       try {
         const ctx = getAudioCtx();
         const now = ctx.currentTime;
@@ -4663,7 +4676,7 @@
 
     // Bespoke Procedural Acoustic Signatures for all 15 Kingdoms (GDD Section X)
     function playKingdomSoundscape(kingdomId) {
-      if (!audioEnabled) return;
+      if (audioEnabled === false) return;
       try {
         const ctx = getAudioCtx();
         const now = ctx.currentTime;
