@@ -4194,6 +4194,7 @@
     // and algorithmic spatial convolution reverb with master dynamics limiter.
     let audioCtx = null;
     let masterCompressor = null;
+    let masterGain = null;
     let masterReverbNode = null;
     let masterReverbGain = null;
     let activeMusicOscs = [];
@@ -4277,7 +4278,10 @@
           masterReverbNode = null;
         }
 
-        masterCompressor.connect(audioCtx.destination);
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(1.4, audioCtx.currentTime);
+        masterCompressor.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
       }
       if (audioCtx.state === 'suspended') {
         audioCtx.resume().catch(() => {});

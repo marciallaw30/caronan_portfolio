@@ -1825,6 +1825,7 @@
     let audioCtx = null;
     let analyserNode = null;
     let masterCompressor = null;
+    let masterGain = null;
     let masterReverbNode = null;
     let masterReverbGain = null;
     let activeMusicOscs = [];
@@ -1913,8 +1914,12 @@
         analyserNode = audioCtx.createAnalyser();
         analyserNode.fftSize = 64;
 
+        masterGain = audioCtx.createGain();
+        masterGain.gain.setValueAtTime(1.5, audioCtx.currentTime);
+
         masterCompressor.connect(analyserNode);
-        analyserNode.connect(audioCtx.destination);
+        analyserNode.connect(masterGain);
+        masterGain.connect(audioCtx.destination);
 
         startOscilloscope();
       }
@@ -3304,7 +3309,20 @@
       updateCharacterInspector(piece);
       playSound('select');
       updateGameplayHint(`⚡ <strong>DRAGGING ${PIECE_PROFILES[piece].name.toUpperCase()}:</strong> Drop onto any highlighted destination tile.`);
-      renderBoard();
+
+      // Highlight in-place without blowing away the active drag element from DOM
+      chessboard.querySelectorAll('.cell').forEach(cl => {
+        const cr = parseInt(cl.dataset.row);
+        const cc = parseInt(cl.dataset.col);
+        cl.classList.remove('cell-selected', 'cell-valid-move', 'cell-valid-capture');
+        if (cr === r && cc === c) {
+          cl.classList.add('cell-selected');
+        } else if (currentLegalMoves.some(m => m.r === cr && m.c === cc)) {
+          if (boardState[cr][cc]) cl.classList.add('cell-valid-capture');
+          else cl.classList.add('cell-valid-move');
+        }
+      });
+
       e.dataTransfer.setData('text/plain', `${r},${c}`);
       e.dataTransfer.effectAllowed = 'move';
     }
@@ -3359,6 +3377,16 @@
         const isPlayable = (!opponentAI || userPlaySide === 'both' || userPlaySide === currentTurn) && isCurrentTurnPiece;
 
         if (isPlayable) {
+          // If clicking the already selected piece: toggle deselect!
+          if (selectedSquare && selectedSquare.r === r && selectedSquare.c === c) {
+            selectedSquare = null;
+            currentLegalMoves = [];
+            const sideName = currentTurn === 'white' ? 'Obsidian (White)' : 'Verdant (Black)';
+            updateGameplayHint(`👉 <strong>YOUR TURN:</strong> Click or drag any ${sideName} figurine to play.`);
+            renderBoard();
+            return;
+          }
+
           // Select piece and show its legal moves
           selectedSquare = { r, c };
           currentLegalMoves = getLegalMoves(r, c, piece);
