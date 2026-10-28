@@ -1239,23 +1239,23 @@
 
     <!-- Dual-Mode Switcher -->
     <div class="btn-group p-1 rounded-pill" style="background: rgba(15, 23, 42, 0.95); border: 2px solid rgba(245, 158, 11, 0.5); box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);">
-      <button id="btnSwitchTacticalGrid" class="btn btn-sm btn-mythic-gold active rounded-pill px-4 py-1 font-mono fw-bold">
+      <button type="button" id="btnSwitchTacticalGrid" class="btn btn-sm btn-mythic-gold active rounded-pill px-4 py-1 font-mono fw-bold">
         <i class="bi bi-grid-3x3 me-1"></i> 3D Tactical Chess
       </button>
-      <button id="btnSwitchRealtimeArena" class="btn btn-sm btn-outline-secondary rounded-pill px-4 py-1 font-mono text-light fw-bold">
+      <button type="button" id="btnSwitchRealtimeArena" class="btn btn-sm btn-outline-secondary rounded-pill px-4 py-1 font-mono text-light fw-bold">
         <i class="bi bi-controller me-1 text-warning"></i> Arcade Mode (Kingdom Land Battle)
       </button>
     </div>
 
     <!-- Audio & AI Controls -->
     <div class="d-flex align-items-center gap-2">
-      <button id="btnToggleAudio" class="btn btn-sm btn-outline-warning rounded-pill px-3 font-mono">
+      <button type="button" id="btnToggleAudio" class="btn btn-sm btn-outline-warning rounded-pill px-3 font-mono">
         <i class="bi bi-volume-up-fill me-1" id="audioIcon"></i> Audio: <span id="audioStateText">ON</span>
       </button>
-      <button id="btnToggleAI" class="btn btn-sm btn-outline-info rounded-pill px-3 font-mono">
+      <button type="button" id="btnToggleAI" class="btn btn-sm btn-outline-info rounded-pill px-3 font-mono">
         <i class="bi bi-robot me-1"></i> Opponent AI: <span class="text-success" id="aiStatusText">ON</span>
       </button>
-      <button id="btnResetGame" class="btn btn-sm btn-outline-secondary rounded-pill px-3 font-mono text-light">
+      <button type="button" id="btnResetGame" class="btn btn-sm btn-outline-secondary rounded-pill px-3 font-mono text-light">
         <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Board
       </button>
       <a href="index.html" class="btn btn-sm btn-outline-secondary rounded-pill px-3 font-mono text-light" title="Return to GDD Document">
@@ -1340,7 +1340,7 @@
           </div>
 
           <!-- Queen Ultimate Trigger -->
-          <button id="btnQueenUltimate" class="btn btn-mythic-gold w-100 py-2 mb-3 font-mono">
+          <button type="button" id="btnQueenUltimate" class="btn btn-mythic-gold w-100 py-2 mb-3 font-mono">
             <i class="bi bi-stars me-1"></i> Trigger Queen Ultimate: Lava Torrent
           </button>
 
@@ -1367,13 +1367,13 @@
           <!-- Camera Perspective Controls -->
           <div class="d-flex justify-content-center align-items-center gap-2 mb-3 flex-wrap">
             <span class="small font-mono text-muted me-2"><i class="bi bi-camera-video me-1"></i> VIEW:</span>
-            <button class="btn btn-xs btn-sm btn-outline-warning active rounded-pill px-3 font-mono cam-btn" data-view="perspective">
+            <button type="button" class="btn btn-xs btn-sm btn-outline-warning active rounded-pill px-3 font-mono cam-btn" data-view="perspective">
               3D Cinematic
             </button>
-            <button class="btn btn-xs btn-sm btn-outline-secondary text-light rounded-pill px-3 font-mono cam-btn" data-view="topdown">
+            <button type="button" class="btn btn-xs btn-sm btn-outline-secondary text-light rounded-pill px-3 font-mono cam-btn" data-view="topdown">
               2D Tactical
             </button>
-            <button class="btn btn-xs btn-sm btn-outline-secondary text-light rounded-pill px-3 font-mono cam-btn" data-view="isometric">
+            <button type="button" class="btn btn-xs btn-sm btn-outline-secondary text-light rounded-pill px-3 font-mono cam-btn" data-view="isometric">
               Isometric 45&deg;</button>
           </div>
 
@@ -1386,9 +1386,9 @@
               </span>
             </div>
             <div class="d-flex align-items-center gap-1">
-              <button class="btn btn-xs btn-outline-warning active font-mono rounded-pill px-2 py-1" id="btnPlayWhite" title="Play White (You move first)">Play White</button>
-              <button class="btn btn-xs btn-outline-secondary text-light font-mono rounded-pill px-2 py-1" id="btnPlayBlack" title="Play Black (AI opens with White)">Play Black</button>
-              <button class="btn btn-xs btn-outline-secondary text-light font-mono rounded-pill px-2 py-1" id="btnPlay2P" title="Local 2-Player Pass & Play (No AI)">2P Local</button>
+              <button type="button" class="btn btn-xs btn-outline-warning active font-mono rounded-pill px-2 py-1" id="btnPlayWhite" title="Play White (You move first)">Play White</button>
+              <button type="button" class="btn btn-xs btn-outline-secondary text-light font-mono rounded-pill px-2 py-1" id="btnPlayBlack" title="Play Black (AI opens with White)">Play Black</button>
+              <button type="button" class="btn btn-xs btn-outline-secondary text-light font-mono rounded-pill px-2 py-1" id="btnPlay2P" title="Local 2-Player Pass & Play (No AI)">2P Local</button>
             </div>
           </div>
 
@@ -1446,16 +1446,16 @@
           <div class="mb-3 p-2 rounded bg-black bg-opacity-60 border border-secondary border-opacity-25">
             <div class="small font-mono text-warning fw-bold mb-2"><i class="bi bi-music-note-beamed me-1"></i> Dynamic Orchestral Score:</div>
             <div class="d-grid gap-1">
-              <button class="btn btn-sm btn-outline-info text-start font-mono py-1" id="btnMusicContemplative" style="font-size: 0.75rem;">
+              <button type="button" class="btn btn-sm btn-outline-info text-start font-mono py-1" id="btnMusicContemplative" style="font-size: 0.75rem;">
                 <i class="bi bi-play-circle me-1"></i> Stage 1: Contemplative (Chords)
               </button>
-              <button class="btn btn-sm btn-outline-warning text-start font-mono py-1" id="btnMusicBattle" style="font-size: 0.75rem;">
+              <button type="button" class="btn btn-sm btn-outline-warning text-start font-mono py-1" id="btnMusicBattle" style="font-size: 0.75rem;">
                 <i class="bi bi-play-circle me-1"></i> Stage 2: Battle Cadence (Pulsing)
               </button>
-              <button class="btn btn-sm btn-outline-danger text-start font-mono py-1" id="btnMusicClimax" style="font-size: 0.75rem;">
+              <button type="button" class="btn btn-sm btn-outline-danger text-start font-mono py-1" id="btnMusicClimax" style="font-size: 0.75rem;">
                 <i class="bi bi-play-circle me-1"></i> Stage 3: Apocalyptic Climax (Choir)
               </button>
-              <button class="btn btn-sm btn-outline-secondary text-start font-mono py-1 text-light" id="btnMusicStop" style="font-size: 0.75rem;">
+              <button type="button" class="btn btn-sm btn-outline-secondary text-start font-mono py-1 text-light" id="btnMusicStop" style="font-size: 0.75rem;">
                 <i class="bi bi-stop-circle me-1"></i> Stop Background Score
               </button>
             </div>
@@ -1465,14 +1465,14 @@
           <div class="mb-3">
             <div class="small font-mono text-info fw-bold mb-2"><i class="bi bi-soundwave me-1"></i> TACTICAL SFX SYNTHESIZER:</div>
             <div class="d-flex gap-1 flex-wrap">
-              <button class="sfx-preview-btn sfx-btn-cyan" onclick="playSound('select')"><i class="bi bi-cursor-fill me-1"></i>Select</button>
-              <button class="sfx-preview-btn sfx-btn-blue" onclick="playSound('move')"><i class="bi bi-arrows-move me-1"></i>Move</button>
-              <button class="sfx-preview-btn sfx-btn-orange" onclick="playSound('capture')"><i class="bi bi-shield-slash me-1"></i>Clash</button>
-              <button class="sfx-preview-btn sfx-btn-gold" onclick="playSound('manifestation')"><i class="bi bi-lightning-fill me-1"></i>Manifest</button>
-              <button class="sfx-preview-btn sfx-btn-crimson" onclick="playSound('check')"><i class="bi bi-exclamation-triangle-fill me-1"></i>Check</button>
-              <button class="sfx-preview-btn sfx-btn-violet" onclick="playSound('ultimate')"><i class="bi bi-stars me-1"></i>Ultimate</button>
-              <button class="sfx-preview-btn sfx-btn-emerald" onclick="playSound('terrain')"><i class="bi bi-globe-americas me-1"></i>Terrain</button>
-              <button class="sfx-preview-btn sfx-btn-amber" onclick="playSound('pageturn')"><i class="bi bi-book-half me-1"></i>Folio</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-cyan" onclick="playSound('select')"><i class="bi bi-cursor-fill me-1"></i>Select</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-blue" onclick="playSound('move')"><i class="bi bi-arrows-move me-1"></i>Move</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-orange" onclick="playSound('capture')"><i class="bi bi-shield-slash me-1"></i>Clash</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-gold" onclick="playSound('manifestation')"><i class="bi bi-lightning-fill me-1"></i>Manifest</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-crimson" onclick="playSound('check')"><i class="bi bi-exclamation-triangle-fill me-1"></i>Check</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-violet" onclick="playSound('ultimate')"><i class="bi bi-stars me-1"></i>Ultimate</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-emerald" onclick="playSound('terrain')"><i class="bi bi-globe-americas me-1"></i>Terrain</button>
+              <button type="button" class="sfx-preview-btn sfx-btn-amber" onclick="playSound('pageturn')"><i class="bi bi-book-half me-1"></i>Folio</button>
             </div>
           </div>
 
@@ -1556,7 +1556,7 @@
             <div class="text-muted" style="font-size: 0.65rem;">TERRITORY BOUNTY</div>
             <div class="fw-bold text-info fs-5" id="arenaGoldCount">300 G</div>
           </div>
-          <button id="btnArenaRestart" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2 font-mono">
+          <button type="button" id="btnArenaRestart" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2 font-mono">
             <i class="bi bi-arrow-counterclockwise me-1"></i> Respawn
           </button>
         </div>

@@ -1,4 +1,4 @@
-# Robust PowerShell HTTP Web Server
+# Robust PowerShell HTTP Web Server with HTTP 206 Range (Video Seeking) Support
 # Serves BSIT Portfolio on Localhost without thread crashes or hanging
 
 $port = 8080
@@ -29,10 +29,12 @@ $mimeTypes = @{
     ".png"  = "image/png"
     ".jpg"  = "image/jpeg"
     ".jpeg" = "image/jpeg"
+    ".webp" = "image/webp"
     ".svg"  = "image/svg+xml"
     ".ico"  = "image/x-icon"
     ".md"   = "text/plain; charset=utf-8"
     ".sql"  = "text/plain; charset=utf-8"
+    ".vtt"  = "text/vtt; charset=utf-8"
     ".xlsx" = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ".docx" = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ".pdf"  = "application/pdf"
@@ -73,12 +75,64 @@ while ($listener.IsListening) {
                 }
                 $res.ContentType = $contentType
                 $res.AddHeader("Accept-Ranges", "bytes")
-                
-                $bytes = [System.IO.File]::ReadAllBytes($filePath)
-                $res.ContentLength64 = $bytes.Length
-                
-                if ($req.HttpMethod -ne "HEAD") {
-                    $res.OutputStream.Write($bytes, 0, $bytes.Length)
+
+                $fileInfo = New-Object System.IO.FileInfo($filePath)
+                $totalLength = $fileInfo.Length
+
+                $rangeHeader = $req.Headers["Range"]
+                if (-not [string]::IsNullOrEmpty($rangeHeader) -and $rangeHeader.StartsWith("bytes=")) {
+                    $rangeSpec = $rangeHeader.Substring(6).Split('-')
+                    $start = 0L
+                    $end = $totalLength - 1L
+
+                    if (-not [string]::IsNullOrEmpty($rangeSpec[0])) {
+                        [long]::TryParse($rangeSpec[0], [ref]$start) | Out-Null
+                    }
+                    if ($rangeSpec.Length -gt 1 -and -not [string]::IsNullOrEmpty($rangeSpec[1])) {
+                        [long]::TryParse($rangeSpec[1], [ref]$end) | Out-Null
+                    }
+                    if ($end -ge $totalLength) {
+                        $end = $totalLength - 1L
+                    }
+
+                    $length = $end - $start + 1L
+                    if ($length -gt 0 -and $start -lt $totalLength) {
+                        $res.StatusCode = 206
+                        $res.AddHeader("Content-Range", "bytes $start-$end/$totalLength")
+                        $res.ContentLength64 = $length
+
+                        if ($req.HttpMethod -ne "HEAD") {
+                            $fs = [System.IO.File]::OpenRead($filePath)
+                            try {
+                                $fs.Seek($start, [System.IO.SeekOrigin]::Begin) | Out-Null
+                                $buffer = New-Object byte[] 65536
+                                $bytesRemaining = $length
+                                while ($bytesRemaining -gt 0) {
+                                    $toRead = [int][Math]::Min($buffer.Length, $bytesRemaining)
+                                    $read = $fs.Read($buffer, 0, $toRead)
+                                    if ($read -le 0) { break }
+                                    $res.OutputStream.Write($buffer, 0, $read)
+                                    $bytesRemaining -= $read
+                                }
+                            } finally {
+                                $fs.Close()
+                            }
+                        }
+                    } else {
+                        $res.StatusCode = 416
+                        $res.AddHeader("Content-Range", "bytes */$totalLength")
+                    }
+                } else {
+                    $res.StatusCode = 200
+                    $res.ContentLength64 = $totalLength
+                    if ($req.HttpMethod -ne "HEAD") {
+                        $fs = [System.IO.File]::OpenRead($filePath)
+                        try {
+                            $fs.CopyTo($res.OutputStream)
+                        } finally {
+                            $fs.Close()
+                        }
+                    }
                 }
             }
             else {
@@ -103,6 +157,6 @@ while ($listener.IsListening) {
         }
     }
     catch {
-        # continue listener loop
+        Write-Host "Server loop error: $_"
     }
 }

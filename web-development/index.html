@@ -197,19 +197,19 @@
       <!-- Simulator Tabs Navigation -->
       <div class="d-flex justify-content-center mt-4">
         <div class="simulator-nav">
-          <button class="sim-tab-btn active" data-tab="employees">
+          <button type="button" class="sim-tab-btn active" data-tab="employees">
             <i class="bi bi-people-fill text-warning"></i> <span>Employee Management</span>
           </button>
-          <button class="sim-tab-btn" data-tab="kiosk">
+          <button type="button" class="sim-tab-btn" data-tab="kiosk">
             <i class="bi bi-fingerprint text-info"></i> <span>Attendance Kiosk</span>
           </button>
-          <button class="sim-tab-btn" data-tab="payroll">
+          <button type="button" class="sim-tab-btn" data-tab="payroll">
             <i class="bi bi-cash-stack text-success"></i> <span>Payroll Engine & Payslip</span>
           </button>
-          <button class="sim-tab-btn" data-tab="bulletin">
+          <button type="button" class="sim-tab-btn" data-tab="bulletin">
             <i class="bi bi-newspaper text-danger"></i> <span>Campus Bulletin & News</span>
           </button>
-          <button class="sim-tab-btn" data-tab="database" id="simTabDatabaseBtn">
+          <button type="button" class="sim-tab-btn" data-tab="database" id="simTabDatabaseBtn">
             <i class="bi bi-database-fill-gear text-info"></i> <span>Live SQL Database & Console</span>
           </button>
         </div>
@@ -225,7 +225,7 @@
             <div class="text-muted small">Active records queried from <code class="text-warning">employees</code> table with Role-Based Access Control (RBAC).</div>
           </div>
           <div class="d-flex gap-2">
-            <button class="btn btn-warning btn-sm fw-bold px-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            <button type="button" class="btn btn-warning btn-sm fw-bold px-3 rounded-pill" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
               <i class="bi bi-person-plus-fill me-1"></i> Add Employee
             </button>
           </div>
@@ -325,12 +325,12 @@
             <!-- Action Buttons -->
             <div class="row g-2">
               <div class="col-6">
-                <button class="kiosk-btn kiosk-btn-in w-100" onclick="handleKioskAction('in')">
+                <button type="button" class="kiosk-btn kiosk-btn-in w-100" onclick="handleKioskAction('in')">
                   <i class="bi bi-box-arrow-in-right"></i> CLOCK IN
                 </button>
               </div>
               <div class="col-6">
-                <button class="kiosk-btn kiosk-btn-out w-100" onclick="handleKioskAction('out')">
+                <button type="button" class="kiosk-btn kiosk-btn-out w-100" onclick="handleKioskAction('out')">
                   <i class="bi bi-box-arrow-right"></i> CLOCK OUT
                 </button>
               </div>
@@ -446,7 +446,7 @@
               <input type="number" id="payOtherDeduction" class="form-control bg-dark border-secondary text-white" value="0" min="0">
             </div>
 
-            <button class="btn btn-warning w-100 fw-bold py-2 rounded-pill" onclick="generatePayslipModal()">
+            <button type="button" class="btn btn-warning w-100 fw-bold py-2 rounded-pill" onclick="generatePayslipModal()">
               <i class="bi bi-file-earmark-pdf-fill me-2"></i> Generate & Print Official Payslip
             </button>
           </div>
@@ -643,16 +643,16 @@
             </div>
           </div>
           <div class="d-flex gap-2 flex-wrap">
-            <button class="btn btn-outline-success btn-sm rounded-pill fw-bold" onclick="openSupabaseModal()" id="btnSupabaseConnect">
+            <button type="button" class="btn btn-outline-success btn-sm rounded-pill fw-bold" onclick="openSupabaseModal()" id="btnSupabaseConnect">
               <i class="bi bi-cloud-arrow-up-fill me-1"></i> <span id="supabaseBtnLabel">Connect Supabase Cloud</span>
             </button>
-            <button class="btn btn-outline-info btn-sm rounded-pill" onclick="exportDatabaseSQL()" title="Export .sql dump matching MySQL format">
+            <button type="button" class="btn btn-outline-info btn-sm rounded-pill" onclick="exportDatabaseSQL()" title="Export .sql dump matching MySQL format">
               <i class="bi bi-download me-1"></i> Export .SQL Dump
             </button>
-            <button class="btn btn-outline-light btn-sm rounded-pill" onclick="exportDatabaseJSON()" title="Export JSON dataset">
+            <button type="button" class="btn btn-outline-light btn-sm rounded-pill" onclick="exportDatabaseJSON()" title="Export JSON dataset">
               <i class="bi bi-filetype-json me-1"></i> Export JSON
             </button>
-            <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="resetDatabaseToDefault()" title="Restore initial records from datamex_payroll_db.sql">
+            <button type="button" class="btn btn-outline-danger btn-sm rounded-pill" onclick="resetDatabaseToDefault()" title="Restore initial records from datamex_payroll_db.sql">
               <i class="bi bi-arrow-counterclockwise me-1"></i> Reset to Factory DB
             </button>
           </div>
@@ -695,12 +695,12 @@
             <!-- Mode Toggle Tabs (SQL Console vs Table Grid) -->
             <ul class="nav nav-pills mb-3 gap-2" id="dbViewTabs">
               <li class="nav-item">
-                <button class="btn btn-sm btn-outline-warning rounded-pill active" id="btnTabSQLConsole" onclick="switchDbViewMode('console')">
+                <button type="button" class="btn btn-sm btn-outline-warning rounded-pill active" id="btnTabSQLConsole" onclick="switchDbViewMode('console')">
                   <i class="bi bi-terminal-fill me-1"></i> SQL Query Console
                 </button>
               </li>
               <li class="nav-item">
-                <button class="btn btn-sm btn-outline-info rounded-pill" id="btnTabTableGrid" onclick="switchDbViewMode('grid')">
+                <button type="button" class="btn btn-sm btn-outline-info rounded-pill" id="btnTabTableGrid" onclick="switchDbViewMode('grid')">
                   <i class="bi bi-table me-1"></i> Table Data Grid (<span id="activeTableNameDisplay">employees</span>)
                 </button>
               </li>
@@ -727,10 +727,10 @@
                 <textarea id="sqlQueryInput" class="form-control font-monospace bg-black border-secondary text-warning py-2 mb-3" rows="3" style="font-size: 0.9rem;" placeholder="Enter SQL query: SELECT * FROM employees WHERE department = 'Information Technology'..."></textarea>
 
                 <div class="d-flex justify-content-between align-items-center">
-                  <button class="btn btn-warning btn-sm fw-bold px-4 rounded-pill" onclick="executeSQLQuery()">
+                  <button type="button" class="btn btn-warning btn-sm fw-bold px-4 rounded-pill" onclick="executeSQLQuery()">
                     <i class="bi bi-play-fill me-1"></i> Run SQL Query
                   </button>
-                  <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="clearSQLQuery()">
+                  <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="clearSQLQuery()">
                     <i class="bi bi-eraser-fill me-1"></i> Clear
                   </button>
                 </div>
@@ -870,19 +870,19 @@
 
       <!-- Code Tabs -->
       <div class="d-flex justify-content-center gap-2 flex-wrap mt-4">
-        <button class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn active" data-code-key="manage_payroll" onclick="switchCodeTab('manage_payroll')">
+        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn active" data-code-key="manage_payroll" onclick="switchCodeTab('manage_payroll')">
           manage_payroll.php
         </button>
-        <button class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="kiosk_attendance" onclick="switchCodeTab('kiosk_attendance')">
+        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="kiosk_attendance" onclick="switchCodeTab('kiosk_attendance')">
           kiosk_attendance.php
         </button>
-        <button class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="admin_panel" onclick="switchCodeTab('admin_panel')">
+        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="admin_panel" onclick="switchCodeTab('admin_panel')">
           admin-panel.php
         </button>
-        <button class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="generate_payslip" onclick="switchCodeTab('generate_payslip')">
+        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="generate_payslip" onclick="switchCodeTab('generate_payslip')">
           generate_payslip.php
         </button>
-        <button class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="datamex_schema" onclick="switchCodeTab('datamex_schema')">
+        <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill code-tab-btn" data-code-key="datamex_schema" onclick="switchCodeTab('datamex_schema')">
           datamex_payroll_db.sql
         </button>
       </div>
@@ -897,7 +897,7 @@
           <span class="rounded-circle bg-success d-inline-block" style="width: 10px; height: 10px;"></span>
           <span id="codeViewerTitle" class="ms-2 text-muted fw-bold">manage_payroll.php [PHP]</span>
         </div>
-        <button id="btnCopyCode" class="btn btn-dark btn-sm border-secondary text-light py-1 px-3" onclick="copyActiveCode()">
+        <button type="button" id="btnCopyCode" class="btn btn-dark btn-sm border-secondary text-light py-1 px-3" onclick="copyActiveCode()">
           <i class="bi bi-clipboard me-1"></i> Copy Code
         </button>
       </div>

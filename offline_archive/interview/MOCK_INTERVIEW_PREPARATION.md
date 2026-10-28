@@ -6,10 +6,10 @@
 ## 12 Mock IT Job Interview Questions & Model Answers
 
 ### 1. Tell me about yourself.
-> "I am a graduating BSIT student from Datamex College of Saint Adeline with a strong foundation in full-stack web engineering, database architecture, and computer systems troubleshooting. Throughout my academic career, I have engineered four functional systemsâ€”including an AI-assisted e-commerce inventory platform and an interactive sales analytics dashboard. I take pride in building secure, clean, and well-documented software solutions."
+> "I am a graduating BSIT student from Datamex College of Saint Adeline with a strong foundation in full-stack web engineering, database architecture, and computer systems troubleshooting. Throughout my academic career, I have engineered four functional systems—including an AI-assisted e-commerce inventory platform and an interactive sales analytics dashboard. I take pride in building secure, clean, and well-documented software solutions."
 
 ### 2. Why did you choose BSIT?
-> "I chose Information Technology because I am passionate about how technology solves practical operational challenges. BSIT bridges theoretical computer science with hands-on enterprise applicationâ€”giving me the skills to design resilient databases, develop user-centric web applications, and maintain robust network infrastructure."
+> "I chose Information Technology because I am passionate about how technology solves practical operational challenges. BSIT bridges theoretical computer science with hands-on enterprise application—giving me the skills to design resilient databases, develop user-centric web applications, and maintain robust network infrastructure."
 
 ### 3. What are your strongest IT skills?
 > "My strongest competencies are in relational database design (MySQL/PostgreSQL), full-stack JavaScript development, and systematic technical troubleshooting. I excel at breaking down complex business logic into clean data models and building performant client interfaces."

@@ -1,4 +1,15 @@
+# Local build & scratch directories
 scratch/
 *.ps1
+*.bat
+*.sh
 node_modules/
-.git
+.git/
+.gemini/
+.agents/
+
+# Heavy offline archives and editable raw docs (prevents public leakage & deployment bloat)
+offline_archive/
+*.docx
+*.zip
+*.log

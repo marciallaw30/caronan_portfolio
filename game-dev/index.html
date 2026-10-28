@@ -1784,25 +1784,25 @@
           <!-- View Mode & Interactive Cylinder Controls -->
           <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mb-3">
             <div class="p-1 rounded-pill bg-dark bg-opacity-75 border border-secondary border-opacity-50 d-inline-flex gap-1">
-              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold active btn-mythic-gold" id="btnViewGrimoireBook">
+              <button type="button" class="btn btn-xs btn-sm rounded-pill px-3 fw-bold active btn-mythic-gold" id="btnViewGrimoireBook">
                 <i class="bi bi-book-half me-1"></i> 📖 Living Grimoire (Book Folio)
               </button>
-              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold text-light btn-outline-secondary" id="btnView3DCylinder">
+              <button type="button" class="btn btn-xs btn-sm rounded-pill px-3 fw-bold text-light btn-outline-secondary" id="btnView3DCylinder">
                 <i class="bi bi-arrow-repeat me-1"></i> 🌀 3D Arc Gallery
               </button>
-              <button class="btn btn-xs btn-sm rounded-pill px-3 fw-bold text-light btn-outline-secondary" id="btnViewGrid">
+              <button type="button" class="btn btn-xs btn-sm rounded-pill px-3 fw-bold text-light btn-outline-secondary" id="btnViewGrid">
                 <i class="bi bi-grid-3x3-gap-fill me-1"></i> 📋 Tactical Grid
               </button>
             </div>
 
             <div class="d-flex align-items-center gap-2 ms-md-3 d-none" id="cylinderControlsCluster">
-              <button class="btn btn-sm btn-outline-secondary text-light rounded-pill px-3" id="btnCylinderRotateToggle">
+              <button type="button" class="btn btn-sm btn-outline-secondary text-light rounded-pill px-3" id="btnCylinderRotateToggle">
                 <i class="bi bi-pause-fill me-1" id="cylinderRotateIcon"></i> <span id="cylinderRotateLabel">Pause Auto-Rotate</span>
               </button>
-              <button class="btn btn-sm btn-outline-secondary text-light rounded-pill px-2" id="btnCylinderPrev" title="Rotate Left (t - 1)">
+              <button type="button" class="btn btn-sm btn-outline-secondary text-light rounded-pill px-2" id="btnCylinderPrev" title="Rotate Left (t - 1)">
                 <i class="bi bi-chevron-left"></i>
               </button>
-              <button class="btn btn-sm btn-outline-secondary text-light rounded-pill px-2" id="btnCylinderNext" title="Rotate Right (t + 1)">
+              <button type="button" class="btn btn-sm btn-outline-secondary text-light rounded-pill px-2" id="btnCylinderNext" title="Rotate Right (t + 1)">
                 <i class="bi bi-chevron-right"></i>
               </button>
             </div>
@@ -1810,13 +1810,13 @@
 
           <!-- Category Filter Buttons -->
           <div class="d-flex justify-content-center gap-2 flex-wrap mb-4" id="kingdomFilters">
-            <button class="filter-tab active" data-filter="all">All (15 Kingdoms)</button>
-            <button class="filter-tab" data-filter="fire-forge">Fire &amp; Forge</button>
-            <button class="filter-tab" data-filter="nature-water">Nature &amp; Water</button>
-            <button class="filter-tab" data-filter="ice-storm">Ice &amp; Lightning</button>
-            <button class="filter-tab" data-filter="shadow-death">Shadow &amp; Death</button>
-            <button class="filter-tab" data-filter="clock-desert">Clockwork &amp; Sand</button>
-            <button class="filter-tab" data-filter="primal-blood">Primal &amp; Horde</button>
+            <button type="button" class="filter-tab active" data-filter="all">All (15 Kingdoms)</button>
+            <button type="button" class="filter-tab" data-filter="fire-forge">Fire &amp; Forge</button>
+            <button type="button" class="filter-tab" data-filter="nature-water">Nature &amp; Water</button>
+            <button type="button" class="filter-tab" data-filter="ice-storm">Ice &amp; Lightning</button>
+            <button type="button" class="filter-tab" data-filter="shadow-death">Shadow &amp; Death</button>
+            <button type="button" class="filter-tab" data-filter="clock-desert">Clockwork &amp; Sand</button>
+            <button type="button" class="filter-tab" data-filter="primal-blood">Primal &amp; Horde</button>
           </div>
         </div>
 
@@ -1953,7 +1953,7 @@
 
           <!-- Book Nav Controls (Previous / Next / Quick Jump Tabs) -->
           <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4 px-2">
-            <button class="btn btn-mythic-outline rounded-pill px-4 py-2 font-mono" id="btnTomePrevPage">
+            <button type="button" class="btn btn-mythic-outline rounded-pill px-4 py-2 font-mono" id="btnTomePrevPage">
               <i class="bi bi-arrow-left-circle-fill me-2"></i> ❮ Previous Folio
             </button>
 
@@ -1962,7 +1962,7 @@
               <!-- 1..15 pills injected via JS -->
             </div>
 
-            <button class="btn btn-mythic-gold rounded-pill px-4 py-2 font-mono" id="btnTomeNextPage">
+            <button type="button" class="btn btn-mythic-gold rounded-pill px-4 py-2 font-mono" id="btnTomeNextPage">
               Next Folio ❯ <i class="bi bi-arrow-right-circle-fill ms-2"></i>
             </button>
           </div>
@@ -1983,10 +1983,10 @@
           <div id="kingdoms3DCylinder" class="kingdoms-3d-cylinder"></div>
 
           <!-- Left / Right Touch / Click Nav Overlays -->
-          <button class="btn position-absolute top-50 start-0 translate-middle-y ms-2 ms-md-4 rounded-circle bg-dark bg-opacity-75 border border-secondary text-white z-3 shadow-lg p-2 p-md-3" id="btnCylinderFloatLeft" aria-label="Rotate Left">
+          <button type="button" class="btn position-absolute top-50 start-0 translate-middle-y ms-2 ms-md-4 rounded-circle bg-dark bg-opacity-75 border border-secondary text-white z-3 shadow-lg p-2 p-md-3" id="btnCylinderFloatLeft" aria-label="Rotate Left">
             <i class="bi bi-chevron-left fs-5 fs-md-4"></i>
           </button>
-          <button class="btn position-absolute top-50 end-0 translate-middle-y me-2 me-md-4 rounded-circle bg-dark bg-opacity-75 border border-secondary text-white z-3 shadow-lg p-2 p-md-3" id="btnCylinderFloatRight" aria-label="Rotate Right">
+          <button type="button" class="btn position-absolute top-50 end-0 translate-middle-y me-2 me-md-4 rounded-circle bg-dark bg-opacity-75 border border-secondary text-white z-3 shadow-lg p-2 p-md-3" id="btnCylinderFloatRight" aria-label="Rotate Right">
             <i class="bi bi-chevron-right fs-5 fs-md-4"></i>
           </button>
         </div>
@@ -2034,10 +2034,10 @@
         <!-- Dual-Mode Simulator Mode Switcher -->
         <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
           <div class="btn-group p-1 rounded-pill" style="background: rgba(15, 23, 42, 0.95); border: 2px solid rgba(245, 158, 11, 0.5); box-shadow: 0 0 30px rgba(245, 158, 11, 0.25);">
-            <button id="btnSwitchTacticalGrid" class="btn btn-sm btn-mythic-gold active rounded-pill px-4 py-2 font-mono fw-bold">
+            <button type="button" id="btnSwitchTacticalGrid" class="btn btn-sm btn-mythic-gold active rounded-pill px-4 py-2 font-mono fw-bold">
               <i class="bi bi-grid-3x3 me-2"></i> 3D Tactical Planar Grid
             </button>
-            <button id="btnSwitchRealtimeArena" class="btn btn-sm btn-outline-secondary rounded-pill px-4 py-2 font-mono text-light fw-bold">
+            <button type="button" id="btnSwitchRealtimeArena" class="btn btn-sm btn-outline-secondary rounded-pill px-4 py-2 font-mono text-light fw-bold">
               <i class="bi bi-controller me-2 text-warning"></i> Arcade Mode (Kingdom Land Battle)
             </button>
           </div>
@@ -2051,7 +2051,7 @@
             <div class="glass-card p-4">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="h5 fw-bold text-white mb-0"><i class="bi bi-sliders me-2 text-info"></i> Battle Matchup &amp; Factions</h4>
-                <button id="btnToggleAudio" class="btn btn-xs btn-outline-info rounded-pill px-3 py-1 font-mono" style="font-size: 0.76rem;">
+                <button type="button" id="btnToggleAudio" class="btn btn-xs btn-outline-info rounded-pill px-3 py-1 font-mono" style="font-size: 0.76rem;">
                   <i class="bi bi-volume-up-fill me-1"></i> Audio: ON
                 </button>
               </div>
@@ -2083,16 +2083,16 @@
 
               <!-- Action Controls -->
               <div class="d-grid gap-2 mb-3">
-                <button class="btn btn-sm btn-outline-info rounded-pill py-2 font-mono fw-bold" id="btnToggleAIMode">
+                <button type="button" class="btn btn-sm btn-outline-info rounded-pill py-2 font-mono fw-bold" id="btnToggleAIMode">
                   <i class="bi bi-robot me-1"></i> Opponent AI Mode: <span class="text-success" id="aiModeLabel">ENABLED (Verdant Court)</span>
                 </button>
-                <button class="btn btn-sm btn-danger fw-bold rounded-pill py-2" id="btnTestManifestation">
+                <button type="button" class="btn btn-sm btn-danger fw-bold rounded-pill py-2" id="btnTestManifestation">
                   <i class="bi bi-lightning-charge-fill me-1"></i> Test Manifestation Combat Execution
                 </button>
-                <button class="btn btn-sm btn-mythic-primary w-100" id="btnQueenUltimate">
+                <button type="button" class="btn btn-sm btn-mythic-primary w-100" id="btnQueenUltimate">
                   <i class="bi bi-stars me-1"></i> Trigger Queen Signature Ultimate
                 </button>
-                <button class="btn btn-sm btn-outline-secondary rounded-pill w-100 text-light" id="btnResetBoard">
+                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill w-100 text-light" id="btnResetBoard">
                   <i class="bi bi-arrow-counterclockwise me-1"></i> Reset Board to Neutral Coordinates
                 </button>
               </div>
@@ -2120,12 +2120,12 @@
 
                 <!-- Language Switcher Tabs -->
                 <div class="d-flex gap-1 flex-wrap mb-2" id="engineLanguageSelector">
-                  <button class="btn btn-xs btn-mythic-gold active rounded-pill px-2 py-1 font-mono engine-lang-btn" data-lang="cpp">C++ UE5</button>
-                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="csharp">C# Unity</button>
-                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="gdscript">GDScript</button>
-                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="python">Python</button>
-                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="rust">Rust Bevy</button>
-                  <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="js">JS WebGL</button>
+                  <button type="button" class="btn btn-xs btn-mythic-gold active rounded-pill px-2 py-1 font-mono engine-lang-btn" data-lang="cpp">C++ UE5</button>
+                  <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="csharp">C# Unity</button>
+                  <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="gdscript">GDScript</button>
+                  <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="python">Python</button>
+                  <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="rust">Rust Bevy</button>
+                  <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 font-mono text-light engine-lang-btn" data-lang="js">JS WebGL</button>
                 </div>
 
                 <!-- Real-Time Code Execution Terminal -->
@@ -2133,10 +2133,10 @@
                   <div class="d-flex justify-content-between align-items-center px-2 py-1 rounded-top" style="background: #0d1326; border: 1px solid rgba(255,255,255,0.12); border-bottom: none;">
                     <span class="font-mono text-info" style="font-size: 0.68rem;" id="engineTerminalFilename">AMythicPieceCharacter.cpp • Unreal Engine 5.4</span>
                     <div class="d-flex gap-2 align-items-center">
-                      <button id="btnCopyEngineCode" class="btn btn-xs btn-link p-0 text-warning font-mono text-decoration-none" style="font-size: 0.68rem;">
+                      <button type="button" id="btnCopyEngineCode" class="btn btn-xs btn-link p-0 text-warning font-mono text-decoration-none" style="font-size: 0.68rem;">
                         <i class="bi bi-clipboard me-1"></i>Copy
                       </button>
-                      <button id="btnClearEngineCode" class="btn btn-xs btn-link p-0 text-muted font-mono text-decoration-none" style="font-size: 0.68rem;">
+                      <button type="button" id="btnClearEngineCode" class="btn btn-xs btn-link p-0 text-muted font-mono text-decoration-none" style="font-size: 0.68rem;">
                         Reset
                       </button>
                     </div>
@@ -2168,12 +2168,12 @@
             <div class="glass-card p-2 px-3 mb-2 d-flex justify-content-between align-items-center flex-wrap gap-2 font-mono small">
               <div class="d-flex align-items-center gap-1 flex-wrap">
                 <span class="text-warning fw-bold me-1"><i class="bi bi-camera-reels-fill me-1"></i>3D CAMERA:</span>
-                <button class="btn btn-xs btn-outline-warning active rounded-pill px-2 py-1 camera-btn" data-view="isometric" id="btnCamIso">3D Isometric (45°)</button>
-                <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 camera-btn text-light" data-view="cinematic" id="btnCamCinema">3D Cinematic Tilt</button>
-                <button class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 camera-btn text-light" data-view="topdown" id="btnCamTop">2D Satellite</button>
+                <button type="button" class="btn btn-xs btn-outline-warning active rounded-pill px-2 py-1 camera-btn" data-view="isometric" id="btnCamIso">3D Isometric (45°)</button>
+                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 camera-btn text-light" data-view="cinematic" id="btnCamCinema">3D Cinematic Tilt</button>
+                <button type="button" class="btn btn-xs btn-outline-secondary rounded-pill px-2 py-1 camera-btn text-light" data-view="topdown" id="btnCamTop">2D Satellite</button>
               </div>
               <div class="d-flex align-items-center gap-1 flex-wrap">
-                <button class="btn btn-xs btn-outline-info rounded-pill px-2 py-1" id="btnCamPhase">
+                <button type="button" class="btn btn-xs btn-outline-info rounded-pill px-2 py-1" id="btnCamPhase">
                   <i class="bi bi-hourglass-split me-1"></i>4D Spacetime Phase
                 </button>
                 <a href="simulator.html" target="_blank" class="btn btn-xs btn-warning rounded-pill px-3 py-1 font-mono text-dark fw-bold text-decoration-none shadow-sm">
@@ -2189,10 +2189,10 @@
                 <span style="color: #cbd5e1; font-size:0.8rem;">Timeline Anchor: <strong class="text-white" id="timeDimensionAnchor">t = Present (Turn 1)</strong></span>
               </div>
               <div class="d-flex align-items-center gap-1">
-                <button class="btn btn-xs btn-outline-secondary text-light rounded-pill px-2" id="btnTimeRewind" title="4D Temporal Step Backward">
+                <button type="button" class="btn btn-xs btn-outline-secondary text-light rounded-pill px-2" id="btnTimeRewind" title="4D Temporal Step Backward">
                   <i class="bi bi-skip-backward-fill me-1"></i>t - 1
                 </button>
-                <button class="btn btn-xs btn-outline-secondary text-light rounded-pill px-2" id="btnTimeForward" title="4D Temporal Step Forward">
+                <button type="button" class="btn btn-xs btn-outline-secondary text-light rounded-pill px-2" id="btnTimeForward" title="4D Temporal Step Forward">
                   <i class="bi bi-skip-forward-fill me-1"></i>t + 1
                 </button>
                 <span id="activeMutatorsCount" class="badge ms-2" style="background:#7c3aed; color:#ffffff;">0 Mutated Tiles</span>
@@ -2309,7 +2309,7 @@
                   <div class="text-muted" style="font-size: 0.65rem;">TERRITORY BOUNTY</div>
                   <div class="fw-bold text-info fs-5" id="arenaGoldCount">300 G</div>
                 </div>
-                <button id="btnArenaRestart" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2 font-mono">
+                <button type="button" id="btnArenaRestart" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2 font-mono">
                   <i class="bi bi-arrow-counterclockwise me-1"></i> Respawn
                 </button>
               </div>
@@ -2387,7 +2387,7 @@
                 
                 <!-- Skill 1: Dash / Flank -->
                 <div class="position-relative text-center">
-                  <button id="btnSkillDash" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 2px solid #38bdf8;">
+                  <button type="button" id="btnSkillDash" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 2px solid #38bdf8;">
                     <i class="bi bi-wind fs-4"></i>
                   </button>
                   <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-info border border-info" style="font-size: 0.6rem; margin-bottom: -6px;">[Q] BLINK</span>
@@ -2396,7 +2396,7 @@
 
                 <!-- Skill 2: Kingdom Hazard AoE -->
                 <div class="position-relative text-center">
-                  <button id="btnSkillHazard" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border: 2px solid #f87171;">
+                  <button type="button" id="btnSkillHazard" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 52px; height: 52px; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border: 2px solid #f87171;">
                     <i class="bi bi-fire fs-4"></i>
                   </button>
                   <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-danger border border-danger" style="font-size: 0.6rem; margin-bottom: -6px;">[E] HAZARD</span>
@@ -2405,7 +2405,7 @@
 
                 <!-- Basic Attack Button -->
                 <div class="position-relative text-center">
-                  <button id="btnBasicAttack" class="btn rounded-circle text-dark shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 72px; height: 72px; background: radial-gradient(circle, #fef08a 0%, #f59e0b 60%, #b45309 100%); border: 3px solid #ffffff; box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);">
+                  <button type="button" id="btnBasicAttack" class="btn rounded-circle text-dark shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 72px; height: 72px; background: radial-gradient(circle, #fef08a 0%, #f59e0b 60%, #b45309 100%); border: 3px solid #ffffff; box-shadow: 0 0 25px rgba(245, 158, 11, 0.8);">
                     <i class="bi bi-lightning-charge-fill fs-2"></i>
                   </button>
                   <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.62rem; margin-bottom: -6px;">[SPACE] STRIKE</span>
@@ -2413,7 +2413,7 @@
 
                 <!-- Ultimate Charging Button -->
                 <div class="position-relative text-center">
-                  <button id="btnQueenUltimateArena" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 65px; height: 65px; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); border: 2.5px solid #c084fc;">
+                  <button type="button" id="btnQueenUltimateArena" class="btn rounded-circle text-white shadow-lg d-flex align-items-center justify-content-center p-0" style="width: 65px; height: 65px; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); border: 2.5px solid #c084fc;">
                     <i class="bi bi-stars fs-3"></i>
                   </button>
                   <span class="position-absolute bottom-0 start-50 translate-middle-x badge bg-black bg-opacity-90 font-mono text-warning border border-warning" style="font-size: 0.6rem; margin-bottom: -6px;">[R] ULTIMATE</span>
@@ -2839,7 +2839,7 @@
         </div>
       </div>
 
-      <button class="btn btn-mythic-gold px-4 py-2" id="btnCloseCombat">
+      <button type="button" class="btn btn-mythic-gold px-4 py-2" id="btnCloseCombat">
         <i class="bi bi-check-circle-fill me-1"></i> Continue Tactical Match
       </button>
     </div>
@@ -3959,7 +3959,7 @@
                 <strong class="text-warning font-mono">ULTIMATE:</strong> ${k.ultimate.substring(0, 75)}...
               </div>
 
-              <button class="btn btn-sm btn-mythic-outline w-100 mt-auto" onclick="openKingdomModal('${k.id}')">
+              <button type="button" class="btn btn-sm btn-mythic-outline w-100 mt-auto" onclick="openKingdomModal('${k.id}')">
                 <i class="bi bi-info-circle me-1"></i> View Hierarchy &amp; Full Lore
               </button>
             </div>

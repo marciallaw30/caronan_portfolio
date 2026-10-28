@@ -1,0 +1,37 @@
+WEBVTT - Marcial Lawrence Jr V. Caronan Mock IT Job Interview Defense
+
+00:00.000 --> 00:25.000
+Marcial Caronan: Graduating BSIT student from Datamex College of Saint Adeline specializing in full-stack web engineering, database architecture, and systematic technical troubleshooting.
+
+00:25.000 --> 00:48.000
+Why BSIT: Passionate about solving operational business challenges by bridging theoretical computing with resilient real-world enterprise systems.
+
+00:48.000 --> 01:12.000
+Strongest Skills: Relational database design (MySQL/PostgreSQL), full-stack JavaScript engineering, and systematic technical troubleshooting.
+
+01:12.000 --> 01:36.000
+Areas Overcome: Addressed initial challenges in asynchronous concurrency and network subnetting through hands-on Packet Tracer labs and state machine modeling.
+
+01:36.000 --> 02:02.000
+Major Project: TarotKnight / SmartShop E-Commerce Inventory Platform featuring atomic inventory decrementing, ACID transactions, and executive inventory analytics.
+
+02:02.000 --> 02:26.000
+Technical Challenge: Race conditions in concurrent checkout flows causing potential inventory overselling past zero during peak traffic.
+
+02:26.000 --> 02:50.000
+Engineering Solution: Implemented optimistic client-side UI locking paired with atomic database decrement operations wrapped in serialized ACID transactions.
+
+02:50.000 --> 03:14.000
+Handling Deadlines: Agile/Kanban methodology, establishing early functional prototypes, and scheduling strict regression testing windows prior to defense.
+
+03:14.000 --> 03:38.000
+Team Collaboration: Transparent communication, Git branch protection, peer code reviews, and documenting API schemas before frontend/backend integration.
+
+03:38.000 --> 04:02.000
+Value Proposition: Delivers functional, secure, well-documented code with strong grounding in defensive security, agile adaptation, and high work ethic.
+
+04:02.000 --> 04:28.000
+Current Learning: Containerization with Docker and cloud orchestration with AWS ECS/EC2 to automate modern CI/CD deployment pipelines.
+
+04:28.000 --> 04:59.000
+Career Roadmap: Advancing into a Mid-Level Cloud and Database Engineer over the next 3 years, pursuing professional AWS and Oracle DBA certifications.

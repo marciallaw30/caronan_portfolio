@@ -110,11 +110,11 @@
 
         <!-- Action Buttons: Admin Modal & Floating Cart Drawer -->
         <div class="d-flex align-items-center gap-2 ms-xl-3">
-          <button class="btn btn-sm btn-outline-warning text-gold py-2 px-3 rounded-pill" data-bs-toggle="modal"
+          <button type="button" class="btn btn-sm btn-outline-warning text-gold py-2 px-3 rounded-pill" data-bs-toggle="modal"
             data-bs-target="#adminModal" title="Open Administrative Control Center">
             <i class="bi bi-speedometer2 me-1"></i> Admin
           </button>
-          <button class="btn-nav-cart" data-bs-toggle="modal" data-bs-target="#cartModal" title="View Shopping Cart">
+          <button type="button" class="btn-nav-cart" data-bs-toggle="modal" data-bs-target="#cartModal" title="View Shopping Cart">
             <i class="bi bi-cart3"></i>
             <span>Cart</span>
             <span class="cart-badge-count">0</span>
@@ -278,11 +278,11 @@
 
       <!-- Category Filter Pills -->
       <div class="filter-pill-bar d-flex flex-wrap justify-content-center align-items-center gap-2 mb-4">
-        <button class="btn-filter-pill active" data-category="All"><i class="bi bi-stars"></i> All Catalog (36)</button>
-        <button class="btn-filter-pill" data-category="AvailableOnly"><i class="bi bi-check-circle-fill text-success"></i> Available Now (27)</button>
-        <button class="btn-filter-pill" data-category="Pendants"><i class="bi bi-gem"></i> Wire Pendants (35)</button>
-        <button class="btn-filter-pill" data-category="Rings"><i class="bi bi-suit-diamond"></i> Artisan Ring (1)</button>
-        <button class="btn-filter-pill" data-category="ComingSoon"><i class="bi bi-tools text-warning"></i> In Production / Soon (9)</button>
+        <button type="button" class="btn-filter-pill active" data-category="All"><i class="bi bi-stars"></i> All Catalog (36)</button>
+        <button type="button" class="btn-filter-pill" data-category="AvailableOnly"><i class="bi bi-check-circle-fill text-success"></i> Available Now (27)</button>
+        <button type="button" class="btn-filter-pill" data-category="Pendants"><i class="bi bi-gem"></i> Wire Pendants (35)</button>
+        <button type="button" class="btn-filter-pill" data-category="Rings"><i class="bi bi-suit-diamond"></i> Artisan Ring (1)</button>
+        <button type="button" class="btn-filter-pill" data-category="ComingSoon"><i class="bi bi-tools text-warning"></i> In Production / Soon (9)</button>
       </div>
 
       <!-- Products Grid (Dynamically Populated by script.js from CRYSTAL_PRODUCTS) -->
@@ -415,15 +415,15 @@
               <div class="input-group input-group-lg shadow">
                 <input type="text" id="trackingInput" class="form-control bg-dark border-danger text-white font-monospace"
                   placeholder="e.g. JNT-PH-8201948291 or TK-ORD-8941">
-                <button id="btnSearchTracking" class="btn btn-danger px-4 fw-bold">
+                <button type="button" id="btnSearchTracking" class="btn btn-danger px-4 fw-bold">
                   <i class="bi bi-search me-1"></i> Track Parcel
                 </button>
               </div>
               <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
                 <span class="text-muted small">Quick Test Waybills:</span>
-                <button class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill font-monospace"
+                <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill font-monospace"
                   onclick="fillSampleTracking('JNT-PH-8201948291')">JNT-PH-8201948291 (In Transit)</button>
-                <button class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill font-monospace"
+                <button type="button" class="btn btn-sm btn-outline-warning py-0 px-2 rounded-pill font-monospace"
                   onclick="fillSampleTracking('JNT-PH-7729104829')">JNT-PH-7729104829 (Delivered)</button>
               </div>
             </div>
@@ -560,7 +560,7 @@
             <div class="chat-input-bar">
               <input type="text" id="aiChatInput" class="form-control bg-dark border-warning text-white"
                 placeholder="Ask a spiritual question or type keywords (e.g. amethyst, gcash, shipping, tarot)...">
-              <button id="btnSendAiChat" class="btn btn-gold-primary px-3">
+              <button type="button" id="btnSendAiChat" class="btn btn-gold-primary px-3">
                 <i class="bi bi-send-fill"></i>
               </button>
             </div>
@@ -876,8 +876,8 @@
             </div>
 
             <div class="d-flex justify-content-center gap-3">
-              <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
-              <button class="btn btn-gold-primary" onclick="bootstrap.Modal.getInstance(document.getElementById('paymongoModal')).hide(); performJTTrackingLookup(document.getElementById('pmSuccessTracking').textContent);">
+              <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-gold-primary" onclick="bootstrap.Modal.getInstance(document.getElementById('paymongoModal')).hide(); performJTTrackingLookup(document.getElementById('pmSuccessTracking').textContent);">
                 <i class="bi bi-truck me-1"></i> Track Waybill in J&amp;T Hub
               </button>
             </div>

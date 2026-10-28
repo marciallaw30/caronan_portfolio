@@ -1,4 +1,20 @@
+# Scratch & Local temporary files
 scratch/
 *.log
 .DS_Store
 Thumbs.db
+Desktop.ini
+
+# Environment and sensitive keys
+.env
+.env*.local
+.env.development
+.env.production
+
+# Dependencies & Editor Artefacts
+node_modules/
+.vercel/
+.idea/
+.vscode/
+*.swp
+*.bak

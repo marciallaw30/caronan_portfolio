@@ -1274,6 +1274,9 @@ exportWebPAssets();`,
   // ===================================================================
   // 7. Glow-In-The-Dark World Map & Global Country Interconnectivity
   // ===================================================================
+  // Exposed start/stop handle so hidden themes can pause the world-map loop
+  let worldMapEngine = null;
+
   function initWorldMapNetwork() {
     const canvas = document.getElementById('cyberNetworkCanvas');
     if (!canvas) return;
@@ -1604,6 +1607,7 @@ exportWebPAssets();`,
 
     let hoveredNode = null;
     let animationFrameId;
+    let worldMapRunning = true;
 
     function renderWorldMap() {
       ctx.clearRect(0, 0, width, height);
@@ -1945,15 +1949,32 @@ exportWebPAssets();`,
         ctx.restore();
       }
 
-      animationFrameId = requestAnimationFrame(renderWorldMap);
+      if (worldMapRunning) {
+        animationFrameId = requestAnimationFrame(renderWorldMap);
+      }
     }
+
+    function startWorldMap() {
+      if (!worldMapRunning) {
+        worldMapRunning = true;
+        renderWorldMap();
+      }
+    }
+
+    function stopWorldMap() {
+      worldMapRunning = false;
+      cancelAnimationFrame(animationFrameId);
+    }
+
+    worldMapEngine = { start: startWorldMap, stop: stopWorldMap };
 
     renderWorldMap();
 
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         cancelAnimationFrame(animationFrameId);
-      } else {
+      } else if (worldMapRunning) {
+        cancelAnimationFrame(animationFrameId);
         renderWorldMap();
       }
     });
@@ -2492,10 +2513,10 @@ exportWebPAssets();`,
     let isRunning = false;
     let animId = null;
 
-    // Authentic Matrix character set
-    const chars = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ0123456789ABCDEFλ§&*%#<>{}[]/~=+';
-    const fontSize = 12; // Sleek and elegant (down from 16)
-    const columnSpacing = 42; // Generous space between streams (down from crammed 16px to 42px)
+    // Authentic Binary Matrix character set (0 and 1 streams)
+    const chars = '01010110010101001101010101001011010101010011010110100101';
+    const fontSize = 14; // Legible binary typography
+    const columnSpacing = 28; // Balanced density: visible rain without a solid wall of digits
     let columns = Math.floor(width / columnSpacing);
 
     let drops = [];
@@ -2504,14 +2525,11 @@ exportWebPAssets();`,
       columns = Math.floor(width / columnSpacing);
       drops = [];
       for (let i = 0; i < columns; i++) {
-        // Only start about 45% of columns so there is calm dark space
-        const isActive = Math.random() < 0.45;
         drops.push({
           x: i * columnSpacing,
-          y: isActive ? Math.random() * -height : -9999,
-          active: isActive,
-          speed: 0.65 + Math.random() * 0.75, // Gentle, relaxing pace
-          length: 7 + Math.floor(Math.random() * 12) // Shorter, neat streams
+          y: Math.random() * -height * 1.5,
+          speed: 1.1 + Math.random() * 1.6,
+          length: 12 + Math.floor(Math.random() * 16)
         });
       }
     }
@@ -2535,28 +2553,24 @@ exportWebPAssets();`,
     });
 
     function renderMatrixRain() {
-      // Clean, dark fade so streams don't blur into an overwhelming green wash
-      ctx.fillStyle = 'rgba(1, 6, 3, 0.30)';
+      // Fade old pixels toward transparent (not toward a solid fill) so the page
+      // background, grid and glows stay visible behind the binary digits
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
       ctx.fillRect(0, 0, width, height);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.shadowBlur = 0; // No glow halos: flat, steady binary digits
 
-      ctx.font = `${fontSize}px "Fira Code", monospace`;
+      ctx.font = `600 ${fontSize}px "Fira Code", monospace`;
 
       for (let i = 0; i < drops.length; i++) {
         const drop = drops[i];
-        if (!drop.active && drop.y < -500) {
-          if (Math.random() < 0.003) {
-            drop.active = true;
-            drop.y = -Math.random() * 60;
-          }
-          continue;
-        }
-
         const x = drop.x;
         const headY = drop.y;
 
         let speed = drop.speed;
         if (mouse.x !== null && Math.abs(x - mouse.x) < 80) {
-          speed *= 1.35;
+          speed *= 1.4;
         }
 
         const charCount = drop.length;
@@ -2567,30 +2581,26 @@ exportWebPAssets();`,
           const char = chars.charAt(Math.floor(Math.random() * chars.length));
 
           if (j === 0) {
-            // Soft pale mint head (gentle on eyes, no blinding white glare)
-            ctx.shadowColor = '#00ff88';
-            ctx.shadowBlur = 4;
-            ctx.fillStyle = '#bbf7d0';
-            ctx.fillText(char, x, charY);
+            // Soft mint head (no white flash, no glow)
+            ctx.fillStyle = 'rgba(209, 250, 229, 0.85)';
           } else if (j === 1) {
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = 'rgba(52, 211, 153, 0.65)';
-            ctx.fillText(char, x, charY);
+            ctx.fillStyle = 'rgba(52, 211, 153, 0.8)';
+          } else if (j < 6) {
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.6)';
           } else {
+            // Smooth tail falloff
             const fade = 1 - (j / charCount);
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = `rgba(16, 185, 129, ${Math.max(0.04, fade * 0.32)})`;
-            ctx.fillText(char, x, charY);
+            ctx.fillStyle = `rgba(16, 185, 129, ${Math.max(0.08, fade * 0.45)})`;
           }
+          ctx.fillText(char, x, charY);
         }
 
-        drop.y += speed * 2.8;
+        drop.y += speed * 3.2;
 
         if (drop.y - (drop.length * (fontSize + 3)) > height) {
-          drop.y = -Math.random() * 120 - 40;
-          drop.active = Math.random() < 0.48; // Quiet pauses between streams
-          drop.speed = 0.65 + Math.random() * 0.75;
-          drop.length = 7 + Math.floor(Math.random() * 12);
+          drop.y = -Math.random() * 120 - 20;
+          drop.speed = 1.1 + Math.random() * 1.6;
+          drop.length = 12 + Math.floor(Math.random() * 16);
         }
       }
 
@@ -2632,7 +2642,604 @@ exportWebPAssets();`,
   }
 
   // ===================================================================
-  // 11. Interactive Visual Theme & Experience Switcher Studio
+  // 11. Milky Way Galaxy & Visible Solar System Simulation Engine
+  // ===================================================================
+  let milkyWayEngine = null;
+
+  function initMilkyWayEngine() {
+    const canvas = document.getElementById('galaxyCanvas');
+    if (!canvas) return null;
+
+    const ctx = canvas.getContext('2d');
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let isRunning = false;
+    let animId = null;
+
+    // Mouse parallax tracking for immersive 3D perspective
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetOffsetX = 0;
+    let targetOffsetY = 0;
+    let currentOffsetX = 0;
+    let currentOffsetY = 0;
+
+    function handleMouseMove(e) {
+      if (!isRunning) return;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      targetOffsetX = ((mouseX / width) - 0.5) * 45;
+      targetOffsetY = ((mouseY / height) - 0.5) * 30;
+    }
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // -------------------------------------------------------------
+    // A. Cosmic Starfield & Milky Way Spiral Generation
+    // -------------------------------------------------------------
+    // Ambient deep background stars (fixed twinkling backdrop)
+    const bgStars = [];
+    const starColors = ['#f8fafc', '#93c5fd', '#fde047', '#fed7aa', '#c084fc', '#ffffff'];
+
+    for (let i = 0; i < 180; i++) {
+      bgStars.push({
+        x: Math.random(),
+        y: Math.random(),
+        size: 0.5 + Math.random() * 1.5,
+        color: starColors[Math.floor(Math.random() * starColors.length)],
+        baseAlpha: 0.2 + Math.random() * 0.6,
+        twinkleSpeed: 0.02 + Math.random() * 0.04,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+
+    // Milky Way Logarithmic Spiral Arms Particles
+    // Centered around the galactic bulge with differential rotation
+    const spiralStars = [];
+    const spiralCount = 420;
+    const numArms = 2; // Two dominant symmetric spiral arms (Perseus & Scutum-Centaurus) plus spurs
+    const armWinding = 2.8;
+
+    for (let i = 0; i < spiralCount; i++) {
+      const distFraction = Math.pow(Math.random(), 0.7);
+      const dist = 30 + distFraction * 540;
+      const armIndex = i % numArms;
+      const baseArmAngle = (armIndex * Math.PI * 2) / numArms;
+      const armAngle = baseArmAngle + Math.log(dist / 30) * armWinding;
+      const scatterAngle = (Math.random() - 0.5) * (0.6 + distFraction * 0.8);
+      const theta = armAngle + scatterAngle;
+      const angSpeed = (0.00035 + (35 / (dist + 60)) * 0.0003);
+
+      spiralStars.push({
+        r: dist,
+        theta: theta,
+        angSpeed: angSpeed,
+        size: 0.7 + Math.random() * 1.8,
+        color: starColors[Math.floor(Math.random() * starColors.length)],
+        alpha: 0.25 + Math.random() * 0.65,
+        twinkleSpeed: 0.015 + Math.random() * 0.035,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+
+    // Occasional Shooting Stars / Interstellar Comets
+    const shootingStars = [];
+    let lastShootingStarTime = 0;
+
+    function spawnShootingStar() {
+      const angle = (Math.PI / 4) + (Math.random() - 0.5) * 0.3; // ~45 deg diagonal streak
+      const speed = 12 + Math.random() * 8;
+      shootingStars.push({
+        x: Math.random() * width * 0.8,
+        y: Math.random() * height * 0.4,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        length: 70 + Math.random() * 60,
+        opacity: 0.9,
+        life: 1.0,
+        decay: 0.016 + Math.random() * 0.012
+      });
+    }
+
+    // -------------------------------------------------------------
+    // B. Visible Solar System Definition
+    // -------------------------------------------------------------
+    // Real astronomical order of the 8 planets + Asteroid belt
+    // With 3D perspective tilt and real-time orbital mechanics
+    const planets = [
+      {
+        name: 'MERCURY',
+        a: 48,
+        speed: 0.024,
+        angle: Math.random() * Math.PI * 2,
+        r: 2.4,
+        color: '#94a3b8',
+        glow: 'rgba(148, 163, 184, 0.4)',
+        type: 'terrestrial'
+      },
+      {
+        name: 'VENUS',
+        a: 78,
+        speed: 0.017,
+        angle: Math.random() * Math.PI * 2,
+        r: 3.8,
+        color: '#fef08a',
+        glow: 'rgba(254, 240, 138, 0.5)',
+        type: 'terrestrial'
+      },
+      {
+        name: 'EARTH [SOL-3]',
+        a: 116,
+        speed: 0.012,
+        angle: Math.random() * Math.PI * 2,
+        r: 4.6,
+        color: '#38bdf8',
+        glow: 'rgba(56, 189, 248, 0.65)',
+        hasMoon: true,
+        moonAngle: 0,
+        moonDist: 13,
+        moonSpeed: 0.065,
+        type: 'habitable'
+      },
+      {
+        name: 'MARS',
+        a: 154,
+        speed: 0.009,
+        angle: Math.random() * Math.PI * 2,
+        r: 3.4,
+        color: '#f87171',
+        glow: 'rgba(248, 113, 113, 0.5)',
+        type: 'terrestrial'
+      },
+      {
+        name: 'JUPITER',
+        a: 236,
+        speed: 0.0044,
+        angle: Math.random() * Math.PI * 2,
+        r: 9.2,
+        color: '#fbbf24',
+        glow: 'rgba(251, 191, 36, 0.45)',
+        hasBands: true,
+        hasMoons: true,
+        moonAngle: 0,
+        type: 'gas-giant'
+      },
+      {
+        name: 'SATURN',
+        a: 300,
+        speed: 0.0030,
+        angle: Math.random() * Math.PI * 2,
+        r: 7.8,
+        color: '#fde68a',
+        glow: 'rgba(253, 230, 138, 0.4)',
+        hasRings: true,
+        type: 'ringed-giant'
+      },
+      {
+        name: 'URANUS',
+        a: 358,
+        speed: 0.0019,
+        angle: Math.random() * Math.PI * 2,
+        r: 5.6,
+        color: '#67e8f9',
+        glow: 'rgba(103, 232, 249, 0.45)',
+        hasThinRing: true,
+        type: 'ice-giant'
+      },
+      {
+        name: 'NEPTUNE',
+        a: 412,
+        speed: 0.0013,
+        angle: Math.random() * Math.PI * 2,
+        r: 5.4,
+        color: '#60a5fa',
+        glow: 'rgba(96, 165, 250, 0.5)',
+        type: 'ice-giant'
+      }
+    ];
+
+    // Main Asteroid Belt particles (between Mars & Jupiter: ~180 - 204px)
+    const asteroidBelt = [];
+    for (let i = 0; i < 55; i++) {
+      asteroidBelt.push({
+        a: 180 + Math.random() * 26,
+        angle: Math.random() * Math.PI * 2,
+        speed: 0.006 + (Math.random() - 0.5) * 0.0015,
+        size: 0.8 + Math.random() * 1.4,
+        alpha: 0.3 + Math.random() * 0.45
+      });
+    }
+
+    let time = 0;
+
+    // -------------------------------------------------------------
+    // C. Master Render Loop
+    // -------------------------------------------------------------
+    function render() {
+      if (!isRunning) return;
+      time += 0.016;
+
+      // Parallax smooth interpolation (lerp)
+      currentOffsetX += (targetOffsetX - currentOffsetX) * 0.06;
+      currentOffsetY += (targetOffsetY - currentOffsetY) * 0.06;
+
+      // System center & responsive scale
+      const cx = width * 0.5 + currentOffsetX;
+      const cy = height * 0.44 + currentOffsetY;
+      // Responsive scale for small screens vs wide screens
+      const scale = Math.min(1.05, Math.max(0.55, width / 1150));
+      const tiltY = 0.38 + (currentOffsetY * 0.001); // 3D oblique viewing perspective
+
+      ctx.clearRect(0, 0, width, height);
+
+      // 1. Draw Ambient Background Starfield (Twinkling)
+      for (let i = 0; i < bgStars.length; i++) {
+        const s = bgStars[i];
+        const alpha = Math.max(0.08, s.baseAlpha + Math.sin(time * 2 + s.phase) * 0.2);
+        ctx.fillStyle = s.color;
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.arc(s.x * width, s.y * height, s.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 2. Draw Galactic Bulge & Core Glow (Milky Way Center)
+      const coreR = Math.max(160, 260 * scale);
+      const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR);
+      coreGrad.addColorStop(0, 'rgba(255, 235, 185, 0.28)');
+      coreGrad.addColorStop(0.25, 'rgba(216, 180, 254, 0.16)');
+      coreGrad.addColorStop(0.55, 'rgba(99, 102, 241, 0.08)');
+      coreGrad.addColorStop(0.85, 'rgba(56, 189, 248, 0.03)');
+      coreGrad.addColorStop(1, 'rgba(2, 1, 10, 0)');
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Cosmic dust cloud haze along spiral arms
+      const dustGrad = ctx.createRadialGradient(cx + 80 * scale, cy - 30 * scale, 10, cx, cy, 380 * scale);
+      dustGrad.addColorStop(0, 'rgba(168, 85, 247, 0.10)');
+      dustGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.06)');
+      dustGrad.addColorStop(1, 'rgba(3, 2, 14, 0)');
+      ctx.fillStyle = dustGrad;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 380 * scale, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 3. Draw Milky Way Logarithmic Spiral Arm Stars
+      for (let i = 0; i < spiralStars.length; i++) {
+        const star = spiralStars[i];
+        star.theta += star.angSpeed;
+
+        const starR = star.r * scale;
+        // Project onto elliptical galactic disk with tilt
+        const sx = cx + Math.cos(star.theta) * starR;
+        const sy = cy + Math.sin(star.theta) * (starR * 0.52);
+
+        const starAlpha = Math.max(0.12, star.alpha + Math.sin(time * 3 + star.phase) * 0.22);
+        ctx.fillStyle = star.color;
+        ctx.globalAlpha = starAlpha;
+        ctx.beginPath();
+        ctx.arc(sx, sy, star.size * (0.8 + (starR / 500) * 0.4), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 4. Shooting Stars / Comets
+      if (Math.random() < 0.012 && time - lastShootingStarTime > 2.5) {
+        spawnShootingStar();
+        lastShootingStarTime = time;
+      }
+      for (let i = shootingStars.length - 1; i >= 0; i--) {
+        const meteor = shootingStars[i];
+        meteor.x += meteor.dx;
+        meteor.y += meteor.dy;
+        meteor.life -= meteor.decay;
+
+        if (meteor.life <= 0 || meteor.x > width || meteor.y > height) {
+          shootingStars.splice(i, 1);
+          continue;
+        }
+
+        const tailX = meteor.x - (meteor.dx / Math.hypot(meteor.dx, meteor.dy)) * meteor.length * meteor.life;
+        const tailY = meteor.y - (meteor.dy / Math.hypot(meteor.dx, meteor.dy)) * meteor.length * meteor.life;
+
+        const mGrad = ctx.createLinearGradient(tailX, tailY, meteor.x, meteor.y);
+        mGrad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+        mGrad.addColorStop(0.7, 'rgba(56, 189, 248, 0.45)');
+        mGrad.addColorStop(1, 'rgba(255, 255, 255, 0.95)');
+
+        ctx.strokeStyle = mGrad;
+        ctx.lineWidth = 1.8;
+        ctx.globalAlpha = meteor.life;
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(meteor.x, meteor.y);
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(meteor.x, meteor.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // -----------------------------------------------------------
+      // 5. Draw Visible Solar System: Orbits & Depth-Sorted Bodies
+      // -----------------------------------------------------------
+      // A. Orbital Tracks (Subtle luminous ellipses)
+      ctx.lineWidth = 1;
+      for (let i = 0; i < planets.length; i++) {
+        const p = planets[i];
+        const a = p.a * scale;
+        const b = a * tiltY;
+
+        ctx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+        ctx.globalAlpha = 1;
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, a, b, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // B. Main Asteroid Belt (Orbiting particles)
+      for (let i = 0; i < asteroidBelt.length; i++) {
+        const ast = asteroidBelt[i];
+        ast.angle += ast.speed;
+        const a = ast.a * scale;
+        const b = a * tiltY;
+        const ax = cx + Math.cos(ast.angle) * a;
+        const ay = cy + Math.sin(ast.angle) * b;
+
+        ctx.fillStyle = '#cbd5e1';
+        ctx.globalAlpha = ast.alpha;
+        ctx.beginPath();
+        ctx.arc(ax, ay, ast.size * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // C. Update Planet Positions & Collect for 3D Z-Depth Sorting
+      const renderBodies = [];
+
+      for (let i = 0; i < planets.length; i++) {
+        const p = planets[i];
+        p.angle += p.speed;
+        const a = p.a * scale;
+        const b = a * tiltY;
+        const px = cx + Math.cos(p.angle) * a;
+        const py = cy + Math.sin(p.angle) * b;
+        const isFarSide = Math.sin(p.angle) < 0;
+
+        renderBodies.push({
+          type: 'planet',
+          planet: p,
+          x: px,
+          y: py,
+          isFarSide: isFarSide,
+          zOrder: py
+        });
+      }
+
+      // Add The Sun into the depth-sort at the center Y
+      renderBodies.push({
+        type: 'sun',
+        x: cx,
+        y: cy,
+        zOrder: cy
+      });
+
+      // Sort all celestial bodies by Y-coordinate (back to front)
+      renderBodies.sort((a, b) => a.zOrder - b.zOrder);
+
+      // D. Draw Bodies in Correct 3D Perspective Order
+      for (let i = 0; i < renderBodies.length; i++) {
+        const item = renderBodies[i];
+
+        if (item.type === 'sun') {
+          // Render Sol (The Sun)
+          const sunR = 14 * scale;
+          const coronaR = (46 + Math.sin(time * 2.2) * 5) * scale;
+
+          // Multi-layer glowing corona
+          const sunGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coronaR);
+          sunGrad.addColorStop(0, '#ffffff');
+          sunGrad.addColorStop(0.18, '#fef08a');
+          sunGrad.addColorStop(0.38, '#f59e0b');
+          sunGrad.addColorStop(0.68, 'rgba(234, 88, 12, 0.35)');
+          sunGrad.addColorStop(1, 'rgba(234, 88, 12, 0)');
+
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = sunGrad;
+          ctx.beginPath();
+          ctx.arc(cx, cy, coronaR, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Photosphere Core
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(cx, cy, sunR, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Sun label HUD
+          ctx.fillStyle = '#fef08a';
+          ctx.globalAlpha = 0.85;
+          ctx.font = `600 ${Math.max(8, Math.round(9 * scale))}px 'Fira Code', monospace`;
+          ctx.textAlign = 'center';
+          ctx.fillText('SOL (1.0 M☉)', cx, cy + sunR + 12 * scale);
+
+        } else if (item.type === 'planet') {
+          const p = item.planet;
+          const px = item.x;
+          const py = item.y;
+          const pr = p.r * scale;
+
+          // Planetary Atmosphere Glow
+          ctx.globalAlpha = 0.6;
+          ctx.fillStyle = p.glow;
+          ctx.beginPath();
+          ctx.arc(px, py, pr * 1.8, 0, Math.PI * 2);
+          ctx.fill();
+
+          // If Saturn: Draw back portion of rings first
+          if (p.hasRings) {
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(0.42); // 24-degree axial ring tilt
+            ctx.scale(1, 0.38);
+
+            // Outer golden ring
+            ctx.strokeStyle = 'rgba(254, 240, 138, 0.65)';
+            ctx.lineWidth = 4 * scale;
+            ctx.beginPath();
+            ctx.arc(0, 0, 17 * scale, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Inner translucent ring
+            ctx.strokeStyle = 'rgba(217, 119, 6, 0.45)';
+            ctx.lineWidth = 2.5 * scale;
+            ctx.beginPath();
+            ctx.arc(0, 0, 12 * scale, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // If Uranus: Faint tilted vertical ring
+          if (p.hasThinRing) {
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(1.4); // Uranus extreme 98 deg tilt
+            ctx.scale(1, 0.25);
+            ctx.strokeStyle = 'rgba(103, 232, 249, 0.35)';
+            ctx.lineWidth = 1.2 * scale;
+            ctx.beginPath();
+            ctx.arc(0, 0, 11 * scale, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          // Planet Body
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(px, py, pr, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Jupiter's cloud bands
+          if (p.hasBands) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(px, py, pr, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.fillStyle = '#b45309';
+            ctx.fillRect(px - pr, py - pr * 0.3, pr * 2, pr * 0.25);
+            ctx.fillRect(px - pr, py + pr * 0.15, pr * 2, pr * 0.25);
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            ctx.arc(px + pr * 0.25, py + pr * 0.25, pr * 0.25, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // Earth's Orbiting Moon (Luna)
+          if (p.hasMoon) {
+            p.moonAngle += p.moonSpeed;
+            const mx = px + Math.cos(p.moonAngle) * (p.moonDist * scale);
+            const my = py + Math.sin(p.moonAngle) * (p.moonDist * scale * tiltY * 1.5);
+
+            ctx.strokeStyle = 'rgba(226, 232, 240, 0.2)';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.ellipse(px, py, p.moonDist * scale, p.moonDist * scale * tiltY * 1.5, 0, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.fillStyle = '#f1f5f9';
+            ctx.beginPath();
+            ctx.arc(mx, my, 1.4 * scale, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Jupiter's Galilean Moons (Io & Europa)
+          if (p.hasMoons) {
+            p.moonAngle += 0.04;
+            const jm1X = px + Math.cos(p.moonAngle) * (16 * scale);
+            const jm1Y = py + Math.sin(p.moonAngle) * (16 * scale * tiltY);
+            const jm2X = px + Math.cos(p.moonAngle + 2.2) * (23 * scale);
+            const jm2Y = py + Math.sin(p.moonAngle + 2.2) * (23 * scale * tiltY);
+
+            ctx.fillStyle = '#fef08a';
+            ctx.beginPath();
+            ctx.arc(jm1X, jm1Y, 1.1 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#e2e8f0';
+            ctx.beginPath();
+            ctx.arc(jm2X, jm2Y, 1.0 * scale, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Planet HUD Label Tag (Only on prominent planets: Earth, Mars, Jupiter, Saturn)
+          if (p.name.includes('EARTH') || p.name === 'JUPITER' || p.name === 'SATURN') {
+            ctx.fillStyle = '#cbd5e1';
+            ctx.globalAlpha = 0.75;
+            ctx.font = `500 ${Math.max(7, Math.round(8 * scale))}px 'Fira Code', monospace`;
+            ctx.textAlign = 'left';
+            ctx.fillText(p.name, px + pr + 4 * scale, py + 3 * scale);
+          }
+        }
+      }
+
+      ctx.globalAlpha = 1;
+      animId = requestAnimationFrame(render);
+    }
+
+    function start() {
+      if (!isRunning) {
+        isRunning = true;
+        resize();
+        render();
+      }
+    }
+
+    function stop() {
+      isRunning = false;
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+      ctx.clearRect(0, 0, width, height);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (animId) cancelAnimationFrame(animId);
+      } else if (isRunning) {
+        render();
+      }
+    });
+
+    milkyWayEngine = {
+      start,
+      stop
+    };
+
+    return milkyWayEngine;
+  }
+
+  // ===================================================================
+  // 12. Interactive Visual Theme & Experience Switcher Studio
   // ===================================================================
   function initThemeEngine() {
     const themeButtons = document.querySelectorAll('.theme-pill-btn');
@@ -2662,18 +3269,11 @@ exportWebPAssets();`,
         snow: true,
         matrix: false
       },
-      'holiday-hybrid': {
-        name: 'MAP + SNOW',
-        telemetry: 'HYBRID HOLIDAY :: GLOBAL NODES + SNOW MATRIX',
-        carrier: 'CELESTIAL LINK :: WINTER NETWORK SYNCHRONIZED',
-        snow: true,
-        matrix: false
-      },
       'cyber-aurora': {
-        name: 'AURORA',
-        telemetry: 'AURORA MESH :: QUANTUM STARDUST ACTIVE',
-        carrier: 'POLAR BEACON :: 528Hz HARMONIC VIBRATION',
-        snow: true,
+        name: 'AURORA BOREALIS',
+        telemetry: 'AURORA BOREALIS :: NORTHERN LIGHTS OVER THE ARCTIC SKY',
+        carrier: 'POLAR BEACON :: GEOMAGNETIC STORM KP-7',
+        snow: false,
         matrix: false
       },
       'cyber-matrix': {
@@ -2681,12 +3281,27 @@ exportWebPAssets();`,
         telemetry: 'MATRIX CODE :: NEURAL STREAM 128-BIT CIPHER',
         carrier: 'TERMINAL KERNEL :: GREEN PHOSPHOR DECRYPTED',
         snow: false,
-        matrix: true
+        matrix: true,
+        galaxy: false
+      },
+      'milky-way': {
+        name: 'MILKY WAY GALAXY',
+        telemetry: 'MILKY WAY :: ORION ARM • SOLAR SYSTEM ACTIVE',
+        carrier: 'HELIOSPHERE BEACON :: SOL-3 ORBIT SYNCHRONIZED',
+        snow: false,
+        matrix: false,
+        galaxy: true
       }
     };
 
-    // Load saved or default theme
-    let currentTheme = localStorage.getItem('portfolio_design_theme') || 'interlink-world';
+    // Load saved or default theme (supports ?theme=milky-way)
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryTheme = urlParams.get('theme');
+    let currentTheme = (queryTheme && themeMeta[queryTheme])
+      ? queryTheme
+      : (localStorage.getItem('portfolio_design_theme') || 'interlink-world');
+    // Migrate visitors who saved the retired Holiday Map + Snow theme
+    if (currentTheme === 'holiday-hybrid') currentTheme = 'christmas-snow';
     if (!themeMeta[currentTheme]) currentTheme = 'interlink-world';
 
     // Eye Comfort Dimmer Modes: soft (recommended), minimal, vivid
@@ -2770,6 +3385,71 @@ exportWebPAssets();`,
         }
       }
 
+      // Milky Way galaxy & solar system engine activation
+      if (milkyWayEngine) {
+        if (themeMeta[themeKey].galaxy) {
+          milkyWayEngine.start();
+        } else {
+          milkyWayEngine.stop();
+        }
+      }
+
+      // World Map is hidden in Cyber Matrix, Aurora Borealis, and Milky Way Galaxy; pause its loop while hidden
+      const hideWorldMap = themeKey === 'cyber-matrix' || themeKey === 'cyber-aurora' || themeKey === 'milky-way';
+      const worldMapCanvas = document.getElementById('cyberNetworkCanvas');
+      if (worldMapCanvas) {
+        if (hideWorldMap) {
+          worldMapCanvas.style.setProperty('display', 'none', 'important');
+          worldMapCanvas.style.setProperty('visibility', 'hidden', 'important');
+        } else {
+          worldMapCanvas.style.removeProperty('display');
+          worldMapCanvas.style.removeProperty('visibility');
+        }
+      }
+      if (worldMapEngine) {
+        if (hideWorldMap) {
+          worldMapEngine.stop();
+        } else {
+          worldMapEngine.start();
+        }
+      }
+
+      // Binary Matrix Rain canvas: shown only in Cyber Matrix (opacity is controlled by CSS)
+      const matrixCanvas = document.getElementById('matrixRainCanvas');
+      if (matrixCanvas) {
+        matrixCanvas.style.removeProperty('opacity');
+        if (themeKey === 'cyber-matrix') {
+          matrixCanvas.style.setProperty('display', 'block', 'important');
+          matrixCanvas.style.setProperty('visibility', 'visible', 'important');
+        } else {
+          matrixCanvas.style.setProperty('display', 'none', 'important');
+          matrixCanvas.style.setProperty('visibility', 'hidden', 'important');
+        }
+      }
+
+      // Milky Way Galaxy & Solar System canvas
+      const galaxyCanvas = document.getElementById('galaxyCanvas');
+      if (galaxyCanvas) {
+        if (themeKey === 'milky-way') {
+          galaxyCanvas.style.setProperty('display', 'block', 'important');
+          galaxyCanvas.style.setProperty('visibility', 'visible', 'important');
+        } else {
+          galaxyCanvas.style.setProperty('display', 'none', 'important');
+          galaxyCanvas.style.setProperty('visibility', 'hidden', 'important');
+        }
+      }
+
+      // Snow density and light-tracer (lightning icon) controls only apply to Christmas Glow.
+      // Bootstrap's d-sm-inline-flex uses !important, so the override must be important too.
+      [btnSnowDensity, btnTracerSpeed].forEach(btn => {
+        if (!btn) return;
+        if (themeMeta[themeKey].snow) {
+          btn.style.removeProperty('display');
+        } else {
+          btn.style.setProperty('display', 'none', 'important');
+        }
+      });
+
       // Quick visual feedback notification
       if (showToast) {
         showThemeNotice(themeMeta[themeKey].name);
@@ -2832,8 +3512,8 @@ exportWebPAssets();`,
         const newDensity = snowfallEngine.cycleDensity();
         const label = newDensity.charAt(0).toUpperCase() + newDensity.slice(1);
         if (snowDensityText) snowDensityText.textContent = `Snow: ${label}`;
-        if (currentTheme === 'interlink-world') {
-          applyTheme('holiday-hybrid', true);
+        if (currentTheme !== 'christmas-snow') {
+          applyTheme('christmas-snow', true);
         }
       });
     }
@@ -2844,8 +3524,8 @@ exportWebPAssets();`,
         const newSpeed = snowfallEngine.cycleTracerSpeed();
         const label = newSpeed.charAt(0).toUpperCase() + newSpeed.slice(1);
         if (tracerSpeedText) tracerSpeedText.textContent = `Light: ${label}`;
-        if (currentTheme === 'interlink-world') {
-          applyTheme('holiday-hybrid', true);
+        if (currentTheme !== 'christmas-snow') {
+          applyTheme('christmas-snow', true);
         }
       });
     }
@@ -2867,6 +3547,7 @@ exportWebPAssets();`,
   initCylinderScroll();
   initSnowfallEngine();
   initMatrixRainEngine();
+  initMilkyWayEngine();
   initThemeEngine();
 });
 

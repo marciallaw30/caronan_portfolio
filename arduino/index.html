@@ -378,10 +378,10 @@
           </div>
 
           <div class="d-flex align-items-center gap-2">
-            <button id="btnAudioToggle" class="btn btn-sm btn-outline-info rounded-pill px-3">
+            <button type="button" id="btnAudioToggle" class="btn btn-sm btn-outline-info rounded-pill px-3">
               <i class="bi bi-volume-up-fill"></i> Sound: Enabled
             </button>
-            <button id="btnRebootArduino" class="btn btn-sm btn-cyber-primary rounded-pill px-3" title="Simulates board reset">
+            <button type="button" id="btnRebootArduino" class="btn btn-sm btn-cyber-primary rounded-pill px-3" title="Simulates board reset">
               <i class="bi bi-arrow-clockwise"></i> Reset / Calibrate (5-6kHz Chime)
             </button>
           </div>
@@ -476,16 +476,16 @@
                 <div class="mt-4">
                   <div class="small text-white mb-2 fw-semibold" style="color: #ffffff !important;">Quick Test Presets:</div>
                   <div class="preset-button-row">
-                    <button class="btn-preset" data-value="8">
+                    <button type="button" class="btn-preset" data-value="8">
                       <i class="bi bi-exclamation-triangle-fill text-red"></i> 8% Dry Alarm
                     </button>
-                    <button class="btn-preset" data-value="22">
+                    <button type="button" class="btn-preset" data-value="22">
                       <i class="bi bi-exclamation-triangle-fill text-amber"></i> 22% Moderate Alarm
                     </button>
-                    <button class="btn-preset active" data-value="65">
+                    <button type="button" class="btn-preset active" data-value="65">
                       <i class="bi bi-volume-mute-fill text-green"></i> 65% Optimal (Muted)
                     </button>
-                    <button class="btn-preset" data-value="100">
+                    <button type="button" class="btn-preset" data-value="100">
                       <i class="bi bi-volume-mute-fill text-cyan"></i> 100% Saturated (Muted)
                     </button>
                   </div>
@@ -510,7 +510,7 @@
                 </span>
                 <div class="d-flex align-items-center gap-2">
                   <span class="serial-baud">9600 Baud</span>
-                  <button id="btnClearSerial" class="btn btn-xs btn-outline-info rounded px-2 py-0 text-light" style="font-size: 0.7rem;">
+                  <button type="button" id="btnClearSerial" class="btn btn-xs btn-outline-info rounded px-2 py-0 text-light" style="font-size: 0.7rem;">
                     Clear
                   </button>
                 </div>
@@ -744,7 +744,7 @@
               <span class="code-lang-tag">
                 <i class="bi bi-file-earmark-code"></i> Arduino_Soil_Moisture.ino (C++)
               </span>
-              <button id="btnCopyCode" class="btn-copy-code">
+              <button type="button" id="btnCopyCode" class="btn-copy-code">
                 <i class="bi bi-clipboard"></i> Copy C++ Sketch
               </button>
             </div>

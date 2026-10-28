@@ -4,10 +4,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Official Industry-Ready BSIT Professional Portfolio of Marcial Lawrence Jr V. Caronan. Full-Stack Web Development, Database Administration, and Data Analytics.">
-  <meta name="author" content="Marcial Lawrence Jr V. Caronan">
   <title>Marcial Lawrence Jr V. Caronan | BSIT Professional Portfolio</title>
+  <meta name="description"
+    content="Official Industry-Ready BSIT Professional Portfolio of Marcial Lawrence Jr V. Caronan. Full-Stack Web Development, Interactive 3D Simulations, Database Administration, and AI Solutions.">
+  <meta name="author" content="Marcial Lawrence Jr V. Caronan">
+  <meta name="theme-color" content="#030712">
+  <link rel="canonical" href="https://marcialcaronan.dev/">
+
+  <!-- Favicon (Inline SVG: High-Res Neon Monogram, zero 404) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230f172a' stroke='%2338bdf8' stroke-width='4'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='central' text-anchor='middle' font-family='monospace' font-weight='900' font-size='52' fill='%2338bdf8'%3EML%3C/text%3E%3C/svg%3E">
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Marcial Lawrence Jr V. Caronan Portfolio">
+  <meta property="og:url" content="https://marcialcaronan.dev/">
+  <meta property="og:title" content="Marcial Lawrence Jr V. Caronan | BSIT Professional Portfolio">
+  <meta property="og:description" content="Official Industry-Ready BSIT Professional Portfolio of Marcial Lawrence Jr V. Caronan. Full-Stack Web Development, Interactive 3D Simulations, Database Administration, and AI Solutions.">
+  <meta property="og:image" content="assets/img/profile.jpg">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://marcialcaronan.dev/">
+  <meta name="twitter:title" content="Marcial Lawrence Jr V. Caronan | BSIT Professional Portfolio">
+  <meta name="twitter:description" content="Full-Stack Web Development, Interactive 3D Simulations, Database Administration, and AI Solutions by Marcial Lawrence Jr V. Caronan.">
+  <meta name="twitter:image" content="assets/img/profile.jpg">
+
+  <!-- Structured Data: Person Schema (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Marcial Lawrence Jr V. Caronan",
+    "jobTitle": "Full-Stack Software Engineer & IT Specialist",
+    "alumniOf": {
+      "@type": "EducationalOrganization",
+      "name": "Datamex College of Saint Adeline"
+    },
+    "url": "https://marcialcaronan.dev/",
+    "image": "assets/img/profile.jpg",
+    "knowsAbout": [
+      "Web Engineering",
+      "Database Administration",
+      "Interactive Simulations",
+      "Data Analytics",
+      "Cybersecurity",
+      "IoT Systems"
+    ]
+  }
+  </script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,8 +60,9 @@
     href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
-  <!-- Bootstrap 5.3 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap 5.3 CSS with SRI -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -26,6 +71,8 @@
 </head>
 
 <body>
+  <!-- Accessibility: Skip to Content Link -->
+  <a href="#mainNavbar" class="skip-to-content visually-hidden-focusable">Skip to primary content</a>
 
   <!-- ================= GLOWING IT CYBER BACKGROUND ================= -->
   <div class="it-cyber-bg" aria-hidden="true">
@@ -46,6 +93,9 @@
 
     <!-- Cyber Matrix Digital Code Rain Canvas -->
     <canvas id="matrixRainCanvas" class="matrix-rain-canvas"></canvas>
+
+    <!-- Milky Way Galaxy & Solar System Simulation Canvas -->
+    <canvas id="galaxyCanvas" class="galaxy-canvas"></canvas>
 
     <!-- Floating Glowing IT Elements -->
     <div class="cyber-floating-icons">
@@ -116,22 +166,22 @@
           <span>Christmas Glow</span>
         </button>
 
-        <!-- 3. Combination: World Map + Christmas Snow -->
-        <button type="button" class="theme-pill-btn" data-theme="holiday-hybrid" id="btnThemeHybrid" aria-pressed="false" title="Combination: Interlink World Map + Luminous Snowflakes">
-          <i class="bi bi-tree-fill text-success"></i>
-          <span class="d-none d-md-inline">Holiday</span> <span>Map + Snow</span>
+        <!-- 3. Aurora Borealis (Northern Lights) -->
+        <button type="button" class="theme-pill-btn d-none d-lg-inline-flex" data-theme="cyber-aurora" id="btnThemeAurora" aria-pressed="false" title="Aurora Borealis: Northern Lights over a Starry Night Sky">
+          <i class="bi bi-stars text-info"></i>
+          <span>Aurora Borealis</span>
         </button>
 
-        <!-- 4. Cosmic Aurora Borealis -->
-        <button type="button" class="theme-pill-btn d-none d-lg-inline-flex" data-theme="cyber-aurora" id="btnThemeAurora" aria-pressed="false" title="Cosmic Aurora Borealis & Stardust">
-          <i class="bi bi-stars text-warning"></i>
-          <span>Aurora</span>
-        </button>
-
-        <!-- 5. Cyber Neon Violet -->
-        <button type="button" class="theme-pill-btn d-none d-xl-inline-flex" data-theme="cyber-matrix" id="btnThemeMatrix" aria-pressed="false" title="Obsidian Violet Matrix">
+        <!-- 4. Cyber Matrix Binary Code Rain -->
+        <button type="button" class="theme-pill-btn d-none d-xl-inline-flex" data-theme="cyber-matrix" id="btnThemeMatrix" aria-pressed="false" title="Cyber Matrix: Binary Code Rain">
           <i class="bi bi-terminal-fill text-purple"></i>
           <span>Cyber Matrix</span>
+        </button>
+
+        <!-- 5. Milky Way Galaxy & Visible Solar System -->
+        <button type="button" class="theme-pill-btn d-none d-sm-inline-flex" data-theme="milky-way" id="btnThemeMilkyWay" aria-pressed="false" title="Milky Way Galaxy: Cosmic Spiral & Solar System with Orbiting Planets">
+          <i class="bi bi-disc-fill text-warning"></i>
+          <span>Milky Way</span>
         </button>
       </div>
 
@@ -154,7 +204,7 @@
       </div>
     </div>
 
-    <!-- Festive Micro Garland Lights (Illuminated in Christmas/Hybrid modes) -->
+    <!-- Festive Micro Garland Lights (Illuminated in Christmas Glow mode) -->
     <div class="festive-garland-lights" id="festiveGarland" aria-hidden="true">
       <span class="f-bulb bulb-red"></span>
       <span class="f-bulb bulb-gold"></span>
@@ -183,7 +233,7 @@
   <nav class="navbar navbar-expand-xxl navbar-dark fixed-top custom-navbar">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center fw-bold" href="#home">
-        <img src="assets/img/profile.jpg" alt="M. Caronan" class="rounded-circle border border-info me-2 shadow-sm"
+        <img loading="lazy" decoding="async" src="assets/img/profile.jpg" alt="M. Caronan" class="rounded-circle border border-info me-2 shadow-sm"
           style="width: 32px; height: 32px; object-fit: cover; object-position: top center;">
         <span>M. CARONAN</span>
         <span class="navbar-brand-badge">BSIT GRADUATE</span>
@@ -293,7 +343,7 @@
             <!-- Card 2: Developer Portrait & Badge -->
             <div class="stat-card-blue d-flex flex-column justify-content-between">
               <div class="d-flex align-items-center mb-2">
-                <img src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
+                <img loading="lazy" decoding="async" src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
                   class="rounded-circle border border-2 border-info me-3 shadow"
                   style="width: 52px; height: 52px; object-fit: cover; object-position: top center;">
                 <div>
@@ -394,7 +444,7 @@
           <!-- Official Student Portrait Card -->
           <div class="codespot-card text-center mb-4 p-3 border border-info border-opacity-25">
             <div class="position-relative d-inline-block w-100 mb-3" style="max-width: 340px;">
-              <img src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
+              <img loading="lazy" decoding="async" src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
                 class="img-fluid rounded-4 shadow-lg border border-2 border-info"
                 style="max-height: 350px; width: 100%; object-fit: cover; object-position: top center;">
               <span
@@ -449,12 +499,12 @@
 
         <!-- Filter Pills -->
         <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
-          <button class="skill-category-pill active" data-category="all">All Skills</button>
-          <button class="skill-category-pill" data-category="prog">Programming Languages</button>
-          <button class="skill-category-pill" data-category="db">Database & Analytics</button>
-          <button class="skill-category-pill" data-category="office">Office & Productivity</button>
-          <button class="skill-category-pill" data-category="tools">Tools & Hardware</button>
-          <button class="skill-category-pill" data-category="design">Design Tools</button>
+          <button type="button" class="skill-category-pill active" data-category="all">All Skills</button>
+          <button type="button" class="skill-category-pill" data-category="prog">Programming Languages</button>
+          <button type="button" class="skill-category-pill" data-category="db">Database & Analytics</button>
+          <button type="button" class="skill-category-pill" data-category="office">Office & Productivity</button>
+          <button type="button" class="skill-category-pill" data-category="tools">Tools & Hardware</button>
+          <button type="button" class="skill-category-pill" data-category="design">Design Tools</button>
         </div>
       </div>
 
@@ -930,7 +980,7 @@
                 <td class="fw-bold text-info"><i class="bi bi-git me-1"></i> Tools</td>
                 <td class="text-white">Git / GitHub Version Control</td>
                 <td><span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50">Advanced</span></td>
-                <td><a href="https://github.com/marciallaw30/caronan_portfolio" target="_blank" class="text-decoration-none text-info">100+ Structured Git Commits</a>, Branch Management, PR Workflows</td>
+                <td><a rel="noopener noreferrer" href="https://github.com/marciallaw30/caronan_portfolio" target="_blank" class="text-decoration-none text-info">100+ Structured Git Commits</a>, Branch Management, PR Workflows</td>
               </tr>
               <tr>
                 <td class="fw-bold text-info"><i class="bi bi-hdd-network me-1"></i> Networking</td>
@@ -1062,10 +1112,10 @@
               </div>
 
               <div class="d-flex gap-3 flex-wrap mt-auto">
-                <a href="oracle-ai/index.html" class="btn-codespot-primary btn-pill px-4 py-2" target="_blank">
+                <a rel="noopener noreferrer" href="oracle-ai/index.html" class="btn-codespot-primary btn-pill px-4 py-2" target="_blank">
                   <i class="bi bi-stars me-2"></i> Launch Oracle AI
                 </a>
-                <button class="btn-codespot-outline btn-pill px-4 py-2" data-bs-toggle="modal"
+                <button type="button" class="btn-codespot-outline btn-pill px-4 py-2" data-bs-toggle="modal"
                   data-bs-target="#projectModal" data-project-id="oracle-ai">
                   View Technical Specs <i class="bi bi-info-circle"></i>
                 </button>
@@ -1160,7 +1210,7 @@
               </div>
 
               <div class="d-flex gap-2 flex-wrap mt-auto">
-                <a href="data-analysis/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #10b981, #34d399); border: none; color: #fff; font-weight: 700;">
+                <a rel="noopener noreferrer" href="data-analysis/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #10b981, #34d399); border: none; color: #fff; font-weight: 700;">
                   <i class="bi bi-graph-up me-2"></i> View Live Dashboard
                 </a>
                 <a href="assets/docs/4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" class="btn btn-outline-success btn-pill px-3 py-2 text-center small" download="4A_Marcial_Lawrence_Jr_V_Caronan.xlsx" style="border-color: rgba(16, 185, 129, 0.7); color: #34d399; font-weight: 600;">
@@ -1169,7 +1219,7 @@
                 <a href="assets/docs/Data_Analysis_Marcial_Caronan_Full_Package.zip" class="btn btn-outline-success btn-pill px-3 py-2 text-center small" download="Data_Analysis_Marcial_Caronan_Full_Package.zip" style="border-color: rgba(52, 211, 153, 0.7); color: #6ee7b7;">
                   <i class="bi bi-folder-symlink-fill me-1"></i> Docs Package (.zip)
                 </a>
-                <button class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="data-analysis" title="View Full Investigation Details">
+                <button type="button" class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="data-analysis" title="View Full Investigation Details">
                   <i class="bi bi-info-circle me-1"></i> Technical Specs
                 </button>
               </div>
@@ -1210,7 +1260,7 @@
                   </div>
                 </div>
 
-                <a href="data-analysis/index.html" class="btn btn-sm w-100 py-2 text-white fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #10b981, #059669); border: none; font-size: 0.82rem;">
+                <a rel="noopener noreferrer" href="data-analysis/index.html" class="btn btn-sm w-100 py-2 text-white fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #10b981, #059669); border: none; font-size: 0.82rem;">
                   <i class="bi bi-box-arrow-up-right me-1"></i> Open Live Dashboard
                 </a>
               </div>
@@ -1276,10 +1326,10 @@
               </div>
 
               <div class="d-flex gap-2 flex-wrap mt-auto">
-                <a href="arduino/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #0284c7, #06b6d4); border: none; color: #fff; font-weight: 700;">
+                <a rel="noopener noreferrer" href="arduino/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #0284c7, #06b6d4); border: none; color: #fff; font-weight: 700;">
                   <i class="bi bi-cpu me-2"></i> Launch Arduino Lab Simulator
                 </a>
-                <button class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="iot-soil">
+                <button type="button" class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="iot-soil">
                   <i class="bi bi-info-circle me-1"></i> Technical Specs &amp; Schematics
                 </button>
                 <span class="badge bg-black bg-opacity-60 border border-info border-opacity-40 text-info font-mono py-2 px-3 d-flex align-items-center" style="font-size:0.75rem;">
@@ -1323,7 +1373,7 @@
                   </div>
                 </div>
 
-                <a href="arduino/index.html" class="btn btn-sm w-100 py-2 text-white fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #0284c7, #06b6d4); border: none; font-size: 0.82rem;">
+                <a rel="noopener noreferrer" href="arduino/index.html" class="btn btn-sm w-100 py-2 text-white fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #0284c7, #06b6d4); border: none; font-size: 0.82rem;">
                   <i class="bi bi-box-arrow-up-right me-1"></i> Launch Virtual Lab Simulator
                 </a>
               </div>
@@ -1390,10 +1440,10 @@
               </div>
 
               <div class="d-flex gap-2 flex-wrap mt-auto">
-                <a href="web-development/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #d97706, #f59e0b); border: none; color: #000; font-weight: 700;">
+                <a rel="noopener noreferrer" href="web-development/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #d97706, #f59e0b); border: none; color: #000; font-weight: 700;">
                   <i class="bi bi-box-arrow-up-right me-2"></i> Launch Web App Portal
                 </a>
-                <button class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="employee-mgmt">
+                <button type="button" class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="employee-mgmt">
                   <i class="bi bi-info-circle me-1"></i> Technical Architecture Specs
                 </button>
                 <span class="badge bg-black bg-opacity-60 border border-warning border-opacity-40 text-warning font-mono py-2 px-3 d-flex align-items-center" style="font-size:0.75rem;">
@@ -1437,7 +1487,7 @@
                   </div>
                 </div>
 
-                <a href="web-development/index.html" class="btn btn-sm w-100 py-2 text-dark fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #fbbf24, #f59e0b); border: none; font-size: 0.82rem;">
+                <a rel="noopener noreferrer" href="web-development/index.html" class="btn btn-sm w-100 py-2 text-dark fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #fbbf24, #f59e0b); border: none; font-size: 0.82rem;">
                   <i class="bi bi-box-arrow-up-right me-1"></i> Open HRIS Web App
                 </a>
               </div>
@@ -1503,10 +1553,10 @@
               </div>
 
               <div class="d-flex gap-2 flex-wrap mt-auto">
-                <a href="ecommerce/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #7c3aed, #a855f7); border: none; color: #fff; font-weight: 700;">
+                <a rel="noopener noreferrer" href="ecommerce/index.html" class="btn-codespot-primary btn-pill px-4 py-2 text-center" target="_blank" style="background: linear-gradient(90deg, #7c3aed, #a855f7); border: none; color: #fff; font-weight: 700;">
                   <i class="bi bi-bag-check-fill me-2"></i> Launch Storefront
                 </a>
-                <button class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="ecommerce">
+                <button type="button" class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="ecommerce">
                   <i class="bi bi-info-circle me-1"></i> Technical Specs &amp; Flow
                 </button>
                 <span class="badge bg-black bg-opacity-60 border border-purple border-opacity-40 font-mono py-2 px-3 d-flex align-items-center" style="color:#d8b4fe; border-color: rgba(168,85,247,0.4); font-size:0.75rem;">
@@ -1554,7 +1604,7 @@
                   </div>
                 </div>
 
-                <a href="ecommerce/index.html" class="btn btn-sm w-100 py-2 text-white fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #7c3aed, #a855f7); border: none; font-size: 0.82rem; box-shadow: 0 4px 12px rgba(124,58,237,0.4);">
+                <a rel="noopener noreferrer" href="ecommerce/index.html" class="btn btn-sm w-100 py-2 text-white fw-bold text-center" target="_blank" style="background: linear-gradient(90deg, #7c3aed, #a855f7); border: none; font-size: 0.82rem; box-shadow: 0 4px 12px rgba(124,58,237,0.4);">
                   <i class="bi bi-box-arrow-up-right me-1"></i> Browse Wire Jewelry Catalog (27 Available &bull; 9 Soon)
                 </a>
               </div>
@@ -1635,11 +1685,11 @@
               </div>
 
               <div class="d-flex gap-2 flex-wrap mt-auto">
-                <a href="game-dev/simulator.html" class="btn btn-warning btn-pill px-3 py-2 text-dark fw-bold text-center" target="_blank"
+                <a rel="noopener noreferrer" href="game-dev/simulator.html" class="btn btn-warning btn-pill px-3 py-2 text-dark fw-bold text-center" target="_blank"
                   style="background: linear-gradient(90deg, #f59e0b, #fbbf24); border: none; font-size: 0.85rem; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.45);">
                   <i class="bi bi-play-circle-fill me-1"></i> Play 3D &amp; Arcade Simulator
                 </a>
-                <a href="game-dev/index.html" class="btn-codespot-primary btn-pill px-3 py-2 text-center" target="_blank"
+                <a rel="noopener noreferrer" href="game-dev/index.html" class="btn-codespot-primary btn-pill px-3 py-2 text-center" target="_blank"
                   style="background: linear-gradient(90deg, #7c3aed, #ec4899); border: none; color: #fff; font-weight: 700; box-shadow: 0 4px 15px rgba(236,72,153,0.4);">
                   <i class="bi bi-controller me-1"></i> Launch Interactive Game Hub &amp; Prototype
                 </a>
@@ -1647,7 +1697,7 @@
                   style="border-color: rgba(245, 158, 11, 0.8); color: #fbbf24; font-weight: 600;">
                   <i class="bi bi-file-earmark-word-fill me-1"></i> Download Game Dev Paper (.docx • 44.6 MB)
                 </a>
-                <button class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="mythic-gambit" title="View GDD Specifications">
+                <button type="button" class="btn-codespot-outline btn-pill px-3 py-2 text-nowrap" data-bs-toggle="modal" data-bs-target="#projectModal" data-project-id="mythic-gambit" title="View GDD Specifications">
                   <i class="bi bi-info-circle me-1"></i> Technical Specs
                 </button>
               </div>
@@ -1658,7 +1708,7 @@
               <div class="codespot-card p-3 overflow-hidden position-relative"
                 style="background:rgba(12,5,24,0.95);border:1px solid rgba(236,72,153,0.45); box-shadow: 0 4px 20px rgba(0,0,0,0.7);">
                 <div class="position-relative rounded-3 overflow-hidden mb-3" style="height: 190px; border: 1px solid rgba(168, 85, 247, 0.4);">
-                  <img src="assets/img/game-dev/image11.jpeg" alt="Mythic Gambit Faction Concept Art" class="w-100 h-100" style="object-fit: cover; object-position: center;">
+                  <img loading="lazy" decoding="async" src="assets/img/game-dev/image11.jpeg" alt="Mythic Gambit Faction Concept Art" class="w-100 h-100" style="object-fit: cover; object-position: center;">
                   <div class="position-absolute bottom-0 start-0 w-100 p-2 d-flex justify-content-between align-items-center" style="background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%);">
                     <span class="badge bg-danger text-uppercase font-mono" style="font-size: 0.72rem;"><i class="bi bi-fire me-1"></i> The Obsidian Roost</span>
                     <span class="badge bg-dark border border-secondary text-info font-mono" style="font-size: 0.7rem;">Figure C.11</span>
@@ -1684,11 +1734,11 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                  <a href="game-dev/simulator.html" class="btn btn-sm flex-fill py-2 text-dark fw-bold text-center" target="_blank"
+                  <a rel="noopener noreferrer" href="game-dev/simulator.html" class="btn btn-sm flex-fill py-2 text-dark fw-bold text-center" target="_blank"
                     style="background: linear-gradient(90deg, #f59e0b, #fbbf24); border: none; font-size: 0.8rem; box-shadow: 0 2px 8px rgba(245,158,11,0.3);">
                     <i class="bi bi-play-circle-fill me-1"></i> 3D Simulator
                   </a>
-                  <a href="game-dev/index.html" class="btn btn-sm flex-fill py-2 text-white fw-bold text-center" target="_blank"
+                  <a rel="noopener noreferrer" href="game-dev/index.html" class="btn btn-sm flex-fill py-2 text-white fw-bold text-center" target="_blank"
                     style="background: linear-gradient(90deg, #ec4899, #8b5cf6); border: none; font-size: 0.8rem;">
                     <i class="bi bi-book-half me-1"></i> GDD Paper Hub
                   </a>
@@ -1734,7 +1784,7 @@
                 <a href="CAPSTONE_PAPER.docx" download="CAPSTONE_PAPER.docx" class="btn btn-sm btn-outline-danger px-3 py-2 rounded-pill small fw-semibold">
                   <i class="bi bi-file-earmark-word-fill text-primary me-1"></i> Download Paper (.docx)
                 </a>
-                <a href="CHAPTER_3_METHODOLOGY_COMPLETE.md" target="_blank" class="btn btn-sm btn-outline-light px-3 py-2 rounded-pill small">
+                <a rel="noopener noreferrer" href="CHAPTER_3_METHODOLOGY_COMPLETE.md" target="_blank" class="btn btn-sm btn-outline-light px-3 py-2 rounded-pill small">
                   <i class="bi bi-file-earmark-code me-1"></i> Full Markdown Manuscript
                 </a>
               </div>
@@ -1951,7 +2001,7 @@
         <!-- Certificate 1 -->
         <div class="col-lg-4 col-md-6">
           <div class="codespot-card h-100 p-3">
-            <img src="assets/img/certificates/MARCIAL 1.png" alt="Certificate 1"
+            <img loading="lazy" decoding="async" src="assets/img/certificates/MARCIAL 1.png" alt="Certificate 1"
               class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
             <h5 class="fw-bold text-white mb-1">IT Seminar & Workshop Certificate</h5>
             <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
@@ -1961,7 +2011,7 @@
         <!-- Certificate 2 -->
         <div class="col-lg-4 col-md-6">
           <div class="codespot-card h-100 p-3">
-            <img src="assets/img/certificates/MARCIAL 2.png" alt="Certificate 2"
+            <img loading="lazy" decoding="async" src="assets/img/certificates/MARCIAL 2.png" alt="Certificate 2"
               class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
             <h5 class="fw-bold text-white mb-1">Professional Development Certificate</h5>
             <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
@@ -1971,7 +2021,7 @@
         <!-- Certificate 3 -->
         <div class="col-lg-4 col-md-6">
           <div class="codespot-card h-100 p-3">
-            <img src="assets/img/certificates/MARCIAL 3.png" alt="Certificate 3"
+            <img loading="lazy" decoding="async" src="assets/img/certificates/MARCIAL 3.png" alt="Certificate 3"
               class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
             <h5 class="fw-bold text-white mb-1">Technical Training Certificate</h5>
             <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
@@ -1981,7 +2031,7 @@
         <!-- Certificate 4 -->
         <div class="col-lg-4 col-md-6">
           <div class="codespot-card h-100 p-3">
-            <img src="assets/img/certificates/MARCIAL 4.png" alt="Certificate 4"
+            <img loading="lazy" decoding="async" src="assets/img/certificates/MARCIAL 4.png" alt="Certificate 4"
               class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
             <h5 class="fw-bold text-white mb-1">Industry Readiness Certificate</h5>
             <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
@@ -1991,7 +2041,7 @@
         <!-- Certificate 5 -->
         <div class="col-lg-4 col-md-6">
           <div class="codespot-card h-100 p-3">
-            <img src="assets/img/certificates/MARCIAL 5.png" alt="Certificate 5"
+            <img loading="lazy" decoding="async" src="assets/img/certificates/MARCIAL 5.png" alt="Certificate 5"
               class="img-fluid rounded mb-3 border border-secondary border-opacity-25 shadow-sm">
             <h5 class="fw-bold text-white mb-1">Advanced Skills Certificate</h5>
             <div class="text-info small fw-semibold mb-2">Issued: 2026</div>
@@ -2442,8 +2492,8 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
                   <span class="text-info-emphasis">Candidate: Marcial Lawrence Jr V. Caronan</span>
                 </div>
                 <div class="d-inline-flex align-items-center gap-2">
-                  <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-40">
-                    <i class="bi bi-broadcast me-1"></i> 1080p HD Ready
+                  <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-40" title="Accurate resolution: 1080x1080 Square Format, 4 minutes 59 seconds duration">
+                    <i class="bi bi-aspect-ratio me-1"></i> 1080×1080 Square • 4:59
                   </span>
                   <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-40">
                     25.8 MB • MP4
@@ -2453,8 +2503,9 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
 
               <!-- HTML5 Video Element -->
               <div class="position-relative rounded-3 overflow-hidden bg-black mb-3 border border-secondary border-opacity-20" style="box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
-                <video id="mockInterviewVideo" class="w-100 d-block" controls preload="metadata" playsinline style="max-height: 520px; width: 100%; object-fit: contain; background: #000;">
+                <video id="mockInterviewVideo" class="w-100 d-block" controls preload="metadata" playsinline poster="assets/img/profile.jpg" style="max-height: 520px; width: 100%; object-fit: contain; background: #000;">
                   <source src="assets/video/mock-interview.mp4" type="video/mp4">
+                  <track kind="captions" label="English (12-Point Defense Q&amp;A)" srclang="en" src="assets/video/mock-interview.vtt" default>
                   Your browser does not support the HTML5 video element. You can 
                   <a href="assets/video/mock-interview.mp4" class="text-info text-decoration-underline" download>download the recording here</a>.
                 </video>
@@ -2471,7 +2522,7 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
                   <button type="button" class="btn btn-sm btn-outline-secondary font-mono text-light py-1 px-2 rounded" onclick="restartInterviewVideo()"><i class="bi bi-arrow-counterclockwise me-1"></i>Restart</button>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                  <a href="assets/video/mock-interview.mp4" target="_blank" class="btn btn-sm btn-outline-info font-mono rounded-pill px-3">
+                  <a href="assets/video/mock-interview.mp4" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info font-mono rounded-pill px-3">
                     <i class="bi bi-box-arrow-up-right me-1"></i> Open Pop-out
                   </a>
                   <a href="assets/video/mock-interview.mp4" download="Marcial_Lawrence_Caronan_Mock_Interview.mp4" class="btn btn-sm btn-info font-mono text-dark fw-bold rounded-pill px-3">
@@ -2917,13 +2968,13 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
           capabilities, and operational experience.</p>
 
         <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
-          <a href="resume.html" class="btn-codespot-primary btn-pill" target="_blank">
+          <a rel="noopener noreferrer" href="resume.html" class="btn-codespot-primary btn-pill" target="_blank">
             <i class="bi bi-file-earmark-person-fill me-2"></i> View &amp; Print Full Resume Page
           </a>
           <a href="assets/docs/Marcial_Lawrence_Jr_V_Resume.docx" class="btn-codespot-outline btn-pill" download="Marcial_Lawrence_Jr_V_Resume.docx">
             <i class="bi bi-download me-2"></i> Download Resume (.docx)
           </a>
-          <button class="btn-codespot-outline btn-pill" onclick="printResumeDocument()">
+          <button type="button" class="btn-codespot-outline btn-pill" onclick="printResumeDocument()">
             <i class="bi bi-printer-fill me-2"></i> Print Resume
           </button>
         </div>
@@ -2935,7 +2986,7 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
         <!-- Header -->
         <div
           class="d-flex flex-column flex-sm-row align-items-center align-items-sm-start gap-4 pb-3 border-bottom border-secondary border-opacity-50 mb-4">
-          <img src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
+          <img loading="lazy" decoding="async" src="assets/img/profile.jpg" alt="Marcial Lawrence Jr V. Caronan"
             class="rounded-3 border border-2 border-info shadow-sm"
             style="width: 105px; height: 125px; object-fit: cover; object-position: top center;">
           <div class="text-center text-sm-start flex-grow-1">
@@ -3048,28 +3099,36 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
           </div>
         </div>
 
-        <!-- Featured Projects -->
+        <!-- Featured Projects & Capstones -->
         <div>
           <h5 class="fw-bold text-info border-bottom border-secondary border-opacity-25 pb-1 mb-2">KEY IT PROJECTS &amp; CAPSTONES</h5>
           <div class="mb-2">
-            <strong class="text-white">1. TarotKnight Crystal Art E-Commerce:</strong>
-            <span class="small text-light opacity-85"> JavaScript ES6+, Bootstrap 5, PayMongo API, J&amp;T Express Logistics, MySQL 3NF. 44-item catalog, real-time inventory decrementing, and admin control center.</span>
+            <strong class="text-white">1. IoT-Based Smart Science Laboratory Safety &amp; Access Control (Collegiate BSIT Capstone Thesis):</strong>
+            <span class="small text-light opacity-85"> ESP32 Dual-Core FreeRTOS, R307 Biometrics, SIM800L GSM, MQ-2 Gas Sensors, DS18B20 Temp Sensors, Solenoid Lock, PHP/MySQL, ISO/IEC 25010 Evaluated (N = 45). Researched and engineered official collegiate Capstone Thesis (Chapters 1–3 Complete) featuring hardware pin segregation, multi-sensor vapor/heat fusion, biometric door authorization, autonomous offline SMS failover during blackouts, and least-squares regression trend-analysis algorithm for predictive hazard escalation.</span>
           </div>
           <div class="mb-2">
-            <strong class="text-white">2. Oracle AI Spiritual Guide:</strong>
-            <span class="small text-light opacity-85"> Google Gemini API (gemini-3.8-flash), PayMongo API, Gmail Auth. 5 free daily insights and Cosmic Token Store.</span>
+            <strong class="text-white">2. DATAMEX College HRIS &amp; Biometric Payroll Portal (Enterprise Web System):</strong>
+            <span class="small text-light opacity-85"> PHP 8.2, MySQL 3NF InnoDB, FPDF Library, JavaScript ES6+, Bootstrap 5. Touchscreen kiosk attendance check-ins, automated 15-day salary calculation algorithms conforming to Philippine statutory deductions (SSS/PhilHealth/Pag-IBIG), digital PDF payslip generation, and administrative role-based access control (RBAC).</span>
           </div>
           <div class="mb-2">
-            <strong class="text-white">3. DATAMEX College HRIS &amp; Payroll Portal:</strong>
-            <span class="small text-light opacity-85"> PHP 8.2, MySQL 3NF, FPDF. Touchscreen kiosk attendance, Philippine statutory deductions (SSS/PhilHealth/Pag-IBIG), and digital payslips.</span>
+            <strong class="text-white">3. Mythic Gambit: Tactical 2.5D / Isometric Strategy Chess Game Engine:</strong>
+            <span class="small text-light opacity-85"> HTML5 Canvas (Dual-Mode 2D Tactical &amp; 2.5D Isometric Projection), Web Audio API Dynamic Synthesizer, Minimax AI Adversary (Alpha-Beta Pruning). Interactive playable browser game engine with multi-perspective camera angles, procedural audio synthesis, heuristic tree search AI, 15 kingdom lore &amp; passives, and 44.6 MB Game Design Document (GDD).</span>
           </div>
           <div class="mb-2">
-            <strong class="text-white">4. Mythic Gambit: Tactical Chess RPG (GDD):</strong>
-            <span class="small text-light opacity-85"> Turn-based strategy game design, 15 kingdom lore &amp; passives, manifestation combat system, 42 concept illustrations. Academic GDD for Datamex College of Saint Adeline under Ms. Jeanniel T. Ilago.</span>
+            <strong class="text-white">4. TarotKnight Crystal Art E-Commerce &amp; Inventory Platform (SmartShop):</strong>
+            <span class="small text-light opacity-85"> JavaScript ES6+, Bootstrap 5, PayMongo Payment Gateway, J&amp;T Express Logistics API, MySQL 3NF, LocalStorage State Machine. 44-item artisanal jewelry catalog, real-time stock decrementing preventing overselling race conditions under concurrent checkouts, appointment booking calendar, and administrative revenue dashboard.</span>
+          </div>
+          <div class="mb-2">
+            <strong class="text-white">5. Commercial Telemetry &amp; Financial Sales Data Analytics Dashboard:</strong>
+            <span class="small text-light opacity-85"> Advanced MS Excel Modeling, JavaScript Canvas BI Charts, Descriptive Statistics (ANOVA, CORREL), CSV/XLSX Pipelines. End-to-end data processing and financial correlation modeling across 50 transaction records (₱9,690 revenue), multi-condition nested IF categorizations, and Pearson r correlation matrices (r = 0.84 between internet duration and gross beverage sales).</span>
+          </div>
+          <div class="mb-2">
+            <strong class="text-white">6. Arduino IoT Smart Soil Moisture &amp; Plant Hydration Telemetry System:</strong>
+            <span class="small text-light opacity-85"> Arduino Uno R3, Embedded C++, Three.js 3D Plant Model, Capacitive Sensor, PWM Audio Speaker, 9600 Baud UART. Precision agriculture hydration monitor utilizing floating-point ratio math, 1000Hz PWM audio alert triggers on critically dry soil, automated relay pump logic, and Three.js 3D leaf moisture deformation shaders.</span>
           </div>
           <div>
-            <strong class="text-white">5. Arduino IoT Soil Moisture Telemetry:</strong>
-            <span class="small text-light opacity-85"> C++, Arduino Uno R3, PWM Speaker, Capacitive Sensor. 1000Hz audio alerts and 9600 baud serial monitoring.</span>
+            <strong class="text-white">7. Oracle AI: Context-Aware Technical Diagnostic &amp; Knowledge Assistant:</strong>
+            <span class="small text-light opacity-85"> Google Gemini API (gemini-3.8-flash), PayMongo API, Gmail Session Auth, Markdown Renderer, LocalStorage. Conversational technical diagnostic assistant with streaming inference responses, structured Markdown table formatting, 5 free daily insights with 24-hour reset timers, and PayMongo Cosmic Token Store for instant wallet top-ups.</span>
           </div>
         </div>
       </div>
@@ -3343,7 +3402,7 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
                     <h6 class="text-success fw-bold mb-1"><i class="bi bi-terminal-fill me-1"></i> Interactive Proof-of-Skill Runner</h6>
                     <p class="small text-muted mb-0">Execute an automated validation test to verify that Marc's skill logic, syntax, and algorithms produce the exact expected outputs.</p>
                   </div>
-                  <button class="btn btn-sm btn-success rounded-pill px-3 fw-bold" id="skillModalRunTestBtn">
+                  <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" id="skillModalRunTestBtn">
                     <i class="bi bi-play-fill me-1"></i> Run Verification Test
                   </button>
                 </div>
@@ -3728,7 +3787,7 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
             <a href="CAPSTONE_PAPER.docx" download="CAPSTONE_PAPER.docx" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold shadow-sm">
               <i class="bi bi-file-earmark-word-fill me-1"></i> Download CAPSTONE PAPER (.docx)
             </a>
-            <a href="CHAPTER_3_METHODOLOGY_COMPLETE.md" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3">
+            <a rel="noopener noreferrer" href="CHAPTER_3_METHODOLOGY_COMPLETE.md" target="_blank" class="btn btn-sm btn-outline-info rounded-pill px-3">
               <i class="bi bi-file-earmark-code me-1"></i> Read Full Chapter 3 Manuscript (.md)
             </a>
             <span class="badge bg-success bg-opacity-25 text-success border border-success px-2 py-1 small">
@@ -3756,8 +3815,9 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
     </div>
   </div>
 
-  <!-- Bootstrap 5.3 Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap 5.3 Bundle JS with SRI -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <!-- Main Application Script -->
   <script src="assets/js/main.js"></script>
 </body>

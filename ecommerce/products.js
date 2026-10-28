@@ -1,10 +1,10 @@
-﻿/**
+/**
  * TAROTKNIGHT CRYSTAL ART - OFFICIAL PRODUCT CATALOG
  * Datamex College of Saint Adeline | Lead: Marcial Lawrence Jr V. Caronan & Team
  * Authentic Handcrafted Wire-Wrapped Crystal Jewelry & Metaphysical Artifacts
  * 36 Verified Artisan Pieces: 35 Wire-Wrapped Pendants (IDs 1-35) + 1 Handcrafted Ring (ID 36)
- * Inventory Status: 27 Available In Stock (26 Pendants + 1 Ring) â€¢ 9 In Workshop Crafting (Coming Soon)
- * All items priced â‚±500+ with genuine metaphysical meanings and artisan wirework
+ * Inventory Status: 27 Available In Stock (26 Pendants + 1 Ring) • 9 In Workshop Crafting (Coming Soon)
+ * All items priced ₱500+ with genuine metaphysical meanings and artisan wirework
  */
 
 const CRYSTAL_PRODUCTS = [
