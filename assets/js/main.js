@@ -2049,12 +2049,853 @@ exportWebPAssets();`,
     setCylinderState(isEnabled);
   }
 
+  // ===================================================================
+  // 9. Luminous Glow-In-The-Dark Christmas Snowflake Engine
+  // ===================================================================
+  class GlowSnowflake {
+    constructor(canvasWidth, canvasHeight, isInitial = false) {
+      this.reset(canvasWidth, canvasHeight, isInitial);
+    }
+
+    reset(canvasWidth, canvasHeight, isInitial = false) {
+      this.x = Math.random() * canvasWidth;
+      this.y = isInitial ? Math.random() * canvasHeight : -40 - Math.random() * 80;
+
+      // 4 Size categories for rich dimensional depth:
+      // Micro (3.5-7px), Small (9-15px), Medium (16-25px), Hero (28-44px)
+      const roll = Math.random();
+      if (roll < 0.35) {
+        this.tier = 'micro';
+        this.radius = 3.5 + Math.random() * 4;
+        this.speedY = 0.5 + Math.random() * 0.7;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.complexity = 1;
+        this.glow = 12;
+      } else if (roll < 0.70) {
+        this.tier = 'small';
+        this.radius = 9 + Math.random() * 6;
+        this.speedY = 0.7 + Math.random() * 0.9;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.complexity = 2;
+        this.glow = 18;
+      } else if (roll < 0.90) {
+        this.tier = 'medium';
+        this.radius = 16 + Math.random() * 9;
+        this.speedY = 0.9 + Math.random() * 1.1;
+        this.speedX = (Math.random() - 0.5) * 0.6;
+        this.complexity = 3;
+        this.glow = 24;
+      } else {
+        this.tier = 'hero';
+        this.radius = 28 + Math.random() * 16;
+        this.speedY = 0.8 + Math.random() * 0.9;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.complexity = 4;
+        this.glow = 32;
+      }
+
+      // Natural graceful physics: harmonic sway & rotation
+      this.swayAngle = Math.random() * Math.PI * 2;
+      this.swaySpeed = 0.015 + Math.random() * 0.02;
+      this.swayDist = 0.8 + Math.random() * 1.4;
+
+      this.rotation = Math.random() * Math.PI * 2;
+      this.rotSpeed = (Math.random() - 0.5) * 0.016;
+
+      this.opacity = 0.75 + Math.random() * 0.25;
+
+      // LIGHT TRAVELING AROUND ITS SHAPE:
+      this.lightPhase = Math.random() * Math.PI * 2;
+      this.lightSpeed = 0.045 + Math.random() * 0.035;
+      this.branchPulse = Math.random();
+      this.cometTrailLength = this.tier === 'hero' ? 22 : (this.tier === 'medium' ? 16 : 10);
+    }
+
+    update(width, height, mouse, wind = 0, speedMult = 1) {
+      this.swayAngle += this.swaySpeed * speedMult;
+      this.x += this.speedX + Math.sin(this.swayAngle) * this.swayDist + wind;
+      this.y += this.speedY * speedMult;
+      this.rotation += this.rotSpeed * speedMult;
+
+      // Advance traveling light around perimeter
+      this.lightPhase += this.lightSpeed * speedMult;
+      this.branchPulse = (this.branchPulse + 0.025 * speedMult) % 1.0;
+
+      // Mouse interactivity: gentle breeze and energetic light flare when cursor passes nearby
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 140) {
+          const push = (140 - dist) / 140;
+          this.x += (dx / dist) * push * 3.5;
+          this.y += (dy / dist) * push * 2.0;
+          this.lightPhase += 0.08 * speedMult;
+        }
+      }
+
+      // Wrap vertically & horizontally
+      if (this.y > height + 60) {
+        this.reset(width, height, false);
+      }
+      if (this.x < -60) this.x = width + 50;
+      if (this.x > width + 60) this.x = -50;
+    }
+
+    draw(ctx) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+
+      const r = this.radius;
+
+      // 1. Ambient Phosphorescent Radial Glow (Glow-in-the-dark white)
+      if (this.tier !== 'micro') {
+        const glowRadius = r * 1.5;
+        const aura = ctx.createRadialGradient(0, 0, 0, 0, 0, glowRadius);
+        aura.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+        aura.addColorStop(0.35, 'rgba(235, 248, 255, 0.12)');
+        aura.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = aura;
+        ctx.beginPath();
+        ctx.arc(0, 0, glowRadius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // 2. Base Snowflake Crystal Shape (Pure White Glow)
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = this.glow;
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      if (this.tier === 'micro') {
+        // Micro snowflake: glowing white crystal dot with orbiting micro-beacon
+        ctx.beginPath();
+        ctx.arc(0, 0, Math.max(1.5, r * 0.4), 0, Math.PI * 2);
+        ctx.fill();
+
+        // Traveling light around micro dot
+        const sparkR = r + 2.5;
+        const sparkX = Math.cos(this.lightPhase) * sparkR;
+        const sparkY = Math.sin(this.lightPhase) * sparkR;
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        ctx.arc(sparkX, sparkY, 1.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+        return;
+      }
+
+      ctx.lineWidth = this.tier === 'hero' ? 2.2 : (this.tier === 'medium' ? 1.7 : 1.3);
+
+      // 3. Draw 6 Symmetrical Main Crystalline Axes & Branchlets
+      for (let i = 0; i < 6; i++) {
+        const angle = (i * Math.PI) / 3;
+        ctx.save();
+        ctx.rotate(angle);
+
+        // Main axis arm
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -r);
+        ctx.stroke();
+
+        // Tier 2+ sub-branches (chevrons pointing outward)
+        if (this.complexity >= 2) {
+          const b1 = r * 0.45;
+          const s1 = r * 0.28;
+          ctx.beginPath();
+          ctx.moveTo(0, -b1);
+          ctx.lineTo(-s1 * 0.75, -b1 - s1 * 0.65);
+          ctx.moveTo(0, -b1);
+          ctx.lineTo(s1 * 0.75, -b1 - s1 * 0.65);
+          ctx.stroke();
+        }
+
+        // Tier 3+ secondary outer branchlets
+        if (this.complexity >= 3) {
+          const b2 = r * 0.75;
+          const s2 = r * 0.22;
+          ctx.beginPath();
+          ctx.moveTo(0, -b2);
+          ctx.lineTo(-s2 * 0.7, -b2 - s2 * 0.6);
+          ctx.moveTo(0, -b2);
+          ctx.lineTo(s2 * 0.7, -b2 - s2 * 0.6);
+          ctx.stroke();
+        }
+
+        // Tier 4 (Hero) center diamond facets & inner hexagon
+        if (this.complexity >= 4) {
+          const b0 = r * 0.25;
+          const s0 = r * 0.16;
+          ctx.beginPath();
+          ctx.moveTo(0, -b0);
+          ctx.lineTo(-s0, -b0 * 0.6);
+          ctx.moveTo(0, -b0);
+          ctx.lineTo(s0, -b0 * 0.6);
+          ctx.stroke();
+        }
+
+        // Branch-pulse: light traveling outward along each branch to the tip!
+        const pulseDistance = r * this.branchPulse;
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 8;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(0, -pulseDistance, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // Center glowing nucleus
+      ctx.beginPath();
+      ctx.arc(0, 0, Math.max(1.8, r * 0.14), 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowBlur = 8;
+      ctx.fill();
+
+      // ========================================================
+      // 4. LIGHT TRAVELING AROUND ITS SHAPE (THE HERO FEATURE)
+      // Mathematical 6-lobed star contour:
+      // R(θ) = r * (0.84 + 0.22 * cos(6 * θ))
+      // As θ advances, this traces the exact peaks (6 tips) and valleys
+      // of the snowflake shape!
+      // ========================================================
+      const getContourRadius = (theta) => r * (0.84 + 0.22 * Math.cos(6 * theta));
+      const currentTheta = this.lightPhase;
+
+      // Draw the glowing comet trail hugging the snowflake shape
+      const steps = this.cometTrailLength;
+      ctx.lineWidth = this.tier === 'hero' ? 2.0 : 1.5;
+
+      for (let s = steps; s >= 1; s--) {
+        const t1 = currentTheta - (s * 0.055);
+        const t2 = currentTheta - ((s - 1) * 0.055);
+        const r1 = getContourRadius(t1);
+        const r2 = getContourRadius(t2);
+
+        const x1 = Math.cos(t1) * r1;
+        const y1 = Math.sin(t1) * r1;
+        const x2 = Math.cos(t2) * r2;
+        const y2 = Math.sin(t2) * r2;
+
+        const factor = (1 - s / steps);
+        const alpha = factor * 0.75;
+
+        ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 10 * factor;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+
+      // Leading Photon Head (Gentle, elegant traveling light beacon)
+      const leadR = getContourRadius(currentTheta);
+      const leadX = Math.cos(currentTheta) * leadR;
+      const leadY = Math.sin(currentTheta) * leadR;
+
+      // Soft white core
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(leadX, leadY, Math.max(2.0, r * 0.14), 0, Math.PI * 2);
+      ctx.fill();
+
+      // Soft ambient flare
+      ctx.shadowBlur = 16;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.beginPath();
+      ctx.arc(leadX, leadY, Math.max(3.0, r * 0.22), 0, Math.PI * 2);
+      ctx.fill();
+
+      // Dual-opposing traveling light for Large and Hero crystals!
+      if (this.tier === 'medium' || this.tier === 'hero') {
+        const oppTheta = currentTheta + Math.PI;
+        const oppR = getContourRadius(oppTheta);
+        const oppX = Math.cos(oppTheta) * oppR;
+        const oppY = Math.sin(oppTheta) * oppR;
+
+        // Opposing traveling trail
+        for (let s = steps; s >= 1; s--) {
+          const ot1 = oppTheta - (s * 0.055);
+          const ot2 = oppTheta - ((s - 1) * 0.055);
+          const or1 = getContourRadius(ot1);
+          const or2 = getContourRadius(ot2);
+
+          const ox1 = Math.cos(ot1) * or1;
+          const oy1 = Math.sin(ot1) * or1;
+          const ox2 = Math.cos(ot2) * or2;
+          const oy2 = Math.sin(ot2) * or2;
+
+          const factor = (1 - s / steps);
+          const alpha = factor * 0.65;
+
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.shadowColor = '#ffffff';
+          ctx.shadowBlur = 8 * factor;
+
+          ctx.beginPath();
+          ctx.moveTo(ox1, oy1);
+          ctx.lineTo(ox2, oy2);
+          ctx.stroke();
+        }
+
+        // Opposing photon head
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(oppX, oppY, Math.max(1.8, r * 0.12), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+  }
+
+  let snowfallEngine = null;
+
+  function initSnowfallEngine() {
+    const canvas = document.getElementById('snowNetworkCanvas');
+    if (!canvas) return null;
+
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    let isRunning = false;
+    let animId = null;
+    let flakes = [];
+
+    // Density tiers - calibrated for peaceful, non-distracting eye comfort
+    const densities = {
+      gentle: 32,
+      normal: 60,
+      blizzard: 95
+    };
+    let currentDensity = 'gentle'; // Default: gentle & soothing
+
+    // Speed multiplier tiers
+    const speedTiers = {
+      calm: 0.55,
+      pulse: 0.8,
+      hyper: 1.15
+    };
+    let currentSpeedMode = 'calm'; // Default: calm pacing
+
+    const mouse = { x: null, y: null };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    function createFlakes(count) {
+      flakes = [];
+      for (let i = 0; i < count; i++) {
+        flakes.push(new GlowSnowflake(width, height, true));
+      }
+    }
+
+    createFlakes(densities[currentDensity]);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    function renderSnow() {
+      ctx.clearRect(0, 0, width, height);
+      const speedMult = speedTiers[currentSpeedMode] || 1.0;
+
+      for (let i = 0; i < flakes.length; i++) {
+        flakes[i].update(width, height, mouse, 0, speedMult);
+        flakes[i].draw(ctx);
+      }
+
+      if (isRunning) {
+        animId = requestAnimationFrame(renderSnow);
+      }
+    }
+
+    function start() {
+      if (!isRunning) {
+        isRunning = true;
+        renderSnow();
+      }
+    }
+
+    function stop() {
+      isRunning = false;
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+      ctx.clearRect(0, 0, width, height);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (animId) cancelAnimationFrame(animId);
+      } else if (isRunning) {
+        renderSnow();
+      }
+    });
+
+    snowfallEngine = {
+      start,
+      stop,
+      cycleDensity: function() {
+        const order = ['normal', 'blizzard', 'gentle'];
+        const nextIdx = (order.indexOf(currentDensity) + 1) % order.length;
+        currentDensity = order[nextIdx];
+        createFlakes(densities[currentDensity]);
+        return currentDensity;
+      },
+      cycleTracerSpeed: function() {
+        const order = ['pulse', 'hyper', 'calm'];
+        const nextIdx = (order.indexOf(currentSpeedMode) + 1) % order.length;
+        currentSpeedMode = order[nextIdx];
+        return currentSpeedMode;
+      },
+      getDensity: () => currentDensity,
+      getSpeedMode: () => currentSpeedMode
+    };
+
+    return snowfallEngine;
+  }
+
+  // ===================================================================
+  // 10. Cyber Matrix Digital Code Rain Engine (Gentle & Eye-Comfort Calibrated)
+  // ===================================================================
+  let matrixRainEngine = null;
+
+  function initMatrixRainEngine() {
+    const canvas = document.getElementById('matrixRainCanvas');
+    if (!canvas) return null;
+
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    let isRunning = false;
+    let animId = null;
+
+    // Authentic Matrix character set
+    const chars = 'ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ0123456789ABCDEFλ§&*%#<>{}[]/~=+';
+    const fontSize = 12; // Sleek and elegant (down from 16)
+    const columnSpacing = 42; // Generous space between streams (down from crammed 16px to 42px)
+    let columns = Math.floor(width / columnSpacing);
+
+    let drops = [];
+
+    function initColumns() {
+      columns = Math.floor(width / columnSpacing);
+      drops = [];
+      for (let i = 0; i < columns; i++) {
+        // Only start about 45% of columns so there is calm dark space
+        const isActive = Math.random() < 0.45;
+        drops.push({
+          x: i * columnSpacing,
+          y: isActive ? Math.random() * -height : -9999,
+          active: isActive,
+          speed: 0.65 + Math.random() * 0.75, // Gentle, relaxing pace
+          length: 7 + Math.floor(Math.random() * 12) // Shorter, neat streams
+        });
+      }
+    }
+
+    initColumns();
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initColumns();
+    });
+
+    const mouse = { x: null, y: null };
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    function renderMatrixRain() {
+      // Clean, dark fade so streams don't blur into an overwhelming green wash
+      ctx.fillStyle = 'rgba(1, 6, 3, 0.30)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.font = `${fontSize}px "Fira Code", monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const drop = drops[i];
+        if (!drop.active && drop.y < -500) {
+          if (Math.random() < 0.003) {
+            drop.active = true;
+            drop.y = -Math.random() * 60;
+          }
+          continue;
+        }
+
+        const x = drop.x;
+        const headY = drop.y;
+
+        let speed = drop.speed;
+        if (mouse.x !== null && Math.abs(x - mouse.x) < 80) {
+          speed *= 1.35;
+        }
+
+        const charCount = drop.length;
+        for (let j = 0; j < charCount; j++) {
+          const charY = headY - (j * (fontSize + 3));
+          if (charY < -fontSize || charY > height + fontSize) continue;
+
+          const char = chars.charAt(Math.floor(Math.random() * chars.length));
+
+          if (j === 0) {
+            // Soft pale mint head (gentle on eyes, no blinding white glare)
+            ctx.shadowColor = '#00ff88';
+            ctx.shadowBlur = 4;
+            ctx.fillStyle = '#bbf7d0';
+            ctx.fillText(char, x, charY);
+          } else if (j === 1) {
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(52, 211, 153, 0.65)';
+            ctx.fillText(char, x, charY);
+          } else {
+            const fade = 1 - (j / charCount);
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = `rgba(16, 185, 129, ${Math.max(0.04, fade * 0.32)})`;
+            ctx.fillText(char, x, charY);
+          }
+        }
+
+        drop.y += speed * 2.8;
+
+        if (drop.y - (drop.length * (fontSize + 3)) > height) {
+          drop.y = -Math.random() * 120 - 40;
+          drop.active = Math.random() < 0.48; // Quiet pauses between streams
+          drop.speed = 0.65 + Math.random() * 0.75;
+          drop.length = 7 + Math.floor(Math.random() * 12);
+        }
+      }
+
+      if (isRunning) {
+        animId = requestAnimationFrame(renderMatrixRain);
+      }
+    }
+
+    function start() {
+      if (!isRunning) {
+        isRunning = true;
+        renderMatrixRain();
+      }
+    }
+
+    function stop() {
+      isRunning = false;
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+      ctx.clearRect(0, 0, width, height);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (animId) cancelAnimationFrame(animId);
+      } else if (isRunning) {
+        renderMatrixRain();
+      }
+    });
+
+    matrixRainEngine = {
+      start,
+      stop
+    };
+
+    return matrixRainEngine;
+  }
+
+  // ===================================================================
+  // 11. Interactive Visual Theme & Experience Switcher Studio
+  // ===================================================================
+  function initThemeEngine() {
+    const themeButtons = document.querySelectorAll('.theme-pill-btn');
+    const activeNameLabel = document.getElementById('themeActiveName');
+    const hudTelemetry = document.getElementById('hudTelemetryText');
+    const hudCarrier = document.getElementById('hudCarrierText');
+    const btnSnowDensity = document.getElementById('btnSnowDensity');
+    const snowDensityText = document.getElementById('snowDensityText');
+    const btnTracerSpeed = document.getElementById('btnTracerSpeed');
+    const tracerSpeedText = document.getElementById('tracerSpeedText');
+    const btnEyeComfort = document.getElementById('btnEyeComfort');
+    const eyeComfortText = document.getElementById('eyeComfortText');
+    const eyeComfortIcon = document.getElementById('eyeComfortIcon');
+
+    const themeMeta = {
+      'interlink-world': {
+        name: 'WORLD MAP',
+        telemetry: 'GLOW NET :: 16 COUNTRY NODES ACTIVE',
+        carrier: 'HQ BEACON: MNL-PH (+14.60°N, +120.98°E)',
+        snow: false,
+        matrix: false
+      },
+      'christmas-snow': {
+        name: 'CHRISTMAS GLOW',
+        telemetry: 'WINTER GLOW :: LUMINOUS SNOW ENGINE ACTIVE',
+        carrier: 'FROST PERIMETER :: TRAVELING LIGHT TRACER V3',
+        snow: true,
+        matrix: false
+      },
+      'holiday-hybrid': {
+        name: 'MAP + SNOW',
+        telemetry: 'HYBRID HOLIDAY :: GLOBAL NODES + SNOW MATRIX',
+        carrier: 'CELESTIAL LINK :: WINTER NETWORK SYNCHRONIZED',
+        snow: true,
+        matrix: false
+      },
+      'cyber-aurora': {
+        name: 'AURORA',
+        telemetry: 'AURORA MESH :: QUANTUM STARDUST ACTIVE',
+        carrier: 'POLAR BEACON :: 528Hz HARMONIC VIBRATION',
+        snow: true,
+        matrix: false
+      },
+      'cyber-matrix': {
+        name: 'CYBER MATRIX',
+        telemetry: 'MATRIX CODE :: NEURAL STREAM 128-BIT CIPHER',
+        carrier: 'TERMINAL KERNEL :: GREEN PHOSPHOR DECRYPTED',
+        snow: false,
+        matrix: true
+      }
+    };
+
+    // Load saved or default theme
+    let currentTheme = localStorage.getItem('portfolio_design_theme') || 'interlink-world';
+    if (!themeMeta[currentTheme]) currentTheme = 'interlink-world';
+
+    // Eye Comfort Dimmer Modes: soft (recommended), minimal, vivid
+    const comfortModes = ['soft', 'minimal', 'vivid'];
+    let currentComfort = localStorage.getItem('portfolio_comfort_mode') || 'soft';
+
+    function applyComfortMode(mode, showNotice = false) {
+      if (!comfortModes.includes(mode)) mode = 'soft';
+      currentComfort = mode;
+      localStorage.setItem('portfolio_comfort_mode', mode);
+      document.documentElement.setAttribute('data-comfort-mode', mode);
+
+      if (eyeComfortText) {
+        const title = mode.charAt(0).toUpperCase() + mode.slice(1);
+        eyeComfortText.textContent = `Comfort: ${title}`;
+      }
+      if (eyeComfortIcon) {
+        if (mode === 'minimal') {
+          eyeComfortIcon.className = 'bi bi-moon-stars-fill text-info';
+        } else if (mode === 'vivid') {
+          eyeComfortIcon.className = 'bi bi-brightness-high-fill text-warning';
+        } else {
+          eyeComfortIcon.className = 'bi bi-eye-fill text-success';
+        }
+      }
+      if (showNotice) {
+        showThemeNotice(`Comfort :: ${mode.toUpperCase()}`);
+      }
+    }
+
+    if (btnEyeComfort) {
+      btnEyeComfort.addEventListener('click', () => {
+        const nextIdx = (comfortModes.indexOf(currentComfort) + 1) % comfortModes.length;
+        applyComfortMode(comfortModes[nextIdx], true);
+      });
+    }
+
+    function applyTheme(themeKey, showToast = false) {
+      if (!themeMeta[themeKey]) return;
+      currentTheme = themeKey;
+      localStorage.setItem('portfolio_design_theme', themeKey);
+
+      document.documentElement.setAttribute('data-portfolio-theme', themeKey);
+      document.body.setAttribute('data-portfolio-theme', themeKey);
+
+      // Update button states
+      themeButtons.forEach(btn => {
+        const isMatch = btn.getAttribute('data-theme') === themeKey;
+        btn.classList.toggle('active', isMatch);
+        btn.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+      });
+
+      // Update Topbar Status
+      if (activeNameLabel) {
+        activeNameLabel.textContent = themeMeta[themeKey].name;
+      }
+
+      // Update Bottom Telemetry HUD
+      if (hudTelemetry) {
+        hudTelemetry.textContent = themeMeta[themeKey].telemetry;
+      }
+      if (hudCarrier) {
+        hudCarrier.textContent = themeMeta[themeKey].carrier;
+      }
+
+      // Snow engine activation
+      if (snowfallEngine) {
+        if (themeMeta[themeKey].snow) {
+          snowfallEngine.start();
+        } else {
+          snowfallEngine.stop();
+        }
+      }
+
+      // Matrix rain engine activation
+      if (matrixRainEngine) {
+        if (themeMeta[themeKey].matrix) {
+          matrixRainEngine.start();
+        } else {
+          matrixRainEngine.stop();
+        }
+      }
+
+      // Quick visual feedback notification
+      if (showToast) {
+        showThemeNotice(themeMeta[themeKey].name);
+      }
+    }
+
+    function showThemeNotice(themeName) {
+      let toastEl = document.getElementById('themeToastMini');
+      if (!toastEl) {
+        toastEl = document.createElement('div');
+        toastEl.id = 'themeToastMini';
+        toastEl.style.cssText = `
+          position: fixed;
+          top: 54px;
+          left: 50%;
+          transform: translateX(-50%) translateY(-10px);
+          background: rgba(10, 15, 30, 0.95);
+          border: 1px solid rgba(56, 189, 248, 0.5);
+          color: #ffffff;
+          padding: 6px 18px;
+          border-radius: 9999px;
+          font-family: 'Fira Code', monospace;
+          font-size: 0.74rem;
+          font-weight: 600;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(56, 189, 248, 0.4);
+          z-index: 2000;
+          opacity: 0;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          pointer-events: none;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        `;
+        document.body.appendChild(toastEl);
+      }
+
+      const accentColor = themeName.includes('MATRIX') ? '#00ff88' : '#38bdf8';
+      toastEl.innerHTML = `<span style="color:#10b981;">●</span> ${themeName}`;
+      toastEl.style.opacity = '1';
+      toastEl.style.transform = 'translateX(-50%) translateY(0)';
+
+      clearTimeout(toastEl._timer);
+      toastEl._timer = setTimeout(() => {
+        toastEl.style.opacity = '0';
+        toastEl.style.transform = 'translateX(-50%) translateY(-10px)';
+      }, 1800);
+    }
+
+    // Attach listeners to theme buttons
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const selected = btn.getAttribute('data-theme');
+        if (selected) applyTheme(selected, true);
+      });
+    });
+
+    // Aux Snowflake Density button
+    if (btnSnowDensity && snowfallEngine) {
+      btnSnowDensity.addEventListener('click', () => {
+        const newDensity = snowfallEngine.cycleDensity();
+        const label = newDensity.charAt(0).toUpperCase() + newDensity.slice(1);
+        if (snowDensityText) snowDensityText.textContent = `Snow: ${label}`;
+        if (currentTheme === 'interlink-world') {
+          applyTheme('holiday-hybrid', true);
+        }
+      });
+    }
+
+    // Aux Light Tracer Speed button
+    if (btnTracerSpeed && snowfallEngine) {
+      btnTracerSpeed.addEventListener('click', () => {
+        const newSpeed = snowfallEngine.cycleTracerSpeed();
+        const label = newSpeed.charAt(0).toUpperCase() + newSpeed.slice(1);
+        if (tracerSpeedText) tracerSpeedText.textContent = `Light: ${label}`;
+        if (currentTheme === 'interlink-world') {
+          applyTheme('holiday-hybrid', true);
+        }
+      });
+    }
+
+    // Initial theme & comfort apply
+    applyComfortMode(currentComfort, false);
+    applyTheme(currentTheme, false);
+
+    window.PortfolioTheme = {
+      apply: applyTheme,
+      setComfort: applyComfortMode,
+      getCurrent: () => currentTheme,
+      getComfort: () => currentComfort
+    };
+  }
+
   // Initialize Core Visual Engines
   initWorldMapNetwork();
   initCylinderScroll();
+  initSnowfallEngine();
+  initMatrixRainEngine();
+  initThemeEngine();
 });
 
 // Helper: Resume Print Trigger
 function printResumeDocument() {
   window.print();
 }
+
+// Helper: Mock Job Interview Video Playback Controls
+function setInterviewPlaybackRate(rate, btn) {
+  const v = document.getElementById('mockInterviewVideo');
+  if (v) {
+    v.playbackRate = rate;
+  }
+  document.querySelectorAll('.btn-speed-ctrl').forEach(b => {
+    b.classList.remove('btn-info', 'text-dark', 'fw-bold');
+    b.classList.add('btn-outline-secondary', 'text-light');
+  });
+  if (btn) {
+    btn.classList.remove('btn-outline-secondary', 'text-light');
+    btn.classList.add('btn-info', 'text-dark', 'fw-bold');
+  }
+}
+
+function restartInterviewVideo() {
+  const v = document.getElementById('mockInterviewVideo');
+  if (v) {
+    v.currentTime = 0;
+    v.play().catch(() => {});
+  }
+}
+

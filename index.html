@@ -38,8 +38,14 @@
     <div class="cyber-grid"></div>
     <div class="cyber-circuit-svg"></div>
 
-    <!-- Interactive Glowing Node Mesh Canvas -->
+    <!-- Interactive Glowing Node Mesh Canvas (World Map) -->
     <canvas id="cyberNetworkCanvas"></canvas>
+
+    <!-- Luminous Glow-In-The-Dark Christmas Snowflakes Canvas -->
+    <canvas id="snowNetworkCanvas" class="snow-network-canvas"></canvas>
+
+    <!-- Cyber Matrix Digital Code Rain Canvas -->
+    <canvas id="matrixRainCanvas" class="matrix-rain-canvas"></canvas>
 
     <!-- Floating Glowing IT Elements -->
     <div class="cyber-floating-icons">
@@ -77,6 +83,101 @@
       </div>
     </div>
   </div>
+
+  <!-- ================= TOP THEME & DESIGN SWITCHER STUDIO ================= -->
+  <header class="portfolio-theme-topbar fixed-top no-print" id="portfolioThemeTopbar" aria-label="Visual Design Studio">
+    <div class="container-fluid px-2 px-md-4 d-flex align-items-center justify-content-between">
+      <!-- Left: Studio Brand & Active Status -->
+      <div class="theme-brand-group d-flex align-items-center gap-2">
+        <div class="theme-icon-badge">
+          <i class="bi bi-palette2"></i>
+        </div>
+        <div class="d-none d-sm-flex flex-column line-tight">
+          <span class="theme-studio-title">DESIGN STUDIO</span>
+          <span class="theme-studio-sub">CLICK TO SWITCH UI</span>
+        </div>
+        <div class="theme-active-tag ms-1 ms-sm-2" id="themeActiveIndicator">
+          <span class="theme-pulse-dot"></span>
+          <span id="themeActiveName" class="fw-semibold font-mono">WORLD MAP</span>
+        </div>
+      </div>
+
+      <!-- Center: Clickable Theme Pills -->
+      <div class="theme-selector-pills d-flex align-items-center gap-1 gap-md-2" role="radiogroup" aria-label="Choose Portfolio CSS Design">
+        <!-- 1. Interlink World Map -->
+        <button type="button" class="theme-pill-btn active" data-theme="interlink-world" id="btnThemeWorld" aria-pressed="true" title="Interlink World Map & Glowing Cyber Nodes">
+          <i class="bi bi-globe2 text-info"></i>
+          <span>World Map</span>
+        </button>
+
+        <!-- 2. Christmas Season Glow Snowflakes -->
+        <button type="button" class="theme-pill-btn" data-theme="christmas-snow" id="btnThemeChristmas" aria-pressed="false" title="Christmas Season: Falling Glow-in-the-Dark Snowflakes with Traveling Perimeter Light">
+          <i class="bi bi-snow2 text-white"></i>
+          <span>Christmas Glow</span>
+        </button>
+
+        <!-- 3. Combination: World Map + Christmas Snow -->
+        <button type="button" class="theme-pill-btn" data-theme="holiday-hybrid" id="btnThemeHybrid" aria-pressed="false" title="Combination: Interlink World Map + Luminous Snowflakes">
+          <i class="bi bi-tree-fill text-success"></i>
+          <span class="d-none d-md-inline">Holiday</span> <span>Map + Snow</span>
+        </button>
+
+        <!-- 4. Cosmic Aurora Borealis -->
+        <button type="button" class="theme-pill-btn d-none d-lg-inline-flex" data-theme="cyber-aurora" id="btnThemeAurora" aria-pressed="false" title="Cosmic Aurora Borealis & Stardust">
+          <i class="bi bi-stars text-warning"></i>
+          <span>Aurora</span>
+        </button>
+
+        <!-- 5. Cyber Neon Violet -->
+        <button type="button" class="theme-pill-btn d-none d-xl-inline-flex" data-theme="cyber-matrix" id="btnThemeMatrix" aria-pressed="false" title="Obsidian Violet Matrix">
+          <i class="bi bi-terminal-fill text-purple"></i>
+          <span>Cyber Matrix</span>
+        </button>
+      </div>
+
+      <!-- Right: Eye Comfort Dimmer & Effect Controls -->
+      <div class="theme-aux-controls d-flex align-items-center gap-1 gap-md-2">
+        <button type="button" class="theme-aux-btn" id="btnEyeComfort" title="Toggle Eye Comfort Dimmer (Soft / Minimal / Vivid)" aria-label="Toggle Eye Comfort Dimmer">
+          <i class="bi bi-eye-fill text-success" id="eyeComfortIcon"></i>
+          <span class="d-none d-sm-inline" id="eyeComfortText">Comfort: Soft</span>
+        </button>
+
+        <button type="button" class="theme-aux-btn" id="btnSnowDensity" title="Cycle Snowflake Density (Gentle / Normal / Blizzard)" aria-label="Adjust Snowflake Density">
+          <i class="bi bi-snowflake text-info"></i>
+          <span class="d-none d-md-inline" id="snowDensityText">Snow: Gentle</span>
+        </button>
+
+        <button type="button" class="theme-aux-btn d-none d-sm-inline-flex" id="btnTracerSpeed" title="Cycle Light Traveling Speed around Snowflake" aria-label="Adjust Light Tracer Speed">
+          <i class="bi bi-lightning-charge-fill text-warning"></i>
+          <span class="d-none d-lg-inline" id="tracerSpeedText">Light: Calm</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Festive Micro Garland Lights (Illuminated in Christmas/Hybrid modes) -->
+    <div class="festive-garland-lights" id="festiveGarland" aria-hidden="true">
+      <span class="f-bulb bulb-red"></span>
+      <span class="f-bulb bulb-gold"></span>
+      <span class="f-bulb bulb-green"></span>
+      <span class="f-bulb bulb-blue"></span>
+      <span class="f-bulb bulb-white"></span>
+      <span class="f-bulb bulb-red"></span>
+      <span class="f-bulb bulb-gold"></span>
+      <span class="f-bulb bulb-green"></span>
+      <span class="f-bulb bulb-blue"></span>
+      <span class="f-bulb bulb-white"></span>
+      <span class="f-bulb bulb-red"></span>
+      <span class="f-bulb bulb-gold"></span>
+      <span class="f-bulb bulb-green"></span>
+      <span class="f-bulb bulb-blue"></span>
+      <span class="f-bulb bulb-white"></span>
+      <span class="f-bulb bulb-red"></span>
+      <span class="f-bulb bulb-gold"></span>
+      <span class="f-bulb bulb-green"></span>
+      <span class="f-bulb bulb-blue"></span>
+      <span class="f-bulb bulb-white"></span>
+    </div>
+  </header>
 
   <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-xxl navbar-dark fixed-top custom-navbar">
@@ -2319,43 +2420,298 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
           <div class="codespot-card p-4 p-md-5">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-4 pb-3 border-bottom border-secondary border-opacity-25">
               <div>
-                <span class="badge bg-info text-dark font-mono px-2 py-1 mb-1">STEP 21 COMPLIANCE</span>
+                <span class="badge bg-info text-dark font-mono px-2 py-1 mb-1">STEP 21 COMPLIANCE • SIMULATED IT JOB INTERVIEW</span>
                 <h4 class="h5 fw-bold text-white mb-0">Simulated IT Job Interview: Recorded Video Defense</h4>
-                <span class="small text-muted font-mono">Curriculum Guide: Datamex College of Saint Adeline Step 21</span>
+                <span class="small text-muted font-mono">Curriculum Guide: Datamex College of Saint Adeline — Candidate: <strong class="text-white">Marcial Lawrence Jr V. Caronan</strong></span>
               </div>
-              <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-40 font-mono px-3 py-2">
-                <i class="bi bi-camera-video-fill me-1"></i> Video Recording
+              <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-40 font-mono px-3 py-2">
+                <i class="bi bi-camera-video-fill me-1"></i> Video Recording Active &amp; Verified
               </span>
             </div>
 
             <!-- Video Player Showcase Container -->
-            <div class="rounded-4 p-4 p-md-5 text-center bg-black bg-opacity-60 border border-secondary border-opacity-30 position-relative overflow-hidden" style="min-height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-              
-              <!-- Subtle Radial Glow -->
-              <div class="position-absolute" style="width: 320px; height: 320px; background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none;"></div>
-
-              <div class="position-relative z-1 max-w-600 mx-auto">
-                <div class="d-inline-flex align-items-center justify-content-center rounded-circle bg-info bg-opacity-10 border border-info border-opacity-30 mb-3 shadow" style="width: 80px; height: 80px;">
-                  <i class="bi bi-camera-reels-fill text-info fs-1"></i>
+            <div class="rounded-4 p-3 p-md-4 bg-black bg-opacity-75 border border-info border-opacity-30 position-relative overflow-hidden shadow-2xl mb-4">
+              <!-- Header Bar of Player -->
+              <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-3 border-bottom border-secondary border-opacity-25 gap-2 font-mono small">
+                <div class="d-flex align-items-center gap-2 text-info">
+                  <span class="d-inline-block rounded-circle bg-danger" style="width: 10px; height: 10px;"></span>
+                  <span class="d-inline-block rounded-circle bg-warning" style="width: 10px; height: 10px;"></span>
+                  <span class="d-inline-block rounded-circle bg-success" style="width: 10px; height: 10px;"></span>
+                  <span class="ms-2 fw-semibold text-white"><i class="bi bi-camera-reels-fill text-info me-1"></i> Video Project 4 (1).mp4</span>
+                  <span class="text-secondary">|</span>
+                  <span class="text-info-emphasis">Candidate: Marcial Lawrence Jr V. Caronan</span>
                 </div>
-                
-                <h4 class="h5 fw-bold text-white mb-2">Video-Recorded Mock IT Job Interview</h4>
-                <p class="text-light opacity-80 small mb-4" style="max-width: 540px; line-height: 1.7;">
-                  The simulated IT job interview session is recorded on video. Once uploaded, the full recorded session covering technical background, database and full-stack systems defense, and behavioral inquiries will be embedded directly in this viewer.
-                </p>
-
-                <!-- Status Badges -->
-                <div class="d-inline-flex flex-wrap justify-content-center gap-2">
-                  <span class="badge bg-black bg-opacity-70 border border-secondary border-opacity-40 font-mono px-3 py-2 text-info">
-                    <i class="bi bi-person-fill text-info me-1"></i> Candidate: Marcial D. Caronan Jr.
+                <div class="d-inline-flex align-items-center gap-2">
+                  <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-40">
+                    <i class="bi bi-broadcast me-1"></i> 1080p HD Ready
                   </span>
-                  <span class="badge bg-black bg-opacity-70 border border-secondary border-opacity-40 font-mono px-3 py-2 text-warning">
-                    <i class="bi bi-hourglass-split me-1"></i> Pending Video Upload
-                  </span>
-                  <span class="badge bg-black bg-opacity-70 border border-secondary border-opacity-40 font-mono px-3 py-2 text-light">
-                    <i class="bi bi-mortarboard-fill text-primary me-1"></i> DCSA BSIT Final Assessment
+                  <span class="badge bg-secondary bg-opacity-30 text-light border border-secondary border-opacity-40">
+                    25.8 MB • MP4
                   </span>
                 </div>
+              </div>
+
+              <!-- HTML5 Video Element -->
+              <div class="position-relative rounded-3 overflow-hidden bg-black mb-3 border border-secondary border-opacity-20" style="box-shadow: 0 10px 30px rgba(0,0,0,0.85);">
+                <video id="mockInterviewVideo" class="w-100 d-block" controls preload="metadata" playsinline style="max-height: 520px; width: 100%; object-fit: contain; background: #000;">
+                  <source src="assets/video/mock-interview.mp4" type="video/mp4">
+                  Your browser does not support the HTML5 video element. You can 
+                  <a href="assets/video/mock-interview.mp4" class="text-info text-decoration-underline" download>download the recording here</a>.
+                </video>
+              </div>
+
+              <!-- Video Quick Action Bar -->
+              <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-2">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <span class="font-mono small text-secondary me-1"><i class="bi bi-speedometer2 me-1"></i>Playback:</span>
+                  <button type="button" class="btn btn-sm btn-outline-secondary btn-speed-ctrl font-mono py-1 px-2 rounded" onclick="setInterviewPlaybackRate(0.75, this)">0.75x</button>
+                  <button type="button" class="btn btn-sm btn-info text-dark fw-bold btn-speed-ctrl font-mono py-1 px-2 rounded" onclick="setInterviewPlaybackRate(1.0, this)">1.0x</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary btn-speed-ctrl font-mono py-1 px-2 rounded" onclick="setInterviewPlaybackRate(1.25, this)">1.25x</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary btn-speed-ctrl font-mono py-1 px-2 rounded" onclick="setInterviewPlaybackRate(1.5, this)">1.5x</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary font-mono text-light py-1 px-2 rounded" onclick="restartInterviewVideo()"><i class="bi bi-arrow-counterclockwise me-1"></i>Restart</button>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <a href="assets/video/mock-interview.mp4" target="_blank" class="btn btn-sm btn-outline-info font-mono rounded-pill px-3">
+                    <i class="bi bi-box-arrow-up-right me-1"></i> Open Pop-out
+                  </a>
+                  <a href="assets/video/mock-interview.mp4" download="Marcial_Lawrence_Caronan_Mock_Interview.mp4" class="btn btn-sm btn-info font-mono text-dark fw-bold rounded-pill px-3">
+                    <i class="bi bi-download me-1"></i> Download MP4
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Candidate & Defense Details Cards -->
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6 col-lg-3">
+                <div class="p-3 rounded-3 bg-black bg-opacity-40 border border-secondary border-opacity-30 h-100">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-person-badge-fill text-info fs-5"></i>
+                    <span class="font-mono small text-secondary">EMPLOYEE / CANDIDATE</span>
+                  </div>
+                  <h6 class="fw-bold text-white mb-1">Marcial Lawrence Jr V. Caronan</h6>
+                  <p class="small text-muted mb-0 font-mono">BSIT Graduating Scholar • Dean's Lister</p>
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-lg-3">
+                <div class="p-3 rounded-3 bg-black bg-opacity-40 border border-secondary border-opacity-30 h-100">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-mortarboard-fill text-warning fs-5"></i>
+                    <span class="font-mono small text-secondary">ACADEMIC INSTITUTION</span>
+                  </div>
+                  <h6 class="fw-bold text-white mb-1">Datamex College of Saint Adeline</h6>
+                  <p class="small text-muted mb-0 font-mono">Step 21 Simulated IT Job Interview</p>
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-lg-3">
+                <div class="p-3 rounded-3 bg-black bg-opacity-40 border border-secondary border-opacity-30 h-100">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-shield-check text-success fs-5"></i>
+                    <span class="font-mono small text-secondary">CORE SPECIALIZATION</span>
+                  </div>
+                  <h6 class="fw-bold text-white mb-1">Full-Stack &amp; Database Arch.</h6>
+                  <p class="small text-muted mb-0 font-mono">MySQL 3NF, PHP 8 OOP, JS ES6+</p>
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-lg-3">
+                <div class="p-3 rounded-3 bg-black bg-opacity-40 border border-secondary border-opacity-30 h-100">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                    <span class="font-mono small text-secondary">VERIFICATION STATUS</span>
+                  </div>
+                  <h6 class="fw-bold text-success mb-1">Recorded &amp; Embedded</h6>
+                  <p class="small text-muted mb-0 font-mono">Video Defense Assessment Ready</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accordion of 12 Questions -->
+            <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
+              <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                <div>
+                  <h5 class="h6 fw-bold text-white mb-1 font-mono">
+                    <i class="bi bi-chat-square-text-fill text-info me-2"></i>12 Mock IT Job Interview Questions &amp; Model Defense Responses
+                  </h5>
+                  <p class="small text-muted mb-0">Student Guidelines Step 21 curriculum interview defense responses formulated by candidate Marcial Lawrence Jr V. Caronan.</p>
+                </div>
+                <span class="badge bg-black border border-secondary border-opacity-40 font-mono text-info px-3 py-2">
+                  <i class="bi bi-award-fill text-warning me-1"></i> 12 / 12 Verified Answers
+                </span>
+              </div>
+
+              <div class="accordion" id="mockInterviewAccordion">
+
+                <!-- Q1 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock1">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock1">
+                      <span class="badge bg-info text-dark me-2">Q1</span> Tell me about yourself.
+                    </button>
+                  </h2>
+                  <div id="cMock1" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "I am <strong>Marcial Lawrence Jr V. Caronan</strong>, a graduating Bachelor of Science in Information Technology (BSIT) professional from Datamex College of Saint Adeline. My academic journey is distinguished by earning Dean’s Lister honors across all three consecutive years and serving as an Overall Cluster Leader for the National Service Training Program (NSTP). What sets me apart is my dual background: I financed my education through front-line operations as a Warehouse Data Encoder at SM Supermarket Warehouse, a Stock Clerk at SM Appliances, and a Service Crew &amp; Inventory Assistant at McDonald's. On the warehouse floor, I saw firsthand how manual data loss, scanner overflows, and inventory discrepancies halt operations. This inspired me to specialize in relational database design (3NF/ACID in MySQL), full-stack web development (PHP 8 &amp; JavaScript), and data analytics. I don’t just write code that compiles—I build resilient software that solves practical business bottlenecks."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock2">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock2">
+                      <span class="badge bg-info text-dark me-2">Q2</span> Why did you choose BSIT?
+                    </button>
+                  </h2>
+                  <div id="cMock2" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "I chose Information Technology because software is the digital nervous system of human enterprise. When working at cash registers and warehouse dispatch docks, I witnessed how a 5-minute system freeze or an unhandled null value can halt hundreds of customer transactions. I wanted to be on the engineering side of those systems—designing relational databases that never duplicate records, building responsive user interfaces that minimize operator fatigue, and architecting backend APIs with zero-trust security."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock3">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock3">
+                      <span class="badge bg-info text-dark me-2">Q3</span> What are your strongest IT skills?
+                    </button>
+                  </h2>
+                  <div id="cMock3" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "My core competencies lie in three interconnected pillars: (1) <strong>Relational Database Engineering</strong>: Designing normalized 3NF schemas in MySQL with strict referential integrity, row-level locking, and indexed queries; (2) <strong>Full-Stack Web Development</strong>: Crafting secure, high-performance web systems using PHP 8 (OOP/PDO), JavaScript (ES6+), and Bootstrap 5; and (3) <strong>Operational Data Analytics &amp; Troubleshooting</strong>: Advanced formula auditing in MS Excel and Python for transactional reconciliation, backed by hands-on hardware/peripheral diagnostics."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock4">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock4">
+                      <span class="badge bg-info text-dark me-2">Q4</span> What is your weakest skill?
+                    </button>
+                  </h2>
+                  <div id="cMock4" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "Early in my programming journey, I had a tendency to over-engineer low-level optimizations before completing the minimum viable feature set—for example, spending excessive time fine-tuning micro-caching mechanisms before user validation flows were finished. I addressed this weakness by adopting Agile timeboxing and MoSCoW prioritization: I now prioritize delivering the core functional requirement first, validating it through automated test scripts, and reserving optimizations for designated refactoring cycles."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock5">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock5">
+                      <span class="badge bg-info text-dark me-2">Q5</span> Tell us about your major project.
+                    </button>
+                  </h2>
+                  <div id="cMock5" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "My flagship project is the <strong>Enterprise E-Commerce Web Application (TarotKnight Store)</strong>. Unlike simple catalog websites, this system features an atomic inventory decrementing pipeline that prevents overselling race conditions under concurrent purchasing. It integrates automated payment gateway webhooks with cryptographic HMAC-SHA256 signature validation, live order lifecycle tracking, customer-to-merchant direct messaging, and an executive administration dashboard. The database is strictly normalized to 3NF in MySQL InnoDB, ensuring zero transactional redundancy."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock6">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock6">
+                      <span class="badge bg-info text-dark me-2">Q6</span> What was your biggest technical problem?
+                    </button>
+                  </h2>
+                  <div id="cMock6" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "My biggest challenge occurred during payment webhook integration: customers completed credit card payments in the sandbox, but the database never transitioned order records from 'Pending' to 'Paid'. The server was rejecting the provider's signature header, leaving orders orphaned. A second concurrent challenge was preventing race conditions when two users clicked 'Checkout' on the single remaining item in stock simultaneously."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q7 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock7">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock7">
+                      <span class="badge bg-info text-dark me-2">Q7</span> How did you solve it?
+                    </button>
+                  </h2>
+                  <div id="cMock7" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "By inspecting raw HTTP streams, I discovered that decoding incoming JSON and re-encoding it via <code>json_encode()</code> altered whitespace and forward-slash escaping, breaking hash parity. I resolved this by feeding the unmodified raw binary byte stream directly via <code>file_get_contents('php://input')</code> into <code>hash_hmac('sha256', ...)</code> with <code>hash_equals()</code>. For the inventory race condition, I wrapped the checkout in a MySQL transaction utilizing pessimistic row-locking (<code>SELECT ... FOR UPDATE</code>), ensuring stock checks and decrements execute atomically."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q8 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock8">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock8">
+                      <span class="badge bg-info text-dark me-2">Q8</span> How do you handle deadlines?
+                    </button>
+                  </h2>
+                  <div id="cMock8" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "I treat deadlines with strict operational discipline. Working 8-hour warehouse shifts while maintaining Dean's Lister honors taught me that time management is about proactive structuring. I decompose deliverables into discrete Git milestone branches, establish self-imposed buffers 48 hours prior to official deadlines, and use continuous automated checks to verify progress rather than relying on last-minute crunching."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q9 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock9">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock9">
+                      <span class="badge bg-info text-dark me-2">Q9</span> How do you work with a team?
+                    </button>
+                  </h2>
+                  <div id="cMock9" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "As the Overall Cluster Leader for NSTP 1 and 2, I coordinated diverse student groups executing community service projects across Parañaque. In software development, team success relies on clear technical documentation, standardized Git commit conventions, and empathy for teammates. I ensure API endpoints are documented with clear request/response contracts, communicate blockers early, and conduct peer code reviews with constructive clarity."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q10 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock10">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock10">
+                      <span class="badge bg-info text-dark me-2">Q10</span> Why should an organization consider hiring you?
+                    </button>
+                  </h2>
+                  <div id="cMock10" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "An organization should hire me because I bring an uncommon operational perspective to software engineering: I know what happens on both sides of the screen. I understand the warehouse clerk entering stock, the manager analyzing sales in Excel, and the software developer architecting the database schema. Combined with a consistent Dean's Lister academic track record and a philosophy of 'No claim without evidence,' I deliver immediate, disciplined value to engineering and data teams."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q11 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock11">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock11">
+                      <span class="badge bg-info text-dark me-2">Q11</span> What technology are you currently learning?
+                    </button>
+                  </h2>
+                  <div id="cMock11" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "I am currently deepening my knowledge in <strong>Cloud Containerization (Docker)</strong> and <strong>Retrieval-Augmented Generation (RAG)</strong>. In my Oracle AI project, I integrated live Google Gemini Flash endpoints with Supabase cloud chat history; I am now studying vector embeddings in PostgreSQL (pgvector) to empower business databases with semantic natural language querying."
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Q12 -->
+                <div class="accordion-item mb-2 border border-secondary border-opacity-25 rounded bg-black bg-opacity-40">
+                  <h2 class="accordion-header" id="hMock12">
+                    <button class="accordion-button collapsed font-mono text-info fw-bold py-3" type="button" data-bs-toggle="collapse" data-bs-target="#cMock12">
+                      <span class="badge bg-info text-dark me-2">Q12</span> Where do you want to develop professionally?
+                    </button>
+                  </h2>
+                  <div id="cMock12" class="accordion-collapse collapse" data-bs-parent="#mockInterviewAccordion">
+                    <div class="accordion-body text-light opacity-90 small" style="line-height: 1.7;">
+                      "In the next 6 months, I aim to secure a Junior Web Developer or Junior Data Analyst role where I can contribute to mission-critical business software. Within 3 years, I plan to attain industry certifications in Oracle/MySQL Database Administration and AWS Cloud Architecture, progressing into a Systems Architect and Database Engineering Lead."
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -2893,11 +3249,11 @@ if (!$order) { http_response_code(403); exit('Access Denied'); }</code></pre>
   <!-- Global World Map Telemetry HUD Overlay -->
   <div class="world-map-hud-overlay no-print" aria-hidden="true">
     <div class="hud-telemetry-tag">
-      <span class="hud-pulse-ring"></span>
-      <span>GLOW NET :: 16 COUNTRY NODES ACTIVE</span>
+      <span class="hud-pulse-ring" id="hudPulseRing"></span>
+      <span id="hudTelemetryText">GLOW NET :: 16 COUNTRY NODES ACTIVE</span>
     </div>
     <div class="hud-carrier-tag d-none d-md-block">
-      <span>HQ BEACON: MNL-PH (+14.60°N, +120.98°E)</span>
+      <span id="hudCarrierText">HQ BEACON: MNL-PH (+14.60°N, +120.98°E)</span>
     </div>
   </div>
 

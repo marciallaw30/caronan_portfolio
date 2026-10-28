@@ -6,6 +6,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
 :root {
+  /* Visual Theme Dimensions */
+  --theme-topbar-height: 44px;
+
   /* Obsidian & Deep Black Surface Scale */
   --bg-darkest: #030006;
   --bg-primary: #08020f;
@@ -94,7 +97,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 90px;
+  scroll-padding-top: 135px;
 }
 
 body {
@@ -104,6 +107,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  padding-top: calc(var(--theme-topbar-height, 44px) + 68px);
 }
 
 /* ===================================================================
@@ -348,6 +352,7 @@ a {
 
 /* ================= Navbar ================= */
 .custom-navbar {
+  top: var(--theme-topbar-height, 44px) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   background: rgba(8, 2, 15, 0.85);
@@ -590,6 +595,21 @@ a {
   display: flex;
   align-items: center;
   position: relative;
+}
+
+/* Soothing Contrast Scrim / Shield: Ensures typography is 100% legible without eye strain */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  inset: -60px -40px;
+  background: radial-gradient(ellipse 72% 65% at 30% 48%, rgba(3, 0, 8, 0.94) 0%, rgba(3, 0, 8, 0.75) 45%, rgba(3, 0, 8, 0) 82%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-section > .container {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-rating-badge {
@@ -1221,4 +1241,498 @@ a {
   transform: translateY(-2px);
   background: rgba(30, 24, 60, 0.95);
   box-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
+}
+
+/* ===================================================================
+   Visual Theme & Design Studio Topbar
+   =================================================================== */
+.portfolio-theme-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--theme-topbar-height);
+  z-index: 1060;
+  background: rgba(6, 2, 14, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.28);
+  display: flex;
+  align-items: center;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.theme-brand-group {
+  user-select: none;
+}
+
+.theme-icon-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(56, 189, 248, 0.25));
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: #c084fc;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+.theme-studio-title {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  line-height: 1.1;
+}
+
+.theme-studio-sub {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.theme-active-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 9999px;
+  padding: 3px 9px;
+  font-size: 0.68rem;
+  color: #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.theme-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: themeDotPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes themeDotPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.75); opacity: 0.45; }
+}
+
+.theme-selector-pills {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 2px 0;
+}
+.theme-selector-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.theme-pill-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cbd5e1;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.74rem;
+  padding: 4px 11px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.theme-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.38);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.theme-pill-btn.active {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.38), rgba(56, 189, 248, 0.3));
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.45), inset 0 0 8px rgba(255, 255, 255, 0.15);
+  font-weight: 700;
+}
+
+.theme-aux-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.theme-aux-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Festive Garland LED Lights (Twinkle in Christmas & Hybrid Themes) */
+.festive-garland-lights {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1061;
+}
+
+.f-bulb {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  animation: bulbTwinkle 1.8s infinite ease-in-out;
+}
+.f-bulb.bulb-red { background: #f43f5e; box-shadow: 0 0 8px #f43f5e, 0 0 14px #f43f5e; animation-delay: 0s; }
+.f-bulb.bulb-gold { background: #facc15; box-shadow: 0 0 8px #facc15, 0 0 14px #facc15; animation-delay: 0.35s; }
+.f-bulb.bulb-green { background: #10b981; box-shadow: 0 0 8px #10b981, 0 0 14px #10b981; animation-delay: 0.7s; }
+.f-bulb.bulb-blue { background: #38bdf8; box-shadow: 0 0 8px #38bdf8, 0 0 14px #38bdf8; animation-delay: 1.05s; }
+.f-bulb.bulb-white { background: #ffffff; box-shadow: 0 0 8px #ffffff, 0 0 16px #ffffff; animation-delay: 1.4s; }
+
+@keyframes bulbTwinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.7); }
+}
+
+/* Canvas Layers */
+.snow-network-canvas,
+.matrix-rain-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#cyberNetworkCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.6s ease;
+}
+
+/* ===================================================================
+   THEME STYLING IMPLEMENTATIONS
+   =================================================================== */
+
+/* Theme: Christmas Glow */
+[data-portfolio-theme="christmas-snow"] {
+  --border-color: rgba(224, 242, 254, 0.22);
+  --border-glow: rgba(255, 255, 255, 0.6);
+  --violet-bright: #38bdf8;
+  --violet-neon: #7dd3fc;
+  --gradient-violet: linear-gradient(135deg, #ffffff 0%, #7dd3fc 45%, #0284c7 100%);
+  --shadow-violet-glow: 0 0 35px rgba(255, 255, 255, 0.3);
+}
+
+[data-portfolio-theme="christmas-snow"] .portfolio-theme-topbar {
+  background: rgba(3, 8, 20, 0.95);
+  border-bottom-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.12);
+}
+
+[data-portfolio-theme="christmas-snow"] .theme-pulse-dot {
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff;
+}
+
+[data-portfolio-theme="christmas-snow"] .festive-garland-lights {
+  opacity: 1;
+}
+
+[data-portfolio-theme="christmas-snow"] #snowNetworkCanvas {
+  opacity: 1;
+}
+
+[data-portfolio-theme="christmas-snow"] #cyberNetworkCanvas {
+  opacity: 0.12; /* faint subtle global contour backdrop */
+}
+
+[data-portfolio-theme="christmas-snow"] .it-cyber-bg {
+  background-color: #020617;
+  background-image:
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(14, 165, 233, 0.28) 0%, transparent 70%),
+    radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.2) 0%, transparent 60%),
+    radial-gradient(circle at 85% 85%, rgba(244, 63, 94, 0.18) 0%, transparent 60%);
+}
+
+[data-portfolio-theme="christmas-snow"] .orb-1 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.38) 0%, rgba(14, 165, 233, 0.12) 50%, transparent 70%);
+}
+[data-portfolio-theme="christmas-snow"] .orb-2 {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.1) 50%, transparent 70%);
+}
+[data-portfolio-theme="christmas-snow"] .orb-3 {
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.28) 0%, rgba(190, 18, 60, 0.08) 50%, transparent 70%);
+}
+
+/* Frosted glass cards with snowy top highlight in Christmas & Hybrid */
+[data-portfolio-theme="christmas-snow"] .card-codespot,
+[data-portfolio-theme="holiday-hybrid"] .card-codespot,
+[data-portfolio-theme="christmas-snow"] .codespot-card,
+[data-portfolio-theme="holiday-hybrid"] .codespot-card {
+  background: rgba(10, 20, 36, 0.88);
+  border: 1px solid rgba(224, 242, 254, 0.18);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 255, 255, 0.06);
+}
+
+[data-portfolio-theme="christmas-snow"] .card-codespot:hover,
+[data-portfolio-theme="holiday-hybrid"] .card-codespot:hover,
+[data-portfolio-theme="christmas-snow"] .codespot-card:hover,
+[data-portfolio-theme="holiday-hybrid"] .codespot-card:hover {
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 255, 255, 0.18);
+}
+
+/* Card Traveling Light Contour Glow (conic gradient light traveling around card edges) */
+@keyframes cardLightTravel {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+[data-portfolio-theme="christmas-snow"] .card-codespot::after,
+[data-portfolio-theme="holiday-hybrid"] .card-codespot::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 280deg, rgba(255, 255, 255, 0.9) 340deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: cardLightTravel 5s linear infinite;
+  opacity: 0.75;
+}
+
+/* Holiday Hybrid: World Map + Snowflakes */
+[data-portfolio-theme="holiday-hybrid"] {
+  --border-color: rgba(168, 85, 247, 0.28);
+  --border-glow: rgba(56, 189, 248, 0.6);
+  --shadow-violet-glow: 0 0 35px rgba(56, 189, 248, 0.35);
+}
+
+[data-portfolio-theme="holiday-hybrid"] .portfolio-theme-topbar {
+  background: rgba(5, 4, 16, 0.95);
+  border-bottom-color: rgba(56, 189, 248, 0.35);
+}
+
+[data-portfolio-theme="holiday-hybrid"] .festive-garland-lights {
+  opacity: 1;
+}
+
+[data-portfolio-theme="holiday-hybrid"] #cyberNetworkCanvas {
+  opacity: 0.88;
+}
+
+[data-portfolio-theme="holiday-hybrid"] #snowNetworkCanvas {
+  opacity: 1;
+}
+
+/* Interlink World Map (Default Theme) */
+[data-portfolio-theme="interlink-world"] #cyberNetworkCanvas {
+  opacity: 1;
+}
+[data-portfolio-theme="interlink-world"] #snowNetworkCanvas {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Cosmic Aurora Theme */
+[data-portfolio-theme="cyber-aurora"] {
+  --border-color: rgba(16, 185, 129, 0.25);
+  --border-glow: rgba(52, 211, 153, 0.55);
+  --violet-bright: #10b981;
+  --violet-neon: #34d399;
+  --gradient-violet: linear-gradient(135deg, #34d399 0%, #06b6d4 50%, #6366f1 100%);
+}
+
+[data-portfolio-theme="cyber-aurora"] .portfolio-theme-topbar {
+  background: rgba(3, 10, 18, 0.95);
+  border-bottom-color: rgba(52, 211, 153, 0.35);
+}
+
+[data-portfolio-theme="cyber-aurora"] .it-cyber-bg {
+  background-color: #020b14;
+  background-image:
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(16, 185, 129, 0.3) 0%, transparent 70%),
+    radial-gradient(circle at 15% 85%, rgba(6, 182, 212, 0.22) 0%, transparent 60%),
+    radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.2) 0%, transparent 60%);
+}
+
+[data-portfolio-theme="cyber-aurora"] #cyberNetworkCanvas {
+  opacity: 0.75;
+}
+
+[data-portfolio-theme="cyber-aurora"] #snowNetworkCanvas {
+  opacity: 0.35;
+}
+
+/* Cyber Matrix Theme: Dedicated Matrix Digital Code Rain & Terminal Emerald */
+[data-portfolio-theme="cyber-matrix"] {
+  --border-color: rgba(0, 255, 136, 0.28);
+  --border-glow: rgba(0, 255, 136, 0.65);
+  --violet-bright: #00ff88;
+  --violet-neon: #34d399;
+  --gradient-violet: linear-gradient(135deg, #ffffff 0%, #34d399 45%, #059669 100%);
+  --shadow-violet-glow: 0 0 35px rgba(0, 255, 136, 0.35);
+}
+
+[data-portfolio-theme="cyber-matrix"] .portfolio-theme-topbar {
+  background: rgba(1, 6, 3, 0.96);
+  border-bottom-color: rgba(0, 255, 136, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 255, 136, 0.15);
+}
+
+[data-portfolio-theme="cyber-matrix"] .theme-pulse-dot {
+  background: #00ff88;
+  box-shadow: 0 0 10px #00ff88;
+}
+
+[data-portfolio-theme="cyber-matrix"] .it-cyber-bg {
+  background-color: #010603;
+  background-image:
+    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(0, 255, 136, 0.2) 0%, transparent 70%),
+    radial-gradient(circle at 15% 85%, rgba(5, 150, 105, 0.18) 0%, transparent 60%),
+    radial-gradient(circle at 85% 85%, rgba(6, 78, 59, 0.25) 0%, transparent 60%);
+}
+
+[data-portfolio-theme="cyber-matrix"] .orb-1 {
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.28) 0%, rgba(5, 150, 105, 0.1) 50%, transparent 70%);
+}
+[data-portfolio-theme="cyber-matrix"] .orb-2 {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(4, 120, 87, 0.1) 50%, transparent 70%);
+}
+[data-portfolio-theme="cyber-matrix"] .orb-3 {
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.2) 0%, rgba(6, 95, 70, 0.08) 50%, transparent 70%);
+}
+
+/* World Map is completely HIDDEN in Cyber Matrix, Matrix Code Rain is ACTIVE */
+[data-portfolio-theme="cyber-matrix"] #cyberNetworkCanvas {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+[data-portfolio-theme="cyber-matrix"] #snowNetworkCanvas {
+  opacity: 0;
+  pointer-events: none;
+}
+[data-portfolio-theme="cyber-matrix"] #matrixRainCanvas {
+  opacity: 0.24;
+  mix-blend-mode: screen;
+  filter: brightness(0.85) contrast(0.9);
+}
+
+/* Ensure Matrix Rain is hidden in non-matrix themes */
+[data-portfolio-theme="interlink-world"] #matrixRainCanvas,
+[data-portfolio-theme="christmas-snow"] #matrixRainCanvas,
+[data-portfolio-theme="holiday-hybrid"] #matrixRainCanvas,
+[data-portfolio-theme="cyber-aurora"] #matrixRainCanvas {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ===================================================================
+   Eye Comfort & Background Dimmer System
+   =================================================================== */
+/* Soft Comfort Mode (Default: Soothing & relaxing dark mode) */
+[data-comfort-mode="soft"] #matrixRainCanvas {
+  opacity: 0.22 !important;
+}
+[data-comfort-mode="soft"] #cyberNetworkCanvas {
+  opacity: 0.55 !important;
+}
+[data-comfort-mode="soft"] #snowNetworkCanvas {
+  opacity: 0.7 !important;
+}
+
+/* Minimal Comfort Mode (Whisper subtle ambient background) */
+[data-comfort-mode="minimal"] #matrixRainCanvas {
+  opacity: 0.10 !important;
+}
+[data-comfort-mode="minimal"] #cyberNetworkCanvas {
+  opacity: 0.25 !important;
+}
+[data-comfort-mode="minimal"] #snowNetworkCanvas {
+  opacity: 0.3 !important;
+}
+
+/* Vivid Mode (For users desiring stronger neon glow) */
+[data-comfort-mode="vivid"] #matrixRainCanvas {
+  opacity: 0.42 !important;
+}
+[data-comfort-mode="vivid"] #cyberNetworkCanvas {
+  opacity: 0.85 !important;
+}
+[data-comfort-mode="vivid"] #snowNetworkCanvas {
+  opacity: 0.9 !important;
+}
+
+/* Matrix card styling with terminal green glow */
+[data-portfolio-theme="cyber-matrix"] .card-codespot,
+[data-portfolio-theme="cyber-matrix"] .codespot-card {
+  background: rgba(2, 10, 6, 0.92);
+  border: 1px solid rgba(0, 255, 136, 0.22);
+  border-top: 1.5px solid #00ff88;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 255, 136, 0.08);
+}
+
+[data-portfolio-theme="cyber-matrix"] .card-codespot:hover,
+[data-portfolio-theme="cyber-matrix"] .codespot-card:hover {
+  border-color: #00ff88;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 255, 136, 0.25);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  :root {
+    --theme-topbar-height: 40px;
+  }
+  .custom-navbar {
+    top: var(--theme-topbar-height) !important;
+  }
+  body {
+    padding-top: calc(var(--theme-topbar-height) + 62px);
+  }
+  .theme-pill-btn {
+    padding: 3px 8px;
+    font-size: 0.68rem;
+  }
 }

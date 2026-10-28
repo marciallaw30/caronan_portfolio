@@ -40,6 +40,9 @@ $mimeTypes = @{
     ".woff" = "font/woff"
     ".woff2"= "font/woff2"
     ".ttf"  = "font/ttf"
+    ".mp4"  = "video/mp4"
+    ".webm" = "video/webm"
+    ".mov"  = "video/quicktime"
 }
 
 while ($listener.IsListening) {
@@ -69,6 +72,7 @@ while ($listener.IsListening) {
                     $contentType = $mimeTypes[$ext]
                 }
                 $res.ContentType = $contentType
+                $res.AddHeader("Accept-Ranges", "bytes")
                 
                 $bytes = [System.IO.File]::ReadAllBytes($filePath)
                 $res.ContentLength64 = $bytes.Length

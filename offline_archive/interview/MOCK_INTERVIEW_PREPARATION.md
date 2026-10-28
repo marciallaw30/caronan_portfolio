@@ -1,5 +1,7 @@
-﻿# Employability & Mock IT Interview Preparation
-**Student Guidelines Steps 20 & 21 (Pages 6â€“7)**
+# Employability & Mock IT Interview Preparation
+**Student Guidelines Steps 20 & 21 (Pages 6-7)**
+**Candidate / Employee:** Marcial Lawrence Jr V. Caronan
+**Recorded Video Defense:** `assets/video/mock-interview.mp4` (Step 21 Compliance)
 
 ## 12 Mock IT Job Interview Questions & Model Answers
 
