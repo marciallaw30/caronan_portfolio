@@ -2395,12 +2395,19 @@ exportWebPAssets();`,
     let isRunning = false;
     let animId = null;
     let flakes = [];
+    let powderFlakes = [];
+    let windPhase = 0;
 
-    // Density tiers - calibrated for peaceful, non-distracting eye comfort
+    // Density tiers — crystalline hero flakes + multi-depth ambient powder snow
     const densities = {
-      gentle: 32,
-      normal: 60,
-      blizzard: 95
+      gentle: 36,
+      normal: 64,
+      blizzard: 98
+    };
+    const powderDensities = {
+      gentle: 115,
+      normal: 185,
+      blizzard: 280
     };
     let currentDensity = 'gentle'; // Default: gentle & soothing
 
@@ -2422,26 +2429,162 @@ exportWebPAssets();`,
       mouse.y = null;
     });
 
-    function createFlakes(count) {
+    function makePowderFlake(w, h, initial) {
+      const roll = Math.random();
+      // 3 depth planes: distant crisp powder (62%), mid soft flakes (28%), foreground winter bokeh (10%)
+      let radius, speedY, alpha, isBokeh;
+      if (roll < 0.62) {
+        radius = 1.0 + Math.random() * 1.5;
+        speedY = 0.35 + Math.random() * 0.55;
+        alpha = 0.32 + Math.random() * 0.38;
+        isBokeh = false;
+      } else if (roll < 0.90) {
+        radius = 2.2 + Math.random() * 2.0;
+        speedY = 0.65 + Math.random() * 0.85;
+        alpha = 0.45 + Math.random() * 0.38;
+        isBokeh = false;
+      } else {
+        radius = 6.5 + Math.random() * 7.5;
+        speedY = 0.85 + Math.random() * 0.95;
+        alpha = 0.14 + Math.random() * 0.14;
+        isBokeh = true;
+      }
+      return {
+        x: Math.random() * w,
+        y: initial ? Math.random() * h : -20 - Math.random() * 60,
+        radius,
+        speedY,
+        driftX: (Math.random() - 0.5) * 0.35,
+        swayPhase: Math.random() * Math.PI * 2,
+        swaySpeed: 0.012 + Math.random() * 0.018,
+        swayAmp: 0.35 + Math.random() * 0.75,
+        twinklePhase: Math.random() * Math.PI * 2,
+        alpha,
+        isBokeh
+      };
+    }
+
+    function createFlakes(count, powderCount) {
       flakes = [];
       for (let i = 0; i < count; i++) {
         flakes.push(new GlowSnowflake(width, height, true));
       }
+      powderFlakes = [];
+      for (let j = 0; j < powderCount; j++) {
+        powderFlakes.push(makePowderFlake(width, height, true));
+      }
     }
 
-    createFlakes(densities[currentDensity]);
+    createFlakes(densities[currentDensity], powderDensities[currentDensity]);
 
     window.addEventListener('resize', () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     });
 
+    function drawSnowyHorizon(ctxRef, w, h) {
+      ctxRef.save();
+      ctxRef.shadowBlur = 0;
+
+      // Back rolling snowbank silhouette
+      const backDrift = ctxRef.createLinearGradient(0, h - 46, 0, h);
+      backDrift.addColorStop(0, 'rgba(186, 230, 253, 0.11)');
+      backDrift.addColorStop(1, 'rgba(12, 34, 66, 0.34)');
+      ctxRef.fillStyle = backDrift;
+      ctxRef.beginPath();
+      ctxRef.moveTo(0, h - 22);
+      ctxRef.bezierCurveTo(w * 0.24, h - 44, w * 0.52, h - 10, w * 0.78, h - 34);
+      ctxRef.bezierCurveTo(w * 0.90, h - 42, w * 0.96, h - 24, w, h - 28);
+      ctxRef.lineTo(w, h);
+      ctxRef.lineTo(0, h);
+      ctxRef.closePath();
+      ctxRef.fill();
+
+      // Front moonlit snowdrift & glistening frost rim
+      const frontDrift = ctxRef.createLinearGradient(0, h - 30, 0, h);
+      frontDrift.addColorStop(0, 'rgba(240, 249, 255, 0.18)');
+      frontDrift.addColorStop(0.5, 'rgba(125, 211, 252, 0.12)');
+      frontDrift.addColorStop(1, 'rgba(15, 42, 78, 0.42)');
+      ctxRef.fillStyle = frontDrift;
+      ctxRef.beginPath();
+      ctxRef.moveTo(0, h - 14);
+      ctxRef.bezierCurveTo(w * 0.18, h - 8, w * 0.38, h - 30, w * 0.62, h - 16);
+      ctxRef.bezierCurveTo(w * 0.82, h - 6, w * 0.92, h - 22, w, h - 15);
+      ctxRef.lineTo(w, h);
+      ctxRef.lineTo(0, h);
+      ctxRef.closePath();
+      ctxRef.fill();
+
+      ctxRef.strokeStyle = 'rgba(224, 242, 254, 0.26)';
+      ctxRef.lineWidth = 1.2;
+      ctxRef.beginPath();
+      ctxRef.moveTo(0, h - 14);
+      ctxRef.bezierCurveTo(w * 0.18, h - 8, w * 0.38, h - 30, w * 0.62, h - 16);
+      ctxRef.bezierCurveTo(w * 0.82, h - 6, w * 0.92, h - 22, w, h - 15);
+      ctxRef.stroke();
+
+      ctxRef.restore();
+    }
+
     function renderSnow() {
       ctx.clearRect(0, 0, width, height);
       const speedMult = speedTiers[currentSpeedMode] || 1.0;
+      windPhase += 0.004 * speedMult;
+      const gentleBreeze = Math.sin(windPhase) * 0.28 + (currentDensity === 'blizzard' ? 0.55 : 0.08);
 
+      // 1. Subtle moonlit snowbank horizon along bottom edge
+      drawSnowyHorizon(ctx, width, height);
+
+      // 2. Multi-depth soft powder snow & winter bokeh flurries
+      ctx.save();
+      ctx.shadowBlur = 0;
+      for (let j = 0; j < powderFlakes.length; j++) {
+        const pf = powderFlakes[j];
+        pf.swayPhase += pf.swaySpeed * speedMult;
+        pf.twinklePhase += 0.025 * speedMult;
+        pf.x += pf.driftX + Math.sin(pf.swayPhase) * pf.swayAmp + gentleBreeze * (pf.isBokeh ? 1.15 : 0.65);
+        pf.y += pf.speedY * speedMult;
+
+        if (mouse.x !== null && mouse.y !== null) {
+          const dx = pf.x - mouse.x;
+          const dy = pf.y - mouse.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 110 && dist > 0.1) {
+            const push = (110 - dist) / 110;
+            pf.x += (dx / dist) * push * 2.0;
+            pf.y += (dy / dist) * push * 1.1;
+          }
+        }
+
+        if (pf.y > height + 20) {
+          pf.x = Math.random() * width;
+          pf.y = -15 - Math.random() * 25;
+        }
+        if (pf.x < -25) pf.x = width + 20;
+        if (pf.x > width + 25) pf.x = -20;
+
+        if (pf.isBokeh) {
+          const bGrad = ctx.createRadialGradient(pf.x, pf.y, 0, pf.x, pf.y, pf.radius);
+          bGrad.addColorStop(0, `rgba(255, 255, 255, ${pf.alpha})`);
+          bGrad.addColorStop(0.55, `rgba(186, 230, 253, ${(pf.alpha * 0.45).toFixed(3)})`);
+          bGrad.addColorStop(1, 'rgba(186, 230, 253, 0)');
+          ctx.fillStyle = bGrad;
+          ctx.beginPath();
+          ctx.arc(pf.x, pf.y, pf.radius, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          const shimmer = pf.alpha * (0.78 + 0.22 * Math.sin(pf.twinklePhase));
+          ctx.fillStyle = `rgba(240, 249, 255, ${shimmer.toFixed(3)})`;
+          ctx.beginPath();
+          ctx.arc(pf.x, pf.y, pf.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+
+      // 3. Signature crystalline snowflakes with traveling perimeter light
       for (let i = 0; i < flakes.length; i++) {
-        flakes[i].update(width, height, mouse, 0, speedMult);
+        flakes[i].update(width, height, mouse, gentleBreeze * 0.45, speedMult);
         flakes[i].draw(ctx);
       }
 
@@ -2481,7 +2624,7 @@ exportWebPAssets();`,
         const order = ['normal', 'blizzard', 'gentle'];
         const nextIdx = (order.indexOf(currentDensity) + 1) % order.length;
         currentDensity = order[nextIdx];
-        createFlakes(densities[currentDensity]);
+        createFlakes(densities[currentDensity], powderDensities[currentDensity]);
         return currentDensity;
       },
       cycleTracerSpeed: function() {
@@ -2643,6 +2786,8 @@ exportWebPAssets();`,
 
   // ===================================================================
   // 11. Milky Way Galaxy & Visible Solar System Simulation Engine
+  //     Astrophotography-Grade Volumetric Galactic Band, Great Rift Dust
+  //     Lanes, H-II Nebulae, 9,500+ Resolved Stars & 3D Orion-Arm Sol
   // ===================================================================
   let milkyWayEngine = null;
 
@@ -2656,292 +2801,855 @@ exportWebPAssets();`,
     let dpr = 1;
     let isRunning = false;
     let animId = null;
+    let skyDirty = true;
+    let resizeTimer = null;
 
-    // Mouse parallax tracking for immersive 3D perspective
-    let mouseX = 0;
-    let mouseY = 0;
+    // Offscreen pre-baked full-DPI cosmic sky (volumetric Milky Way + 9,500+ stars)
+    const skyCanvas = document.createElement('canvas');
+    const skyCtx = skyCanvas.getContext('2d');
+    const PARALLAX_PAD = 48;
+    let skyW = 0;
+    let skyH = 0;
+
+    // Mouse parallax tracking for multi-plane 3D cosmic depth
     let targetOffsetX = 0;
     let targetOffsetY = 0;
     let currentOffsetX = 0;
     let currentOffsetY = 0;
 
     function handleMouseMove(e) {
-      if (!isRunning) return;
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      targetOffsetX = ((mouseX / width) - 0.5) * 45;
-      targetOffsetY = ((mouseY / height) - 0.5) * 30;
+      if (!isRunning || !width || !height) return;
+      targetOffsetX = ((e.clientX / width) - 0.5) * 44;
+      targetOffsetY = ((e.clientY / height) - 0.5) * 30;
     }
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
+    // -------------------------------------------------------------
+    // Deterministic PRNG & Fast Rotated-Octave 2D FBM Noise
+    // -------------------------------------------------------------
+    function createPRNG(seed) {
+      let s = seed >>> 0;
+      return function () {
+        s = (s + 0x6D2B79F5) >>> 0;
+        let t = Math.imul(s ^ (s >>> 15), 1 | s);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    const noiseRand = createPRNG(0x4D494C4B);
+    const PERM = new Uint8Array(512);
+    const VALS = new Float32Array(256);
+    for (let i = 0; i < 256; i++) {
+      PERM[i] = i;
+      VALS[i] = noiseRand();
+    }
+    for (let i = 255; i > 0; i--) {
+      const j = Math.floor(noiseRand() * (i + 1));
+      const tmp = PERM[i];
+      PERM[i] = PERM[j];
+      PERM[j] = tmp;
+    }
+    for (let i = 0; i < 256; i++) {
+      PERM[i + 256] = PERM[i];
+    }
+
+    function valueNoise2D(x, y) {
+      const xi = Math.floor(x);
+      const yi = Math.floor(y);
+      const fx = x - xi;
+      const fy = y - yi;
+      const X = xi & 255;
+      const Y = yi & 255;
+      const u = fx * fx * (3.0 - 2.0 * fx);
+      const v = fy * fy * (3.0 - 2.0 * fy);
+
+      const aa = VALS[PERM[X + PERM[Y]]];
+      const ba = VALS[PERM[X + 1 + PERM[Y]]];
+      const ab = VALS[PERM[X + PERM[Y + 1]]];
+      const bb = VALS[PERM[X + 1 + PERM[Y + 1]]];
+
+      const x1 = aa + u * (ba - aa);
+      const x2 = ab + u * (bb - ab);
+      return x1 + v * (x2 - x1);
+    }
+
+    // Inter-octave 37-deg rotation eliminates any grid alignment artifacts
+    function fbm(x, y, octaves) {
+      let sum = 0.0;
+      let amp = 0.5;
+      let norm = 0.0;
+      let px = x;
+      let py = y;
+      for (let i = 0; i < octaves; i++) {
+        sum += amp * valueNoise2D(px, py);
+        norm += amp;
+        const nx = (px * 0.8 - py * 0.6) * 2.03 + 17.1;
+        const ny = (px * 0.6 + py * 0.8) * 2.03 + 31.7;
+        px = nx;
+        py = ny;
+        amp *= 0.5;
+      }
+      return sum / norm;
+    }
+
+    // -------------------------------------------------------------
+    // Galactic Plane Coordinate & Structure Model
+    // Sweeps diagonally from bottom-left (Carina/Vela) through the
+    // radiant Sagittarius Core (upper-center-right) to Cygnus/Orion
+    // -------------------------------------------------------------
+    const GC_X = 0.58;
+    const GC_Y = 0.325;
+    const GAL_ANGLE = -0.47; // ~ -27 deg panoramic diagonal across the cosmos
+    const COS_GAL = Math.cos(GAL_ANGLE);
+    const SIN_GAL = Math.sin(GAL_ANGLE);
+
+    function toGalacticCoords(nx, ny, aspect) {
+      const scaleX = Math.max(0.95, Math.min(1.42, aspect * 0.78));
+      const dx = (nx - GC_X) * scaleX;
+      const dy = ny - gcYOffset(nx);
+      const gx = dx * COS_GAL + dy * SIN_GAL;
+      const gy = -dx * SIN_GAL + dy * COS_GAL;
+      const arch = 0.024 * gx * gx - 0.008 + 0.014 * Math.sin(gx * 3.4 + 0.45);
+      return { gx, gy, gyBase: gy + arch };
+    }
+
+    function gcYOffset() {
+      return GC_Y;
+    }
+
+    // Evaluates star-cloud density and dust extinction at normalized (nx, ny)
+    function sampleGalacticField(nx, ny, aspect) {
+      const { gx, gyBase } = toGalacticCoords(nx, ny, aspect);
+
+      const w1 = fbm(gx * 2.6 + 5.2, gyBase * 3.4 + 1.3, 3);
+      const w2 = fbm(gx * 2.6 - 3.7, gyBase * 3.4 + 8.9, 3);
+      const gxW = gx + (w1 - 0.5) * 0.14;
+      const gyW = gyBase + (w2 - 0.5) * 0.062;
+
+      const cloud1 = fbm(gxW * 7.2 + 2.1, gyW * 12.0 - 3.4, 5);
+      const cloud2 = fbm(gxW * 17.5 - 7.3, gyW * 26.0 + 4.8, 4);
+      // Sharpen cloud clumps so star clouds billow crisply instead of looking flat
+      const clumped1 = Math.pow(Math.max(0.0, cloud1 * 1.18 - 0.08), 1.35);
+      const cloudTex = 0.30 + 0.95 * clumped1 + 0.42 * cloud2;
+
+      // 1. Sagittarius Galactic Core & Central Barred Bulge
+      const bulgeEnv = Math.exp(-((gxW * gxW) / (0.195 * 0.195) + (gyW * gyW) / (0.098 * 0.098)));
+      const innerNucleus = Math.exp(-((gx * gx) / (0.072 * 0.072) + (gyBase * gyBase) / (0.038 * 0.038)));
+      const bulge = bulgeEnv * (0.62 + 0.68 * clumped1) + innerNucleus * 0.85;
+
+      // 2. Main Milky Way Luminous Band + Major Star Clouds (Scutum, Cygnus, Carina, Vela)
+      const diskWidth = 0.068 + 0.052 * Math.exp(-(gx * gx) / 0.19);
+      const alongClouds =
+        0.54 +
+        0.52 * Math.exp(-(gx * gx) / 0.46) +
+        0.38 * Math.exp(-((gx - 0.28) * (gx - 0.28)) / 0.030) +
+        0.36 * Math.exp(-((gx + 0.32) * (gx + 0.32)) / 0.040) +
+        0.26 * Math.exp(-((gx + 0.62) * (gx + 0.62)) / 0.055) +
+        0.22 * Math.exp(-((gx - 0.52) * (gx - 0.52)) / 0.045);
+      const diskBand = Math.exp(-(gyW * gyW) / (2.0 * diskWidth * diskWidth)) * alongClouds * cloudTex;
+
+      // 3. Oblique Logarithmic Spiral Arm Streams curving around the disk
+      const galDiskX = gx;
+      const galDiskY = gyBase * 3.1;
+      const rSpiral = Math.hypot(galDiskX, galDiskY);
+      const thetaSpiral = Math.atan2(galDiskY, galDiskX);
+      const armWave2 = Math.cos(2.0 * thetaSpiral - 3.0 * Math.log(rSpiral + 0.085) + (w1 - 0.5) * 0.85);
+      const armWave4 = Math.cos(4.0 * thetaSpiral - 3.0 * Math.log(rSpiral + 0.085) + 1.15);
+      const spiralStreams =
+        (Math.pow(0.5 + 0.5 * armWave2, 2.5) * 0.82 + Math.pow(0.5 + 0.5 * armWave4, 3.1) * 0.36) *
+        Math.exp(-rSpiral * 1.35) *
+        (1.0 - Math.exp(-rSpiral * 6.5)) *
+        (0.45 + 0.75 * clumped1);
+
+      // 4. Broad Outer Galactic Halo (deep sapphire-indigo)
+      const halo =
+        Math.exp(-(gyW * gyW) / (2.0 * 0.22 * 0.22)) *
+        (0.30 + 0.70 * Math.exp(-(gx * gx) / 0.82)) *
+        (0.55 + 0.50 * w1);
+
+      // 5. High-Contrast Great Rift, Cygnus Rift & Dark Horse Interstellar Dust Lanes
+      const gyRift = gyBase + 0.010 * Math.sin(gx * 7.6 + 0.35) + (w2 - 0.5) * 0.028;
+      const nR1 = fbm(gx * 6.5 + w1 * 0.95 + 1.7, gyRift * 19.5 + w2 * 0.95, 4);
+      const nR2 = fbm(gx * 14.8 - w2 * 0.75 - 4.1, gyRift * 36.0 + w1 * 0.75, 4);
+      const nR3 = fbm(gx * 26.0 + 3.3, gyRift * 58.0 - 2.2, 3);
+      const ridge1 = Math.pow(Math.max(0.0, 1.0 - Math.abs(nR1 * 2.0 - 0.98)), 1.95);
+      const ridge2 = Math.pow(Math.max(0.0, 1.0 - Math.abs(nR2 * 2.0 - 0.98)), 2.25);
+      const dustFilaments = ridge1 * 0.88 + ridge2 * 0.55 + Math.max(0, nR3 - 0.48) * 0.35;
+
+      const riftCoreEnv = Math.exp(-(gyRift * gyRift) / (2.0 * 0.030 * 0.030));
+      const riftBranchEnv = Math.exp(-(gyBase * gyBase) / (2.0 * 0.088 * 0.088)) * 0.48;
+      const darkHorse = Math.exp(-(((gx - 0.05) * (gx - 0.05)) / 0.0080 + ((gyBase + 0.034) * (gyBase + 0.034)) / 0.0016)) * 1.05;
+      const cygnusRift = Math.exp(-(((gx - 0.26) * (gx - 0.26)) / 0.035 + (gyRift * gyRift) / 0.0012)) * 0.75;
+      const tauDust = dustFilaments * (riftCoreEnv * 2.95 + riftBranchEnv + darkHorse + cygnusRift) * (0.50 + 0.68 * alongClouds);
+
+      // Deep velvety dust extinction (down to 4% transmission in dense molecular cores!)
+      const extinction = Math.max(0.04, Math.exp(-tauDust * 1.18));
+      const dustWarmth = tauDust * Math.exp(-tauDust * 0.80) * (0.42 + 0.72 * bulgeEnv + 0.35 * diskBand);
+
+      return {
+        gx,
+        gyBase,
+        gxW,
+        gyW,
+        cloud1: clumped1,
+        cloud2,
+        bulge,
+        bulgeEnv,
+        innerNucleus,
+        diskBand,
+        spiralStreams,
+        halo,
+        extinction,
+        dustWarmth
+      };
+    }
+
+    // -------------------------------------------------------------
+    // Build Cached Full-DPI Volumetric Milky Way + 13,500+ Star Layer
+    // -------------------------------------------------------------
+    let liveStars = [];
+    let beaconStars = [];
+
+    function buildMilkyWaySky() {
+      skyW = width + PARALLAX_PAD * 2;
+      skyH = height + PARALLAX_PAD * 2;
+      skyCanvas.width = Math.floor(skyW * dpr);
+      skyCanvas.height = Math.floor(skyH * dpr);
+      skyCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      skyCtx.clearRect(0, 0, skyW, skyH);
+
+      const aspect = skyW / Math.max(1, skyH);
+
+      // Step 1: High-definition volumetric Milky Way clouds, Great Rift dust, and nebulae
+      const nebW = Math.min(860, Math.max(420, Math.round(skyW * 0.44)));
+      const nebH = Math.min(500, Math.max(250, Math.round(skyH * 0.44)));
+      const nebCanvas = document.createElement('canvas');
+      nebCanvas.width = nebW;
+      nebCanvas.height = nebH;
+      const nebCtx = nebCanvas.getContext('2d');
+      const imgData = nebCtx.createImageData(nebW, nebH);
+      const data = imgData.data;
+
+      let ptr = 0;
+      for (let py = 0; py < nebH; py++) {
+        const ny = (py + 0.5) / nebH;
+        for (let px = 0; px < nebW; px++) {
+          const nx = (px + 0.5) / nebW;
+          const f = sampleGalacticField(nx, ny, aspect);
+
+          // Deep OLED-cosmos base + rich sapphire/royal-indigo galactic halo (never muddy gray!)
+          let r = 1.5 + f.halo * 16.0;
+          let g = 2.0 + f.halo * 22.0;
+          let b = 7.5 + f.halo * 78.0;
+
+          // Oblique spiral arm streams (celestial cobalt-blue & violet-lavender)
+          const sp = f.spiralStreams * (0.35 + 0.65 * f.extinction);
+          r += sp * 96.0;
+          g += sp * 138.0;
+          b += sp * 245.0;
+
+          // Main Milky Way star-cloud band (crystalline silver-blue outer -> creamy gold inner)
+          const coreMix = Math.min(1.0, Math.pow(f.bulgeEnv, 0.85) * 1.2);
+          const diskR = 148.0 * (1.0 - coreMix) + 255.0 * coreMix;
+          const diskG = 196.0 * (1.0 - coreMix) + 214.0 * coreMix;
+          const diskB = 255.0 * (1.0 - coreMix) + 158.0 * coreMix;
+
+          r += f.diskBand * diskR * f.extinction * 1.12;
+          g += f.diskBand * diskG * f.extinction * 1.12;
+          b += f.diskBand * diskB * f.extinction * 1.12;
+
+          // Radiant Sagittarius Galactic Bulge & Nucleus (incandescent champagne-gold & amber)
+          const bulgeLight = f.bulge * (0.18 + 0.82 * f.extinction);
+          r += bulgeLight * 265.0 + f.innerNucleus * f.extinction * 115.0;
+          g += bulgeLight * 198.0 + f.innerNucleus * f.extinction * 94.0;
+          b += bulgeLight * 118.0 + f.innerNucleus * f.extinction * 64.0;
+
+          // Interstellar dust reddening along Great Rift borders (rich burnt-amber / sienna)
+          r += f.dustWarmth * 135.0;
+          g += f.dustWarmth * 56.0;
+          b += f.dustWarmth * 28.0;
+
+          // Embedded H-II Emission Nebulae (Lagoon M8, Trifid M20, Eagle M16, North America NGC 7000, Carina)
+          const lagoonKnot = Math.exp(-(((f.gx + 0.072) * (f.gx + 0.072)) / 0.0020 + ((f.gyBase - 0.017) * (f.gyBase - 0.017)) / 0.00065));
+          const trifidCyan = Math.exp(-(((f.gx + 0.055) * (f.gx + 0.055)) / 0.0010 + ((f.gyBase - 0.028) * (f.gyBase - 0.028)) / 0.00045));
+          const eagleKnot = Math.exp(-(((f.gx - 0.13) * (f.gx - 0.13)) / 0.0018 + ((f.gyBase + 0.009) * (f.gyBase + 0.009)) / 0.00055));
+          const cygnusHII = Math.exp(-(((f.gx - 0.30) * (f.gx - 0.30)) / 0.0052 + ((f.gyBase + 0.015) * (f.gyBase + 0.015)) / 0.0011));
+          const carinaHII = Math.exp(-(((f.gx + 0.34) * (f.gx + 0.34)) / 0.0048 + ((f.gyBase - 0.014) * (f.gyBase - 0.014)) / 0.0010));
+          const velaHII = Math.exp(-(((f.gx + 0.56) * (f.gx + 0.56)) / 0.0055 + ((f.gyBase + 0.012) * (f.gyBase + 0.012)) / 0.0012));
+          const procHII = Math.max(0.0, f.cloud2 - 0.55) * 2.8 * Math.exp(-(f.gyW * f.gyW) / (2.0 * 0.058 * 0.058));
+
+          const hiiTotal = (lagoonKnot * 1.35 + eagleKnot * 0.95 + cygnusHII * 1.15 + carinaHII * 1.25 + velaHII * 0.95 + procHII * 0.62) * (0.38 + 0.62 * f.extinction);
+          r += hiiTotal * 255.0;
+          g += hiiTotal * 58.0;
+          b += hiiTotal * 156.0;
+
+          // Rho Ophiuchi (golden-amber + electric blue) & Cyan O-III Reflection Nebulae
+          const rhoAmber = Math.exp(-(((f.gx - 0.042) * (f.gx - 0.042)) / 0.0038 + ((f.gyBase + 0.068) * (f.gyBase + 0.068)) / 0.0016)) * (0.55 + 0.45 * f.cloud1);
+          const rhoBlue = Math.exp(-(((f.gx - 0.075) * (f.gx - 0.075)) / 0.0032 + ((f.gyBase + 0.058) * (f.gyBase + 0.058)) / 0.0014));
+          const oiiiCyan = (trifidCyan * 1.1 + Math.max(0.0, f.cloud1 - 0.52) * 1.6 * Math.exp(-(((f.gx - 0.25) * (f.gx - 0.25)) / 0.042 + (f.gyW * f.gyW) / 0.0045))) * f.extinction;
+
+          r += rhoAmber * 235.0 + rhoBlue * 55.0 + oiiiCyan * 36.0;
+          g += rhoAmber * 156.0 + rhoBlue * 145.0 + oiiiCyan * 208.0;
+          b += rhoAmber * 62.0 + rhoBlue * 255.0 + oiiiCyan * 255.0;
+
+          // Luminance-preserving saturation boost + filmic S-curve so colors stay jewel-pure
+          const lum = 0.299 * r + 0.587 * g + 0.114 * b + 1e-4;
+          const satBoost = 1.24;
+          r = Math.max(0.0, lum + (r - lum) * satBoost);
+          g = Math.max(0.0, lum + (g - lum) * satBoost);
+          b = Math.max(0.0, lum + (b - lum) * satBoost);
+
+          // Crisp astrophotography contrast toe + silky highlight shoulder
+          const mappedLum = (255.0 * Math.pow(lum / 215.0, 1.14)) / (1.0 + Math.pow(lum / 215.0, 1.14) * 0.88);
+          const scaleRGB = mappedLum / lum;
+
+          data[ptr++] = Math.min(255, Math.max(0, (r * scaleRGB) | 0));
+          data[ptr++] = Math.min(255, Math.max(0, (g * scaleRGB) | 0));
+          data[ptr++] = Math.min(255, Math.max(0, (b * scaleRGB) | 0));
+          data[ptr++] = 255;
+        }
+      }
+
+      nebCtx.putImageData(imgData, 0, 0);
+
+      // Upscale volumetric Milky Way smoothly onto the full-DPI skyCanvas
+      skyCtx.save();
+      skyCtx.imageSmoothingEnabled = true;
+      skyCtx.imageSmoothingQuality = 'high';
+      skyCtx.drawImage(nebCanvas, 0, 0, nebW, nebH, 0, 0, skyW, skyH);
+      skyCtx.restore();
+
+      // Step 2: Populate 13,500+ Crisp Full-DPI Milky Way Stars & Shimmering Star-Cloud Granulation
+      const starRand = createPRNG(0x53544152);
+      const spectralDisk = ['#ffffff', '#f8fafc', '#e0f2fe', '#bae6fd', '#93c5fd', '#c7d2fe', '#fef9c3', '#fbcfe8'];
+      const spectralBulge = ['#fffbeb', '#fef3c7', '#fde68a', '#fcd34d', '#fdba74', '#fed7aa', '#ffffff', '#fecdd3'];
+
+      // A. Dense crystalline Milky Way stardust (11,500 micro-stars tracing bright star-cloud ridges!)
+      const dustStarTarget = Math.min(12000, Math.max(6000, Math.round((skyW * skyH) / 195)));
+      let placed = 0;
+      let attempts = 0;
+      const maxAttempts = dustStarTarget * 7;
+
+      while (placed < dustStarTarget && attempts < maxAttempts) {
+        attempts++;
+        const gxSample = (starRand() - 0.5) * 2.15;
+        const spread = starRand() < 0.76 ? 0.105 : 0.26;
+        const u1 = Math.max(1e-5, starRand());
+        const u2 = starRand();
+        const gauss = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(Math.PI * 2.0 * u2);
+        const gySample = gauss * spread;
+
+        const scaleX = Math.max(0.95, Math.min(1.42, aspect * 0.78));
+        const arch = 0.024 * gxSample * gxSample - 0.008 + 0.014 * Math.sin(gxSample * 3.4 + 0.45);
+        const gyUnarched = gySample - arch;
+        const dx = gxSample * COS_GAL - gyUnarched * SIN_GAL;
+        const dy = gxSample * SIN_GAL + gyUnarched * COS_GAL;
+        const nx = GC_X + dx / scaleX;
+        const ny = GC_Y + dy;
+
+        if (nx < 0.0 || nx > 1.0 || ny < 0.0 || ny > 1.0) continue;
+
+        const f = sampleGalacticField(nx, ny, aspect);
+        // Strong dust masking so stars pack bright clouds and leave dark Great Rift velvety clean
+        const starProb = Math.min(1.0, (f.diskBand * 1.05 + f.bulge * 0.95 + f.spiralStreams * 0.60 + 0.02) * Math.pow(f.extinction, 1.25));
+        if (starRand() > starProb) continue;
+
+        placed++;
+        const sx = nx * skyW;
+        const sy = ny * skyH;
+        const isCoreStar = starRand() < f.bulgeEnv * 0.82;
+        const palette = isCoreStar ? spectralBulge : spectralDisk;
+        const color = palette[Math.floor(starRand() * palette.length)];
+        const radius = 0.32 + Math.pow(starRand(), 2.2) * 1.08;
+        const alpha = (0.22 + starRand() * 0.68) * Math.min(1.0, 0.25 + f.extinction * 0.85);
+
+        skyCtx.fillStyle = color;
+        skyCtx.globalAlpha = alpha;
+        if (radius < 0.75) {
+          skyCtx.fillRect(sx - radius * 0.5, sy - radius * 0.5, radius * 1.25, radius * 1.25);
+        } else {
+          skyCtx.beginPath();
+          skyCtx.arc(sx, sy, radius, 0, Math.PI * 2);
+          skyCtx.fill();
+        }
+      }
+
+      // B. Deep all-sky background starfield (1,500 crisp pinpoint stars)
+      const fieldCount = Math.min(1650, Math.max(850, Math.round((skyW * skyH) / 1450)));
+      for (let i = 0; i < fieldCount; i++) {
+        const nx = starRand();
+        const ny = starRand();
+        const f = sampleGalacticField(nx, ny, aspect);
+        const sx = nx * skyW;
+        const sy = ny * skyH;
+        const r = 0.42 + Math.pow(starRand(), 2.8) * 1.25;
+        const dimByDust = 0.35 + 0.65 * f.extinction;
+        const alpha = (0.18 + starRand() * 0.68) * dimByDust;
+        const palette = starRand() < 0.35 ? spectralBulge : spectralDisk;
+
+        skyCtx.fillStyle = palette[Math.floor(starRand() * palette.length)];
+        skyCtx.globalAlpha = alpha;
+        skyCtx.beginPath();
+        skyCtx.arc(sx, sy, r, 0, Math.PI * 2);
+        skyCtx.fill();
+      }
+
+      // C. Rich Globular & Open Star Clusters along the Milky Way (M22, M24, M7, Jewel Box, Double Cluster)
+      const clusterDefs = [
+        { gx: -0.04, gy: 0.045, r: 22, stars: 75, tint: '254, 240, 195', core: true },  // M22 Sagittarius Globular
+        { gx: 0.09, gy: -0.022, r: 28, stars: 90, tint: '224, 242, 254', core: false }, // M24 Small Sagittarius Cloud
+        { gx: -0.16, gy: 0.028, r: 20, stars: 65, tint: '253, 230, 138', core: true },  // Ptolemy Cluster M7
+        { gx: 0.21, gy: -0.015, r: 19, stars: 60, tint: '186, 230, 253', core: false }, // Wild Duck Cluster M11
+        { gx: -0.32, gy: -0.018, r: 24, stars: 72, tint: '240, 249, 255', core: false }, // Jewel Box / Carina Cluster
+        { gx: 0.36, gy: 0.024, r: 22, stars: 64, tint: '199, 210, 254', core: false },  // Cygnus OB2 Association
+        { gx: 0.49, gy: -0.020, r: 20, stars: 58, tint: '224, 242, 254', core: false }, // Perseus Double Cluster
+        { gx: 0.03, gy: -0.088, r: 16, stars: 52, tint: '254, 215, 170', core: true }   // M4 Scorpius Globular
+      ];
+
+      const scaleX = Math.max(0.95, Math.min(1.42, aspect * 0.78));
+      for (let c = 0; c < clusterDefs.length; c++) {
+        const cl = clusterDefs[c];
+        const arch = 0.025 * cl.gx * cl.gx - 0.009 + 0.015 * Math.sin(cl.gx * 3.3 + 0.45);
+        const gyUn = cl.gy - arch;
+        const dx = cl.gx * COS_GAL - gyUn * SIN_GAL;
+        const dy = cl.gx * SIN_GAL + gyUn * COS_GAL;
+        const cxCl = (GC_X + dx / scaleX) * skyW;
+        const cyCl = (GC_Y + dy) * skyH;
+
+        if (cxCl < -30 || cxCl > skyW + 30 || cyCl < -30 || cyCl > skyH + 30) continue;
+
+        const clGrad = skyCtx.createRadialGradient(cxCl, cyCl, 0, cxCl, cyCl, cl.r);
+        clGrad.addColorStop(0, `rgba(${cl.tint}, 0.26)`);
+        clGrad.addColorStop(0.45, `rgba(${cl.tint}, 0.09)`);
+        clGrad.addColorStop(1, `rgba(${cl.tint}, 0)`);
+        skyCtx.globalAlpha = 1;
+        skyCtx.fillStyle = clGrad;
+        skyCtx.beginPath();
+        skyCtx.arc(cxCl, cyCl, cl.r, 0, Math.PI * 2);
+        skyCtx.fill();
+
+        for (let s = 0; s < cl.stars; s++) {
+          const ang = starRand() * Math.PI * 2;
+          const dist = Math.pow(starRand(), 1.85) * cl.r;
+          const sx = cxCl + Math.cos(ang) * dist;
+          const sy = cyCl + Math.sin(ang) * dist;
+          const sr = 0.35 + Math.pow(starRand(), 2.2) * 0.95;
+          skyCtx.fillStyle = cl.core
+            ? spectralBulge[Math.floor(starRand() * spectralBulge.length)]
+            : spectralDisk[Math.floor(starRand() * spectralDisk.length)];
+          skyCtx.globalAlpha = 0.28 + (1.0 - dist / cl.r) * 0.62;
+          skyCtx.beginPath();
+          skyCtx.arc(sx, sy, sr, 0, Math.PI * 2);
+          skyCtx.fill();
+        }
+      }
+
+      skyCtx.globalAlpha = 1;
+
+      // Step 3: Generate Live Animated Foreground Twinkling Stars & Diffraction Beacons
+      liveStars = [];
+      const liveRand = createPRNG(0x4C495645);
+      const liveCount = 340;
+      for (let i = 0; i < liveCount; i++) {
+        // 65% concentrated near the Milky Way band, 35% across the open sky
+        let nx;
+        let ny;
+        if (i < liveCount * 0.65) {
+          const gxS = (liveRand() - 0.5) * 1.85;
+          const gyS = (liveRand() + liveRand() + liveRand() - 1.5) * 0.16;
+          const arch = 0.025 * gxS * gxS - 0.009 + 0.015 * Math.sin(gxS * 3.3 + 0.45);
+          const gyUn = gyS - arch;
+          const dx = gxS * COS_GAL - gyUn * SIN_GAL;
+          const dy = gxS * SIN_GAL + gyUn * COS_GAL;
+          nx = GC_X + dx / scaleX;
+          ny = GC_Y + dy;
+          if (nx < 0 || nx > 1 || ny < 0 || ny > 1) {
+            nx = liveRand();
+            ny = liveRand();
+          }
+        } else {
+          nx = liveRand();
+          ny = liveRand();
+        }
+
+        const palette = liveRand() < 0.4 ? spectralBulge : spectralDisk;
+        liveStars.push({
+          x: nx,
+          y: ny,
+          size: 0.65 + Math.pow(liveRand(), 2.1) * 1.45,
+          color: palette[Math.floor(liveRand() * palette.length)],
+          baseAlpha: 0.30 + liveRand() * 0.58,
+          speed: 1.2 + liveRand() * 3.2,
+          phase: liveRand() * Math.PI * 2,
+          parallax: 0.55 + liveRand() * 0.35
+        });
+      }
+
+      // Prominent Navigation / Jewel Stars with 4-Point Optical Diffraction Spikes
+      // (Antares near Rho Ophiuchi, Vega/Deneb/Altair Summer Triangle, Carina/Crux beacons)
+      const beaconSpecs = [
+        { gx: 0.04, gy: -0.078, r: 2.3, spike: 15, color: '#fed7aa', glow: '251, 146, 60' },  // Antares (Amber-Ruby Supergiant)
+        { gx: 0.31, gy: -0.012, r: 2.4, spike: 17, color: '#e0f2fe', glow: '125, 211, 252' }, // Deneb (Blue-White Supergiant)
+        { gx: 0.24, gy: -0.145, r: 2.5, spike: 18, color: '#f0f9ff', glow: '56, 189, 248' },  // Vega (Sapphire-White)
+        { gx: 0.17, gy: 0.088, r: 2.1, spike: 14, color: '#f8fafc', glow: '186, 230, 253' },  // Altair
+        { gx: -0.08, gy: 0.022, r: 2.0, spike: 13, color: '#fef3c7', glow: '253, 224, 71' },  // Kaus Australis (Sagittarius)
+        { gx: -0.22, gy: -0.032, r: 2.1, spike: 14, color: '#bae6fd', glow: '96, 165, 250' }, // Shaula (Scorpius)
+        { gx: -0.35, gy: 0.015, r: 2.3, spike: 16, color: '#fbcfe8', glow: '244, 114, 182' }, // Eta Carinae
+        { gx: -0.44, gy: -0.028, r: 2.2, spike: 15, color: '#e0f2fe', glow: '147, 197, 253' }, // Acrux
+        { gx: 0.44, gy: 0.022, r: 1.9, spike: 12, color: '#fde68a', glow: '251, 191, 36' },   // Sadr / Cepheus
+        { gx: 0.01, gy: 0.008, r: 1.9, spike: 12, color: '#fffbeb', glow: '253, 230, 138' },  // Sagittarius Core Jewel
+        { gx: -0.13, gy: -0.11, r: 1.8, spike: 11, color: '#e0e7ff', glow: '165, 180, 252' },
+        { gx: 0.39, gy: -0.09, r: 1.8, spike: 11, color: '#f0f9ff', glow: '125, 211, 252' }
+      ];
+
+      beaconStars = [];
+      for (let i = 0; i < beaconSpecs.length; i++) {
+        const b = beaconSpecs[i];
+        const arch = 0.025 * b.gx * b.gx - 0.009 + 0.015 * Math.sin(b.gx * 3.3 + 0.45);
+        const gyUn = b.gy - arch;
+        const dx = b.gx * COS_GAL - gyUn * SIN_GAL;
+        const dy = b.gx * SIN_GAL + gyUn * COS_GAL;
+        const nx = GC_X + dx / scaleX;
+        const ny = GC_Y + dy;
+        if (nx > 0.02 && nx < 0.98 && ny > 0.04 && ny < 0.96) {
+          beaconStars.push({
+            x: nx,
+            y: ny,
+            r: b.r,
+            spike: b.spike,
+            color: b.color,
+            glow: b.glow,
+            phase: i * 1.37
+          });
+        }
+      }
+
+      skyDirty = false;
+    }
+
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = window.innerWidth;
-      height = window.innerHeight;
+      const newW = window.innerWidth;
+      const newH = window.innerHeight;
+      if (newW === width && newH === height && !skyDirty) return;
+
+      width = newW;
+      height = newH;
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       canvas.style.width = width + 'px';
       canvas.style.height = height + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      skyDirty = true;
+
+      if (isRunning) {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (isRunning && skyDirty) buildMilkyWaySky();
+        }, 120);
+      }
     }
+
     window.addEventListener('resize', resize);
     resize();
 
     // -------------------------------------------------------------
-    // A. Cosmic Starfield & Milky Way Spiral Generation
+    // Shooting Stars / Interstellar Bolide Meteors
     // -------------------------------------------------------------
-    // Ambient deep background stars (fixed twinkling backdrop)
-    const bgStars = [];
-    const starColors = ['#f8fafc', '#93c5fd', '#fde047', '#fed7aa', '#c084fc', '#ffffff'];
-
-    for (let i = 0; i < 180; i++) {
-      bgStars.push({
-        x: Math.random(),
-        y: Math.random(),
-        size: 0.5 + Math.random() * 1.5,
-        color: starColors[Math.floor(Math.random() * starColors.length)],
-        baseAlpha: 0.2 + Math.random() * 0.6,
-        twinkleSpeed: 0.02 + Math.random() * 0.04,
-        phase: Math.random() * Math.PI * 2
-      });
-    }
-
-    // Milky Way Logarithmic Spiral Arms Particles
-    // Centered around the galactic bulge with differential rotation
-    const spiralStars = [];
-    const spiralCount = 420;
-    const numArms = 2; // Two dominant symmetric spiral arms (Perseus & Scutum-Centaurus) plus spurs
-    const armWinding = 2.8;
-
-    for (let i = 0; i < spiralCount; i++) {
-      const distFraction = Math.pow(Math.random(), 0.7);
-      const dist = 30 + distFraction * 540;
-      const armIndex = i % numArms;
-      const baseArmAngle = (armIndex * Math.PI * 2) / numArms;
-      const armAngle = baseArmAngle + Math.log(dist / 30) * armWinding;
-      const scatterAngle = (Math.random() - 0.5) * (0.6 + distFraction * 0.8);
-      const theta = armAngle + scatterAngle;
-      const angSpeed = (0.00035 + (35 / (dist + 60)) * 0.0003);
-
-      spiralStars.push({
-        r: dist,
-        theta: theta,
-        angSpeed: angSpeed,
-        size: 0.7 + Math.random() * 1.8,
-        color: starColors[Math.floor(Math.random() * starColors.length)],
-        alpha: 0.25 + Math.random() * 0.65,
-        twinkleSpeed: 0.015 + Math.random() * 0.035,
-        phase: Math.random() * Math.PI * 2
-      });
-    }
-
-    // Occasional Shooting Stars / Interstellar Comets
     const shootingStars = [];
     let lastShootingStarTime = 0;
 
     function spawnShootingStar() {
-      const angle = (Math.PI / 4) + (Math.random() - 0.5) * 0.3; // ~45 deg diagonal streak
-      const speed = 12 + Math.random() * 8;
+      const angle = (Math.PI * 0.72) + (Math.random() - 0.5) * 0.28; // Streak roughly parallel to galactic band
+      const speed = 13 + Math.random() * 9;
       shootingStars.push({
-        x: Math.random() * width * 0.8,
-        y: Math.random() * height * 0.4,
+        x: width * (0.25 + Math.random() * 0.70),
+        y: height * (0.04 + Math.random() * 0.42),
         dx: Math.cos(angle) * speed,
         dy: Math.sin(angle) * speed,
-        length: 70 + Math.random() * 60,
-        opacity: 0.9,
+        length: 85 + Math.random() * 75,
         life: 1.0,
-        decay: 0.016 + Math.random() * 0.012
+        decay: 0.015 + Math.random() * 0.011
       });
     }
 
     // -------------------------------------------------------------
-    // B. Visible Solar System Definition
+    // Visible 3D Solar System Definition (Nestled in the Orion Spur)
     // -------------------------------------------------------------
-    // Real astronomical order of the 8 planets + Asteroid belt
-    // With 3D perspective tilt and real-time orbital mechanics
     const planets = [
       {
         name: 'MERCURY',
-        a: 48,
-        speed: 0.024,
-        angle: Math.random() * Math.PI * 2,
-        r: 2.4,
-        color: '#94a3b8',
-        glow: 'rgba(148, 163, 184, 0.4)',
-        type: 'terrestrial'
+        a: 44,
+        speed: 0.022,
+        angle: 0.8,
+        r: 2.3,
+        color: '#cbd5e1',
+        darkColor: '#1e293b',
+        glow: 'rgba(148, 163, 184, 0.35)'
       },
       {
         name: 'VENUS',
-        a: 78,
-        speed: 0.017,
-        angle: Math.random() * Math.PI * 2,
-        r: 3.8,
+        a: 72,
+        speed: 0.016,
+        angle: 2.4,
+        r: 3.6,
         color: '#fef08a',
-        glow: 'rgba(254, 240, 138, 0.5)',
-        type: 'terrestrial'
+        darkColor: '#451a03',
+        glow: 'rgba(254, 240, 138, 0.45)'
       },
       {
         name: 'EARTH [SOL-3]',
-        a: 116,
-        speed: 0.012,
-        angle: Math.random() * Math.PI * 2,
-        r: 4.6,
+        a: 108,
+        speed: 0.011,
+        angle: 4.1,
+        r: 4.4,
         color: '#38bdf8',
-        glow: 'rgba(56, 189, 248, 0.65)',
+        darkColor: '#082f49',
+        glow: 'rgba(56, 189, 248, 0.60)',
         hasMoon: true,
-        moonAngle: 0,
-        moonDist: 13,
-        moonSpeed: 0.065,
-        type: 'habitable'
+        moonAngle: 0.5,
+        moonDist: 12,
+        moonSpeed: 0.06
       },
       {
         name: 'MARS',
-        a: 154,
-        speed: 0.009,
-        angle: Math.random() * Math.PI * 2,
-        r: 3.4,
-        color: '#f87171',
-        glow: 'rgba(248, 113, 113, 0.5)',
-        type: 'terrestrial'
+        a: 144,
+        speed: 0.0085,
+        angle: 5.5,
+        r: 3.3,
+        color: '#fb7185',
+        darkColor: '#450a0a',
+        glow: 'rgba(248, 113, 113, 0.45)'
       },
       {
         name: 'JUPITER',
-        a: 236,
-        speed: 0.0044,
-        angle: Math.random() * Math.PI * 2,
-        r: 9.2,
-        color: '#fbbf24',
-        glow: 'rgba(251, 191, 36, 0.45)',
+        a: 218,
+        speed: 0.0042,
+        angle: 1.9,
+        r: 8.6,
+        color: '#fcd34d',
+        darkColor: '#451a03',
+        glow: 'rgba(251, 191, 36, 0.40)',
         hasBands: true,
         hasMoons: true,
-        moonAngle: 0,
-        type: 'gas-giant'
+        moonAngle: 1.2
       },
       {
         name: 'SATURN',
-        a: 300,
-        speed: 0.0030,
-        angle: Math.random() * Math.PI * 2,
-        r: 7.8,
+        a: 278,
+        speed: 0.0028,
+        angle: 0.55,
+        r: 7.4,
         color: '#fde68a',
-        glow: 'rgba(253, 230, 138, 0.4)',
-        hasRings: true,
-        type: 'ringed-giant'
+        darkColor: '#422006',
+        glow: 'rgba(253, 230, 138, 0.38)',
+        hasRings: true
       },
       {
         name: 'URANUS',
-        a: 358,
-        speed: 0.0019,
-        angle: Math.random() * Math.PI * 2,
-        r: 5.6,
+        a: 332,
+        speed: 0.0018,
+        angle: 3.4,
+        r: 5.2,
         color: '#67e8f9',
-        glow: 'rgba(103, 232, 249, 0.45)',
-        hasThinRing: true,
-        type: 'ice-giant'
+        darkColor: '#083344',
+        glow: 'rgba(103, 232, 249, 0.40)',
+        hasThinRing: true
       },
       {
         name: 'NEPTUNE',
-        a: 412,
-        speed: 0.0013,
-        angle: Math.random() * Math.PI * 2,
-        r: 5.4,
+        a: 382,
+        speed: 0.0012,
+        angle: 5.0,
+        r: 5.0,
         color: '#60a5fa',
-        glow: 'rgba(96, 165, 250, 0.5)',
-        type: 'ice-giant'
+        darkColor: '#172554',
+        glow: 'rgba(96, 165, 250, 0.45)'
       }
     ];
 
-    // Main Asteroid Belt particles (between Mars & Jupiter: ~180 - 204px)
     const asteroidBelt = [];
-    for (let i = 0; i < 55; i++) {
+    const astRand = createPRNG(0x42454C54);
+    for (let i = 0; i < 65; i++) {
       asteroidBelt.push({
-        a: 180 + Math.random() * 26,
-        angle: Math.random() * Math.PI * 2,
-        speed: 0.006 + (Math.random() - 0.5) * 0.0015,
-        size: 0.8 + Math.random() * 1.4,
-        alpha: 0.3 + Math.random() * 0.45
+        a: 168 + astRand() * 24,
+        angle: astRand() * Math.PI * 2,
+        speed: 0.0055 + (astRand() - 0.5) * 0.0014,
+        size: 0.7 + astRand() * 1.2,
+        alpha: 0.24 + astRand() * 0.40
       });
+    }
+
+    function drawDiffractionStar(x, y, r, spikeLen, color, glowRgb, pulse) {
+      const haloR = r * (4.8 + pulse * 1.4);
+      const g = ctx.createRadialGradient(x, y, 0, x, y, haloR);
+      g.addColorStop(0, '#ffffff');
+      g.addColorStop(0.22, color);
+      g.addColorStop(0.5, `rgba(${glowRgb}, 0.34)`);
+      g.addColorStop(1, `rgba(${glowRgb}, 0)`);
+
+      ctx.globalAlpha = 0.85 + pulse * 0.15;
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(x, y, haloR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 4-point crisp optical diffraction spikes + subtle 45-deg secondary rays
+      const len = spikeLen * (0.9 + pulse * 0.22);
+      ctx.save();
+      ctx.translate(x, y);
+
+      const hGrad = ctx.createLinearGradient(-len, 0, len, 0);
+      hGrad.addColorStop(0, `rgba(${glowRgb}, 0)`);
+      hGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.92)');
+      hGrad.addColorStop(1, `rgba(${glowRgb}, 0)`);
+      ctx.strokeStyle = hGrad;
+      ctx.lineWidth = 1.05;
+      ctx.beginPath();
+      ctx.moveTo(-len, 0);
+      ctx.lineTo(len, 0);
+      ctx.stroke();
+
+      const vGrad = ctx.createLinearGradient(0, -len, 0, len);
+      vGrad.addColorStop(0, `rgba(${glowRgb}, 0)`);
+      vGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.92)');
+      vGrad.addColorStop(1, `rgba(${glowRgb}, 0)`);
+      ctx.strokeStyle = vGrad;
+      ctx.beginPath();
+      ctx.moveTo(0, -len);
+      ctx.lineTo(0, len);
+      ctx.stroke();
+
+      const dLen = len * 0.42;
+      ctx.strokeStyle = `rgba(${glowRgb}, 0.35)`;
+      ctx.lineWidth = 0.75;
+      ctx.beginPath();
+      ctx.moveTo(-dLen, -dLen);
+      ctx.lineTo(dLen, dLen);
+      ctx.moveTo(dLen, -dLen);
+      ctx.lineTo(-dLen, dLen);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawSaturnRingsHalf(px, py, scale, isFront) {
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.rotate(0.40);
+      ctx.scale(1, 0.36);
+
+      const startA = isFront ? 0 : Math.PI;
+      const endA = isFront ? Math.PI : Math.PI * 2;
+
+      // Outer A-Ring
+      ctx.strokeStyle = 'rgba(254, 240, 138, 0.62)';
+      ctx.lineWidth = 2.6 * scale;
+      ctx.beginPath();
+      ctx.arc(0, 0, 17.5 * scale, startA, endA);
+      ctx.stroke();
+
+      // Bright B-Ring (separated by Cassini Division gap)
+      ctx.strokeStyle = 'rgba(253, 224, 71, 0.80)';
+      ctx.lineWidth = 3.2 * scale;
+      ctx.beginPath();
+      ctx.arc(0, 0, 13.2 * scale, startA, endA);
+      ctx.stroke();
+
+      // Faint inner C-Ring
+      ctx.strokeStyle = 'rgba(217, 119, 6, 0.36)';
+      ctx.lineWidth = 1.6 * scale;
+      ctx.beginPath();
+      ctx.arc(0, 0, 9.8 * scale, startA, endA);
+      ctx.stroke();
+
+      ctx.restore();
     }
 
     let time = 0;
 
     // -------------------------------------------------------------
-    // C. Master Render Loop
+    // Master 60fps Render Loop
     // -------------------------------------------------------------
     function render() {
       if (!isRunning) return;
+      if (skyDirty && !resizeTimer) {
+        buildMilkyWaySky();
+      }
+
       time += 0.016;
 
-      // Parallax smooth interpolation (lerp)
-      currentOffsetX += (targetOffsetX - currentOffsetX) * 0.06;
-      currentOffsetY += (targetOffsetY - currentOffsetY) * 0.06;
-
-      // System center & responsive scale
-      const cx = width * 0.5 + currentOffsetX;
-      const cy = height * 0.44 + currentOffsetY;
-      // Responsive scale for small screens vs wide screens
-      const scale = Math.min(1.05, Math.max(0.55, width / 1150));
-      const tiltY = 0.38 + (currentOffsetY * 0.001); // 3D oblique viewing perspective
+      // Subtle autonomous cosmic drift + mouse parallax
+      const autoDriftX = Math.sin(time * 0.14) * 6;
+      const autoDriftY = Math.cos(time * 0.11) * 4;
+      currentOffsetX += ((targetOffsetX + autoDriftX) - currentOffsetX) * 0.055;
+      currentOffsetY += ((targetOffsetY + autoDriftY) - currentOffsetY) * 0.055;
 
       ctx.clearRect(0, 0, width, height);
 
-      // 1. Draw Ambient Background Starfield (Twinkling)
-      for (let i = 0; i < bgStars.length; i++) {
-        const s = bgStars[i];
-        const alpha = Math.max(0.08, s.baseAlpha + Math.sin(time * 2 + s.phase) * 0.2);
+      // 1. Blit Pre-Baked Astrophotography Milky Way + 9,500+ Stardust Layer (Depth Plane 1)
+      if (skyCanvas.width > 0 && skyCanvas.height > 0) {
+        const bgShiftX = -PARALLAX_PAD + currentOffsetX * 0.38;
+        const bgShiftY = -PARALLAX_PAD + currentOffsetY * 0.38;
+        ctx.globalAlpha = 1;
+        ctx.drawImage(
+          skyCanvas,
+          0,
+          0,
+          skyCanvas.width,
+          skyCanvas.height,
+          bgShiftX,
+          bgShiftY,
+          skyW,
+          skyH
+        );
+      }
+
+      // 2. Subtle Breathing Volumetric Shimmer over Sagittarius Core & Star Clouds
+      const coreScreenX = width * GC_X + currentOffsetX * 0.42;
+      const coreScreenY = height * GC_Y + currentOffsetY * 0.42;
+      const shimmerPulse = 0.045 + Math.sin(time * 0.9) * 0.018;
+      const shimmerR = Math.max(220, Math.min(width, height) * 0.38);
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      const coreBreath = ctx.createRadialGradient(coreScreenX, coreScreenY, 0, coreScreenX, coreScreenY, shimmerR);
+      coreBreath.addColorStop(0, `rgba(255, 228, 170, ${shimmerPulse})`);
+      coreBreath.addColorStop(0.45, `rgba(186, 210, 255, ${shimmerPulse * 0.45})`);
+      coreBreath.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = coreBreath;
+      ctx.beginPath();
+      ctx.arc(coreScreenX, coreScreenY, shimmerR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 3. Live Scintillating Stars & Optical Diffraction Beacons (Depth Plane 2)
+      for (let i = 0; i < liveStars.length; i++) {
+        const s = liveStars[i];
+        const sx = s.x * width + currentOffsetX * s.parallax;
+        const sy = s.y * height + currentOffsetY * s.parallax;
+        const twinkle = Math.sin(time * s.speed + s.phase);
+        const alpha = Math.max(0.08, Math.min(1.0, s.baseAlpha + twinkle * 0.24));
+
         ctx.fillStyle = s.color;
         ctx.globalAlpha = alpha;
         ctx.beginPath();
-        ctx.arc(s.x * width, s.y * height, s.size, 0, Math.PI * 2);
+        ctx.arc(sx, sy, s.size, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // 2. Draw Galactic Bulge & Core Glow (Milky Way Center)
-      const coreR = Math.max(160, 260 * scale);
-      const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR);
-      coreGrad.addColorStop(0, 'rgba(255, 235, 185, 0.28)');
-      coreGrad.addColorStop(0.25, 'rgba(216, 180, 254, 0.16)');
-      coreGrad.addColorStop(0.55, 'rgba(99, 102, 241, 0.08)');
-      coreGrad.addColorStop(0.85, 'rgba(56, 189, 248, 0.03)');
-      coreGrad.addColorStop(1, 'rgba(2, 1, 10, 0)');
-
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = coreGrad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Cosmic dust cloud haze along spiral arms
-      const dustGrad = ctx.createRadialGradient(cx + 80 * scale, cy - 30 * scale, 10, cx, cy, 380 * scale);
-      dustGrad.addColorStop(0, 'rgba(168, 85, 247, 0.10)');
-      dustGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.06)');
-      dustGrad.addColorStop(1, 'rgba(3, 2, 14, 0)');
-      ctx.fillStyle = dustGrad;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 380 * scale, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 3. Draw Milky Way Logarithmic Spiral Arm Stars
-      for (let i = 0; i < spiralStars.length; i++) {
-        const star = spiralStars[i];
-        star.theta += star.angSpeed;
-
-        const starR = star.r * scale;
-        // Project onto elliptical galactic disk with tilt
-        const sx = cx + Math.cos(star.theta) * starR;
-        const sy = cy + Math.sin(star.theta) * (starR * 0.52);
-
-        const starAlpha = Math.max(0.12, star.alpha + Math.sin(time * 3 + star.phase) * 0.22);
-        ctx.fillStyle = star.color;
-        ctx.globalAlpha = starAlpha;
-        ctx.beginPath();
-        ctx.arc(sx, sy, star.size * (0.8 + (starR / 500) * 0.4), 0, Math.PI * 2);
-        ctx.fill();
+      for (let i = 0; i < beaconStars.length; i++) {
+        const b = beaconStars[i];
+        const bx = b.x * width + currentOffsetX * 0.66;
+        const by = b.y * height + currentOffsetY * 0.66;
+        const pulse = 0.5 + 0.5 * Math.sin(time * 1.8 + b.phase);
+        drawDiffractionStar(bx, by, b.r, b.spike, b.color, b.glow, pulse);
       }
 
-      // 4. Shooting Stars / Comets
-      if (Math.random() < 0.012 && time - lastShootingStarTime > 2.5) {
+      // 4. Shooting Stars / Interstellar Meteors
+      if (Math.random() < 0.014 && time - lastShootingStarTime > 2.4) {
         spawnShootingStar();
         lastShootingStarTime = time;
       }
@@ -2951,21 +3659,23 @@ exportWebPAssets();`,
         meteor.y += meteor.dy;
         meteor.life -= meteor.decay;
 
-        if (meteor.life <= 0 || meteor.x > width || meteor.y > height) {
+        if (meteor.life <= 0 || meteor.x < -120 || meteor.x > width + 120 || meteor.y > height + 120) {
           shootingStars.splice(i, 1);
           continue;
         }
 
-        const tailX = meteor.x - (meteor.dx / Math.hypot(meteor.dx, meteor.dy)) * meteor.length * meteor.life;
-        const tailY = meteor.y - (meteor.dy / Math.hypot(meteor.dx, meteor.dy)) * meteor.length * meteor.life;
+        const speedNorm = Math.hypot(meteor.dx, meteor.dy) || 1;
+        const tailX = meteor.x - (meteor.dx / speedNorm) * meteor.length * meteor.life;
+        const tailY = meteor.y - (meteor.dy / speedNorm) * meteor.length * meteor.life;
 
         const mGrad = ctx.createLinearGradient(tailX, tailY, meteor.x, meteor.y);
         mGrad.addColorStop(0, 'rgba(56, 189, 248, 0)');
-        mGrad.addColorStop(0.7, 'rgba(56, 189, 248, 0.45)');
-        mGrad.addColorStop(1, 'rgba(255, 255, 255, 0.95)');
+        mGrad.addColorStop(0.55, 'rgba(125, 211, 252, 0.42)');
+        mGrad.addColorStop(0.85, 'rgba(254, 240, 138, 0.78)');
+        mGrad.addColorStop(1, 'rgba(255, 255, 255, 0.98)');
 
         ctx.strokeStyle = mGrad;
-        ctx.lineWidth = 1.8;
+        ctx.lineWidth = 1.6;
         ctx.globalAlpha = meteor.life;
         ctx.beginPath();
         ctx.moveTo(tailX, tailY);
@@ -2974,165 +3684,163 @@ exportWebPAssets();`,
 
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
-        ctx.arc(meteor.x, meteor.y, 2, 0, Math.PI * 2);
+        ctx.arc(meteor.x, meteor.y, 1.8, 0, Math.PI * 2);
         ctx.fill();
       }
 
       // -----------------------------------------------------------
-      // 5. Draw Visible Solar System: Orbits & Depth-Sorted Bodies
+      // 5. Visible 3D Solar System in the Orion Spur (Depth Plane 3)
+      //    Positioned in the unobstructed upper-right Orion Arm sky
       // -----------------------------------------------------------
-      // A. Orbital Tracks (Subtle luminous ellipses)
-      ctx.lineWidth = 1;
+      const isCompact = width < 768;
+      const solCx = (isCompact ? width * 0.56 : width * 0.775) + currentOffsetX * 0.95;
+      const solCy = (isCompact ? height * 0.21 : height * 0.255) + currentOffsetY * 0.95;
+      const scale = Math.min(0.56, Math.max(0.32, width / 2950));
+      const tiltY = 0.36 + (currentOffsetY * 0.0008);
+
+      // A. Delicate Celestial Orbital Tracks
+      ctx.save();
+      ctx.translate(solCx, solCy);
+      ctx.rotate(-0.18); // Subtle ecliptic inclination relative to the galactic plane
+      ctx.lineWidth = 0.85;
       for (let i = 0; i < planets.length; i++) {
         const p = planets[i];
         const a = p.a * scale;
         const b = a * tiltY;
-
-        ctx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+        ctx.strokeStyle = i === 2 ? 'rgba(56, 189, 248, 0.16)' : 'rgba(186, 230, 253, 0.075)';
         ctx.globalAlpha = 1;
         ctx.beginPath();
-        ctx.ellipse(cx, cy, a, b, 0, 0, Math.PI * 2);
+        ctx.ellipse(0, 0, a, b, 0, 0, Math.PI * 2);
         ctx.stroke();
       }
+      ctx.restore();
 
-      // B. Main Asteroid Belt (Orbiting particles)
+      const cosEcl = Math.cos(-0.18);
+      const sinEcl = Math.sin(-0.18);
+
+      // B. Main Asteroid Belt
       for (let i = 0; i < asteroidBelt.length; i++) {
         const ast = asteroidBelt[i];
         ast.angle += ast.speed;
-        const a = ast.a * scale;
-        const b = a * tiltY;
-        const ax = cx + Math.cos(ast.angle) * a;
-        const ay = cy + Math.sin(ast.angle) * b;
+        const lx = Math.cos(ast.angle) * (ast.a * scale);
+        const ly = Math.sin(ast.angle) * (ast.a * scale * tiltY);
+        const ax = solCx + lx * cosEcl - ly * sinEcl;
+        const ay = solCy + lx * sinEcl + ly * cosEcl;
 
-        ctx.fillStyle = '#cbd5e1';
+        ctx.fillStyle = '#e2e8f0';
         ctx.globalAlpha = ast.alpha;
         ctx.beginPath();
-        ctx.arc(ax, ay, ast.size * scale, 0, Math.PI * 2);
+        ctx.arc(ax, ay, Math.max(0.5, ast.size * scale * 1.25), 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // C. Update Planet Positions & Collect for 3D Z-Depth Sorting
+      // C. Collect Celestial Bodies for 3D Depth Sorting
       const renderBodies = [];
-
       for (let i = 0; i < planets.length; i++) {
         const p = planets[i];
         p.angle += p.speed;
-        const a = p.a * scale;
-        const b = a * tiltY;
-        const px = cx + Math.cos(p.angle) * a;
-        const py = cy + Math.sin(p.angle) * b;
-        const isFarSide = Math.sin(p.angle) < 0;
+        const lx = Math.cos(p.angle) * (p.a * scale);
+        const ly = Math.sin(p.angle) * (p.a * scale * tiltY);
+        const px = solCx + lx * cosEcl - ly * sinEcl;
+        const py = solCy + lx * sinEcl + ly * cosEcl;
 
         renderBodies.push({
           type: 'planet',
           planet: p,
           x: px,
           y: py,
-          isFarSide: isFarSide,
-          zOrder: py
+          zOrder: ly
         });
       }
 
-      // Add The Sun into the depth-sort at the center Y
       renderBodies.push({
         type: 'sun',
-        x: cx,
-        y: cy,
-        zOrder: cy
+        x: solCx,
+        y: solCy,
+        zOrder: 0
       });
 
-      // Sort all celestial bodies by Y-coordinate (back to front)
       renderBodies.sort((a, b) => a.zOrder - b.zOrder);
 
-      // D. Draw Bodies in Correct 3D Perspective Order
+      // D. Render Sol & 3D-Lit Planets
       for (let i = 0; i < renderBodies.length; i++) {
         const item = renderBodies[i];
 
         if (item.type === 'sun') {
-          // Render Sol (The Sun)
-          const sunR = 14 * scale;
-          const coronaR = (46 + Math.sin(time * 2.2) * 5) * scale;
+          const sunR = Math.max(5.5, 13 * scale);
+          const coronaR = (44 + Math.sin(time * 2.1) * 4) * scale;
 
-          // Multi-layer glowing corona
-          const sunGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coronaR);
+          const sunGrad = ctx.createRadialGradient(solCx, solCy, 0, solCx, solCy, coronaR);
           sunGrad.addColorStop(0, '#ffffff');
-          sunGrad.addColorStop(0.18, '#fef08a');
-          sunGrad.addColorStop(0.38, '#f59e0b');
-          sunGrad.addColorStop(0.68, 'rgba(234, 88, 12, 0.35)');
+          sunGrad.addColorStop(0.20, '#fef9c3');
+          sunGrad.addColorStop(0.42, 'rgba(251, 191, 36, 0.72)');
+          sunGrad.addColorStop(0.72, 'rgba(234, 88, 12, 0.25)');
           sunGrad.addColorStop(1, 'rgba(234, 88, 12, 0)');
 
           ctx.globalAlpha = 1;
           ctx.fillStyle = sunGrad;
           ctx.beginPath();
-          ctx.arc(cx, cy, coronaR, 0, Math.PI * 2);
+          ctx.arc(solCx, solCy, coronaR, 0, Math.PI * 2);
           ctx.fill();
 
-          // Photosphere Core
+          // Subtle solar diffraction rays
+          drawDiffractionStar(solCx, solCy, sunR * 0.45, coronaR * 1.15, '#fef08a', '251, 191, 36', 0.5);
+
+          ctx.globalAlpha = 1;
           ctx.fillStyle = '#ffffff';
           ctx.beginPath();
-          ctx.arc(cx, cy, sunR, 0, Math.PI * 2);
+          ctx.arc(solCx, solCy, sunR, 0, Math.PI * 2);
           ctx.fill();
 
-          // Sun label HUD
-          ctx.fillStyle = '#fef08a';
-          ctx.globalAlpha = 0.85;
-          ctx.font = `600 ${Math.max(8, Math.round(9 * scale))}px 'Fira Code', monospace`;
+          ctx.fillStyle = 'rgba(254, 240, 138, 0.85)';
+          ctx.font = `600 ${Math.max(8, Math.round(13 * scale))}px 'Fira Code', monospace`;
           ctx.textAlign = 'center';
-          ctx.fillText('SOL (1.0 M☉)', cx, cy + sunR + 12 * scale);
+          ctx.fillText('SOL • ORION SPUR', solCx, solCy + sunR + Math.max(10, 16 * scale));
 
         } else if (item.type === 'planet') {
           const p = item.planet;
           const px = item.x;
           const py = item.y;
-          const pr = p.r * scale;
+          const pr = Math.max(1.8, p.r * scale * 1.32);
 
-          // Planetary Atmosphere Glow
-          ctx.globalAlpha = 0.6;
+          // Atmosphere glow
+          ctx.globalAlpha = 0.55;
           ctx.fillStyle = p.glow;
           ctx.beginPath();
-          ctx.arc(px, py, pr * 1.8, 0, Math.PI * 2);
+          ctx.arc(px, py, pr * 1.9, 0, Math.PI * 2);
           ctx.fill();
 
-          // If Saturn: Draw back portion of rings first
+          // Back half of Saturn's rings (behind sphere)
           if (p.hasRings) {
-            ctx.save();
-            ctx.translate(px, py);
-            ctx.rotate(0.42); // 24-degree axial ring tilt
-            ctx.scale(1, 0.38);
-
-            // Outer golden ring
-            ctx.strokeStyle = 'rgba(254, 240, 138, 0.65)';
-            ctx.lineWidth = 4 * scale;
-            ctx.beginPath();
-            ctx.arc(0, 0, 17 * scale, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // Inner translucent ring
-            ctx.strokeStyle = 'rgba(217, 119, 6, 0.45)';
-            ctx.lineWidth = 2.5 * scale;
-            ctx.beginPath();
-            ctx.arc(0, 0, 12 * scale, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.restore();
+            ctx.globalAlpha = 1;
+            drawSaturnRingsHalf(px, py, scale * 1.32, false);
           }
 
-          // If Uranus: Faint tilted vertical ring
           if (p.hasThinRing) {
             ctx.save();
             ctx.translate(px, py);
-            ctx.rotate(1.4); // Uranus extreme 98 deg tilt
+            ctx.rotate(1.4);
             ctx.scale(1, 0.25);
             ctx.strokeStyle = 'rgba(103, 232, 249, 0.35)';
-            ctx.lineWidth = 1.2 * scale;
+            ctx.lineWidth = 1.1 * scale * 1.3;
             ctx.beginPath();
-            ctx.arc(0, 0, 11 * scale, 0, Math.PI * 2);
+            ctx.arc(0, 0, 10.5 * scale * 1.3, 0, Math.PI * 2);
             ctx.stroke();
             ctx.restore();
           }
 
-          // Planet Body
+          // 3D Spherical Day/Night Illumination facing Sol
+          const toSunAngle = Math.atan2(solCy - py, solCx - px);
+          const litX = px + Math.cos(toSunAngle) * pr * 0.45;
+          const litY = py + Math.sin(toSunAngle) * pr * 0.45;
+          const sphereGrad = ctx.createRadialGradient(litX, litY, pr * 0.08, px, py, pr * 1.08);
+          sphereGrad.addColorStop(0, '#ffffff');
+          sphereGrad.addColorStop(0.28, p.color);
+          sphereGrad.addColorStop(0.78, p.color);
+          sphereGrad.addColorStop(1, p.darkColor);
+
           ctx.globalAlpha = 1;
-          ctx.fillStyle = p.color;
+          ctx.fillStyle = sphereGrad;
           ctx.beginPath();
           ctx.arc(px, py, pr, 0, Math.PI * 2);
           ctx.fill();
@@ -3143,60 +3851,64 @@ exportWebPAssets();`,
             ctx.beginPath();
             ctx.arc(px, py, pr, 0, Math.PI * 2);
             ctx.clip();
+            ctx.globalAlpha = 0.55;
             ctx.fillStyle = '#b45309';
-            ctx.fillRect(px - pr, py - pr * 0.3, pr * 2, pr * 0.25);
-            ctx.fillRect(px - pr, py + pr * 0.15, pr * 2, pr * 0.25);
+            ctx.fillRect(px - pr, py - pr * 0.32, pr * 2, pr * 0.22);
+            ctx.fillRect(px - pr, py + pr * 0.14, pr * 2, pr * 0.22);
             ctx.fillStyle = '#dc2626';
             ctx.beginPath();
-            ctx.arc(px + pr * 0.25, py + pr * 0.25, pr * 0.25, 0, Math.PI * 2);
+            ctx.arc(px + pr * 0.24, py + pr * 0.24, pr * 0.22, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
           }
 
-          // Earth's Orbiting Moon (Luna)
+          // Front half of Saturn's rings (in front of sphere)
+          if (p.hasRings) {
+            ctx.globalAlpha = 1;
+            drawSaturnRingsHalf(px, py, scale * 1.32, true);
+          }
+
+          // Earth's Moon (Luna)
           if (p.hasMoon) {
             p.moonAngle += p.moonSpeed;
-            const mx = px + Math.cos(p.moonAngle) * (p.moonDist * scale);
-            const my = py + Math.sin(p.moonAngle) * (p.moonDist * scale * tiltY * 1.5);
+            const mDist = p.moonDist * scale * 1.35;
+            const mx = px + Math.cos(p.moonAngle) * mDist;
+            const my = py + Math.sin(p.moonAngle) * (mDist * tiltY * 1.45);
 
-            ctx.strokeStyle = 'rgba(226, 232, 240, 0.2)';
-            ctx.lineWidth = 0.8;
+            ctx.strokeStyle = 'rgba(226, 232, 240, 0.22)';
+            ctx.lineWidth = 0.7;
             ctx.beginPath();
-            ctx.ellipse(px, py, p.moonDist * scale, p.moonDist * scale * tiltY * 1.5, 0, 0, Math.PI * 2);
+            ctx.ellipse(px, py, mDist, mDist * tiltY * 1.45, 0, 0, Math.PI * 2);
             ctx.stroke();
 
-            ctx.fillStyle = '#f1f5f9';
+            ctx.fillStyle = '#f8fafc';
             ctx.beginPath();
-            ctx.arc(mx, my, 1.4 * scale, 0, Math.PI * 2);
+            ctx.arc(mx, my, Math.max(1.0, 1.35 * scale * 1.3), 0, Math.PI * 2);
             ctx.fill();
           }
 
-          // Jupiter's Galilean Moons (Io & Europa)
+          // Jupiter's Galilean Moons
           if (p.hasMoons) {
-            p.moonAngle += 0.04;
-            const jm1X = px + Math.cos(p.moonAngle) * (16 * scale);
-            const jm1Y = py + Math.sin(p.moonAngle) * (16 * scale * tiltY);
-            const jm2X = px + Math.cos(p.moonAngle + 2.2) * (23 * scale);
-            const jm2Y = py + Math.sin(p.moonAngle + 2.2) * (23 * scale * tiltY);
-
+            p.moonAngle += 0.038;
+            const r1 = 15 * scale * 1.3;
+            const r2 = 21 * scale * 1.3;
             ctx.fillStyle = '#fef08a';
             ctx.beginPath();
-            ctx.arc(jm1X, jm1Y, 1.1 * scale, 0, Math.PI * 2);
+            ctx.arc(px + Math.cos(p.moonAngle) * r1, py + Math.sin(p.moonAngle) * r1 * tiltY, Math.max(0.9, 1.1 * scale * 1.3), 0, Math.PI * 2);
             ctx.fill();
 
             ctx.fillStyle = '#e2e8f0';
             ctx.beginPath();
-            ctx.arc(jm2X, jm2Y, 1.0 * scale, 0, Math.PI * 2);
+            ctx.arc(px + Math.cos(p.moonAngle + 2.2) * r2, py + Math.sin(p.moonAngle + 2.2) * r2 * tiltY, Math.max(0.85, 1.0 * scale * 1.3), 0, Math.PI * 2);
             ctx.fill();
           }
 
-          // Planet HUD Label Tag (Only on prominent planets: Earth, Mars, Jupiter, Saturn)
+          // Crisp HUD planet callout tags
           if (p.name.includes('EARTH') || p.name === 'JUPITER' || p.name === 'SATURN') {
-            ctx.fillStyle = '#cbd5e1';
-            ctx.globalAlpha = 0.75;
-            ctx.font = `500 ${Math.max(7, Math.round(8 * scale))}px 'Fira Code', monospace`;
+            ctx.fillStyle = 'rgba(226, 232, 240, 0.78)';
+            ctx.font = `500 ${Math.max(7, Math.round(11 * scale))}px 'Fira Code', monospace`;
             ctx.textAlign = 'left';
-            ctx.fillText(p.name, px + pr + 4 * scale, py + 3 * scale);
+            ctx.fillText(p.name, px + pr + 4, py + 2.5);
           }
         }
       }
@@ -3209,12 +3921,14 @@ exportWebPAssets();`,
       if (!isRunning) {
         isRunning = true;
         resize();
+        if (skyDirty) buildMilkyWaySky();
         render();
       }
     }
 
     function stop() {
       isRunning = false;
+      clearTimeout(resizeTimer);
       if (animId) {
         cancelAnimationFrame(animId);
         animId = null;
@@ -3224,8 +3938,11 @@ exportWebPAssets();`,
 
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        if (animId) cancelAnimationFrame(animId);
-      } else if (isRunning) {
+        if (animId) {
+          cancelAnimationFrame(animId);
+          animId = null;
+        }
+      } else if (isRunning && !animId) {
         render();
       }
     });
@@ -3367,7 +4084,17 @@ exportWebPAssets();`,
         hudCarrier.textContent = themeMeta[themeKey].carrier;
       }
 
-      // Snow engine activation
+      // Snow engine activation & canvas visibility
+      const snowCanvas = document.getElementById('snowNetworkCanvas');
+      if (snowCanvas) {
+        if (themeMeta[themeKey].snow) {
+          snowCanvas.style.setProperty('display', 'block', 'important');
+          snowCanvas.style.setProperty('visibility', 'visible', 'important');
+        } else {
+          snowCanvas.style.setProperty('display', 'none', 'important');
+          snowCanvas.style.setProperty('visibility', 'hidden', 'important');
+        }
+      }
       if (snowfallEngine) {
         if (themeMeta[themeKey].snow) {
           snowfallEngine.start();
@@ -3394,8 +4121,8 @@ exportWebPAssets();`,
         }
       }
 
-      // World Map is hidden in Cyber Matrix, Aurora Borealis, and Milky Way Galaxy; pause its loop while hidden
-      const hideWorldMap = themeKey === 'cyber-matrix' || themeKey === 'cyber-aurora' || themeKey === 'milky-way';
+      // World Map is ONLY shown in Interlink World Map; hidden & paused in Christmas Glow, Cyber Matrix, Aurora Borealis, and Milky Way
+      const hideWorldMap = themeKey === 'christmas-snow' || themeKey === 'cyber-matrix' || themeKey === 'cyber-aurora' || themeKey === 'milky-way';
       const worldMapCanvas = document.getElementById('cyberNetworkCanvas');
       if (worldMapCanvas) {
         if (hideWorldMap) {

@@ -1450,20 +1450,20 @@ a {
    THEME STYLING IMPLEMENTATIONS
    =================================================================== */
 
-/* Theme: Christmas Glow */
+/* Theme: Christmas Glow — Pure Serene Snowy Winter Night (No World Map) */
 [data-portfolio-theme="christmas-snow"] {
-  --border-color: rgba(224, 242, 254, 0.22);
-  --border-glow: rgba(255, 255, 255, 0.6);
+  --border-color: rgba(224, 242, 254, 0.24);
+  --border-glow: rgba(255, 255, 255, 0.62);
   --violet-bright: #38bdf8;
-  --violet-neon: #7dd3fc;
-  --gradient-violet: linear-gradient(135deg, #ffffff 0%, #7dd3fc 45%, #0284c7 100%);
-  --shadow-violet-glow: 0 0 35px rgba(255, 255, 255, 0.3);
+  --violet-neon: #bae6fd;
+  --gradient-violet: linear-gradient(135deg, #ffffff 0%, #bae6fd 48%, #38bdf8 100%);
+  --shadow-violet-glow: 0 0 35px rgba(186, 230, 253, 0.28);
 }
 
 [data-portfolio-theme="christmas-snow"] .portfolio-theme-topbar {
-  background: rgba(3, 8, 20, 0.95);
-  border-bottom-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.12);
+  background: rgba(3, 9, 22, 0.95);
+  border-bottom-color: rgba(224, 242, 254, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75), 0 0 15px rgba(186, 230, 253, 0.14);
 }
 
 [data-portfolio-theme="christmas-snow"] .theme-pulse-dot {
@@ -1476,29 +1476,79 @@ a {
 }
 
 [data-portfolio-theme="christmas-snow"] #snowNetworkCanvas {
-  opacity: 1;
+  display: block !important;
+  opacity: 0.95;
+  visibility: visible !important;
 }
 
-[data-portfolio-theme="christmas-snow"] #cyberNetworkCanvas {
-  opacity: 0.12; /* faint subtle global contour backdrop */
+/* Completely hide the World Map, digital grid, circuit traces, and HUD chips for a pure snowy vibe */
+[data-portfolio-theme="christmas-snow"] #cyberNetworkCanvas,
+[data-portfolio-theme="christmas-snow"] .cyber-grid,
+[data-portfolio-theme="christmas-snow"] .cyber-circuit-svg,
+[data-portfolio-theme="christmas-snow"] .cyber-floating-icons {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
+/* Crisp Moonlit Winter Midnight Sky & Frosted Horizon Mist */
 [data-portfolio-theme="christmas-snow"] .it-cyber-bg {
-  background-color: #020617;
+  background-color: #020714;
   background-image:
-    radial-gradient(ellipse 120% 90% at 50% -10%, rgba(14, 165, 233, 0.28) 0%, transparent 70%),
-    radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.2) 0%, transparent 60%),
-    radial-gradient(circle at 85% 85%, rgba(244, 63, 94, 0.18) 0%, transparent 60%);
+    radial-gradient(circle at 78% 14%, rgba(224, 242, 254, 0.20) 0%, rgba(125, 211, 252, 0.08) 24%, transparent 55%),
+    radial-gradient(ellipse 130% 55% at 50% 105%, rgba(56, 189, 248, 0.24) 0%, rgba(14, 116, 144, 0.10) 45%, transparent 75%),
+    linear-gradient(180deg, #020612 0%, #051126 48%, #0a1f3d 84%, #102c52 100%);
+}
+
+/* Subtle winter frost haze & distant starlight shimmer */
+[data-portfolio-theme="christmas-snow"] .it-cyber-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(1.2px 1.2px at 12% 18%, rgba(255, 255, 255, 0.85) 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 28% 9%, rgba(224, 242, 254, 0.9) 50%, transparent 55%),
+    radial-gradient(1px 1px at 46% 22%, rgba(255, 255, 255, 0.75) 50%, transparent 55%),
+    radial-gradient(1.4px 1.4px at 64% 12%, rgba(240, 249, 255, 0.88) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 83% 20%, rgba(255, 255, 255, 0.82) 50%, transparent 55%),
+    radial-gradient(1px 1px at 91% 11%, rgba(186, 230, 253, 0.85) 50%, transparent 55%),
+    radial-gradient(1.2px 1.2px at 19% 36%, rgba(255, 255, 255, 0.65) 50%, transparent 55%),
+    radial-gradient(1px 1px at 73% 34%, rgba(224, 242, 254, 0.7) 50%, transparent 55%);
+}
+
+/* Soft snowy ground mist glow along the bottom edge */
+[data-portfolio-theme="christmas-snow"] .it-cyber-bg::after {
+  content: '';
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -2%;
+  height: 22vh;
+  pointer-events: none;
+  background: radial-gradient(ellipse 75% 100% at 50% 100%, rgba(224, 242, 254, 0.18) 0%, rgba(125, 211, 252, 0.07) 48%, transparent 78%);
+  filter: blur(12px);
 }
 
 [data-portfolio-theme="christmas-snow"] .orb-1 {
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.38) 0%, rgba(14, 165, 233, 0.12) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(186, 230, 253, 0.28) 0%, rgba(56, 189, 248, 0.10) 50%, transparent 70%);
 }
 [data-portfolio-theme="christmas-snow"] .orb-2 {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.1) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(125, 211, 252, 0.24) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 70%);
 }
 [data-portfolio-theme="christmas-snow"] .orb-3 {
-  background: radial-gradient(circle, rgba(244, 63, 94, 0.28) 0%, rgba(190, 18, 60, 0.08) 50%, transparent 70%);
+  background: radial-gradient(circle, rgba(240, 249, 255, 0.22) 0%, rgba(56, 189, 248, 0.08) 50%, transparent 70%);
+}
+
+/* Soften hero scrim so falling snow & moonlit sky shine naturally behind crisp text */
+[data-portfolio-theme="christmas-snow"] .hero-section::before {
+  background: radial-gradient(ellipse 46% 52% at 24% 55%, rgba(3, 9, 22, 0.52) 0%, rgba(3, 9, 22, 0.22) 58%, rgba(3, 9, 22, 0) 85%);
+}
+
+[data-portfolio-theme="christmas-snow"] .hero-section h1 {
+  filter: drop-shadow(0 3px 16px rgba(2, 6, 18, 0.85));
 }
 
 /* Frosted glass cards with snowy top highlight in Christmas Glow */
@@ -1883,11 +1933,60 @@ a {
 }
 
 [data-portfolio-theme="milky-way"] .it-cyber-bg {
-  background: radial-gradient(circle at 50% 45%, #0b0826 0%, #050314 60%, #020108 100%) !important;
+  background: radial-gradient(ellipse 130% 90% at 55% 36%, #06071b 0%, #03030e 52%, #010106 100%) !important;
+}
+
+/* Pure deep-space astrophotography sky: hide artificial grid & circuit traces */
+[data-portfolio-theme="milky-way"] .cyber-grid,
+[data-portfolio-theme="milky-way"] .cyber-circuit-svg {
+  display: none !important;
+}
+
+/* Replace purple orbs with subtle deep-space galactic ambient glow */
+[data-portfolio-theme="milky-way"] .orb-1 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, rgba(30, 58, 138, 0.06) 50%, transparent 70%);
+  opacity: 0.28;
+}
+[data-portfolio-theme="milky-way"] .orb-2 {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.14) 0%, rgba(180, 83, 9, 0.05) 50%, transparent 70%);
+  opacity: 0.25;
+}
+[data-portfolio-theme="milky-way"] .orb-3 {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(49, 46, 129, 0.06) 50%, transparent 70%);
+  opacity: 0.26;
+}
+
+/* Feather the hero scrim so the sweeping Milky Way band shines across the sky while keeping text crisp */
+[data-portfolio-theme="milky-way"] .hero-section::before {
+  background: radial-gradient(ellipse 44% 50% at 24% 56%, rgba(2, 3, 12, 0.58) 0%, rgba(2, 3, 12, 0.28) 55%, rgba(2, 3, 12, 0) 84%);
+}
+
+/* Use filter drop-shadow instead of text-shadow on h1 so background-clip gradient spans stay vivid */
+[data-portfolio-theme="milky-way"] .hero-section h1 {
+  filter: drop-shadow(0 3px 16px rgba(1, 2, 10, 0.9));
+}
+
+[data-portfolio-theme="milky-way"] .hero-section .lead {
+  text-shadow: 0 2px 16px rgba(1, 2, 10, 0.92);
 }
 
 [data-portfolio-theme="milky-way"] .cyber-floating-icons {
-  opacity: 0.35;
+  opacity: 0.16;
+}
+
+[data-portfolio-theme="milky-way"] .it-floating-chip {
+  background: rgba(6, 10, 26, 0.45);
+  border-color: rgba(147, 197, 253, 0.22);
+  color: #93c5fd;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+[data-portfolio-theme="milky-way"] .stat-card-violet,
+[data-portfolio-theme="milky-way"] .stat-card-blue {
+  background: linear-gradient(145deg, rgba(7, 10, 26, 0.78) 0%, rgba(3, 5, 15, 0.86) 100%);
+  border-color: rgba(147, 197, 253, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 [data-portfolio-theme="milky-way"] .theme-pill-btn[data-theme="milky-way"].active {
@@ -1899,7 +1998,7 @@ a {
 
 [data-portfolio-theme="milky-way"] .card-codespot,
 [data-portfolio-theme="milky-way"] .codespot-card {
-  background: rgba(8, 7, 24, 0.92);
+  background: rgba(8, 7, 24, 0.90);
   border: 1px solid rgba(56, 189, 248, 0.22);
   border-top: 1.5px solid #38bdf8;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 25px rgba(56, 189, 248, 0.08);
@@ -1913,13 +2012,13 @@ a {
 
 /* Milky Way Theme Dedicated Visibility Across Comfort Modes */
 [data-portfolio-theme="milky-way"][data-comfort-mode="soft"] #galaxyCanvas {
-  opacity: 0.92 !important;
+  opacity: 0.96 !important;
 }
 [data-portfolio-theme="milky-way"][data-comfort-mode="vivid"] #galaxyCanvas {
   opacity: 1 !important;
 }
 [data-portfolio-theme="milky-way"][data-comfort-mode="minimal"] #galaxyCanvas {
-  opacity: 0.55 !important;
+  opacity: 0.58 !important;
 }
 
 /* ===================================================================
@@ -1929,33 +2028,33 @@ a {
 [data-comfort-mode="soft"]:not([data-portfolio-theme="cyber-matrix"]) #matrixRainCanvas {
   opacity: 0.22 !important;
 }
-[data-comfort-mode="soft"]:not([data-portfolio-theme="cyber-matrix"]) #cyberNetworkCanvas {
+[data-portfolio-theme="interlink-world"][data-comfort-mode="soft"] #cyberNetworkCanvas {
   opacity: 0.55 !important;
 }
 [data-comfort-mode="soft"] #snowNetworkCanvas {
-  opacity: 0.7 !important;
+  opacity: 0.88 !important;
 }
 
 /* Minimal Comfort Mode (Whisper subtle ambient background) */
 [data-comfort-mode="minimal"]:not([data-portfolio-theme="cyber-matrix"]) #matrixRainCanvas {
   opacity: 0.10 !important;
 }
-[data-comfort-mode="minimal"]:not([data-portfolio-theme="cyber-matrix"]) #cyberNetworkCanvas {
+[data-portfolio-theme="interlink-world"][data-comfort-mode="minimal"] #cyberNetworkCanvas {
   opacity: 0.25 !important;
 }
 [data-comfort-mode="minimal"] #snowNetworkCanvas {
-  opacity: 0.3 !important;
+  opacity: 0.48 !important;
 }
 
 /* Vivid Mode (For users desiring stronger neon glow) */
 [data-comfort-mode="vivid"]:not([data-portfolio-theme="cyber-matrix"]) #matrixRainCanvas {
   opacity: 0.42 !important;
 }
-[data-comfort-mode="vivid"]:not([data-portfolio-theme="cyber-matrix"]) #cyberNetworkCanvas {
+[data-portfolio-theme="interlink-world"][data-comfort-mode="vivid"] #cyberNetworkCanvas {
   opacity: 0.85 !important;
 }
 [data-comfort-mode="vivid"] #snowNetworkCanvas {
-  opacity: 0.9 !important;
+  opacity: 1 !important;
 }
 
 /* Cyber Matrix Theme Dedicated Visibility Across Comfort Modes */

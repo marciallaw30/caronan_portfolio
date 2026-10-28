@@ -925,8 +925,8 @@
     }
     .planar-board-wrapper.view-4d-phase,
     .planar-board-3d.view-4d-phase {
-      transform: rotateX(28deg) rotateZ(16deg) translateZ(12px);
-      filter: drop-shadow(0 0 35px rgba(236, 72, 153, 0.7)) hue-rotate(25deg);
+      transform: rotateX(34deg) rotateZ(15deg) translateZ(16px);
+      filter: drop-shadow(0 0 36px rgba(168, 85, 247, 0.65)) drop-shadow(0 0 18px rgba(56, 189, 248, 0.35));
       animation: chronoFloat4D 6s ease-in-out infinite alternate;
     }
 
@@ -1116,46 +1116,147 @@
       box-shadow: 0 0 22px rgba(168, 85, 247, 0.9) !important;
     }
 
-    /* ================= REALISTIC 3D TABLETOP MINIATURE PIECES ================= */
+    .cell-ironanvil {
+      background: radial-gradient(circle, #d97706 0%, #78350f 55%, #27272a 100%) !important;
+      border: 1px solid #fbbf24 !important;
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.75) !important;
+    }
+    .cell-fulminating {
+      background: radial-gradient(circle, #eab308 0%, #0284c7 55%, #1e1b4b 100%) !important;
+      border: 1px solid #fde047 !important;
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.85) !important;
+    }
+    .cell-gossamer {
+      background: radial-gradient(circle, #ec4899 0%, #701a75 55%, #1f0933 100%) !important;
+      border: 1px solid #f472b6 !important;
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.8) !important;
+    }
+    .cell-titans {
+      background: radial-gradient(circle, #a8a29e 0%, #57534e 55%, #1c1917 100%) !important;
+      border: 1px solid #d6d3d1 !important;
+      box-shadow: 0 0 18px rgba(168, 162, 158, 0.75) !important;
+    }
+    .cell-irontusk {
+      background: radial-gradient(circle, #dc2626 0%, #7f1d1d 55%, #29140e 100%) !important;
+      border: 1px solid #f87171 !important;
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.85) !important;
+    }
+    .cell-sanguine {
+      background: radial-gradient(circle, #be123c 0%, #4c0519 60%, #16030a 100%) !important;
+      border: 1px solid #fb7185 !important;
+      box-shadow: 0 0 22px rgba(225, 29, 72, 0.88) !important;
+    }
+    .cell-howling {
+      background: radial-gradient(circle, #818cf8 0%, #312e81 58%, #0f172a 100%) !important;
+      border: 1px solid #a5b4fc !important;
+      box-shadow: 0 0 20px rgba(129, 140, 248, 0.82) !important;
+    }
+    .cell-gearwork {
+      background: radial-gradient(circle, #b45309 0%, #451a03 58%, #18181b 100%) !important;
+      border: 1px solid #fbbf24 !important;
+      box-shadow: 0 0 18px rgba(217, 119, 6, 0.8) !important;
+    }
+    .cell-sunsand {
+      background: radial-gradient(circle, #f59e0b 0%, #b45309 55%, #422006 100%) !important;
+      border: 1px solid #fde047 !important;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.82) !important;
+    }
+    .cell-grave {
+      background: radial-gradient(circle, #14b8a6 0%, #115e59 58%, #042f2e 100%) !important;
+      border: 1px solid #5eead4 !important;
+      box-shadow: 0 0 22px rgba(45, 212, 191, 0.85) !important;
+    }
+
+    /* ================= UPGRADED 4D VOLUMETRIC & SPACETIME CHESS PIECES (GDD SEC. II, IV, V & X) ================= */
+    .miniature-slot,
+    .miniature-slot *,
+    .chrono-echo-ghost-hub,
+    .chrono-echo-ghost-hub *,
+    .quantum-preview-hub,
+    .quantum-preview-hub *,
+    .spacetime-vector-svg,
+    .spacetime-vector-svg * {
+      pointer-events: none !important;
+    }
+
     .miniature-slot {
       position: absolute;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      pointer-events: none;
       transform-style: preserve-3d;
+      --k-primary: #f59e0b;
+      --k-glow: rgba(245, 158, 11, 0.65);
+      --k-accent: #fde047;
+      --k-sprite-filter: none;
     }
 
     /* Soft Floor Contact Drop Shadow */
     .miniature-shadow {
       position: absolute;
-      width: 42px;
-      height: 22px;
+      width: 44px;
+      height: 24px;
       border-radius: 50%;
-      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 100%);
       transform: translateZ(1px);
       filter: blur(2px);
       transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
+    /* 3D Extruded Beveled Pedestal Plinth + Arcane Rune Orbit */
+    .figurine-plinth-3d {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #2a1f3d 0%, #0b0716 65%, #020108 100%);
+      border: 2px solid var(--k-primary);
+      box-shadow:
+        0 4px 0 #05030b,
+        0 6px 10px rgba(0, 0, 0, 0.92),
+        0 0 12px var(--k-glow),
+        inset 0 1px 4px rgba(255, 255, 255, 0.28);
+      transform: translateZ(3px);
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .figurine-rune-orbit {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1.4px dashed var(--k-accent);
+      opacity: 0.55;
+      transform: translateZ(5px);
+      animation: spinRuneHub4D 10s linear infinite;
+    }
+    .view-4d-phase .figurine-rune-orbit,
+    .cell-selected .figurine-rune-orbit {
+      opacity: 0.95;
+      box-shadow: 0 0 12px var(--k-glow);
+    }
+    @keyframes spinRuneHub4D {
+      from { transform: translateZ(5px) rotate(0deg); }
+      to { transform: translateZ(5px) rotate(360deg); }
+    }
+
     /* Arcane Selection Glyphs & Aether Ring (GDD Figure C.36) */
     .miniature-aether-ring {
       position: absolute;
-      width: 50px;
-      height: 50px;
+      width: 52px;
+      height: 52px;
       border: 2px dashed #fbbf24;
       border-radius: 50%;
       opacity: 0;
-      transform: translateZ(2px) scale(0.6);
+      transform: translateZ(6px) scale(0.6);
       transition: all 0.25s ease;
       box-shadow: 0 0 16px rgba(251, 191, 36, 0.9);
       animation: spinAetherMini 6s linear infinite;
-      pointer-events: none;
     }
     @keyframes spinAetherMini {
-      from { transform: translateZ(2px) rotate(0deg); }
-      to { transform: translateZ(2px) rotate(360deg); }
+      from { transform: translateZ(6px) rotate(0deg); }
+      to { transform: translateZ(6px) rotate(360deg); }
     }
 
     /* Upright Sculpted Figurine Body - Counter-rotates so miniature stands tall facing camera */
@@ -1169,8 +1270,6 @@
       transform-origin: 50% 100%;
       transform: translateZ(12px) rotateZ(12deg) rotateX(-34deg);
       transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.25s ease;
-      pointer-events: none !important;
-      cursor: pointer;
     }
 
     /* Dynamic Camera Counter-Rotations: Bilateral vertical standing */
@@ -1184,17 +1283,16 @@
       transform: translateZ(4px) rotateX(0deg);
     }
     .view-4d-phase .miniature-body {
-      transform: translateZ(14px) rotateZ(-16deg) rotateX(-28deg);
+      transform: translateZ(16px) rotateZ(-15deg) rotateX(-34deg);
     }
 
-    /* ================= AUTHENTIC 3D TABLETOP MINIATURE FIGURINES (REALISTIC CHARACTERS) ================= */
     .miniature-sculpture {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
-      pointer-events: none;
+      transform-style: preserve-3d;
     }
 
     .tabletop-miniature-figurine {
@@ -1205,32 +1303,132 @@
       justify-content: flex-end;
       transform-style: preserve-3d;
       transform-origin: 50% 100%;
-      /* Stands upright perpendicular to board facing player camera */
       transform: none;
       transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.25s ease;
-      filter: drop-shadow(0 14px 12px rgba(0, 0, 0, 0.92));
+      animation: hubBreath4D 3.6s ease-in-out infinite alternate;
+      animation-delay: var(--idle-delay, 0s);
+    }
+    @keyframes hubBreath4D {
+      0% { transform: translateY(0px) translateZ(0px); }
+      100% { transform: translateY(-2.5px) translateZ(3px); }
     }
 
-    /* Freestanding realistic cutout character image standing on board tile */
+    /* Layer Z=-8px/-15px: 4D Temporal Phase Echo Silhouette */
+    .figurine-4d-echo-back {
+      position: absolute;
+      bottom: 0;
+      width: auto;
+      object-fit: contain;
+      opacity: 0.26;
+      transform: translateZ(-8px) translateY(-3px) scale(1.04);
+      filter: var(--k-sprite-filter) brightness(1.4) saturate(1.6) drop-shadow(0 0 8px var(--k-primary));
+      transition: transform 0.32s ease, opacity 0.32s ease;
+    }
+    .view-4d-phase .figurine-4d-echo-back {
+      opacity: 0.52;
+      transform: translateZ(-15px) translateY(-6px) scale(1.08);
+      filter: var(--k-sprite-filter) brightness(1.55) drop-shadow(0 0 12px #a855f7) drop-shadow(0 0 6px #38bdf8);
+    }
+
+    /* Layer Z=-4px: 3D Volumetric Armor Relief Layer */
+    .figurine-3d-relief {
+      position: absolute;
+      bottom: 0;
+      width: auto;
+      object-fit: contain;
+      opacity: 0.78;
+      transform: translateZ(-4px) translateY(1px) scale(0.99);
+      filter: var(--k-sprite-filter) brightness(0.42) contrast(1.4);
+    }
+
+    /* Layer Z=0px: Primary Freestanding Hero Character Sprite */
     .figurine-character-sprite {
+      position: relative;
       display: block;
       width: auto;
       object-fit: contain;
       image-rendering: -webkit-optimize-contrast;
       user-select: none;
-      pointer-events: none;
+      transform: translateZ(0px);
+      filter: var(--k-sprite-filter) drop-shadow(0 12px 12px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 7px var(--k-glow));
       transition: transform 0.28s ease, filter 0.28s ease;
     }
 
-    /* Proportional heights by chess rank */
-    .piece-rank-k .figurine-character-sprite { height: 82px; max-width: 54px; }
-    .piece-rank-q .figurine-character-sprite { height: 80px; max-width: 50px; }
-    .piece-rank-b .figurine-character-sprite { height: 72px; max-width: 46px; }
-    .piece-rank-n .figurine-character-sprite { height: 70px; max-width: 48px; }
-    .piece-rank-r .figurine-character-sprite { height: 68px; max-width: 44px; }
-    .piece-rank-p .figurine-character-sprite { height: 52px; max-width: 36px; }
+    /* Proportional heights across all 3 planes by chess rank */
+    .piece-rank-k .figurine-character-sprite,
+    .piece-rank-k .figurine-3d-relief,
+    .piece-rank-k .figurine-4d-echo-back { height: 82px; max-width: 54px; }
+    .piece-rank-q .figurine-character-sprite,
+    .piece-rank-q .figurine-3d-relief,
+    .piece-rank-q .figurine-4d-echo-back { height: 80px; max-width: 50px; }
+    .piece-rank-b .figurine-character-sprite,
+    .piece-rank-b .figurine-3d-relief,
+    .piece-rank-b .figurine-4d-echo-back { height: 72px; max-width: 46px; }
+    .piece-rank-n .figurine-character-sprite,
+    .piece-rank-n .figurine-3d-relief,
+    .piece-rank-n .figurine-4d-echo-back { height: 70px; max-width: 48px; }
+    .piece-rank-r .figurine-character-sprite,
+    .piece-rank-r .figurine-3d-relief,
+    .piece-rank-r .figurine-4d-echo-back { height: 68px; max-width: 44px; }
+    .piece-rank-p .figurine-character-sprite,
+    .piece-rank-p .figurine-3d-relief,
+    .piece-rank-p .figurine-4d-echo-back { height: 54px; max-width: 38px; }
 
-    /* Faction Glowing Aura & Ground Contact Shadow under Figurine */
+    /* Layer Z=+9px: Orbiting 4D Aether-Shard Crystal */
+    .figurine-aether-shard {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      width: 9px;
+      height: 14px;
+      background: linear-gradient(160deg, #ffffff 0%, var(--k-accent) 42%, var(--k-primary) 100%);
+      clip-path: polygon(50% 0%, 100% 45%, 50% 100%, 0% 45%);
+      box-shadow: 0 0 10px var(--k-primary);
+      transform: translateZ(9px);
+      animation: shardFloatHub4D 2.6s ease-in-out infinite alternate;
+    }
+    @keyframes shardFloatHub4D {
+      0% { transform: translateZ(9px) translateY(0px) rotate(-8deg) scale(0.92); }
+      100% { transform: translateZ(14px) translateY(-5px) rotate(12deg) scale(1.1); }
+    }
+
+    /* Layer Z=+11px: Emotional Catalyst Particle Motes (GDD Sec. II) */
+    .figurine-catalyst-motes {
+      position: absolute;
+      inset: -4px -8px 4px -8px;
+      transform: translateZ(11px);
+    }
+    .figurine-catalyst-motes span {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--k-accent);
+      box-shadow: 0 0 7px var(--k-primary);
+      animation: catalystRiseHub 2.8s ease-in-out infinite;
+    }
+    .figurine-catalyst-motes span:nth-child(1) { left: 10%; bottom: 16%; animation-delay: 0s; }
+    .figurine-catalyst-motes span:nth-child(2) { right: 10%; bottom: 30%; animation-delay: 1.2s; }
+    @keyframes catalystRiseHub {
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      40% { opacity: 0.92; }
+      100% { transform: translateY(-22px) scale(1.1); opacity: 0; }
+    }
+
+    /* Layer Z=+13px: Royal Sovereign Halo (King & Queen) */
+    .figurine-sovereign-halo {
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      width: 26px;
+      height: 10px;
+      transform: translateX(-50%) translateZ(13px);
+      border-radius: 50%;
+      border: 1.5px solid var(--k-accent);
+      box-shadow: 0 0 10px var(--k-primary), inset 0 0 6px var(--k-glow);
+    }
+
+    /* Faction Glowing Aura under Figurine */
     .figurine-aura-ring {
       position: absolute;
       bottom: -3px;
@@ -1239,63 +1437,182 @@
       width: 44px;
       height: 24px;
       border-radius: 50%;
-      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.5) 60%, transparent 85%);
-      pointer-events: none;
+      border: 1.5px solid var(--k-primary);
+      box-shadow: 0 0 14px var(--k-glow), inset 0 0 8px var(--k-glow);
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.45) 60%, transparent 85%);
       z-index: -1;
       transition: all 0.28s ease;
     }
 
-    .figurine-obsidian .figurine-aura-ring {
-      border: 1.5px solid rgba(245, 158, 11, 0.65);
-      box-shadow: 0 0 16px rgba(245, 158, 11, 0.55), inset 0 0 8px rgba(249, 115, 22, 0.4);
-    }
-    .figurine-verdant .figurine-aura-ring {
-      border: 1.5px solid rgba(34, 197, 94, 0.65);
-      box-shadow: 0 0 16px rgba(34, 197, 94, 0.55), inset 0 0 8px rgba(74, 222, 128, 0.4);
-    }
-
-    .figurine-obsidian .figurine-character-sprite {
-      filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 7px rgba(245, 158, 11, 0.45));
-    }
-    .figurine-verdant .figurine-character-sprite {
-      filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 7px rgba(34, 197, 94, 0.45));
-    }
-
-    /* Figurine Chess Rank Symbol Badge */
+    /* Layer Z=+14px: Figurine Chess Rank Symbol Badge */
     .figurine-rank-badge {
       position: absolute;
       bottom: -6px;
       right: -8px;
-      background: rgba(10, 14, 26, 0.92);
-      border: 1px solid rgba(251, 191, 36, 0.65);
-      color: #fbbf24;
+      background: rgba(10, 14, 26, 0.94);
+      border: 1px solid var(--k-primary);
+      color: var(--k-accent);
       font-size: 0.68rem;
+      font-weight: 800;
       border-radius: 5px;
       padding: 1px 4px;
       line-height: 1.2;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 6px var(--k-glow);
+      transform: translateZ(14px);
       z-index: 6;
     }
-    .figurine-verdant .figurine-rank-badge {
-      border-color: rgba(34, 197, 94, 0.65);
-      color: #4ade80;
+
+    /* Layer Z=+16px: Live Kingdom Passive Aura Pill on Mutated Terrain */
+    .figurine-passive-pill {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(16px);
+      padding: 1px 5px;
+      border-radius: 999px;
+      background: rgba(8, 12, 26, 0.92);
+      border: 1px solid var(--k-primary);
+      color: var(--k-accent);
+      font-family: var(--font-mono, monospace);
+      font-size: 0.5rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 8px var(--k-glow);
     }
 
-    /* Hover & Selection Levitation: Tabletop Figurines Float Smoothly */
+    /* 4D Spacetime t-1 Chrono-Echo Ghost (Departed Origin Square) */
+    .chrono-echo-ghost-hub {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      z-index: 8;
+    }
+    .chrono-echo-ghost-hub .echo-rift-ring {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(168, 85, 247, 0.85);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.65), inset 0 0 8px rgba(56, 189, 248, 0.45);
+      animation: spinRuneHub4D 5s linear infinite reverse;
+    }
+    .chrono-echo-ghost-hub img {
+      height: 50px;
+      width: auto;
+      object-fit: contain;
+      opacity: 0.45;
+      transform: translateZ(10px) rotateZ(12deg) rotateX(-34deg);
+      filter: hue-rotate(195deg) saturate(1.9) brightness(1.35) drop-shadow(0 0 10px rgba(56, 189, 248, 0.9));
+    }
+    .view-topdown .chrono-echo-ghost-hub img {
+      transform: translateZ(4px) rotateX(0deg);
+    }
+    .view-4d-phase .chrono-echo-ghost-hub img {
+      opacity: 0.65;
+      transform: translateZ(14px) rotateZ(-15deg) rotateX(-34deg);
+    }
+    .chrono-echo-ghost-hub .echo-tag {
+      position: absolute;
+      bottom: 2px;
+      padding: 0 4px;
+      border-radius: 4px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.65);
+      color: #7dd3fc;
+      font-family: var(--font-mono, monospace);
+      font-size: 0.5rem;
+      font-weight: 700;
+    }
+
+    /* 4D Spacetime Vector Tether SVG (Connects t-1 Origin to t=Present Piece) */
+    .spacetime-vector-svg {
+      position: absolute;
+      overflow: visible;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 6;
+      transform: translateZ(4px);
+    }
+    .spacetime-vector-line {
+      stroke: #38bdf8;
+      stroke-width: 2.2;
+      stroke-dasharray: 5 4;
+      fill: none;
+      filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.95));
+      animation: vectorDashHub4D 1.2s linear infinite;
+    }
+    @keyframes vectorDashHub4D {
+      from { stroke-dashoffset: 18; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* 4D Spacetime t+1 Pre-Cognitive Quantum Hover Projection */
+    .quantum-preview-hub {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateZ(10px) scale(0.84);
+      transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.15);
+      transform-style: preserve-3d;
+      z-index: 28;
+    }
+    .board-cell-3d.cell-valid-move:hover > .quantum-preview-hub,
+    .board-cell-3d.cell-valid-capture:hover > .quantum-preview-hub {
+      opacity: 1;
+      transform: translateZ(20px) scale(1);
+    }
+    .quantum-preview-hub img {
+      height: 54px;
+      width: auto;
+      object-fit: contain;
+      opacity: 0.72;
+      transform: rotateZ(12deg) rotateX(-34deg);
+      filter: brightness(1.35) saturate(1.4) drop-shadow(0 0 12px rgba(16, 185, 129, 0.95));
+    }
+    .board-cell-3d.cell-valid-capture > .quantum-preview-hub img {
+      filter: brightness(1.35) saturate(1.6) drop-shadow(0 0 14px rgba(244, 63, 94, 0.95));
+    }
+    .view-topdown .quantum-preview-hub img { transform: rotateX(0deg); }
+    .view-4d-phase .quantum-preview-hub img { transform: rotateZ(-15deg) rotateX(-34deg); }
+    .quantum-preview-hub .quantum-tag {
+      position: absolute;
+      top: -6px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(6, 78, 59, 0.94);
+      border: 1px solid #34d399;
+      color: #a7f3d0;
+      font-family: var(--font-mono, monospace);
+      font-size: 0.5rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .board-cell-3d.cell-valid-capture > .quantum-preview-hub .quantum-tag {
+      background: rgba(127, 29, 29, 0.95);
+      border-color: #fb7185;
+      color: #fecdd3;
+    }
+
+    /* Hover & Selection Levitation: 4D Volumetric Figurines Float Smoothly */
     .board-cell-3d:hover .tabletop-miniature-figurine {
-      transform: translateZ(50px) rotateX(-28deg) translateY(-8px) scale(1.08);
+      transform: translateZ(34px) translateY(-6px) scale(1.08);
     }
     .cell-selected .tabletop-miniature-figurine {
-      transform: translateZ(58px) rotateX(-26deg) translateY(-12px) scale(1.14);
+      transform: translateZ(44px) translateY(-10px) scale(1.13);
     }
-    .board-cell-3d:hover .figurine-obsidian .figurine-character-sprite,
-    .cell-selected .figurine-obsidian .figurine-character-sprite {
-      filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 16px rgba(251, 191, 36, 0.95));
-    }
-    .board-cell-3d:hover .figurine-verdant .figurine-character-sprite,
-    .cell-selected .figurine-verdant .figurine-character-sprite {
-      filter: drop-shadow(0 20px 20px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 16px rgba(74, 222, 128, 0.95));
+    .board-cell-3d:hover .figurine-character-sprite,
+    .cell-selected .figurine-character-sprite {
+      filter: var(--k-sprite-filter) drop-shadow(0 18px 18px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 15px var(--k-primary));
     }
 
     /* ================= ARCADE MODE: KINGDOM LAND BATTLE STYLES ================= */
@@ -1381,9 +1698,10 @@
       z-index: 60;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.95);
     }
+    .board-cell-3d:hover .miniature-tooltip,
     .miniature-body:hover .miniature-tooltip {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%) translateY(0) translateZ(26px);
     }
 
     /* Legal Move Highlights */
@@ -1562,7 +1880,7 @@
 
       <div class="d-flex align-items-center gap-2">
         <a href="simulator.html" target="_blank" class="btn btn-sm btn-warning rounded-pill px-3 fw-bold text-dark shadow-sm">
-          <i class="bi bi-controller me-1"></i> Play 3D &amp; Arcade Sim <i class="bi bi-box-arrow-up-right ms-1"></i>
+          <i class="bi bi-controller me-1"></i> Play 4D &amp; Arcade Sim <i class="bi bi-box-arrow-up-right ms-1"></i>
         </a>
         <a href="#kingdoms" class="btn btn-sm btn-mythic-outline d-none d-md-inline-flex">
           <i class="bi bi-people-fill me-1"></i> 15 Kingdoms
@@ -1599,8 +1917,8 @@
           THE SHATTERING OF THE INFINITE TAPESTRY &amp; THE WAR OF THE ENDLESS SHARDS
         </p>
         <p class="text-light mx-auto mb-4" style="max-width: 820px; font-size: 1.12rem; line-height: 1.8; color: #e2e8f0;">
-          An original 3D turn-based tactical strategy game blueprint engineered by the BSIT development cohort. 
-          Bridging classical 8x8 chess movement logic with real-time elemental terrain transformations, unit manifestation executions, 15 mythical civilizations, and apocalyptic Queen Ultimates.
+          An original 3D/4D turn-based tactical strategy game blueprint engineered by the BSIT development cohort. 
+          Bridging classical 8x8 chess movement logic with 4D Aether-Chrono chess pieces, real-time elemental terrain transformations, unit manifestation executions, 15 mythical civilizations, and apocalyptic Queen Ultimates.
         </p>
 
         <!-- Project Authors Credit -->
@@ -1622,7 +1940,7 @@
         <!-- Download & CTAs -->
         <div class="d-flex justify-content-center gap-3 flex-wrap mb-5">
           <a href="simulator.html" target="_blank" class="btn-mythic-gold" style="background: linear-gradient(135deg, #f59e0b, #ec4899); border-color: #fbbf24; color: #fff; box-shadow: 0 0 25px rgba(245, 158, 11, 0.55);">
-            <i class="bi bi-play-circle-fill fs-5"></i> Play 3D &amp; Arcade Simulator <i class="bi bi-box-arrow-up-right ms-1"></i>
+            <i class="bi bi-play-circle-fill fs-5"></i> Play 4D &amp; Arcade Simulator <i class="bi bi-box-arrow-up-right ms-1"></i>
           </a>
           <a href="../assets/docs/Game_Dev_Paper_Mythic_Gambit.docx" download="Game_Dev_Paper_Mythic_Gambit.docx" class="btn-mythic-gold">
             <i class="bi bi-cloud-arrow-down-fill fs-5"></i> Download Full Paper (.docx • 44.6 MB)
@@ -2035,7 +2353,7 @@
         <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
           <div class="btn-group p-1 rounded-pill" style="background: rgba(15, 23, 42, 0.95); border: 2px solid rgba(245, 158, 11, 0.5); box-shadow: 0 0 30px rgba(245, 158, 11, 0.25);">
             <button type="button" id="btnSwitchTacticalGrid" class="btn btn-sm btn-mythic-gold active rounded-pill px-4 py-2 font-mono fw-bold">
-              <i class="bi bi-grid-3x3 me-2"></i> 3D Tactical Planar Grid
+              <i class="bi bi-layers-half me-2"></i> 4D Tactical Planar Grid
             </button>
             <button type="button" id="btnSwitchRealtimeArena" class="btn btn-sm btn-outline-secondary rounded-pill px-4 py-2 font-mono text-light fw-bold">
               <i class="bi bi-controller me-2 text-warning"></i> Arcade Mode (Kingdom Land Battle)
@@ -2056,25 +2374,33 @@
                 </button>
               </div>
 
-              <!-- Attacker Kingdom -->
+              <!-- Attacker Kingdom (All 15 Mythic Gambit Kingdoms — GDD Section V) -->
               <div class="mb-3">
-                <label class="form-label small font-mono mb-1" style="color: #cbd5e1; font-weight: 600;">PLAYER 1 FACTION (WHITE PIECES)</label>
+                <label class="form-label small font-mono mb-1" style="color: #cbd5e1; font-weight: 600;">PLAYER 1 FACTION (15 MYTHIC KINGDOMS • 4D PIECES)</label>
                 <select id="simKingdomSelect" class="form-select bg-dark text-white border-secondary">
-                  <option value="volcanic">The Obsidian Roost (Fire / Magma Terrain)</option>
-                  <option value="verdant">The Verdant Court (Nature / Thorny Briars)</option>
-                  <option value="abyssal">The Abyssal Tides (Water / Tidal Floods)</option>
-                  <option value="frost">The Frostbound Reach (Ice / Glacial Rime)</option>
-                  <option value="void">The Abyssal Veil (Shadow / Void Rifts)</option>
-                  <option value="gearwork">The Gearwork Citadel (Steam / Clockwork Tiles)</option>
-                  <option value="grave">The Grave-Bound Dynasty (Necromancy / Soul Wells)</option>
+                  <option value="volcanic">1. The Obsidian Roost (Fire / Anger &amp; Pride)</option>
+                  <option value="verdant">2. The Verdant Court (Nature / Loneliness &amp; Grief)</option>
+                  <option value="ironanvil">3. The Iron-Anvil Forge (Metal / Stubborn Resolve)</option>
+                  <option value="abyssal">4. The Abyssal Tides (Water / Melancholy &amp; Isolation)</option>
+                  <option value="frost">5. The Frostbound Reach (Ice / Numbness &amp; Despair)</option>
+                  <option value="fulminating">6. The Fulminating Spire (Lightning / Restless Impatience)</option>
+                  <option value="gossamer">7. The Gossamer Glade (Fae / Fear &amp; Melancholy)</option>
+                  <option value="titans">8. The Titan's Foothold (Earth / Heavy Burden)</option>
+                  <option value="irontusk">9. The Iron-Tusk Horde (War / Righteous Vengeance)</option>
+                  <option value="sanguine">10. The Sanguine Court (Blood / Existential Dread)</option>
+                  <option value="howling">11. The Howling Pack (Moon / Primal Anguish)</option>
+                  <option value="void">12. The Abyssal Veil (Void / Emptiness &amp; Bitterness)</option>
+                  <option value="gearwork">13. The Gearwork Citadel (Clockwork / Obsessive Perfectionism)</option>
+                  <option value="sunsand">14. The Sun-Scorched Sands (Mirage / Endurance &amp; Sorrow)</option>
+                  <option value="grave">15. The Grave-Bound Dynasty (Undead / Cold Acceptance)</option>
                 </select>
               </div>
 
-              <!-- Passive Card -->
+              <!-- Passive & Emotional Catalyst Card -->
               <div class="p-3 rounded mb-3" style="background: rgba(255,255,255,0.04); border: 1px dashed rgba(168, 85, 247, 0.4);">
-                <div class="d-flex align-items-center justify-content-between mb-1">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-1 mb-1">
                   <span class="small fw-bold text-info" id="simPassiveName">Active Passive: Heat Haze</span>
-                  <span class="badge bg-secondary font-mono" style="font-size: 0.68rem;">GDD SECTION V.D</span>
+                  <span class="badge font-mono" id="hubCatalystBadge" style="font-size: 0.65rem; background: rgba(244, 63, 94, 0.22); border: 1px solid rgba(251, 113, 133, 0.45); color: #fda4af;">Catalyst: Anger &amp; Pride</span>
                 </div>
                 <div class="small" id="simPassiveDesc" style="color: #e2e8f0; line-height: 1.6;">
                   Volcanic terrain emits thermal distortions reducing enemy ranged attack accuracy by 25% on claimed tiles.
@@ -2176,17 +2502,18 @@
                 <button type="button" class="btn btn-xs btn-outline-info rounded-pill px-2 py-1" id="btnCamPhase">
                   <i class="bi bi-hourglass-split me-1"></i>4D Spacetime Phase
                 </button>
-                <a href="simulator.html" target="_blank" class="btn btn-xs btn-warning rounded-pill px-3 py-1 font-mono text-dark fw-bold text-decoration-none shadow-sm">
-                  <i class="bi bi-controller me-1"></i>Play Real-Character & Audio Simulator <i class="bi bi-box-arrow-up-right ms-1"></i>
+                <a href="simulator.html?view=4d-phase" target="_blank" class="btn btn-xs btn-warning rounded-pill px-3 py-1 font-mono text-dark fw-bold text-decoration-none shadow-sm">
+                  <i class="bi bi-controller me-1"></i>Play 4D Real-Character &amp; Audio Simulator <i class="bi bi-box-arrow-up-right ms-1"></i>
                 </a>
               </div>
             </div>
 
             <!-- 4D Spacetime Telemetry & Temporal Replay -->
             <div class="glass-card p-2 px-3 mb-3 d-flex justify-content-between align-items-center font-mono small flex-wrap gap-2" style="background: rgba(18, 12, 38, 0.9); border: 1px solid rgba(236,72,153,0.45);">
-              <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center gap-2 flex-wrap">
                 <span class="badge bg-danger bg-opacity-75 font-mono" style="font-size:0.68rem;"><i class="bi bi-broadcast me-1"></i>4D DIMENSION</span>
-                <span style="color: #cbd5e1; font-size:0.8rem;">Timeline Anchor: <strong class="text-white" id="timeDimensionAnchor">t = Present (Turn 1)</strong></span>
+                <span style="color: #cbd5e1; font-size:0.78rem;">Anchor: <strong class="text-white" id="timeDimensionAnchor">t = Present (Turn 1)</strong></span>
+                <span id="hubChronoEchoReadout" style="color: #7dd3fc; font-size:0.72rem;">• Hover legal tiles for t+1 Quantum Projection</span>
               </div>
               <div class="d-flex align-items-center gap-1">
                 <button type="button" class="btn btn-xs btn-outline-secondary text-light rounded-pill px-2" id="btnTimeRewind" title="4D Temporal Step Backward">
@@ -5395,10 +5722,11 @@
       }
     });
 
-    // Faction Manifestation Profiles for Combat Overlay
+    // Faction Manifestation Profiles for Combat Overlay (All 15 Mythic Gambit Kingdoms — GDD Sec. V)
     const factionCombatProfiles = {
       volcanic: {
         name: "The Obsidian Roost",
+        catalyst: "Anger & Pride",
         attackerName: "The Ash Matriarch",
         attackerRole: "Obsidian Queen",
         attackerImg: "../assets/img/game-dev/image4.png",
@@ -5409,6 +5737,7 @@
       },
       verdant: {
         name: "The Verdant Court",
+        catalyst: "Loneliness & Grief",
         attackerName: "The Forest Matriarch",
         attackerRole: "Verdant Queen",
         attackerImg: "../assets/img/game-dev/image8.jpeg",
@@ -5417,9 +5746,21 @@
         passiveDesc: "Units landing on verdant tiles sprout thorny briars that restrict enemy mobility on subsequent turns.",
         result: "• Enemy piece captured by primeval roots.<br>• Tile transformed into permanent Verdant Briar.<br>• Root-Bound debuff inflicts movement limitation."
       },
+      ironanvil: {
+        name: "The Iron-Anvil Forge",
+        catalyst: "Stubborn Resolve & Resentment",
+        attackerName: "The Forge Matriarch",
+        attackerRole: "Forge Queen",
+        attackerImg: "../assets/img/game-dev/image13.jpeg",
+        dialogue: '"By hammer, rune, and geothermal steam—no intruder breaches our tempered steel!"',
+        passiveName: "Reinforced Plate",
+        passiveDesc: "Friendly pieces on Forge terrain gain temporary capture plating on initial frontline engagements.",
+        result: "• Enemy crushed beneath tempered rune-steel.<br>• Tile converted into Geothermal Forge Plate.<br>• Reinforced Plate passive fortified."
+      },
       abyssal: {
         name: "The Abyssal Tides",
-        attackerName: "Leviathan Matriarch",
+        catalyst: "Melancholy & Isolation",
+        attackerName: "The Siren Queen",
         attackerRole: "Abyssal Queen",
         attackerImg: "../assets/img/game-dev/image14.jpeg",
         dialogue: '"From trench depths dark and silent, let the crushing pressure swallow your soul!"',
@@ -5429,43 +5770,124 @@
       },
       frost: {
         name: "The Frostbound Reach",
-        attackerName: "The Frost Matriarch",
+        catalyst: "Numbness & Despair",
+        attackerName: "The Ice Queen",
         attackerRole: "Glacial Queen",
         attackerImg: "../assets/img/game-dev/image15.jpeg",
         dialogue: '"Sub-zero permafrost shatters brittle bone. Remain frozen for all eternity!"',
-        passiveName: "Permafrost",
-        passiveDesc: "Enemy pieces stepping onto Glacial terrain lose 1 movement turn due to freezing crystallizations.",
-        result: "• Enemy encased and shattered into glacial rime.<br>• Tile converted into permanent Permafrost.<br>• Glacial freeze debuff applied."
+        passiveName: "Chilling Mist",
+        passiveDesc: "Enemy pieces stepping onto Glacial terrain lose momentum due to sub-zero permafrost crystallization.",
+        result: "• Enemy encased and shattered into glacial rime.<br>• Tile converted into permanent Permafrost.<br>• Chilling Mist debuff applied."
+      },
+      fulminating: {
+        name: "The Fulminating Spire",
+        catalyst: "Restless Impatience & Frustration",
+        attackerName: "The Lightning Matriarch",
+        attackerRole: "Storm Queen",
+        attackerImg: "../assets/img/game-dev/image16.jpeg",
+        dialogue: '"Ten thousand volts of arc lightning—strike down before their thought even forms!"',
+        passiveName: "Static Charge",
+        passiveDesc: "Capturing a unit discharges a chain-lightning arc that energizes claimed storm coordinates.",
+        result: "• Enemy vaporized by high-voltage arc.<br>• Tile ionized into Fulminating Storm Grid.<br>• Static Charge resonance active."
+      },
+      gossamer: {
+        name: "The Gossamer Glade",
+        catalyst: "Fear & Melancholy",
+        attackerName: "Titania",
+        attackerRole: "Fae Queen",
+        attackerImg: "../assets/img/game-dev/image17.png",
+        dialogue: '"Step into the shimmering pollen mist, wanderer—what you strike is merely a dream!"',
+        passiveName: "Glimmer",
+        passiveDesc: "Optical fae illusions cloak friendly units on Gossamer tiles with evasive prism decoys.",
+        result: "• Enemy ensnared in prismatic fae illusion.<br>• Tile bloomed into Gossamer Glade.<br>• Glimmer decoy veil active."
+      },
+      titans: {
+        name: "The Titan's Foothold",
+        catalyst: "Heavy Burden & Exhaustion",
+        attackerName: "The Peak Matriarch",
+        attackerRole: "Mountain Queen",
+        attackerImg: "../assets/img/game-dev/image18.png",
+        dialogue: '"Continental granite endures every storm. Kneel beneath the weight of the mountain!"',
+        passiveName: "Bulwark",
+        passiveDesc: "Friendly pieces anchored on Tectonic tiles gain unshakeable defensive fortification.",
+        result: "• Enemy shattered against continental granite.<br>• Tile elevated into Tectonic Bastion.<br>• Bulwark fortification active."
+      },
+      irontusk: {
+        name: "The Iron-Tusk Horde",
+        catalyst: "Righteous Vengeance",
+        attackerName: "The War Matriarch",
+        attackerRole: "Horde Queen",
+        attackerImg: "../assets/img/game-dev/image19.png",
+        dialogue: '"Sound the war-horns! Every fallen kin fuels our unstoppable iron charge!"',
+        passiveName: "War Cry",
+        passiveDesc: "Advancing into contested territory rallies adjacent Iron-Tusk vanguard units.",
+        result: "• Enemy trampled by Iron-Tusk warband.<br>• Tile claimed as Scorched Warground.<br>• War Cry momentum surging."
+      },
+      sanguine: {
+        name: "The Sanguine Court",
+        catalyst: "Hunger & Existential Dread",
+        attackerName: "The Blood Matriarch",
+        attackerRole: "Sanguine Queen",
+        attackerImg: "../assets/img/game-dev/image20.png",
+        dialogue: '"Drink deep of crimson eternity—your fleeting mortal pulse now serves the Court!"',
+        passiveName: "Life-Tap",
+        passiveDesc: "Capturing enemy units siphons vital essence across Sanguine sanctified tiles.",
+        result: "• Enemy essence drained into crimson chalice.<br>• Tile sanctified as Sanguine Court.<br>• Life-Tap vitality siphon active."
+      },
+      howling: {
+        name: "The Howling Pack",
+        catalyst: "Primal Anguish",
+        attackerName: "The Moon Matriarch",
+        attackerRole: "Lunar Queen",
+        attackerImg: "../assets/img/game-dev/image21.jpeg",
+        dialogue: '"Beneath the silver full moon, the Pack hunts as one unbroken shadow!"',
+        passiveName: "Moonlight Scent",
+        passiveDesc: "Friendly pieces gain pack-hunt flank synergy within lunar-illuminated territory.",
+        result: "• Enemy overwhelmed by spectral lunar pack.<br>• Tile bathed in Moonlight Hunting Ground.<br>• Moonlight Scent tracking active."
       },
       void: {
         name: "The Abyssal Veil",
+        catalyst: "Emptiness & Bitterness",
         attackerName: "The Shadow Queen",
         attackerRole: "Void Queen",
         attackerImg: "../assets/img/game-dev/image22.jpeg",
         dialogue: '"Enter the black vortex of silence where neither memory nor light exists!"',
         passiveName: "Shadow Walk",
-        passiveDesc: "Allows instantaneous piece swap with any allied unit across the board once per game.",
+        passiveDesc: "Allows instantaneous piece phase-shift resonance across Void Rift coordinates.",
         result: "• Enemy pulled into nothingness.<br>• Tile converted into permanent Void Rift.<br>• Shadow Walk positioning bonus unlocked."
       },
       gearwork: {
         name: "The Gearwork Citadel",
+        catalyst: "Obsessive Perfectionism",
         attackerName: "The Gear Matriarch",
         attackerRole: "Clockwork Queen",
         attackerImg: "../assets/img/game-dev/image23.jpeg",
         dialogue: '"Organic weakness detected. Calibrating high-pressure steam pistons for structural liquidation!"',
         passiveName: "Overclock",
-        passiveDesc: "Friendly units adjacent to Clockwork pieces gain +1 maximum movement distance on mechanical tiles.",
+        passiveDesc: "Friendly units adjacent to Clockwork pieces gain +1 maximum movement synchronization on brass tiles.",
         result: "• Enemy dismantled by industrial gearwork mechanisms.<br>• Tile transformed into Brass Clockwork plate.<br>• Overclock adjacency bonus granted."
+      },
+      sunsand: {
+        name: "The Sun-Scorched Sands",
+        catalyst: "Endurance & Sorrow",
+        attackerName: "The Sand Matriarch",
+        attackerRole: "Solar Mirage Queen",
+        attackerImg: "../assets/img/game-dev/image24.jpeg",
+        dialogue: '"Empires crumble into golden dust—vanish beneath the blinding solar mirage!"',
+        passiveName: "Mirage Veil",
+        passiveDesc: "Units on Sun-Scorched dunes project shimmering mirages that deflect long-range sightlines.",
+        result: "• Enemy swallowed by shifting solar dunes.<br>• Tile transmuted into Sun-Scorched Mirage.<br>• Mirage Veil refraction active."
       },
       grave: {
         name: "The Grave-Bound Dynasty",
+        catalyst: "Cold Acceptance & Remorse",
         attackerName: "The Death Matriarch",
         attackerRole: "Necromancy Queen",
         attackerImg: "../assets/img/game-dev/image25.jpeg",
         dialogue: '"Your breath ceases, mortal. Rise now as a thrall bound to my underworld!"',
         passiveName: "Soul Binding",
-        passiveDesc: "Captured pieces leave a Soul Well for 2 turns; moving onto it grants Spectral Protection from capture.",
-        result: "• Enemy dragged into subterranean abyss.<br>• Tile marked as active Soul Well.<br>• Spectral Protection granted to allied vanguard."
+        passiveDesc: "Captured pieces leave a Soul Well; allied units standing on it gain Spectral Protection.",
+        result: "• Enemy dragged into subterranean abyss.<br>• Tile marked as active Soul Well.<br>• Soul Binding spectral ward granted."
       }
     };
 
@@ -6045,14 +6467,19 @@
     // --- 4D SPACETIME TIMELINE MEMORY & REPLAY ENGINE ---
     let timelineHistory = [];
     let currentTimelineIndex = -1;
+    let lastMove4DHub = null;
 
     function saveTimelineSnapshot(note = '') {
+      if (currentTimelineIndex >= 0 && currentTimelineIndex < timelineHistory.length - 1) {
+        timelineHistory = timelineHistory.slice(0, currentTimelineIndex + 1);
+      }
       timelineHistory.push({
         turn: moveTurn,
         activeTurn: activeTurn,
         board: JSON.parse(JSON.stringify(currentBoardState)),
         terrains: JSON.parse(JSON.stringify(cellTerrains)),
         captured: [...capturedBlackPieces],
+        lastMove4D: lastMove4DHub ? { ...lastMove4DHub } : null,
         logText: document.getElementById('simStatusLog').textContent,
         note
       });
@@ -6062,14 +6489,24 @@
 
     function updateTimelineHUD() {
       const anchor = document.getElementById('timeDimensionAnchor');
-      if (!anchor) return;
-      if (currentTimelineIndex === timelineHistory.length - 1 || currentTimelineIndex === -1) {
-        anchor.textContent = `t = Present (Turn ${moveTurn})`;
-        anchor.className = 'text-white';
-      } else {
-        const snap = timelineHistory[currentTimelineIndex];
-        anchor.textContent = `t = Turn ${snap.turn} (4D Temporal Echo)`;
-        anchor.className = 'text-warning font-mono';
+      const echoReadout = document.getElementById('hubChronoEchoReadout');
+      if (anchor) {
+        if (currentTimelineIndex === timelineHistory.length - 1 || currentTimelineIndex === -1) {
+          anchor.textContent = `t = Present (Turn ${moveTurn})`;
+          anchor.className = 'text-white';
+        } else {
+          const snap = timelineHistory[currentTimelineIndex];
+          anchor.textContent = `t = Turn ${snap.turn} (4D Temporal Echo)`;
+          anchor.className = 'text-warning font-mono';
+        }
+      }
+      if (echoReadout) {
+        if (lastMove4DHub) {
+          const lInfo = getPieceLore(lastMove4DHub.piece, lastMove4DHub.faction);
+          echoReadout.textContent = `• t-1 Echo: ${lInfo.name} (${lastMove4DHub.fromCoord} → ${lastMove4DHub.toCoord})`;
+        } else {
+          echoReadout.textContent = '• Hover legal tiles for t+1 Quantum Projection';
+        }
       }
     }
 
@@ -6082,6 +6519,7 @@
       capturedBlackPieces = [...snap.captured];
       moveTurn = snap.turn;
       activeTurn = snap.activeTurn || 'white';
+      lastMove4DHub = snap.lastMove4D ? { ...snap.lastMove4D } : null;
       isGameOver = false;
       isThinkingAI = false;
       document.getElementById('turnIndicator').textContent = `Turn: ${moveTurn} (${aiOpponentEnabled ? 'Player 1' : (activeTurn === 'white' ? 'White' : 'Black')})`;
@@ -6093,89 +6531,177 @@
       updateTimelineHUD();
     }
 
-    // ================= REALISTIC PIECE LORE & GDD CHARACTER PROFILES =================
+    // ================= 15-KINGDOM 4D PALETTES, CRESTS & GDD SEC. V ROSTERS =================
     const factionCrests = {
-      volcanic: '🔥',
-      verdant: '🌿',
-      abyssal: '🌊',
-      frost: '❄️',
-      void: '🌑',
-      gearwork: '⚙️',
-      grave: '💀'
+      volcanic: '🔥', verdant: '🌿', ironanvil: '⚒️', abyssal: '🌊', frost: '❄️',
+      fulminating: '⚡', gossamer: '✨', titans: '🏔️', irontusk: '🪓', sanguine: '🩸',
+      howling: '🐺', void: '🌑', gearwork: '⚙️', sunsand: '🏜️', grave: '💀'
+    };
+
+    const HUB_KINGDOM_META = {
+      volcanic:    { primary: '#f59e0b', glow: 'rgba(249, 115, 22, 0.72)', accent: '#fde047', spriteFilter: 'none', passive: 'Heat Haze', catalyst: 'Anger & Pride', conceptImg: '../assets/img/game-dev/image11.jpeg', figLabel: 'Fig. C.1: The Obsidian Roost' },
+      verdant:     { primary: '#22c55e', glow: 'rgba(34, 197, 94, 0.72)', accent: '#86efac', spriteFilter: 'none', passive: 'Root-Bound', catalyst: 'Loneliness & Grief', conceptImg: '../assets/img/game-dev/image12.jpeg', figLabel: 'Fig. C.2: The Verdant Court' },
+      ironanvil:   { primary: '#fb923c', glow: 'rgba(251, 146, 60, 0.7)', accent: '#fed7aa', spriteFilter: 'sepia(0.32) saturate(1.25) contrast(1.08)', passive: 'Reinforced Plate', catalyst: 'Stubborn Resolve', conceptImg: '../assets/img/game-dev/image13.jpeg', figLabel: 'Fig. C.12: The Iron-Anvil Forge' },
+      abyssal:     { primary: '#0ea5e9', glow: 'rgba(14, 165, 233, 0.75)', accent: '#7dd3fc', spriteFilter: 'hue-rotate(168deg) saturate(1.35) brightness(1.05)', passive: 'Tidal Flow', catalyst: 'Melancholy & Isolation', conceptImg: '../assets/img/game-dev/image14.jpeg', figLabel: 'Fig. C.13: The Abyssal Tides' },
+      frost:       { primary: '#38bdf8', glow: 'rgba(56, 189, 248, 0.78)', accent: '#e0f2fe', spriteFilter: 'hue-rotate(182deg) saturate(1.2) brightness(1.18)', passive: 'Chilling Mist', catalyst: 'Numbness & Despair', conceptImg: '../assets/img/game-dev/image15.jpeg', figLabel: 'Fig. C.14: The Frostbound Reach' },
+      fulminating: { primary: '#facc15', glow: 'rgba(250, 204, 21, 0.8)', accent: '#fef08a', spriteFilter: 'hue-rotate(28deg) saturate(1.55) brightness(1.14)', passive: 'Static Charge', catalyst: 'Restless Impatience', conceptImg: '../assets/img/game-dev/image16.jpeg', figLabel: 'Fig. C.15: The Fulminating Spire' },
+      gossamer:    { primary: '#f472b6', glow: 'rgba(244, 114, 182, 0.76)', accent: '#fbcfe8', spriteFilter: 'hue-rotate(288deg) saturate(1.4) brightness(1.12)', passive: 'Glimmer', catalyst: 'Fear & Melancholy', conceptImg: '../assets/img/game-dev/image17.png', figLabel: 'Fig. C.16: The Gossamer Glade' },
+      titans:      { primary: '#a8a29e', glow: 'rgba(168, 162, 158, 0.72)', accent: '#e7e5e4', spriteFilter: 'saturate(0.45) contrast(1.15) brightness(1.06)', passive: 'Bulwark', catalyst: 'Heavy Burden', conceptImg: '../assets/img/game-dev/image18.png', figLabel: 'Fig. C.17: The Titan\'s Foothold' },
+      irontusk:    { primary: '#ef4444', glow: 'rgba(239, 68, 68, 0.76)', accent: '#fca5a5', spriteFilter: 'hue-rotate(-14deg) saturate(1.45) contrast(1.1)', passive: 'War Cry', catalyst: 'Righteous Vengeance', conceptImg: '../assets/img/game-dev/image19.png', figLabel: 'Fig. C.18: The Iron-Tusk Horde' },
+      sanguine:    { primary: '#e11d48', glow: 'rgba(225, 29, 72, 0.8)', accent: '#fda4af', spriteFilter: 'hue-rotate(328deg) saturate(1.55) contrast(1.12)', passive: 'Life-Tap', catalyst: 'Hunger & Dread', conceptImg: '../assets/img/game-dev/image20.png', figLabel: 'Fig. C.19: The Sanguine Court' },
+      howling:     { primary: '#818cf8', glow: 'rgba(129, 140, 248, 0.76)', accent: '#c7d2fe', spriteFilter: 'hue-rotate(212deg) saturate(1.15) brightness(1.08)', passive: 'Moonlight Scent', catalyst: 'Primal Anguish', conceptImg: '../assets/img/game-dev/image21.jpeg', figLabel: 'Fig. C.20: The Howling Pack' },
+      void:        { primary: '#a855f7', glow: 'rgba(168, 85, 247, 0.82)', accent: '#d8b4fe', spriteFilter: 'hue-rotate(250deg) saturate(1.5) brightness(1.04)', passive: 'Shadow Walk', catalyst: 'Emptiness & Bitterness', conceptImg: '../assets/img/game-dev/image22.jpeg', figLabel: 'Fig. C.21: The Abyssal Veil' },
+      gearwork:    { primary: '#d97706', glow: 'rgba(217, 119, 6, 0.75)', accent: '#fde68a', spriteFilter: 'sepia(0.5) hue-rotate(8deg) saturate(1.35) brightness(1.08)', passive: 'Overclock', catalyst: 'Obsessive Perfectionism', conceptImg: '../assets/img/game-dev/image23.jpeg', figLabel: 'Fig. C.22: The Gearwork Citadel' },
+      sunsand:     { primary: '#fbbf24', glow: 'rgba(251, 191, 36, 0.78)', accent: '#fef08a', spriteFilter: 'hue-rotate(18deg) saturate(1.38) brightness(1.14)', passive: 'Mirage Veil', catalyst: 'Endurance & Sorrow', conceptImg: '../assets/img/game-dev/image24.jpeg', figLabel: 'Fig. C.23: The Sun-Scorched Sands' },
+      grave:       { primary: '#2dd4bf', glow: 'rgba(45, 212, 191, 0.78)', accent: '#99f6e4', spriteFilter: 'hue-rotate(138deg) saturate(1.28) brightness(1.06)', passive: 'Soul Binding', catalyst: 'Cold Acceptance', conceptImg: '../assets/img/game-dev/image25.jpeg', figLabel: 'Fig. C.24: The Grave-Bound Dynasty' }
+    };
+
+    const RANK_STATS_SUMMARY = {
+      'K': 'HP: 600 • ATK: 85 • 4D Step: 1-Square Omnidirectional',
+      'Q': 'HP: 450 • ATK: 120 • 4D Range: Infinite Planar Files',
+      'B': 'HP: 380 • ATK: 75 • 4D Sweep: Diagonal Aether Rays',
+      'N': 'HP: 420 • ATK: 80 • 4D Phase-Hop: L-Shape Quantum Leap',
+      'R': 'HP: 550 • ATK: 90 • 4D Sweep: Orthogonal Bastion Files',
+      'P': 'HP: 220 • ATK: 45 • 4D Advance: 1-2 Squares + Ascension'
     };
 
     function getPieceLore(piece, factionKey) {
       if (!piece) return { name: '', role: '', stats: '' };
       const isW = isWhite(piece);
       const type = piece.toUpperCase();
+      const targetKey = isW ? (factionKey || 'volcanic') : 'verdant';
 
-      if (!isW) {
-        // Verdant Court (Opponent AI Faction - GDD Figure C.2)
-        const verdantMap = {
-          'K': { name: 'The Elder Dryad', role: 'Woodland Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square Omnidirectional' },
-          'Q': { name: 'The Forest Matriarch', role: 'Verdant Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
-          'B': { name: 'The Sylvaris', role: 'Thorn Warden', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
-          'N': { name: 'The Stag-Rider', role: 'Celestial Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
-          'R': { name: 'The Treant Guardian', role: 'Ironbark Treant', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
-          'P': { name: 'The Sapling', role: 'Living Sproutling', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares Forward' }
-        };
-        return verdantMap[type] || { name: 'Verdant Unit', role: 'Unit', stats: '' };
-      }
-
-      // Player 1 Faction (Default: The Obsidian Roost - GDD Figure C.1)
+      // Exact 15-Kingdom Chess Piece Hierarchies from GDD Section V
       const factionLoreMap = {
         volcanic: {
-          'K': { name: 'The Eternal Drake', role: 'Obsidian Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square Omnidirectional' },
-          'Q': { name: 'The Ash Matriarch', role: 'Obsidian Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
-          'B': { name: 'The Ember Seer', role: 'Cinder Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
-          'N': { name: 'Flame-Winged Vanguard', role: 'Drake Knight', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
-          'R': { name: 'The Obsidian Fortress', role: 'Magma Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
-          'P': { name: 'The Roostling', role: 'Scaled Hatchling', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares Forward' }
+          'K': ['The Eternal Drake', 'Obsidian Sovereign'],
+          'Q': ['The Ash Matriarch', 'Obsidian Queen'],
+          'B': ['The Pyromancer', 'Cinder Bishop'],
+          'N': ['The Flame-Winged Vanguard', 'Drake Knight'],
+          'R': ['The Magma Sentinel', 'Volcanic Rook'],
+          'P': ['The Scale-Bearer', 'Obsidian Vanguard']
+        },
+        verdant: {
+          'K': ['The Elder Dryad', 'Woodland Sovereign'],
+          'Q': ['The Forest Matriarch', 'Verdant Queen'],
+          'B': ['The Sylvaris', 'Thorn Warden'],
+          'N': ['The Stag-Rider', 'Celestial Cavalier'],
+          'R': ['The Treant Guardian', 'Ironbark Rook'],
+          'P': ['The Sapling', 'Living Sproutling']
+        },
+        ironanvil: {
+          'K': ['The High Thane', 'Forge Sovereign'],
+          'Q': ['The Forge Matriarch', 'Smelting Queen'],
+          'B': ['The Rune-Smith', 'Runic Bishop'],
+          'N': ['The Shield-Bearer', 'Iron Cavalier'],
+          'R': ['The Anvil-Crusher', 'Geothermal Rook'],
+          'P': ['The Iron-Clan Miner', 'Forge Vanguard']
         },
         abyssal: {
-          'K': { name: 'Abyssal Monarch', role: 'Trench Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
-          'Q': { name: 'Leviathan Matriarch', role: 'Abyssal Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
-          'B': { name: 'Trench Oracle', role: 'Deep Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
-          'N': { name: 'Deep-Sea Manta', role: 'Tidal Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
-          'R': { name: 'Coral Fortress', role: 'Bioluminescent Spire', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
-          'P': { name: 'Nautiloid', role: 'Trench Hatchling', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+          'K': ['The Abyssal King', 'Trench Sovereign'],
+          'Q': ['The Siren Queen', 'Abyssal Matriarch'],
+          'B': ['The Deep-Seer', 'Bioluminescent Bishop'],
+          'N': ['The Kelp-Stalker', 'Tidal Cavalier'],
+          'R': ['The Trench-Titan', 'Pelagic Rook'],
+          'P': ['The Tide-Runner', 'Abyssal Vanguard']
         },
         frost: {
-          'K': { name: 'Glacial Sovereign', role: 'Permafrost King', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
-          'Q': { name: 'The Frost Matriarch', role: 'Glacial Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
-          'B': { name: 'Shard Weaver', role: 'Rime Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
-          'N': { name: 'Ice-Fang Wolf', role: 'Frost Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
-          'R': { name: 'Spire of Rime', role: 'Glacial Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
-          'P': { name: 'Snow Strider', role: 'Glacial Sentry', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+          'K': ['Frost Monarch', 'Permafrost Sovereign'],
+          'Q': ['Ice Queen', 'Glacial Matriarch'],
+          'B': ['Glacial Mage', 'Cryo Bishop'],
+          'N': ['Ice Charger', 'Frostbound Knight'],
+          'R': ['Frost Sentinel', 'Rime Bastion'],
+          'P': ['Ice Shard', 'Glacial Sentry']
+        },
+        fulminating: {
+          'K': ['Storm Lord', 'Tempest Sovereign'],
+          'Q': ['Lightning Matriarch', 'Fulminating Queen'],
+          'B': ['Spark Weaver', 'Arc Bishop'],
+          'N': ['Bolt Rider', 'Thunder Cavalier'],
+          'R': ['Thunder Tower', 'Dynamo Rook'],
+          'P': ['Spark', 'Voltaic Thrall']
+        },
+        gossamer: {
+          'K': ['Fairy King', 'Gossamer Sovereign'],
+          'Q': ['Titania', 'Fae Empress'],
+          'B': ['Illusionist', 'Prism Bishop'],
+          'N': ['Sprite Scout', 'Glimmer Knight'],
+          'R': ['Thistle Guard', 'Briar-Fae Rook'],
+          'P': ['Pollenling', 'Fae Sprout']
+        },
+        titans: {
+          'K': ['Mountain King', 'Tectonic Sovereign'],
+          'Q': ['Peak Matriarch', 'Granite Queen'],
+          'B': ['Earth Shaper', 'Geomancer Bishop'],
+          'N': ['Boulder Crusher', 'Crag Cavalier'],
+          'R': ['Stone Bastion', 'Monolith Rook'],
+          'P': ['Pebble', 'Lithic Vanguard']
+        },
+        irontusk: {
+          'K': ['Warchief', 'Horde Sovereign'],
+          'Q': ['War Matriarch', 'Iron-Tusk Queen'],
+          'B': ['Shaman', 'War-Drum Bishop'],
+          'N': ['Warg Rider', 'Feral Cavalier'],
+          'R': ['War Engine', 'Siege Juggernaut'],
+          'P': ['Grunt', 'Frontline Raider']
+        },
+        sanguine: {
+          'K': ['Elder Progenitor', 'Crimson Sovereign'],
+          'Q': ['Blood Matriarch', 'Sanguine Empress'],
+          'B': ['Hemomancer', 'Blood-Rite Bishop'],
+          'N': ['Night-Stalker', 'Dusk Cavalier'],
+          'R': ['Stone Gargoyle', 'Cathedral Rook'],
+          'P': ['Thrall', 'Covenant Initiate']
+        },
+        howling: {
+          'K': ['Alpha', 'Pack Sovereign'],
+          'Q': ['Moon Matriarch', 'Lunar Queen'],
+          'B': ['Spirit Seer', 'Totem Bishop'],
+          'N': ['Pack Hunter', 'Lycan Cavalier'],
+          'R': ['Den Guardian', 'Moonstone Rook'],
+          'P': ['Pup', 'Young Stalker']
         },
         void: {
-          'K': { name: 'Void Sovereign', role: 'Nether King', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
-          'Q': { name: 'The Shadow Queen', role: 'Void Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
-          'B': { name: 'Nether Oracle', role: 'Shadow Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
-          'N': { name: 'Rift Stalker', role: 'Void Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
-          'R': { name: 'Oblivion Spire', role: 'Abyssal Monolith', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
-          'P': { name: 'Void Wisp', role: 'Nether Thrall', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+          'K': ['Void King', 'Singularity Sovereign'],
+          'Q': ['Shadow Queen', 'Abyssal Veil Matriarch'],
+          'B': ['Void Mage', 'Rift Bishop'],
+          'N': ['Shadow Stalker', 'Phase Cavalier'],
+          'R': ['Void Pillar', 'Event-Horizon Rook'],
+          'P': ['Shade', 'Umbral Thrall']
         },
         gearwork: {
-          'K': { name: 'Clockwork Emperor', role: 'Steam Sovereign', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
-          'Q': { name: 'The Gear Matriarch', role: 'Clockwork Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
-          'B': { name: 'Steam Artificer', role: 'Brass Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
-          'N': { name: 'Piston Automaton', role: 'Clockwork Cavalier', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
-          'R': { name: 'Foundry Spire', role: 'Brass Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
-          'P': { name: 'Cogwheel Sentry', role: 'Steam Thrall', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+          'K': ['Grand Inventor', 'Clockwork Sovereign'],
+          'Q': ['Gear Matriarch', 'Chrono-Steam Queen'],
+          'B': ['Aether-Smith', 'Brass Artificer'],
+          'N': ['Clockwork Steed', 'Piston Cavalier'],
+          'R': ['Steam Engine', 'Foundry Rook'],
+          'P': ['Automaton', 'Cogwheel Unit']
+        },
+        sunsand: {
+          'K': ['Sultan', 'Solar Sovereign'],
+          'Q': ['Sand Matriarch', 'Mirage Empress'],
+          'B': ['Dune Mage', 'Refraction Bishop'],
+          'N': ['Dune Strider', 'Sirocco Cavalier'],
+          'R': ['Oasis Gate', 'Sandstone Rook'],
+          'P': ['Nomad', 'Desert Wayfarer']
         },
         grave: {
-          'K': { name: 'Necro Sovereign', role: 'Dynasty Monarch', stats: 'HP: 600 • ATK: 85 • Step: 1-Square' },
-          'Q': { name: 'The Death Matriarch', role: 'Necromancy Queen', stats: 'HP: 450 • ATK: 120 • Range: Infinite Planar Files' },
-          'B': { name: 'Soul Priest', role: 'Underworld Cleric', stats: 'HP: 380 • ATK: 75 • Sweep: Diagonal Rays' },
-          'N': { name: 'Skeletal Cavalier', role: 'Undead Knight', stats: 'HP: 420 • ATK: 80 • Hop: L-Shape Leap' },
-          'R': { name: 'Mausoleum Spire', role: 'Crypt Bastion', stats: 'HP: 550 • ATK: 90 • Sweep: Orthogonal Files' },
-          'P': { name: 'Bone Thrall', role: 'Risen Sentry', stats: 'HP: 220 • ATK: 45 • Advance: 1-2 Squares' }
+          'K': ['The Lich Lord', 'Undying Sovereign'],
+          'Q': ['The Death Matriarch', 'Necropolis Queen'],
+          'B': ['The Soul-Weaver', 'Phylactery Bishop'],
+          'N': ['The Skeletal Charger', 'Death Knight'],
+          'R': ['The Crypt Guardian', 'Ossuary Rook'],
+          'P': ['The Risen Thrall', 'Reanimated Sentry']
         }
       };
 
-      const set = factionLoreMap[factionKey] || factionLoreMap.volcanic;
-      return set[type] || { name: 'Mythic Unit', role: 'Unit', stats: '' };
+      const set = factionLoreMap[targetKey] || factionLoreMap.volcanic;
+      const entry = set[type] || ['Mythic Unit', 'Planar Unit'];
+      return {
+        name: entry[0],
+        role: entry[1],
+        stats: RANK_STATS_SUMMARY[type] || ''
+      };
     }
 
     // ================= REALISTIC 3D TABLETOP MINIATURE SVG GENERATOR =================
@@ -6777,40 +7303,39 @@ playSoundBuffer('ultimate');`;
       updateEngineTerminalDisplay();
     }
 
-    // ================= AUTHENTIC GDD SKETCH ASSET MAPPING (FIGURES C.1 TO C.9) =================
+    // ================= AUTHENTIC 4D CHARACTER CUTOUT & APPENDIX C DOSSIER MAPPING (ALL 15 KINGDOMS) =================
+    const HUB_BASE_CUTOUTS = {
+      white: {
+        'K': 'assets/real_characters/pieces/obsidian_king.png',
+        'Q': 'assets/real_characters/pieces/obsidian_queen.png',
+        'B': 'assets/real_characters/pieces/obsidian_bishop.png',
+        'N': 'assets/real_characters/pieces/obsidian_knight.png',
+        'R': 'assets/real_characters/pieces/obsidian_rook.png',
+        'P': 'assets/real_characters/pieces/obsidian_pawn.png'
+      },
+      nature: {
+        'K': 'assets/real_characters/pieces/verdant_king.png',
+        'Q': 'assets/real_characters/pieces/verdant_queen.png',
+        'B': 'assets/real_characters/pieces/verdant_bishop.png',
+        'N': 'assets/real_characters/pieces/verdant_knight.png',
+        'R': 'assets/real_characters/pieces/verdant_rook.png',
+        'P': 'assets/real_characters/pieces/verdant_pawn.png'
+      }
+    };
+
     function getPieceSketch(piece, faction, isWhitePiece) {
       const type = piece.toUpperCase();
-      if (isWhitePiece) {
-        // Player 1 Faction (Obsidian Roost Real Characters from GDD)
-        if (faction === 'volcanic' || !faction) {
-          if (type === 'K') return { img: 'assets/real_characters/pieces/obsidian_king.png', fig: 'Figure C.2: The Eternal Drake (King)' };
-          if (type === 'Q') return { img: 'assets/real_characters/pieces/obsidian_queen.png', fig: 'Figure C.3: The Ash Matriarch (Queen)' };
-          if (type === 'N') return { img: 'assets/real_characters/pieces/obsidian_knight.png', fig: 'Figure C.4: Flame-Winged Vanguard (Knight)' };
-          if (type === 'R') return { img: 'assets/real_characters/pieces/obsidian_rook.png', fig: 'Figure C.10: The Basalt Bastion (Rook)' };
-          if (type === 'B') return { img: 'assets/real_characters/pieces/obsidian_bishop.png', fig: 'Figure C.1: The Magma Pyromancer (Bishop)' };
-          if (type === 'P') return { img: 'assets/real_characters/pieces/obsidian_pawn.png', fig: 'Figure C.1: The Ember Initiate (Pawn)' };
-        } else if (faction === 'abyssal') {
-          return { img: '../assets/img/game-dev/image14.jpeg', fig: 'Figure C.13: The Abyssal Tides' };
-        } else if (faction === 'frost') {
-          return { img: '../assets/img/game-dev/image15.jpeg', fig: 'Figure C.14: The Frostbound Reach' };
-        } else if (faction === 'gearwork') {
-          return { img: '../assets/img/game-dev/image23.jpeg', fig: 'Figure C.22: The Gearwork Citadel' };
-        } else if (faction === 'grave') {
-          return { img: '../assets/img/game-dev/image25.jpeg', fig: 'Figure C.24: The Grave-Bound Dynasty' };
-        } else if (faction === 'void') {
-          return { img: '../assets/img/game-dev/image22.jpeg', fig: 'Figure C.21: The Abyssal Veil' };
-        }
-        return { img: 'assets/real_characters/pieces/obsidian_queen.png', fig: 'Figure C.10: The Obsidian Roost' };
-      } else {
-        // Opponent Faction (Verdant Court Real Characters from GDD)
-        if (type === 'K') return { img: 'assets/real_characters/pieces/verdant_king.png', fig: 'Figure C.6: The Elder Dryad (King)' };
-        if (type === 'Q') return { img: 'assets/real_characters/pieces/verdant_queen.png', fig: 'Figure C.7: The Forest Matriarch (Queen)' };
-        if (type === 'N') return { img: 'assets/real_characters/pieces/verdant_knight.png', fig: 'Figure C.8: The Stag-Rider (Knight)' };
-        if (type === 'R') return { img: 'assets/real_characters/pieces/verdant_rook.png', fig: 'Figure C.11: The Ironwood Treant (Rook)' };
-        if (type === 'B') return { img: 'assets/real_characters/pieces/verdant_bishop.png', fig: 'Figure C.5: The Bramble Seer (Bishop)' };
-        if (type === 'P') return { img: 'assets/real_characters/pieces/verdant_pawn.png', fig: 'Figure C.9: The Seedling Sprout (Pawn)' };
-        return { img: 'assets/real_characters/pieces/verdant_queen.png', fig: 'Figure C.11: The Verdant Court' };
-      }
+      const fKey = isWhitePiece ? (faction || 'volcanic') : 'verdant';
+      const meta = HUB_KINGDOM_META[fKey] || HUB_KINGDOM_META.volcanic;
+      // Use nature-silhouette cutout family for sylvan/fae/tidal/howling realms, draconic-armored family for forged/arcane realms
+      const useNatureMesh = !isWhitePiece || ['verdant', 'gossamer', 'abyssal', 'howling'].includes(fKey);
+      const meshSet = useNatureMesh ? HUB_BASE_CUTOUTS.nature : HUB_BASE_CUTOUTS.white;
+      const cutoutImg = meshSet[type] || meshSet['Q'];
+      return {
+        img: cutoutImg,
+        conceptImg: meta.conceptImg || cutoutImg,
+        fig: meta.figLabel
+      };
     }
 
     function renderBoard() {
@@ -6818,6 +7343,7 @@ playSoundBuffer('ultimate');`;
       boardEl.innerHTML = '';
       let mutatorCount = 0;
       const playerFaction = document.getElementById('simKingdomSelect') ? document.getElementById('simKingdomSelect').value : 'volcanic';
+      const selectedPieceChar = selectedCell ? currentBoardState[selectedCell.r][selectedCell.c] : null;
 
       // Check king status for visual check alerts
       const whiteKingPos = findKing('white', currentBoardState);
@@ -6831,8 +7357,9 @@ playSoundBuffer('ultimate');`;
           const isLight = (r + c) % 2 === 0;
           cell.className = `board-cell-3d ${isLight ? 'cell-light' : 'cell-dark'}`;
           
-          if (cellTerrains[r][c]) {
-            cell.classList.add(`cell-${cellTerrains[r][c]}`);
+          const tileTerrain = cellTerrains[r][c];
+          if (tileTerrain) {
+            cell.classList.add(`cell-${tileTerrain}`);
             mutatorCount++;
           }
 
@@ -6849,16 +7376,27 @@ playSoundBuffer('ultimate');`;
             cell.classList.add('cell-selected');
           }
 
-          // Check if this square is a legal move or capture for selected unit
+          // Check if this square is a legal move or capture + attach 4D t+1 Quantum Hover Projection
           if (currentLegalMoves.length > 0) {
             const legalMove = currentLegalMoves.find(m => m.r === r && m.c === c);
             if (legalMove) {
               if (legalMove.isCapture) {
                 cell.classList.add('cell-valid-capture');
-                cell.title = 'Legal Capture (Triggers Manifestation Combat!)';
+                cell.title = 'Legal Capture (Hover for 4D t+1 Manifestation Projection!)';
               } else {
                 cell.classList.add('cell-valid-move');
-                cell.title = 'Legal Standard Move';
+                cell.title = 'Legal Move (Hover for 4D t+1 Quantum Projection!)';
+              }
+              if (selectedPieceChar) {
+                const selIsW = isWhite(selectedPieceChar);
+                const selSketch = getPieceSketch(selectedPieceChar, selIsW ? playerFaction : 'verdant', selIsW);
+                const preview = document.createElement('div');
+                preview.className = 'quantum-preview-hub';
+                preview.innerHTML = `
+                  <span class="quantum-tag">${legalMove.isCapture ? '⚔️ t+1 MANIFEST' : '⏳ t+1 PROJECT'}</span>
+                  <img src="${selSketch.img}" alt="" draggable="false">
+                `;
+                cell.appendChild(preview);
               }
             }
           }
@@ -6869,59 +7407,116 @@ playSoundBuffer('ultimate');`;
           coordLabel.textContent = `${String.fromCharCode(97 + c)}${8 - r}`;
           cell.appendChild(coordLabel);
 
-          // REALISTIC 3D TABLETOP MINIATURE SCULPTURE WITH AUTHENTIC GDD SKETCHES
           const piece = currentBoardState[r][c];
+
+          // 4D t-1 Past-Turn Chrono-Echo Ghost on the departed origin square
+          if (!piece && lastMove4DHub && lastMove4DHub.fromR === r && lastMove4DHub.fromC === c) {
+            const echoIsW = isWhite(lastMove4DHub.piece);
+            const echoSketch = getPieceSketch(lastMove4DHub.piece, lastMove4DHub.faction, echoIsW);
+            const echoEl = document.createElement('div');
+            echoEl.className = 'chrono-echo-ghost-hub';
+            echoEl.innerHTML = `
+              <div class="echo-rift-ring"></div>
+              <img src="${echoSketch.img}" alt="" draggable="false">
+              <span class="echo-tag">t-1 ${lastMove4DHub.fromCoord}</span>
+            `;
+            cell.appendChild(echoEl);
+          }
+
+          // UPGRADED 4D MULTI-PLANE VOLUMETRIC CHESS PIECE SCULPTURE
           if (piece) {
             const isW = isWhite(piece);
             const faction = isW ? playerFaction : 'verdant';
+            const kMeta = HUB_KINGDOM_META[faction] || HUB_KINGDOM_META.volcanic;
             const lore = getPieceLore(piece, faction);
             const sketchInfo = getPieceSketch(piece, faction, isW);
             const pieceSym = pieceIcons[piece] || piece;
             const pType = piece.toLowerCase();
+            const isRoyal = (pType === 'k' || pType === 'q');
+
+            // 4D Spacetime Vector Tether SVG linking t-1 origin to t=Present arrived piece
+            if (lastMove4DHub && lastMove4DHub.toR === r && lastMove4DHub.toC === c) {
+              const pitch = 56.4;
+              const offX = (lastMove4DHub.fromC - c) * pitch;
+              const offY = (lastMove4DHub.fromR - r) * pitch;
+              const svgNS = 'http://www.w3.org/2000/svg';
+              const svg = document.createElementNS(svgNS, 'svg');
+              svg.setAttribute('class', 'spacetime-vector-svg');
+              svg.innerHTML = `
+                <line class="spacetime-vector-line" x1="${25.7 + offX}" y1="${25.7 + offY}" x2="25.7" y2="25.7" />
+                <circle cx="25.7" cy="25.7" r="3.5" fill="#38bdf8" />
+              `;
+              cell.appendChild(svg);
+            }
 
             const slot = document.createElement('div');
             slot.className = 'miniature-slot';
+            slot.style.setProperty('--k-primary', kMeta.primary);
+            slot.style.setProperty('--k-glow', kMeta.glow);
+            slot.style.setProperty('--k-accent', kMeta.accent);
+            slot.style.setProperty('--k-sprite-filter', kMeta.spriteFilter);
 
-            // 1. Soft Floor Contact Drop Shadow
+            // 1. Soft Floor Contact Drop Shadow + 3D Beveled Plinth + Rotating Arcane Rune Orbit
             const shadow = document.createElement('div');
             shadow.className = 'miniature-shadow';
             slot.appendChild(shadow);
 
-            // 2. Arcane Selection Aether Ring (Spins on levitation)
+            const plinth = document.createElement('div');
+            plinth.className = 'figurine-plinth-3d';
+            slot.appendChild(plinth);
+
+            const runeOrbit = document.createElement('div');
+            runeOrbit.className = 'figurine-rune-orbit';
+            slot.appendChild(runeOrbit);
+
+            // 2. Arcane Selection Aether Ring
             const aetherRing = document.createElement('div');
             aetherRing.className = 'miniature-aether-ring';
             slot.appendChild(aetherRing);
 
-            // 3. Upright Sculpted Figurine Body
+            // 3. Upright Sculpted Multi-Plane 4D Figurine Body
             const body = document.createElement('div');
             body.className = 'miniature-body';
 
-            // 4. Authentic Realistic Character Miniature Figurine (From GDD Concepts)
             const sculp = document.createElement('div');
             sculp.className = 'miniature-sculpture';
 
+            let passivePillHtml = '';
+            if (tileTerrain && HUB_KINGDOM_META[tileTerrain]) {
+              const tMeta = HUB_KINGDOM_META[tileTerrain];
+              const crest = factionCrests[tileTerrain] || '💠';
+              passivePillHtml = `<span class="figurine-passive-pill">${crest} ${tMeta.passive}</span>`;
+            }
+
+            const idleDelay = `${((r * 7 + c * 3) % 10) * -0.32}s`;
             sculp.innerHTML = `
-              <div class="tabletop-miniature-figurine ${isW ? 'figurine-obsidian' : 'figurine-verdant'} piece-rank-${pType}">
+              <div class="tabletop-miniature-figurine ${isW ? 'figurine-obsidian' : 'figurine-verdant'} piece-rank-${pType}" style="--idle-delay: ${idleDelay};">
+                ${passivePillHtml}
+                ${isRoyal ? '<div class="figurine-sovereign-halo"></div>' : ''}
+                <div class="figurine-aether-shard"></div>
+                <div class="figurine-catalyst-motes"><span></span><span></span></div>
                 <div class="figurine-aura-ring"></div>
-                <img src="${sketchInfo.img}" alt="${lore.name}" class="figurine-character-sprite" loading="lazy">
+                <img src="${sketchInfo.img}" alt="" class="figurine-4d-echo-back" loading="lazy" draggable="false">
+                <img src="${sketchInfo.img}" alt="" class="figurine-3d-relief" loading="lazy" draggable="false">
+                <img src="${sketchInfo.img}" alt="${lore.name}" class="figurine-character-sprite" loading="lazy" draggable="false">
                 <span class="figurine-rank-badge">${pieceSym}</span>
               </div>
             `;
             body.appendChild(sculp);
 
-            // 6. Interactive Lore & Authentic Sketch Dossier Tooltip
+            // 4. Interactive Lore & Authentic Appendix C Concept Dossier Tooltip
             const tip = document.createElement('div');
             tip.className = 'miniature-tooltip';
             tip.innerHTML = `
               <div class="d-flex align-items-center gap-2 mb-1">
-                <img src="${sketchInfo.img}" style="width:34px; height:34px; border-radius:6px; object-fit:cover; border:1px solid #fbbf24;">
+                <img src="${sketchInfo.conceptImg}" style="width:34px; height:34px; border-radius:6px; object-fit:cover; border:1px solid ${kMeta.primary};">
                 <div class="text-start">
                   <div class="fw-bold text-white" style="font-size:0.75rem;">${lore.name}</div>
-                  <div class="text-warning font-mono" style="font-size:0.64rem;">${sketchInfo.fig}</div>
+                  <div class="text-warning font-mono" style="font-size:0.62rem;">${sketchInfo.fig} • ${kMeta.catalyst}</div>
                 </div>
               </div>
-              <div style="color:#7dd3fc; font-size:0.68rem; font-weight:600;">${lore.role}</div>
-              <div style="color:#cbd5e1; font-size:0.65rem; line-height:1.4;">${lore.stats}</div>
+              <div style="color:#7dd3fc; font-size:0.68rem; font-weight:600;">${lore.role} • Passive: ${kMeta.passive}</div>
+              <div style="color:#cbd5e1; font-size:0.64rem; line-height:1.4;">${lore.stats}</div>
             `;
             body.appendChild(tip);
 
@@ -6941,6 +7536,7 @@ playSoundBuffer('ultimate');`;
       if (capEl) {
         capEl.textContent = capturedBlackPieces.length > 0 ? capturedBlackPieces.join(' ') : 'None';
       }
+      updateTimelineHUD();
     }
 
     function handleCellClick(r, c) {
@@ -7047,10 +7643,10 @@ playSoundBuffer('ultimate');`;
         const capturedKing = targetPiece && targetPiece.toLowerCase() === 'k';
         const movingLore = getPieceLore(movingPiece, faction);
 
-        // Execute 3D Move
+        // Execute 4D Volumetric Move
         currentBoardState[oldR][oldC] = '';
         currentBoardState[r][c] = movingPiece;
-        cellTerrains[r][c] = faction; // GDD: Tiles permanently absorb kingdom essence
+        cellTerrains[r][c] = isWhite(movingPiece) ? faction : 'verdant'; // GDD: Tiles permanently absorb kingdom essence
 
         // Add to Tactical Turn Log & Dispatch Engine Code
         const moveList = document.getElementById('moveLogList');
@@ -7100,6 +7696,18 @@ playSoundBuffer('ultimate');`;
           logEntry.innerHTML += ` <span class="badge bg-secondary font-mono" style="font-size:0.65rem;">ASCENSION (THE FOREST MATRIARCH)</span>`;
           playSound('ultimate');
         }
+
+        // Record 4D Spacetime t-1 Chrono-Echo Vector
+        lastMove4DHub = {
+          fromR: oldR,
+          fromC: oldC,
+          toR: r,
+          toC: c,
+          piece: currentBoardState[r][c],
+          faction: isWhite(movingPiece) ? faction : 'verdant',
+          fromCoord: fromCoordStr,
+          toCoord: coordStr
+        };
 
         moveList.appendChild(logEntry);
         moveList.scrollTop = moveList.scrollHeight;
@@ -7213,6 +7821,18 @@ playSoundBuffer('ultimate');`;
       if (chosen.piece === 'p' && chosen.toR === 7) {
         currentBoardState[chosen.toR][chosen.toC] = 'q';
       }
+
+      // Record 4D Spacetime t-1 Chrono-Echo Vector for Opponent Move
+      lastMove4DHub = {
+        fromR: chosen.fromR,
+        fromC: chosen.fromC,
+        toR: chosen.toR,
+        toC: chosen.toC,
+        piece: currentBoardState[chosen.toR][chosen.toC],
+        faction: 'verdant',
+        fromCoord: fromCoordStr,
+        toCoord: coordStr
+      };
 
       const moveList = document.getElementById('moveLogList');
       const logEntry = document.createElement('div');
@@ -7455,6 +8075,7 @@ playSoundBuffer('ultimate');`;
       selectedCell = null;
       currentLegalMoves = [];
       isGameOver = false;
+      lastMove4DHub = null;
       timelineHistory = [];
       currentTimelineIndex = -1;
       document.getElementById('turnIndicator').textContent = 'Turn: 1 (Player 1)';
@@ -7466,12 +8087,16 @@ playSoundBuffer('ultimate');`;
       saveTimelineSnapshot('Initial Setup');
     });
 
-    // Faction Selector Change
+    // Faction Selector Change (All 15 Mythic Gambit Kingdoms)
     document.getElementById('simKingdomSelect').addEventListener('change', (e) => {
       const val = e.target.value;
       const prof = factionCombatProfiles[val] || factionCombatProfiles.volcanic;
       document.getElementById('simPassiveName').textContent = `Active Passive: ${prof.passiveName}`;
       document.getElementById('simPassiveDesc').textContent = prof.passiveDesc;
+      const catEl = document.getElementById('hubCatalystBadge');
+      if (catEl && prof.catalyst) {
+        catEl.textContent = `Catalyst: ${prof.catalyst}`;
+      }
       playSound('terrain');
       renderBoard();
     });
@@ -8788,6 +9413,21 @@ playSoundBuffer('ultimate');`;
       saveTimelineSnapshot('Game Initialized');
       dispatchEngineAction('init', { turn: 1 });
       initActionArena();
+
+      // Support URL deep-links (?kingdom=... & ?view=4d-phase)
+      try {
+        const qp = new URLSearchParams(window.location.search);
+        const kParam = qp.get('kingdom');
+        const kSel = document.getElementById('simKingdomSelect');
+        if (kParam && kSel && HUB_KINGDOM_META[kParam]) {
+          kSel.value = kParam;
+          kSel.dispatchEvent(new Event('change'));
+        }
+        if (qp.get('view') === '4d-phase') {
+          const phaseBtn = document.getElementById('btnCamPhase');
+          if (phaseBtn) phaseBtn.click();
+        }
+      } catch (e) {}
     });
   </script>
 </body>
